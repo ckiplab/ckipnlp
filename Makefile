@@ -6,7 +6,7 @@ RM = rm -rf
 
 all: build
 
-dist: bdist sdist
+dist: sdist
 
 build: build_ext
 
@@ -15,11 +15,8 @@ bdist: bdist_wheel
 build_ext bdist_wheel sdist:
 	$(PY) setup.py $@
 
-upload:
+upload: dist
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz --verbose
-
-run: build
-	$(PY) run.py
 
 clean:
 	$(PY) setup.py clean -a

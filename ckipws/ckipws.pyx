@@ -1,20 +1,21 @@
-# coding=utf-8
+# -*- coding:utf-8 -*-
+# cython: language_level=3
 
 from __future__ import print_function
 
 __author__    = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
-__version__   = '0.0.3'
+include '../about.pyx'
 
 cimport ckipws.cckipws as cckipws
 from libc.stdlib cimport malloc, free
 from cpython.unicode cimport PyUnicode_AsUnicode, PyUnicode_FromUnicode
 
-import datetime     as __datetime
-import os           as __os
-import re           as __re
-import sys          as __sys
-import tempfile     as __tempfile
+import datetime as __datetime
+import os       as __os
+import re       as __re
+import sys      as __sys
+import tempfile as __tempfile
 
 def __to_bytes(text):
 	return text.encode() if __sys.version_info >= (3, 0) else text
@@ -51,9 +52,12 @@ cdef class CkipWS:
 		if not inifile:
 			fini = __tempfile.NamedTemporaryFile(mode='w')
 			inifile = fini.name
-			inidata = self.create_ini(**options)
-			fini.write(inidata)
+			inidata, options = self.create_ini(**options)
+			fini.write(__from_unicode(inidata))
 			fini.flush()
+
+		def CkipWS(*, _=None): return None
+		CkipWS(**options)
 
 		name = __to_bytes(inifile)
 		ret = cckipws.WordSeg_InitData(self.__obj, name)
@@ -138,7 +142,7 @@ cdef class CkipWS:
 		assert ret is not None
 
 	@staticmethod
-	def create_ini(*, data2dir=None, lexfile=None, NewStyleFormat=False, ShowCategory=True):
+	def create_ini(*, data2dir=None, lexfile=None, NewStyleFormat=False, ShowCategory=True, **options):
 		"""Generate config.
 
 		Args:
@@ -406,4 +410,4 @@ cdef class CkipWS:
 		cfg.append('Result=ProbModelResult')
 		cfg.append('')
 
-		return '\n'.join(cfg)
+		return '\n'.join(cfg), options

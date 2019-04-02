@@ -1,10 +1,11 @@
-# coding=utf-8
+# -*- coding:utf-8 -*-
+# cython: language_level=3
 
 from __future__ import print_function
 
 __author__    = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
-__version__   = '0.0.3'
+include '../about.pyx'
 
 cimport ckipparser.cckipparser as cckipparser
 from libc.stdlib cimport malloc, free
@@ -54,16 +55,19 @@ cdef class CkipParser:
 		if not wsinifile:
 			fwsini = __tempfile.NamedTemporaryFile(mode='w')
 			wsinifile = fwsini.name
-			wsinidata = __CkipWS.create_ini(**options)
-			fwsini.write(wsinidata)
+			wsinidata, options = __CkipWS.create_ini(**options)
+			fwsini.write(__from_unicode(wsinidata))
 			fwsini.flush()
 
 		if not inifile:
 			fini = __tempfile.NamedTemporaryFile(mode='w')
 			inifile = fini.name
-			inidata = self.create_ini(wsinifile=wsinifile, **options)
-			fini.write(inidata)
+			inidata, options = self.create_ini(wsinifile=wsinifile, **options)
+			fini.write(__from_unicode(inidata))
 			fini.flush()
+
+		def CkipParser(*, _=None): return None
+		CkipParser(**options)
 
 		name = __to_bytes(inifile)
 		ret = cckipparser.CKIPCoreNLP_InitData(self.__obj, name)
@@ -140,8 +144,8 @@ cdef class CkipParser:
 		"""Parse a file.
 
 		Args:
-			ifile (str):  the input file.
-			ofile (str):  the output file (will be overwritten).
+			ifile (str): the input file.
+			ofile (str): the output file (will be overwritten).
 		"""
 		assert ifile is not None
 		assert ofile is not None
@@ -152,12 +156,17 @@ cdef class CkipParser:
 		assert ret is not None
 
 	@staticmethod
-	def create_ini(*, wsinifile=None, ruledir=None, rdbdir=None, **options):
+	def create_ini(*, wsinifile=None, ruledir=None, rdbdir=None, \
+			do_ws=True, do_parse=True, do_role=True, **options):
 		"""Generate config.
 
 		Args:
-			ruledir (str):  the path to "Rule/".
-			rdbdir (str):   the path to "RDB/".
+			ruledir (str): the path to "Rule/".
+			rdbdir (str):  the path to "RDB/".
+
+			do_ws (bool):    do word-segmentation.
+			do_parse (bool): do parsing.
+			do_role (bool):  do role.
 		"""
 		assert wsinifile is not None
 
@@ -171,6 +180,20 @@ cdef class CkipParser:
 			if not rdbdir:
 				print('Warning: $CKIPPARSER_RDB is unset or null')
 
+		IsTag          = not do_ws
+		AssignRole     = do_role
+		AssignRoleOnly = False
+
+		if not do_parse:
+			if not do_ws and not do_role:
+				raise ValueError('Must select at least one task')
+			if do_ws and not do_role:
+				raise ValueError('Use ckipws.CkipWS for word-segmentation')
+			if not do_ws and do_role:
+				AssignRoleOnly = True
+			if do_ws and do_role:
+				raise ValueError('Invalid tasks')
+
 		cfg = []
 
 		cfg.append('[WordSeg]')
@@ -182,7 +205,8 @@ cdef class CkipParser:
 		cfg.append('13CateFile={ruledir}/13Cate.txt'.format(ruledir=ruledir))
 		cfg.append('')
 
-		cfg.append('SetMap=1')
+		# cfg.append('SetMap=1')
+		cfg.append('SetMap=0')
 		cfg.append('CatMapFile={ruledir}/CatMap.txt'.format(ruledir=ruledir))
 		cfg.append('')
 
@@ -195,12 +219,12 @@ cdef class CkipParser:
 		cfg.append('SetLength=15')
 		cfg.append('NormalPos=1')
 		cfg.append('NormalTree=1')
-		cfg.append('IsTag=0')
+		cfg.append('IsTag={IsTag}'.format(IsTag=int(IsTag)))
 		cfg.append('')
 
 		cfg.append('[SRL]')
 		cfg.append('DataPath={rdbdir}/'.format(rdbdir=rdbdir))
-		cfg.append('AssignRole=1')
-		cfg.append('AssignRoleOnly=0')
+		cfg.append('AssignRole={AssignRole}'.format(AssignRole=int(AssignRole)))
+		cfg.append('AssignRoleOnly={AssignRoleOnly}'.format(AssignRoleOnly=int(AssignRoleOnly)))
 
-		return '\n'.join(cfg)
+		return '\n'.join(cfg), options

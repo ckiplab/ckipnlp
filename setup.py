@@ -1,35 +1,39 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
+__author__    = 'Mu Yang <emfomy@gmail.com>'
+__copyright__ = 'Copyright 2018-2019'
+
 from setuptools import dist
 dist.Distribution().fetch_build_eggs([
 	'Cython>=0.29',
 ])
 
-from setuptools import setup
+import sys
+from setuptools import setup, find_packages
 from setuptools.extension import Extension
 from Cython.Build import cythonize
 
-with open('ckipws/ckipws.pyx') as fin:
-	for line in fin:
-		if '__version__' in line:
-			exec(line)
-			break
+import pyximport; pyximport.install()
+import about
 
 with open('README.rst') as fin:
-	description = fin.read()
+	readme = fin.read()
 
 setup(
-	name='pyckip',
-	version=__version__,
-	packages=['ckipws'],
-	author='Mu Yang',
-	author_email='emfomy@gmail.com',
-	description='CKIP NLP Wrappers',
-	long_description=description,
+	name=about.__title__,
+	version=about.__version__,
+	author=about.__author_name__,
+	author_email=about.__author_email__,
+	maintainer=about.__author_name__,
+	maintainer_email=about.__author_email__,
+	description=about.__description__,
+	long_description=readme,
 	long_description_content_type='text/x-rst',
-	url='https://github.com/emfomy/pyckip',
-	download_url='https://github.com/emfomy/pyckip/tarball/'+__version__,
+	url=about.__url__,
+	download_url=about.__download_url__,
+	platforms=['linux_x86_64'],
+	license=about.__license__,
 	classifiers=[
 		'Development Status :: 3 - Alpha',
 		'Environment :: Console',
@@ -58,5 +62,4 @@ setup(
 		],
 		build_dir='build',
 	),
-	include_package_data=True,
 )
