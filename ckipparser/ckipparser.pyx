@@ -36,9 +36,9 @@ cdef class CkipParser:
 
 	Args:
 		logger (bool): enable logger.
-		inifile (str):   the INI file.
-		wsinifile (str): the INI file for CKIPWS.
-		options:         the optiones (see :func:`create_ini`).
+		inifile (str):   the path to the INI file.
+		wsinifile (str): the path to the INI file for CKIPWS.
+		options:         the options (see :func:`create_ini`).
 	"""
 
 	cdef cckipparser.corenlp_t __obj

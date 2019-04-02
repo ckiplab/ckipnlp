@@ -1,5 +1,5 @@
 PyCkip
-========
+======
 
 CKIP NLP Wrappers (Word Segmentation and Parser)
 
@@ -62,10 +62,10 @@ Requirements
 * CKIP Parser Linux version
 
 Installation
-^^^^^^^^^^^^
+------------
 
 Step 1: Setup CKIPWS environment
-""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version. Add below command to ``~/.bashrc``
 
@@ -75,7 +75,7 @@ Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version. Add bel
    export CKIPWS_DATA2=<ckipws-linux-root>/Data2
 
 Step 2: Setup CKIP-Parser environment
-"""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Denote ``<ckipparser-linux-root>`` as the root path of CKIP-Parser Linux Version. Add below command to ``~/.bashrc``
 
@@ -86,11 +86,185 @@ Denote ``<ckipparser-linux-root>`` as the root path of CKIP-Parser Linux Version
    export CKIPPARSER_RDB=<ckipparser-linux-root>/RDB
 
 Step 3: Install Using Pip
-"""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
    LIBRARY_PATH=<ckipws-linux-root>/lib:<ckipparser-linux-root>/lib:$LIBRARY_PATH pip install pyckip
+
+API
+---
+
+CkipWS
+^^^^^^
+
+.. code-block:: python
+
+   class ckipws.CkipWS(logger=False, inifile=None, data2dir=None, lexfile=None, new_style_format=False, show_category=True)
+
+The CKIP word segmentation driver.
+
+   logger (bool)
+      enable logger.
+
+   inifile (str)
+      the path to the INI file.
+
+   data2dir (str)
+      the path to the folder "Data2/" (default is "$CKIPWS_DATA2/").
+
+   lexfile (str)
+      the path to the user-defined lexicon file.
+
+   new_style_format (bool)
+      split sentences by newline characters ("\n") rather than punctuations.
+
+   show_category (bool)
+      show part-of-speech tags.
+
+--------------------------------
+
+.. code-block:: python
+
+   def ckipws.CkipWS.__call__(text, unicode=False)
+
+Segment a sentence.
+
+   text (str)
+      the input sentence.
+
+   unicode (bool)
+      use Unicode for of input/output encoding; otherwise use system encoding.
+
+   return value (str)
+      the output sentence.
+
+--------------------------------
+
+.. code-block:: python
+
+   def ckipws.CkipWS.apply_list(text, unicode=False)
+
+Segment a list of sentence.
+
+   ilist (str)
+      the list of input sentences (str).
+
+   unicode (bool)
+      use Unicode for of input/output encoding; otherwise use system encoding.
+
+   return value (str)
+      the list of output sentences (str).
+
+--------------------------------
+
+.. code-block:: python
+
+   def ckipws.CkipWS.apply_file(ifile, ofile, uwfile)
+
+Segment a file.
+
+   ifile (str)
+      the input file.
+
+   ofile (str)
+      the output file (will be overwritten).
+
+   uwfile (str)
+      the unknown word file (will be overwritten).
+
+CkipParser
+^^^^^^^^^^
+
+.. code-block:: python
+
+   class ckipparser.CkipParser(logger=False, inifile=None, wsinifile=None, data2dir=None, ruledir=None, rdbdir=None, do_ws=True, do_parse=True, do_role=True, lexfile=None, new_style_format=False, show_category=True)
+
+The CKIP parser driver.
+
+   logger (bool)
+      enable logger (logger is not support in parser).
+
+   inifile (str)
+      the path to the INI file.
+
+   wsinifile (str)
+      the path to the INI file.
+
+   data2dir (str)
+      the path to the folder "Data2/" (default is "$CKIPWS_DATA2/").
+
+   ruledir (str)
+      the path to the folder "Rule/" (default is "$CKIPPARSER_RULE/").
+
+   rdbdir (str)
+      the path to the folder "RDB/" (default is "$CKIPPARSER_RDB/").
+
+   do_ws (bool)
+      do word-segmentation.
+
+   do_parse (bool)
+      do parsing.
+
+   do_role (bool)
+      do role.
+
+   lexfile (str)
+      the path to the user-defined lexicon file.
+
+   new_style_format (bool)
+      split sentences by newline characters ("\n") rather than punctuations.
+
+   show_category (bool)
+      show part-of-speech tags.
+
+--------------------------------
+
+.. code-block:: python
+
+   def ckipparser.CkipParser.__call__(text, unicode=False)
+
+Segment a sentence.
+
+   text (str)
+      the input sentence.
+
+   unicode (bool)
+      use Unicode for of input/output encoding; otherwise use system encoding.
+
+   return value (str)
+      the output sentence.
+
+--------------------------------
+
+.. code-block:: python
+
+   def ckipparser.CkipParser.apply_list(text, unicode=False)
+
+Segment a list of sentence.
+
+   ilist (str)
+      the list of input sentences (str).
+
+   unicode (bool)
+      use Unicode for of input/output encoding; otherwise use system encoding.
+
+   return value (str)
+      the list of output sentences (str).
+
+--------------------------------
+
+.. code-block:: python
+
+   def ckipparser.CkipParser.apply_file(ifile, ofile)
+
+Segment a file.
+
+   ifile (str)
+      the input file.
+
+   ofile (str)
+      the output file (will be overwritten).
 
 FAQ
 ---
