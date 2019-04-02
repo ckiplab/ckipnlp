@@ -100,7 +100,14 @@ CkipWS
 
 .. code-block:: python
 
-   class ckipws.CkipWS(logger=False, inifile=None, data2dir=None, lexfile=None, new_style_format=False, show_category=True)
+   class ckipws.CkipWS(
+      logger           = False,
+      inifile          = None,
+      data2dir         = None,
+      lexfile          = None,
+      new_style_format = False,
+      show_category    = True,
+   )
 
 The CKIP word segmentation driver.
 
@@ -117,7 +124,7 @@ The CKIP word segmentation driver.
       the path to the user-defined lexicon file.
 
    new_style_format (bool)
-      split sentences by newline characters ("\n") rather than punctuations.
+      split sentences by newline characters ("\\n") rather than punctuations.
 
    show_category (bool)
       show part-of-speech tags.
@@ -178,7 +185,20 @@ CkipParser
 
 .. code-block:: python
 
-   class ckipparser.CkipParser(logger=False, inifile=None, wsinifile=None, data2dir=None, ruledir=None, rdbdir=None, do_ws=True, do_parse=True, do_role=True, lexfile=None, new_style_format=False, show_category=True)
+   class ckipparser.CkipParser(
+      logger           = False,
+      inifile          = None,
+      wsinifile        = None,
+      data2dir         = None,
+      ruledir          = None,
+      rdbdir           = None,
+      do_ws            = True,
+      do_parse         = True,
+      do_role          = True,
+      lexfile          = None,
+      new_style_format = False,
+      show_category    = True,
+   )
 
 The CKIP parser driver.
 
@@ -213,7 +233,7 @@ The CKIP parser driver.
       the path to the user-defined lexicon file.
 
    new_style_format (bool)
-      split sentences by newline characters ("\n") rather than punctuations.
+      split sentences by newline characters ("\\n") rather than punctuations.
 
    show_category (bool)
       show part-of-speech tags.
