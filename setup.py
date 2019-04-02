@@ -12,6 +12,7 @@ dist.Distribution().fetch_build_eggs([
 import sys
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
+from setuptools.command.install import install
 from Cython.Build import cythonize
 
 import pyximport; pyximport.install()
@@ -19,6 +20,51 @@ import about
 
 with open('README.rst') as fin:
 	readme = fin.read()
+
+class InstallCommand(install):
+
+	user_options = install.user_options + [
+		('no-ws',     None, 'without CKIP Word Segmentation'),
+		('no-parser', None, 'without CKIP Parser'),
+	]
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.__extensions = []
+
+	def initialize_options(self):
+		super().initialize_options()
+		self.no_ws     = False
+		self.no_parser = False
+
+	def finalize_options(self):
+		super().finalize_options()
+
+		print('*'*100)
+		print(self.no_ws)
+		print(self.no_parser)
+		print('*'*100)
+
+		if not self.no_ws:
+			self.__extensions.append(Extension('ckipws',
+				sources=['ckipws/ckipws.pyx'],
+				libraries=['WordSeg'],
+			))
+
+		if not self.no_parser:
+			self.__extensions.append(Extension('ckipparser',
+				sources=['ckipparser/ckipparser.pyx'],
+				libraries=['CKIPCoreNLP', 'CKIPParser', 'CKIPSRL', 'CKIPWS'],
+			))
+
+	def run(self):
+
+		print('*'*100)
+		print(self.user_options)
+		print('*'*100)
+
+		self.distribution.ext_modules = cythonize(self.__extensions, build_dir='build')
+		super().run()
 
 setup(
 	name=about.__title__,
@@ -35,7 +81,7 @@ setup(
 	platforms=['linux_x86_64'],
 	license=about.__license__,
 	classifiers=[
-		'Development Status :: 3 - Alpha',
+		'Development Status :: 4 - Beta',
 		'Environment :: Console',
 		'Programming Language :: Python',
 		'Programming Language :: Python :: 2',
@@ -49,17 +95,7 @@ setup(
 		'Operating System :: POSIX :: Linux',
 		'Natural Language :: Chinese (Traditional)',
 	],
-	ext_modules=cythonize(
-		[
-			Extension('ckipws',
-				sources=['ckipws/ckipws.pyx'],
-				libraries=['WordSeg'],
-			),
-			Extension('ckipparser',
-				sources=['ckipparser/ckipparser.pyx'],
-				libraries=['CKIPCoreNLP', 'CKIPParser', 'CKIPSRL', 'CKIPWS'],
-			),
-		],
-		build_dir='build',
-	),
+	cmdclass={
+		'install': InstallCommand,
+	},
 )

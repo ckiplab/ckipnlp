@@ -55,16 +55,59 @@ Author
 Requirements
 ^^^^^^^^^^^^
 
-* `Python <http://www.python.org>`_
-* `Cython <http://cython.org>`_
-* `Boost C++ Libraries 1.54.0 <https://www.boost.org/>`_
+* `Python <http://www.python.org>`_ 2.7+, 3.5+
+* `Cython <http://cython.org>`_ 0.29+
+* `Boost C++ Libraries <https://www.boost.org/>`_ 1.54.0
 * CKIP Word Segmentation Linux version
 * CKIP Parser Linux version
+
+Installation
+^^^^^^^^^^^^
+
+Step 1: Setup CKIPWS environment
+""""""""""""""""""""""""""""""""
+
+Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version. Add below command to ``~/.bashrc``
+
+.. code-block:: bash
+
+   export LD_LIBRARY_PATH=<ckipws-linux-root>/lib:$LD_LIBRARY_PATH
+   export CKIPWS_DATA2=<ckipws-linux-root>/Data2
+
+Step 2: Setup CKIP-Parser environment
+"""""""""""""""""""""""""""""""""""""
+
+Denote ``<ckipparser-linux-root>`` as the root path of CKIP-Parser Linux Version. Add below command to ``~/.bashrc``
+
+.. code-block:: bash
+
+   export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
+   export CKIPPARSER_RULE=<ckipparser-linux-root>/Rule
+   export CKIPPARSER_RDB=<ckipparser-linux-root>/RDB
+
+Step 3: Install Using Pip
+"""""""""""""""""""""""""
+
+.. code-block:: bash
+
+   LIBRARY_PATH=<ckipws-linux-root>/lib:<ckipparser-linux-root>/lib:$LIBRARY_PATH pip install pyckip
 
 FAQ
 ---
 
-* The CkipWS throws "``what():  locale::facet::_S_create_c_locale name not valid``". What should I do?
+* I don't have CKIPWS/CKIP-Parser. What should I do?
+
+Append :code:`--install-option='--no-ws'` or :code:`--install-option='--no-parser'` after the :code:`pip install` command to disable CKIPWS or CKIP-Parser.
+
+.. code-block:: bash
+
+   # Disable CKIPWS support
+   pip install pyckip --install-option='--no-ws'
+
+   # Disable CKIP-Parser support
+   pip install pyckip --install-option='--no-parser'
+
+* The CKIPWS throws "``what():  locale::facet::_S_create_c_locale name not valid``". What should I do?
 
 .. code-block:: bash
 
