@@ -34,8 +34,8 @@ cdef class CkipWS:
 
 	Args:
 		logger (bool): enable logger.
-		inifile (str): the INI file.
-		options:       the optiones (see :func:`create_ini`).
+		inifile (str): the path to the INI file.
+		options:       the options (see :func:`create_ini`).
 	"""
 
 	cdef cckipws.wordseg_t __obj
@@ -142,15 +142,15 @@ cdef class CkipWS:
 		assert ret is not None
 
 	@staticmethod
-	def create_ini(*, data2dir=None, lexfile=None, NewStyleFormat=False, ShowCategory=True, **options):
+	def create_ini(*, data2dir=None, lexfile=None, new_style_format=False, show_category=True, **options):
 		"""Generate config.
 
 		Args:
-			data2dir (str): the path to "Data2/".
-			lexfile (str):  the path to user-defined lexicon file.
+			data2dir (str): the path to the folder "Data2/".
+			lexfile (str):  the path to the user-defined lexicon file.
 
-			NewStyleFormat (bool): split sentences by newline characters ("\\n") rather than punctuations.
-			ShowCategory (bool):   show part-of-speech tags.
+			new_style_format (bool): split sentences by newline characters ("\\n") rather than punctuations.
+			show_category (bool):    show part-of-speech tags.
 		"""
 		if data2dir is None:
 			data2dir = __os.getenv('CKIPWS_DATA2')
@@ -378,8 +378,8 @@ cdef class CkipWS:
 		cfg.append('[CSimpleProbModelResult]')
 		cfg.append('Name=ProbModelResult')
 		cfg.append('ProbabilityModelName=ProbModel')
-		cfg.append('NewStyleFormat={NewStyleFormat}'.format(NewStyleFormat=str(NewStyleFormat).lower()))
-		cfg.append('ShowCategory={ShowCategory}'.format(ShowCategory=str(ShowCategory).lower()))
+		cfg.append('NewStyleFormat={NewStyleFormat}'.format(NewStyleFormat=str(new_style_format).lower()))
+		cfg.append('ShowCategory={ShowCategory}'.format(ShowCategory=str(show_category).lower()))
 		cfg.append('LexiconName=Lex')
 		cfg.append('CategoryPredictor=CatPred')
 		cfg.append('KeepExistingWord=true')
