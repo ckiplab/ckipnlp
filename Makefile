@@ -1,8 +1,7 @@
-CC = gcc
 PY = python
 RM = rm -rf
 
-.PHONY: all build build_ext dist bdist bdist_wheel sdist upload clean run
+.PHONY: all build build_ext dist bdist bdist_wheel sdist test upload clean run
 
 all: build
 
@@ -12,7 +11,7 @@ build: build_ext
 
 bdist: bdist_wheel
 
-build_ext bdist_wheel sdist:
+build_ext bdist_wheel sdist test:
 	$(PY) setup.py $@
 
 upload: dist
@@ -20,4 +19,4 @@ upload: dist
 
 clean:
 	$(PY) setup.py clean -a
-	$(RM) build dist pyckip.egg-info
+	$(RM) build dist *.egg-info *.so __pycache__

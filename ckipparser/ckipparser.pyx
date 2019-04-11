@@ -38,7 +38,7 @@ cdef class CkipParser:
 		logger (bool): enable logger.
 		inifile (str):   the path to the INI file.
 		wsinifile (str): the path to the INI file for CKIPWS.
-		options:         the options (see :func:`create_ini`).
+		options:         the options (see :func:`CkipParser.create_ini` and  :func:`CkipWS.create_ini`).
 	"""
 
 	cdef cckipparser.corenlp_t __obj
@@ -94,7 +94,7 @@ cdef class CkipParser:
 		# cckipparser.CKIPCoreNLP_EnableConsoleLogger(self.__obj)
 		pass
 
-	def __call__(self, text, unicode=False):
+	def __call__(self, text, *, unicode=False):
 		"""Parse a sentence.
 
 		Args:
@@ -106,7 +106,7 @@ cdef class CkipParser:
 		"""
 		return self.apply_list([text], unicode=unicode)[0]
 
-	def apply_list(self, ilist, unicode=False):
+	def apply_list(self, ilist, *, unicode=False):
 		"""Parse a list of sentence.
 
 		Args:
@@ -140,15 +140,13 @@ cdef class CkipParser:
 
 		return olist
 
-	def apply_file(self, ifile=None, ofile=None):
+	def apply_file(self, *, ifile, ofile):
 		"""Parse a file.
 
 		Args:
 			ifile (str): the input file.
 			ofile (str): the output file (will be overwritten).
 		"""
-		assert ifile is not None
-		assert ofile is not None
 		ifile  = __to_bytes(ifile)
 		ofile  = __to_bytes(ofile)
 
@@ -156,8 +154,7 @@ cdef class CkipParser:
 		assert ret is not None
 
 	@staticmethod
-	def create_ini(*, wsinifile=None, ruledir=None, rdbdir=None, \
-			do_ws=True, do_parse=True, do_role=True, **options):
+	def create_ini(*, wsinifile, ruledir=None, rdbdir=None, do_ws=True, do_parse=True, do_role=True, **options):
 		"""Generate config.
 
 		Args:
@@ -168,8 +165,6 @@ cdef class CkipParser:
 			do_parse (bool): do parsing.
 			do_role (bool):  do role.
 		"""
-		assert wsinifile is not None
-
 		if ruledir is None:
 			ruledir = __os.getenv('CKIPPARSER_RULE')
 			if not ruledir:

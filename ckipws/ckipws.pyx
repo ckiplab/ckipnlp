@@ -78,7 +78,7 @@ cdef class CkipWS:
 		"""Enable logger."""
 		cckipws.WordSeg_EnableConsoleLogger(self.__obj)
 
-	def __call__(self, text, unicode=False):
+	def __call__(self, text, *, unicode=False):
 		"""Segment a sentence.
 
 		Args:
@@ -90,7 +90,7 @@ cdef class CkipWS:
 		"""
 		return self.apply_list([text], unicode=unicode)[0]
 
-	def apply_list(self, ilist, unicode=False):
+	def apply_list(self, ilist, *, unicode=False):
 		"""Segment a list of sentence.
 
 		Args:
@@ -124,7 +124,7 @@ cdef class CkipWS:
 
 		return olist
 
-	def apply_file(self, ifile=None, ofile=None, uwfile=''):
+	def apply_file(self, *, ifile, ofile, uwfile=''):
 		"""Segment a file.
 
 		Args:
@@ -132,8 +132,6 @@ cdef class CkipWS:
 			ofile (str):  the output file (will be overwritten).
 			uwfile (str): the unknown word file (will be overwritten).
 		"""
-		assert ifile is not None
-		assert ofile is not None
 		ifile  = __to_bytes(ifile)
 		ofile  = __to_bytes(ofile)
 		uwfile = __to_bytes(uwfile)

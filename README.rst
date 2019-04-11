@@ -74,6 +74,8 @@ Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version. Add bel
    export LD_LIBRARY_PATH=<ckipws-linux-root>/lib:$LD_LIBRARY_PATH
    export CKIPWS_DATA2=<ckipws-linux-root>/Data2
 
+Note that ``<ckipws-linux-root>/lib`` must contain ``libWordSeg.so``.
+
 Step 2: Setup CKIP-Parser environment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -84,6 +86,8 @@ Denote ``<ckipparser-linux-root>`` as the root path of CKIP-Parser Linux Version
    export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
    export CKIPPARSER_RULE=<ckipparser-linux-root>/Rule
    export CKIPPARSER_RDB=<ckipparser-linux-root>/RDB
+
+Note that ``<ckipparser-linux-root>/lib`` must contain ``libCKIPCoreNLP.so``, ``libCKIPParser.so``, ``libCKIPSRL.so``, and ``libCKIPWS.so````.
 
 Step 3: Install Using Pip
 ^^^^^^^^^^^^^^^^^^^^^^^^^
