@@ -39,7 +39,7 @@ def os_environ_prepend(name, dirpath):
 		os.environ[name] = dirpath
 
 
-class CommandMixin:
+class CommandMixin(object):
 
 	user_options = [
 		('ws',        None, 'with CKIPWS [default]'),
@@ -65,12 +65,7 @@ class CommandMixin:
 		'no-parser': 'parser',
 	}
 
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.__extensions = []
-
 	def initialize_options(self):
-		super().initialize_options()
 		self.ws     = True
 		self.parser = True
 
@@ -86,6 +81,8 @@ class CommandMixin:
 		self.data2_dir = None
 		self.rule_dir  = None
 		self.rdb_dir   = None
+
+		super(CommandMixin, self).initialize_options()
 
 	def finalize_options(self):
 
@@ -118,9 +115,9 @@ class CommandMixin:
 		for opt0 in opt_directory:
 			dir0 = getattr(self, opt0)
 			if dir0 and not os.path.isdir(dir0):
-				raise FileNotFoundError('--%s (%s) is not a directory' % (opt0.replace('_', '-'), dir0,))
+				raise IOError('--%s (%s) is not a directory' % (opt0.replace('_', '-'), dir0,))
 
-		super().finalize_options()
+		super(CommandMixin, self).finalize_options()
 
 	def run(self):
 
@@ -131,7 +128,7 @@ class CommandMixin:
 				print('- Use CKIPWS library from (%s)' % self.ws_lib_dir)
 				i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipws'), None)
 				self.distribution.ext_modules[i].library_dirs.append(self.ws_lib_dir)
-				# self.distribution.ext_modules[i].runtime_library_dirs.append(self.ws_lib_dir)
+				self.distribution.ext_modules[i].runtime_library_dirs.append(self.ws_lib_dir)
 		else:
 			print('- Disable CKIPWS support')
 			i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipws'), None)
@@ -144,7 +141,7 @@ class CommandMixin:
 				print('- Use CKIP-Parser library from (%s)' % self.parser_lib_dir)
 				i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipparser'), None)
 				self.distribution.ext_modules[i].library_dirs.append(self.parser_lib_dir)
-				# self.distribution.ext_modules[i].runtime_library_dirs.append(self.parser_lib_dir)
+				self.distribution.ext_modules[i].runtime_library_dirs.append(self.parser_lib_dir)
 		else:
 			print('- Disable CKIP-Parser support')
 			i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipparser'), None)
@@ -164,7 +161,7 @@ class CommandMixin:
 			print('- Use "RDB" from (%s)' % self.rdb_dir)
 			self.data_files('share/pyckip/RDB/', self.rdb_dir)
 
-		super().run()
+		super(CommandMixin, self).run()
 
 	def data_files(self, prefix, dirtop):
 		for dirpath, _, files in os.walk(dirtop):
@@ -178,10 +175,16 @@ class InstallCommand(CommandMixin, install):
 	negative_opt = install.negative_opt
 	negative_opt.update(CommandMixin.negative_opt)
 
+	def __init__(self, *args, **kwargs):
+		install.__init__(self, *args, **kwargs)
+
 class DevelopCommand(CommandMixin, develop):
 	user_options = develop.user_options + CommandMixin.user_options
 	negative_opt = develop.negative_opt
 	negative_opt.update(CommandMixin.negative_opt)
+
+	def __init__(self, *args, **kwargs):
+		develop.__init__(self, *args, **kwargs)
 
 setup(
 	name=about.__title__,
