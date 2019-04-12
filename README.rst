@@ -58,39 +58,61 @@ Requirements
 * `Python <http://www.python.org>`_ 2.7+, 3.5+
 * `Cython <http://cython.org>`_ 0.29+
 * `Boost C++ Libraries <https://www.boost.org/>`_ 1.54.0
-* CKIP Word Segmentation Linux version
-* CKIP Parser Linux version
+* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw:8080/project/wordsegment/>`_ Linux version
+* `CKIP Parser <http://ckip.iis.sinica.edu.tw:8080/project/parser/>`_ Linux version
 
 Installation
 ------------
 
-Step 1: Setup CKIPWS environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version, and ``<ckipparser-linux-root>`` as the root path of CKIP-Parser Linux Version.
 
-Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version. Add below command to ``~/.bashrc``
+Step 1: Setup CKIPWS & CKIP-Parser environment
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: bash
-
-   export LD_LIBRARY_PATH=<ckipws-linux-root>/lib:$LD_LIBRARY_PATH
-   export CKIPWS_DATA2=<ckipws-linux-root>/Data2
-
-Step 2: Setup CKIP-Parser environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Denote ``<ckipparser-linux-root>`` as the root path of CKIP-Parser Linux Version. Add below command to ``~/.bashrc``
+Add below command to ``~/.bashrc``:
 
 .. code-block:: bash
 
-   export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
-   export CKIPPARSER_RULE=<ckipparser-linux-root>/Rule
-   export CKIPPARSER_RDB=<ckipparser-linux-root>/RDB
+   export LD_LIBRARY_PATH=<ckipws-linux-root>/lib:<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
 
-Step 3: Install Using Pip
+
+Step 2: Install Using Pip
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-   LIBRARY_PATH=<ckipws-linux-root>/lib:<ckipparser-linux-root>/lib:$LIBRARY_PATH pip install pyckip
+   pip install pyckip \
+      --install-option='--ws-dir=<ckipws-linux-root>' \
+      --install-option='--parser-dir=<ckipparser-linux-root>'
+
+Installation Options
+^^^^^^^^^^^^^^^^^^^^
+
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| Option                                        | Detail                                | Default Value                 |
++===============================================+=======================================+===============================+
+| ``--[no-]ws``                                 | Enable/disable CKIPWS.                |                               |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--[no-]parser``                             | Enable/disable CKIP-Parser.           |                               |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--ws-dir=<ws-dir>``                         | CKIPWS root directory.                |                               |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--ws-lib-dir=<ws-lib-dir>``                 | CKIPWS libraries directory            | ``<ws-dir>/lib``              |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--ws-share-dir=<ws-share-dir>``             | CKIPWS share directory                | ``<ws-dir>``                  |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--parser-dir=<parser-dir>``                 | CKIP-Parser root directory.           |                               |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--parser-lib-dir=<parser-lib-dir>``         | CKIP-Parser libraries directory       | ``<parser-dir>/lib``          |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--parser-share-dir=<parser-share-dir>``     | CKIP-Parser share directory           | ``<parser-dir>``              |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--data2-dir=<data2-dir>``                   | "Data2" directory                     | ``<ws-share-dir>/Data2``      |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--rule-dir=<rule-dir>``                     | "Rule" directory                      | ``<parser-share-dir>/Rule``   |
++-----------------------------------------------+---------------------------------------+-------------------------------+
+| ``--rdb-dir=<rdb-dir>``                       | "RDB" directory                       | ``<parser-share-dir>/RDB``    |
++-----------------------------------------------+---------------------------------------+-------------------------------+
 
 API
 ---
@@ -100,7 +122,14 @@ CkipWS
 
 .. code-block:: python
 
-   class ckipws.CkipWS(logger=False, inifile=None, data2dir=None, lexfile=None, new_style_format=False, show_category=True)
+   class ckipws.CkipWS(
+      logger           = False,
+      inifile          = None,
+      data2dir         = None,
+      lexfile          = None,
+      new_style_format = False,
+      show_category    = True,
+   )
 
 The CKIP word segmentation driver.
 
@@ -111,13 +140,13 @@ The CKIP word segmentation driver.
       the path to the INI file.
 
    data2dir (str)
-      the path to the folder "Data2/" (default is "$CKIPWS_DATA2/").
+      the path to the folder "Data2/". (Use $CKIPWS_DATA2 if unset or null.)
 
    lexfile (str)
       the path to the user-defined lexicon file.
 
    new_style_format (bool)
-      split sentences by newline characters ("\n") rather than punctuations.
+      split sentences by newline characters ("\\n") rather than punctuations.
 
    show_category (bool)
       show part-of-speech tags.
@@ -178,7 +207,20 @@ CkipParser
 
 .. code-block:: python
 
-   class ckipparser.CkipParser(logger=False, inifile=None, wsinifile=None, data2dir=None, ruledir=None, rdbdir=None, do_ws=True, do_parse=True, do_role=True, lexfile=None, new_style_format=False, show_category=True)
+   class ckipparser.CkipParser(
+      logger           = False,
+      inifile          = None,
+      wsinifile        = None,
+      data2dir         = None,
+      ruledir          = None,
+      rdbdir           = None,
+      do_ws            = True,
+      do_parse         = True,
+      do_role          = True,
+      lexfile          = None,
+      new_style_format = False,
+      show_category    = True,
+   )
 
 The CKIP parser driver.
 
@@ -192,13 +234,13 @@ The CKIP parser driver.
       the path to the INI file.
 
    data2dir (str)
-      the path to the folder "Data2/" (default is "$CKIPWS_DATA2/").
+      the path to the folder "Data2/". (Use $CKIPWS_DATA2 if unset or null.)
 
    ruledir (str)
-      the path to the folder "Rule/" (default is "$CKIPPARSER_RULE/").
+      the path to the folder "Rule/". (Use $CKIPPARSER_RULE if unset or null.)
 
    rdbdir (str)
-      the path to the folder "RDB/" (default is "$CKIPPARSER_RDB/").
+      the path to the folder "RDB/". (Use $CKIPPARSER_RDB if unset or null.)
 
    do_ws (bool)
       do word-segmentation.
@@ -213,7 +255,7 @@ The CKIP parser driver.
       the path to the user-defined lexicon file.
 
    new_style_format (bool)
-      split sentences by newline characters ("\n") rather than punctuations.
+      split sentences by newline characters ("\\n") rather than punctuations.
 
    show_category (bool)
       show part-of-speech tags.

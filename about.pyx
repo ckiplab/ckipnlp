@@ -6,7 +6,7 @@ __author_email__  = 'emfomy@gmail.com'
 __copyright__     = 'Copyright 2018-2019'
 
 __title__         = 'pyckip'
-__version__       = '0.3.1'
+__version__       = '0.4.0'
 __description__   = 'CKIP NLP Wrappers'
 __license__       = "MIT"
 
