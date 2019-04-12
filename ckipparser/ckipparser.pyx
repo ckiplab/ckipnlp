@@ -6,6 +6,8 @@ from __future__ import print_function
 __author__    = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 include '../about.pyx'
+include 'ini.pyx'
+include '../ckipws/ini.pyx'
 
 cimport ckipparser.cckipparser as cckipparser
 from libc.stdlib cimport malloc, free
@@ -16,8 +18,6 @@ import os       as __os
 import re       as __re
 import sys      as __sys
 import tempfile as __tempfile
-
-from ckipws import CkipWS as __CkipWS
 
 def __to_bytes(text):
 	return text.encode() if __sys.version_info >= (3, 0) else text
@@ -35,10 +35,10 @@ cdef class CkipParser:
 	"""The CKIP parser driver.
 
 	Args:
-		logger (bool): enable logger.
+		logger (bool):   enable logger.
 		inifile (str):   the path to the INI file.
 		wsinifile (str): the path to the INI file for CKIPWS.
-		options:         the options (see :func:`CkipParser.create_ini` and  :func:`CkipWS.create_ini`).
+		options:         the options (see :func:`create_ws_ini` and  :func:`create_parser_ini`).
 	"""
 
 	cdef cckipparser.corenlp_t __obj
@@ -55,14 +55,14 @@ cdef class CkipParser:
 		if not wsinifile:
 			fwsini = __tempfile.NamedTemporaryFile(mode='w')
 			wsinifile = fwsini.name
-			wsinidata, options = __CkipWS.create_ini(**options)
+			wsinidata, options = create_ws_ini(**options)
 			fwsini.write(__from_unicode(wsinidata))
 			fwsini.flush()
 
 		if not inifile:
 			fini = __tempfile.NamedTemporaryFile(mode='w')
 			inifile = fini.name
-			inidata, options = self.create_ini(wsinifile=wsinifile, **options)
+			inidata, options = create_parser_ini(wsinifile=wsinifile, **options)
 			fini.write(__from_unicode(inidata))
 			fini.flush()
 
@@ -152,74 +152,3 @@ cdef class CkipParser:
 
 		ret = cckipparser.CKIPCoreNLP_ApplyFile(self.__obj, ifile, ofile)
 		assert ret is not None
-
-	@staticmethod
-	def create_ini(*, wsinifile, ruledir=None, rdbdir=None, do_ws=True, do_parse=True, do_role=True, **options):
-		"""Generate config.
-
-		Args:
-			ruledir (str): the path to "Rule/".
-			rdbdir (str):  the path to "RDB/".
-
-			do_ws (bool):    do word-segmentation.
-			do_parse (bool): do parsing.
-			do_role (bool):  do role.
-		"""
-		if ruledir is None:
-			ruledir = __os.getenv('CKIPPARSER_RULE')
-			if not ruledir:
-				print('Warning: $CKIPPARSER_RULE is unset or null')
-
-		if rdbdir is None:
-			rdbdir = __os.getenv('CKIPPARSER_RDB')
-			if not rdbdir:
-				print('Warning: $CKIPPARSER_RDB is unset or null')
-
-		IsTag          = not do_ws
-		AssignRole     = do_role
-		AssignRoleOnly = False
-
-		if not do_parse:
-			if not do_ws and not do_role:
-				raise ValueError('Must select at least one task')
-			if do_ws and not do_role:
-				raise ValueError('Use ckipws.CkipWS for word-segmentation')
-			if not do_ws and do_role:
-				AssignRoleOnly = True
-			if do_ws and do_role:
-				raise ValueError('Invalid tasks')
-
-		cfg = []
-
-		cfg.append('[WordSeg]')
-		cfg.append('ini={wsinifile}'.format(wsinifile=wsinifile))
-		cfg.append('')
-
-		cfg.append('[Parser]')
-		cfg.append('SetPos13=0')
-		cfg.append('13CateFile={ruledir}/13Cate.txt'.format(ruledir=ruledir))
-		cfg.append('')
-
-		# cfg.append('SetMap=1')
-		cfg.append('SetMap=0')
-		cfg.append('CatMapFile={ruledir}/CatMap.txt'.format(ruledir=ruledir))
-		cfg.append('')
-
-		cfg.append('GrammarRule={ruledir}/CKIP-Rule.txt'.format(ruledir=ruledir))
-		cfg.append('HeadRule={ruledir}/CKIP-Head.txt'.format(ruledir=ruledir))
-		cfg.append('')
-
-		cfg.append('SetChangePos=1')
-		cfg.append('SentenceDelimiter=，,；。！？')
-		cfg.append('SetLength=15')
-		cfg.append('NormalPos=1')
-		cfg.append('NormalTree=1')
-		cfg.append('IsTag={IsTag}'.format(IsTag=int(IsTag)))
-		cfg.append('')
-
-		cfg.append('[SRL]')
-		cfg.append('DataPath={rdbdir}/'.format(rdbdir=rdbdir))
-		cfg.append('AssignRole={AssignRole}'.format(AssignRole=int(AssignRole)))
-		cfg.append('AssignRoleOnly={AssignRoleOnly}'.format(AssignRoleOnly=int(AssignRoleOnly)))
-
-		return '\n'.join(cfg), options

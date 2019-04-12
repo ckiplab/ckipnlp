@@ -9,7 +9,6 @@ __copyright__ = 'Copyright 2018-2019'
 from setuptools import dist
 dist.Distribution().fetch_build_eggs([
 	'Cython>=0.29',
-	'Click',
 ])
 
 import os
@@ -40,9 +39,6 @@ def os_environ_prepend(name, dirpath):
 		os.environ[name] = dirpath
 
 
-def glob_files(dirpath):
-	return [os.path.join(filepath, file) for filepath, _, files in os.walk(dirpath) for file in files]
-
 class CommandMixin:
 
 	user_options = [
@@ -51,17 +47,17 @@ class CommandMixin:
 		('no-ws',     None, 'without CKIPWS'),
 		('no-parser', None, 'without CKIP-Parser'),
 
-		('ws-dir=',     None, 'CKIPWS directory'),
-		('parser-dir=', None, 'CKIP-Parser directory'),
-
+		('ws-dir=',       None, 'CKIPWS root directory'),
 		('ws-lib-dir=',   None, 'CKIPWS libraries directory [default is <ws-dir>/lib]'),
 		('ws-share-dir=', None, 'CKIPWS share directory [default is <ws-dir>]'),
-		('ws-data2-dir=', None, 'CKIPWS "Data2" directory [default is "<ws-share-dir>/Data2"]'),
 
+		('parser-dir=',       None, 'CKIP-Parser root directory'),
 		('parser-lib-dir=',   None, 'CKIP-Parser libraries directory [default is "<parser-dir>/lib"]'),
 		('parser-share-dir=', None, 'CKIPWS share directory [default is "<parser-dir>"]'),
-		('parser-rule-dir=',  None, 'CKIP-Parser "Rule" directory [default is "<parser-share-dir>/Rule"]'),
-		('parser-rdb-dir=',   None, 'CKIP-Parser "RDB" directory [default is "<parser-share-dir>/RDB"]'),
+
+		('data2-dir=', None, 'CKIPWS "Data2" directory [default is "<ws-share-dir>/Data2" or "<parser-share-dir>/Data2"]'),
+		('rule-dir=',  None, 'CKIP-Parser "Rule" directory [default is "<parser-share-dir>/Rule"]'),
+		('rdb-dir=',   None, 'CKIP-Parser "RDB" directory [default is "<parser-share-dir>/RDB"]'),
 	]
 
 	negative_opt = {
@@ -79,46 +75,31 @@ class CommandMixin:
 		self.parser = True
 
 		self.ws_dir     = None
-		self.parser_dir = None
 
 		self.ws_lib_dir   = None
 		self.ws_share_dir = None
-		self.ws_data2_dir = None
 
+		self.parser_dir = None
 		self.parser_lib_dir   = None
 		self.parser_share_dir = None
-		self.parser_rule_dir  = None
-		self.parser_rdb_dir   = None
+
+		self.data2_dir = None
+		self.rule_dir  = None
+		self.rdb_dir   = None
 
 	def finalize_options(self):
 
-		# prerequisite
-		opt_prerequisite = [
-			('parser',           'ws',),
-			('ws_dir',           'ws',),
-			('ws_lib_dir',       'ws',),
-			('ws_share_dir',     'ws',),
-			('ws_data2_dir',     'ws',),
-			('parser_dir',       'parser',),
-			('parser_lib_dir',   'parser',),
-			('parser_share_dir',  'parser',),
-			('parser_rule_dir',  'parser',),
-			('parser_rdb_dir',   'parser',),
-		]
-		for opt0, opt1 in opt_prerequisite:
-			if getattr(self, opt0) and not getattr(self, opt1):
-				raise ValueError('--%s requires --%s' % (opt0.replace('_', '-'), opt1.replace('_', '-'),))
-
 		# subdirectory
 		opt_subdirectory = [
-			('ws_lib_dir',      'ws_dir',           'lib',),
-			('ws_data2_dir',    'ws_share_dir',     'Data2',),
-			('ws_data2_dir',    'ws_dir',           'Data2',),
-			('parser_lib_dir',  'parser_dir',       'lib',),
-			('parser_rule_dir', 'parser_share_dir', 'Rule',),
-			('parser_rule_dir', 'parser_dir',       'Rule',),
-			('parser_rdb_dir',  'parser_share_dir', 'RDB',),
-			('parser_rdb_dir',  'parser_dir',       'RDB',),
+			('ws_lib_dir',      'ws_dir',     'lib',),
+			('ws_share_dir',    'ws_dir',     '',),
+			('parser_lib_dir',  'parser_dir', 'lib',),
+			('parser_share_dir','parser_dir', '',),
+
+			('data2_dir', 'ws_share_dir',     'Data2',),
+			('data2_dir', 'parser_share_dir', 'Data2',),
+			('rule_dir',  'parser_share_dir', 'Rule',),
+			('rdb_dir',   'parser_share_dir', 'RDB',),
 		]
 		for opt0, opt1, subdir in opt_subdirectory:
 			dir0 = getattr(self, opt0)
@@ -129,10 +110,10 @@ class CommandMixin:
 		# directory
 		opt_directory = [
 			'ws_lib_dir',
-			'ws_data2_dir',
 			'parser_lib_dir',
-			'parser_rule_dir',
-			'parser_rdb_dir',
+			'data2_dir',
+			'rule_dir',
+			'rdb_dir',
 		]
 		for opt0 in opt_directory:
 			dir0 = getattr(self, opt0)
@@ -146,16 +127,11 @@ class CommandMixin:
 		# CKIPWS
 		if self.ws:
 			print('- Enable CKIPWS support')
-
 			if self.ws_lib_dir:
 				print('- Use CKIPWS library from (%s)' % self.ws_lib_dir)
 				i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipws'), None)
 				self.distribution.ext_modules[i].library_dirs.append(self.ws_lib_dir)
-				self.distribution.ext_modules[i].runtime_library_dirs.append(self.ws_lib_dir)
-
-			if self.ws_data2_dir:
-				print('- Use CKIPWS "Data2" from (%s)' % self.ws_data2_dir)
-				self.distribution.data_files.append(('share/pyckip/Data2/', glob_files(self.ws_data2_dir),))
+				# self.distribution.ext_modules[i].runtime_library_dirs.append(self.ws_lib_dir)
 		else:
 			print('- Disable CKIPWS support')
 			i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipws'), None)
@@ -164,27 +140,38 @@ class CommandMixin:
 		# CKIP-Parser
 		if self.parser:
 			print('- Enable CKIP-Parser support')
-
 			if self.parser_lib_dir:
 				print('- Use CKIP-Parser library from (%s)' % self.parser_lib_dir)
 				i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipparser'), None)
 				self.distribution.ext_modules[i].library_dirs.append(self.parser_lib_dir)
-				self.distribution.ext_modules[i].runtime_library_dirs.append(self.parser_lib_dir)
-
-			if self.parser_rule_dir:
-				print('- Use CKIP-Parser "Rule" from (%s)' % self.parser_rule_dir)
-				self.distribution.data_files.append(('share/pyckip/Rule/', glob_files(self.parser_rule_dir),))
-
-			if self.parser_rdb_dir:
-				print('- Use CKIP-Parser "RDB" from (%s)' % self.parser_rdb_dir)
-				self.distribution.data_files.append(('share/pyckip/RDB/', glob_files(self.parser_rdb_dir),))
-
+				# self.distribution.ext_modules[i].runtime_library_dirs.append(self.parser_lib_dir)
 		else:
 			print('- Disable CKIP-Parser support')
 			i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipparser'), None)
 			if i is not None: del self.distribution.ext_modules[i]
 
+
+		# Data
+		if self.data2_dir:
+			print('- Use "Data2" from (%s)' % self.data2_dir)
+			self.data_files('share/pyckip/Data2/', self.data2_dir)
+
+		if self.rule_dir:
+			print('- Use "Rule" from (%s)' % self.rule_dir)
+			self.data_files('share/pyckip/Rule/', self.rule_dir)
+
+		if self.rdb_dir:
+			print('- Use "RDB" from (%s)' % self.rdb_dir)
+			self.data_files('share/pyckip/RDB/', self.rdb_dir)
+
 		super().run()
+
+	def data_files(self, prefix, dirtop):
+		for dirpath, _, files in os.walk(dirtop):
+			self.distribution.data_files.append((
+				os.path.join(prefix, os.path.relpath(dirpath, dirtop)),
+				[os.path.join(dirpath, file) for file in files],
+			))
 
 class InstallCommand(CommandMixin, install):
 	user_options = install.user_options + CommandMixin.user_options
@@ -231,7 +218,7 @@ setup(
 			),
 			Extension('ckipparser',
 				sources=['ckipparser/ckipparser.pyx'],
-				libraries=['CKIPCoreNLP', 'CKIPParser', 'CKIPSRL', 'CKIPWS'],
+				libraries=['CKIPCoreNLP'],
 			),
 		],
 		build_dir='build',
