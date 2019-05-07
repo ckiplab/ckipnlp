@@ -57,9 +57,17 @@ Requirements
 
 * `Python <http://www.python.org>`_ 2.7+, 3.5+
 * `Cython <http://cython.org>`_ 0.29+
+
+CkipWS
+""""""
+
+* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version
+
+CkipParser
+""""""""""
+
+* `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version
 * `Boost C++ Libraries <https://www.boost.org/>`_ 1.54.0
-* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw:8080/project/wordsegment/>`_ Linux version
-* `CKIP Parser <http://ckip.iis.sinica.edu.tw:8080/project/parser/>`_ Linux version
 
 Installation
 ------------
