@@ -66,11 +66,10 @@ class CommandMixin(object):
 	}
 
 	def initialize_options(self):
-		self.ws     = True
-		self.parser = True
+		self.ws     = False
+		self.parser = False
 
-		self.ws_dir     = None
-
+		self.ws_dir       = None
 		self.ws_lib_dir   = None
 		self.ws_share_dir = None
 
@@ -124,6 +123,7 @@ class CommandMixin(object):
 		# CKIPWS
 		if self.ws:
 			print('- Enable CKIPWS support')
+			self.distribution.package_dir.pop('ckipws')
 			if self.ws_lib_dir:
 				print('- Use CKIPWS library from (%s)' % self.ws_lib_dir)
 				i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipws'), None)
@@ -137,6 +137,7 @@ class CommandMixin(object):
 		# CKIP-Parser
 		if self.parser:
 			print('- Enable CKIP-Parser support')
+			self.distribution.package_dir.pop('ckipparser')
 			if self.parser_lib_dir:
 				print('- Use CKIP-Parser library from (%s)' % self.parser_lib_dir)
 				i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipparser'), None)
@@ -160,6 +161,9 @@ class CommandMixin(object):
 		if self.rdb_dir:
 			print('- Use "RDB" from (%s)' % self.rdb_dir)
 			self.data_files('share/pyckip/RDB/', self.rdb_dir)
+
+		# Python packages
+		self.distribution.packages = list(self.distribution.package_dir.keys())
 
 		super(CommandMixin, self).run()
 
@@ -213,6 +217,11 @@ setup(
 		'Operating System :: POSIX :: Linux',
 		'Natural Language :: Chinese (Traditional)',
 	],
+	packages=['ckipws', 'ckipparser'],
+	package_dir={
+		'ckipws': 'helper/ckipws',
+		'ckipparser': 'helper/ckipparser',
+	},
 	ext_modules=cythonize(
 		[
 			Extension('ckipws',
@@ -221,7 +230,7 @@ setup(
 			),
 			Extension('ckipparser',
 				sources=['ckipparser/ckipparser.pyx'],
-				libraries=['CKIPCoreNLP'],
+				libraries=['CKIPCoreNLP','CKIPParser','CKIPWS','CKIPSRL'],
 			),
 		],
 		build_dir='build',

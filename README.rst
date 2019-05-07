@@ -57,9 +57,17 @@ Requirements
 
 * `Python <http://www.python.org>`_ 2.7+, 3.5+
 * `Cython <http://cython.org>`_ 0.29+
+
+CkipWS (Optional)
+"""""""""""""""""
+
+* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version
+
+CkipParser (Optional)
+"""""""""""""""""""""
+
+* `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version
 * `Boost C++ Libraries <https://www.boost.org/>`_ 1.54.0
-* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw:8080/project/wordsegment/>`_ Linux version
-* `CKIP Parser <http://ckip.iis.sinica.edu.tw:8080/project/parser/>`_ Linux version
 
 Installation
 ------------
@@ -82,8 +90,12 @@ Step 2: Install Using Pip
 .. code-block:: bash
 
    pip install pyckip \
+      --install-option='--ws' \
       --install-option='--ws-dir=<ckipws-linux-root>' \
+      --install-option='--parser' \
       --install-option='--parser-dir=<ckipparser-linux-root>'
+
+Ignore ws/parser options if one doesn't have CKIPWS/CKIP-Parser.
 
 Installation Options
 ^^^^^^^^^^^^^^^^^^^^
@@ -91,9 +103,9 @@ Installation Options
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 | Option                                        | Detail                                | Default Value                 |
 +===============================================+=======================================+===============================+
-| ``--[no-]ws``                                 | Enable/disable CKIPWS.                |                               |
+| ``--[no-]ws``                                 | Enable/disable CKIPWS.                | False                         |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--[no-]parser``                             | Enable/disable CKIP-Parser.           |                               |
+| ``--[no-]parser``                             | Enable/disable CKIP-Parser.           | False                         |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 | ``--ws-dir=<ws-dir>``                         | CKIPWS root directory.                |                               |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
@@ -310,18 +322,6 @@ Segment a file.
 
 FAQ
 ---
-
-* I don't have CKIPWS/CKIP-Parser. What should I do?
-
-Append :code:`--install-option='--no-ws'` or :code:`--install-option='--no-parser'` after the :code:`pip install` command to disable CKIPWS or CKIP-Parser.
-
-.. code-block:: bash
-
-   # Disable CKIPWS support
-   pip install pyckip --install-option='--no-ws'
-
-   # Disable CKIP-Parser support
-   pip install pyckip --install-option='--no-parser'
 
 * The CKIPWS throws "``what():  locale::facet::_S_create_c_locale name not valid``". What should I do?
 
