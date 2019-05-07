@@ -62,9 +62,11 @@ def create_parser_ini(*, wsinifile, ruledir=None, rdbdir=None, do_ws=True, do_pa
 	cfg.append('13CateFile={ruledir}/13Cate.txt'.format(ruledir=ruledir))
 	cfg.append('')
 
-	# cfg.append('SetMap=1')
-	cfg.append('SetMap=0')
+	cfg.append('SetMap=1')
 	cfg.append('CatMapFile={ruledir}/CatMap.txt'.format(ruledir=ruledir))
+	cfg.append('WordLib1={ruledir}/WordLib1.txt'.format(ruledir=ruledir))
+	cfg.append('WordLib2={ruledir}/WordLib2.txt'.format(ruledir=ruledir))
+	cfg.append('WordLib3={ruledir}/WordLib3.txt'.format(ruledir=ruledir))
 	cfg.append('')
 
 	cfg.append('GrammarRule={ruledir}/CKIP-Rule.txt'.format(ruledir=ruledir))
