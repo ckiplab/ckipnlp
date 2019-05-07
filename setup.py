@@ -221,7 +221,7 @@ setup(
 			),
 			Extension('ckipparser',
 				sources=['ckipparser/ckipparser.pyx'],
-				libraries=['CKIPCoreNLP'],
+				libraries=['CKIPCoreNLP','CKIPParser','CKIPWS','CKIPSRL'],
 			),
 		],
 		build_dir='build',
