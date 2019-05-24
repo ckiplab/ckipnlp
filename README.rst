@@ -135,12 +135,14 @@ CkipWS
 .. code-block:: python
 
    class ckipws.CkipWS(
-      logger           = False,
-      inifile          = None,
-      data2dir         = None,
-      lexfile          = None,
-      new_style_format = False,
-      show_category    = True,
+      logger                = False,
+      inifile               = None,
+      data2dir              = None,
+      lexfile               = None,
+      new_style_format      = False,
+      show_category         = True,
+      article_max_line_num  = 300,
+      sentence_max_word_num = 80,
    )
 
 The CKIP word segmentation driver.
@@ -162,6 +164,12 @@ The CKIP word segmentation driver.
 
    show_category (bool)
       show part-of-speech tags.
+
+   article_max_line_num (int)
+      maximum number of lines per article. (used only with `apply_article`.)
+
+   sentence_max_word_num (int)
+      maximum number of words per sentence. (used only with `apply_article`.)
 
 --------------------------------
 
@@ -186,7 +194,26 @@ Segment a sentence.
 
    def ckipws.CkipWS.apply_list(text, unicode=False)
 
-Segment a list of sentence.
+Segment a list of sentences.
+
+   ilist (str)
+      the list of input sentences (str).
+
+   unicode (bool)
+      use Unicode for of input/output encoding; otherwise use system encoding.
+
+   return value (str)
+      the list of output sentences (str).
+
+--------------------------------
+
+.. code-block:: python
+
+   def ckipws.CkipWS.apply_article(text, unicode=False)
+
+Segment an article.
+
+   Similar to :func:`create_ws_ini`, but split sentence/article by `article_max_line_num` and `sentence_max_word_num`.
 
    ilist (str)
       the list of input sentences (str).
@@ -295,7 +322,7 @@ Segment a sentence.
 
    def ckipparser.CkipParser.apply_list(text, unicode=False)
 
-Segment a list of sentence.
+Segment a list of sentences.
 
    ilist (str)
       the list of input sentences (str).

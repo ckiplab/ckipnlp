@@ -5,7 +5,15 @@ __author__    = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
 
-def create_ws_ini(*, data2dir=None, lexfile=None, new_style_format=False, show_category=True, **options):
+def create_ws_ini(*,
+		data2dir=None,
+		lexfile=None,
+		new_style_format=False,
+		show_category=True,
+		article_max_line_num=300,
+		sentence_max_word_num=80,
+		**options,
+):
 	"""Generate CKIP word segmentation config.
 
 	Args:
@@ -14,6 +22,9 @@ def create_ws_ini(*, data2dir=None, lexfile=None, new_style_format=False, show_c
 
 		new_style_format (bool): split sentences by newline characters ("\\n") rather than punctuations.
 		show_category (bool):    show part-of-speech tags.
+
+		article_max_line_num  (int): maximum number of lines per article.  (used only with :func:`apply_article`.)
+		sentence_max_word_num (int): maximum number of words per sentence. (used only with :func:`apply_article`.)
 	"""
 	if data2dir is None:
 		data2dir = __os.getenv('CKIPWS_DATA2')
@@ -269,8 +280,8 @@ def create_ws_ini(*, data2dir=None, lexfile=None, new_style_format=False, show_c
 
 	cfg.append('[CWordSegmentor]')
 	cfg.append('Name=MainWS')
-	cfg.append('ArticleMaxLineNum=300')
-	cfg.append('SentenceMaxWordNum=80')
+	cfg.append('ArticleMaxLineNum={article_max_line_num}'.format(article_max_line_num=article_max_line_num)
+	cfg.append('SentenceMaxWordNum={sentence_max_word_num}'.format(sentence_max_word_num=sentence_max_word_num)
 	cfg.append('ReloadMyDic=false')
 	cfg.append('SentenceDelimiter=，,；。！？')
 	cfg.append('HandlerList={HandlerList}'.format(HandlerList=' '.join(HandlerList)))

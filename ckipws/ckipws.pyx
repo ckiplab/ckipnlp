@@ -92,7 +92,7 @@ cdef class CkipWS:
 		return self.apply_list([text], unicode=unicode)[0]
 
 	def apply_list(self, ilist, *, unicode=False):
-		"""Segment a list of sentence.
+		"""Segment a list of sentences.
 
 		Args:
 			ilist (list):   the list of input sentences (str).
@@ -110,6 +110,43 @@ cdef class CkipWS:
 		for i in range(inum):
 			iarr[i] = PyUnicode_AsUnicode(ilist[i])
 		ret = cckipws.WordSeg_ApplyList(self.__obj, inum, iarr)
+		free(iarr)
+		assert ret is not None
+
+		cdef const Py_UNICODE* result
+		olist = []
+		result = cckipws.WordSeg_GetResultBegin(self.__obj)
+		while result is not NULL:
+			olist.append(PyUnicode_FromUnicode(result, len(result)).strip())
+			result = cckipws.WordSeg_GetResultNext(self.__obj)
+
+		if not unicode:
+			olist = [__from_unicode(l) for l in olist]
+
+		return olist
+
+	def apply_article(self, ilist, *, unicode=False):
+		"""Segment an article.
+
+		Note:
+			Similar to :func:`create_ws_ini`, but split sentence/article by `article_max_line_num` and `sentence_max_word_num`.
+
+		Args:
+			ilist (list):   the list of input sentences (str).
+			unicode (bool): use Unicode for of input/output encoding; otherwise use system encoding.
+
+		Return:
+			list:           the list of output sentences (str).
+		"""
+
+		inum = len(ilist)
+		if not unicode:
+			ilist = [__to_unicode(l) for l in ilist]
+
+		iarr = <const Py_UNICODE**> malloc(sizeof(const Py_UNICODE*) * inum)
+		for i in range(inum):
+			iarr[i] = PyUnicode_AsUnicode(ilist[i])
+		ret = cckipws.WordSeg_ApplyArticle(self.__obj, inum, iarr)
 		free(iarr)
 		assert ret is not None
 

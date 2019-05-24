@@ -5,7 +5,15 @@ __author__    = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
 
-def create_parser_ini(*, wsinifile, ruledir=None, rdbdir=None, do_ws=True, do_parse=True, do_role=True, **options):
+def create_parser_ini(*,
+		wsinifile,
+		ruledir=None,
+		rdbdir=None,
+		do_ws=True,
+		do_parse=True,
+		do_role=True,
+		**options,
+):
 	"""Generate CKIP parser config.
 
 	Args:
