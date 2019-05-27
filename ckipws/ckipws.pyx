@@ -129,7 +129,7 @@ cdef class CkipWS:
 		"""Segment an article.
 
 		Note:
-			Similar to :func:`create_ws_ini`, but split sentence/article by `article_max_line_num` and `sentence_max_word_num`.
+			Similar to :func:`create_ws_ini`, but split sentence and `sentence_max_word_num`.
 
 		Args:
 			ilist (list):   the list of input sentences (str).

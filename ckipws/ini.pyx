@@ -10,7 +10,6 @@ def create_ws_ini(*,
 		lexfile=None,
 		new_style_format=False,
 		show_category=True,
-		article_max_line_num=300,
 		sentence_max_word_num=80,
 		**options,
 ):
@@ -23,7 +22,6 @@ def create_ws_ini(*,
 		new_style_format (bool): split sentences by newline characters ("\\n") rather than punctuations.
 		show_category (bool):    show part-of-speech tags.
 
-		article_max_line_num  (int): maximum number of lines per article.  (used only with :func:`apply_article`.)
 		sentence_max_word_num (int): maximum number of words per sentence. (used only with :func:`apply_article`.)
 	"""
 	if data2dir is None:
@@ -280,8 +278,8 @@ def create_ws_ini(*,
 
 	cfg.append('[CWordSegmentor]')
 	cfg.append('Name=MainWS')
-	cfg.append('ArticleMaxLineNum={article_max_line_num}'.format(article_max_line_num=article_max_line_num)
-	cfg.append('SentenceMaxWordNum={sentence_max_word_num}'.format(sentence_max_word_num=sentence_max_word_num)
+	cfg.append('ArticleMaxLineNum=300')
+	cfg.append('SentenceMaxWordNum={sentence_max_word_num}'.format(sentence_max_word_num=sentence_max_word_num))
 	cfg.append('ReloadMyDic=false')
 	cfg.append('SentenceDelimiter=，,；。！？')
 	cfg.append('HandlerList={HandlerList}'.format(HandlerList=' '.join(HandlerList)))

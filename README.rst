@@ -141,7 +141,6 @@ CkipWS
       lexfile               = None,
       new_style_format      = False,
       show_category         = True,
-      article_max_line_num  = 300,
       sentence_max_word_num = 80,
    )
 
@@ -213,7 +212,7 @@ Segment a list of sentences.
 
 Segment an article.
 
-   Similar to :func:`create_ws_ini`, but split sentence/article by `article_max_line_num` and `sentence_max_word_num`.
+   Similar to :func:`create_ws_ini`, but split sentence by `sentence_max_word_num`.
 
    ilist (str)
       the list of input sentences (str).
