@@ -164,11 +164,8 @@ The CKIP word segmentation driver.
    show_category (bool)
       show part-of-speech tags.
 
-   article_max_line_num (int)
-      maximum number of lines per article. (used only with `apply_article`.)
-
    sentence_max_word_num (int)
-      maximum number of words per sentence. (used only with `apply_article`.)
+      maximum number of words per sentence.
 
 --------------------------------
 
@@ -194,25 +191,6 @@ Segment a sentence.
    def ckipws.CkipWS.apply_list(text, unicode=False)
 
 Segment a list of sentences.
-
-   ilist (str)
-      the list of input sentences (str).
-
-   unicode (bool)
-      use Unicode for of input/output encoding; otherwise use system encoding.
-
-   return value (str)
-      the list of output sentences (str).
-
---------------------------------
-
-.. code-block:: python
-
-   def ckipws.CkipWS.apply_article(text, unicode=False)
-
-Segment an article.
-
-   Similar to :func:`create_ws_ini`, but split sentence by `sentence_max_word_num`.
 
    ilist (str)
       the list of input sentences (str).

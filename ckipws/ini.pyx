@@ -22,7 +22,7 @@ def create_ws_ini(*,
 		new_style_format (bool): split sentences by newline characters ("\\n") rather than punctuations.
 		show_category (bool):    show part-of-speech tags.
 
-		sentence_max_word_num (int): maximum number of words per sentence. (used only with :func:`apply_article`.)
+		sentence_max_word_num (int): maximum number of words per sentence.
 	"""
 	if data2dir is None:
 		data2dir = __os.getenv('CKIPWS_DATA2')
