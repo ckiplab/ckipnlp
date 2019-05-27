@@ -107,7 +107,7 @@ cdef class CkipParser:
 		return self.apply_list([text], unicode=unicode)[0]
 
 	def apply_list(self, ilist, *, unicode=False):
-		"""Parse a list of sentence.
+		"""Parse a list of sentences.
 
 		Args:
 			ilist (list):   the list of input sentences (str).

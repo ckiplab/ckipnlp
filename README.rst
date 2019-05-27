@@ -61,12 +61,12 @@ Requirements
 CkipWS (Optional)
 """""""""""""""""
 
-* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version
+* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version (20190524+)
 
 CkipParser (Optional)
 """""""""""""""""""""
 
-* `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version
+* `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version (20190506+)
 * `Boost C++ Libraries <https://www.boost.org/>`_ 1.54.0
 
 Installation
@@ -135,12 +135,13 @@ CkipWS
 .. code-block:: python
 
    class ckipws.CkipWS(
-      logger           = False,
-      inifile          = None,
-      data2dir         = None,
-      lexfile          = None,
-      new_style_format = False,
-      show_category    = True,
+      logger                = False,
+      inifile               = None,
+      data2dir              = None,
+      lexfile               = None,
+      new_style_format      = False,
+      show_category         = True,
+      sentence_max_word_num = 80,
    )
 
 The CKIP word segmentation driver.
@@ -162,6 +163,9 @@ The CKIP word segmentation driver.
 
    show_category (bool)
       show part-of-speech tags.
+
+   sentence_max_word_num (int)
+      maximum number of words per sentence.
 
 --------------------------------
 
@@ -186,7 +190,7 @@ Segment a sentence.
 
    def ckipws.CkipWS.apply_list(text, unicode=False)
 
-Segment a list of sentence.
+Segment a list of sentences.
 
    ilist (str)
       the list of input sentences (str).
@@ -295,7 +299,7 @@ Segment a sentence.
 
    def ckipparser.CkipParser.apply_list(text, unicode=False)
 
-Segment a list of sentence.
+Segment a list of sentences.
 
    ilist (str)
       the list of input sentences (str).

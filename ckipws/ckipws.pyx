@@ -92,7 +92,7 @@ cdef class CkipWS:
 		return self.apply_list([text], unicode=unicode)[0]
 
 	def apply_list(self, ilist, *, unicode=False):
-		"""Segment a list of sentence.
+		"""Segment a list of sentences.
 
 		Args:
 			ilist (list):   the list of input sentences (str).
