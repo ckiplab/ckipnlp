@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-__author__    = 'Mu Yang <emfomy@gmail.com>'
+__author__ = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
 try:
@@ -39,14 +39,14 @@ class CkipWS:
             fini.write(inidata)
             fini.flush()
 
-        def CkipWS(*, _=None): return None
+        def CkipWS(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
         CkipWS(**options)
 
         self.__core.init_data(inifile)
 
         try:
             fini.close()
-        except:
+        except: # pylint: disable=bare-except
             pass
 
     def __call__(self, text):
@@ -58,7 +58,7 @@ class CkipWS:
         Return:
             str:        the output sentence.
         """
-        return self.__core.apply_list([text])[0]
+        return self.apply_list([text])[0]
 
     def apply_list(self, ilist):
         """Segment a list of sentences.

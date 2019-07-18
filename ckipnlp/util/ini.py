@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-__author__    = 'Mu Yang <emfomy@gmail.com>'
+__author__ = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
 import datetime as _datetime
@@ -11,7 +11,8 @@ import warnings as _warnings
 
 import ckipnlp as _about
 
-def create_ws_ini(*,
+def create_ws_ini( # pylint: disable=too-many-statements
+        *,
         data2dir=None,
         lexfile=None,
         new_style_format=False,
@@ -30,6 +31,9 @@ def create_ws_ini(*,
 
         sentence_max_word_num (int): maximum number of words per sentence.
     """
+
+    # pylint: disable=invalid-name
+
     if data2dir is None:
         data2dir = _os.getenv('CKIPWS_DATA2')
         if not data2dir:
@@ -50,10 +54,10 @@ def create_ws_ini(*,
     cfg.append('')
 
     if lexfile:
-            cfg.append('[CTextLexicon]')
-            cfg.append('Name=TextLex')
-            cfg.append('FileName={lexfile}'.format(lexfile=lexfile))
-            cfg.append('')
+        cfg.append('[CTextLexicon]')
+        cfg.append('Name=TextLex')
+        cfg.append('FileName={lexfile}'.format(lexfile=lexfile))
+        cfg.append('')
 
     cfg.append('[CLexicon]')
     cfg.append('Name=Lex')
@@ -167,7 +171,8 @@ def create_ws_ini(*,
     cfg.append('StatisticProbability2=Prob2')
     cfg.append('StatisticProbability3=Prob3')
     cfg.append('LexiconName=Lex')
-    if lexfile: cfg.append('TextLexiconName=TextLex')
+    if lexfile:
+        cfg.append('TextLexiconName=TextLex')
     cfg.append('AdjustProb3=true')
     cfg.append('CoveringAmbiguityLexiconName=CALex')
     cfg.append('CategoryPredictor=CatPred')
@@ -190,7 +195,8 @@ def create_ws_ini(*,
     cfg.append('[CForeignName]')
     cfg.append('Name=FN')
     cfg.append('LexiconName=Lex')
-    if lexfile: cfg.append('TextLexiconName=TextLex')
+    if lexfile:
+        cfg.append('TextLexiconName=TextLex')
     cfg.append('InitDataPath={data2dir}/uwea/data/'.format(data2dir=data2dir))
     cfg.append('')
 
@@ -203,7 +209,8 @@ def create_ws_ini(*,
     cfg.append('[CStatisticWord]')
     cfg.append('Name=SW')
     cfg.append('LexiconName=Lex')
-    if lexfile: cfg.append('TextLexiconName=TextLex')
+    if lexfile:
+        cfg.append('TextLexiconName=TextLex')
     cfg.append('CategoryPredictor=CatPred')
     cfg.append('InitDataPath={data2dir}/uwea/data/'.format(data2dir=data2dir))
     cfg.append('ApplyRule=639')
@@ -212,7 +219,8 @@ def create_ws_ini(*,
     cfg.append('[CAffixCombiner]')
     cfg.append('Name=AC')
     cfg.append('LexiconName=Lex')
-    if lexfile: cfg.append('TextLexiconName=TextLex')
+    if lexfile:
+        cfg.append('TextLexiconName=TextLex')
     cfg.append('CategoryPredictor=CatPred')
     cfg.append('')
 
@@ -235,10 +243,10 @@ def create_ws_ini(*,
     cfg.append('')
 
     if lexfile:
-            cfg.append('[CLexWordGenerator]')
-            cfg.append('Name=myLWGen')
-            cfg.append('LexiconName=TextLex')
-            cfg.append('')
+        cfg.append('[CLexWordGenerator]')
+        cfg.append('Name=myLWGen')
+        cfg.append('LexiconName=TextLex')
+        cfg.append('')
 
     cfg.append('[CLexWordGenerator]')
     cfg.append('Name=LWGen')
@@ -276,8 +284,11 @@ def create_ws_ini(*,
     cfg.append('Name=RWTBPP')
     cfg.append('')
 
-    HandlerList = ['LWGen', 'myLWGen', 'DMMergedParser', 'RD3', 'RD6', 'RD7', 'FW', 'BW', 'MaxMatch', 'ProbModel', 'UW', \
-            'DDMFPP', 'LWGen', 'UWGen', 'RWTBPP', 'LWGen', 'myLWGen', 'DMSplittedParser', 'BW', 'MaxMatch', 'ProbModel', 'CA']
+    HandlerList = [
+        'LWGen', 'myLWGen', 'DMMergedParser', 'RD3', 'RD6', 'RD7', 'FW', 'BW', 'MaxMatch', 'ProbModel', 'UW', 'DDMFPP',
+        'LWGen', 'UWGen', 'RWTBPP', 'LWGen', 'myLWGen', 'DMSplittedParser', 'BW', 'MaxMatch', 'ProbModel', 'CA'
+    ]
+
     if not lexfile:
         while 'myLWGen' in HandlerList:
             HandlerList.remove('myLWGen')
@@ -294,7 +305,8 @@ def create_ws_ini(*,
 
     return '\n'.join(cfg), options
 
-def create_parser_ini(*,
+def create_parser_ini( # pylint: disable=too-many-statements
+        *,
         wsinifile,
         ruledir=None,
         rdbdir=None,
@@ -313,6 +325,9 @@ def create_parser_ini(*,
         do_parse (bool): do parsing.
         do_role (bool):  do role.
     """
+
+    # pylint: disable=invalid-name
+
     if ruledir is None:
         ruledir = _os.getenv('CKIPPARSER_RULE')
         if not ruledir:
@@ -329,8 +344,8 @@ def create_parser_ini(*,
             _warnings.warn('Invalid rdbdir (%s)' % rdbdir)
             rdbdir = 'RDB'
 
-    IsTag          = not do_ws
-    AssignRole     = do_role
+    IsTag = not do_ws
+    AssignRole = do_role
     AssignRoleOnly = False
 
     if not do_parse:

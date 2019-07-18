@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 # cython: language_level=3
 
-__author__    = 'Mu Yang <emfomy@gmail.com>'
+__author__ = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
 cimport src.ws.cckipws as cckipws

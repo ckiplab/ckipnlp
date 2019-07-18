@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-__author__    = 'Mu Yang <emfomy@gmail.com>'
+__author__ = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
 try:
@@ -50,22 +50,22 @@ class CkipParser:
             fini.write(inidata)
             fini.flush()
 
-        def CkipParser(*, _=None): return None
+        def CkipParser(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
         CkipParser(**options)
 
         self.__core.init_data(inifile)
 
         try:
             fwsini.close()
-        except:
+        except: # pylint: disable=bare-except
             pass
 
         try:
             fini.close()
-        except:
+        except: # pylint: disable=bare-except
             pass
 
-    def __call__(self, text, *, unicode=False):
+    def __call__(self, text):
         """Segment a sentence.
 
         Args:
@@ -74,9 +74,9 @@ class CkipParser:
         Return:
             str:        the output sentence.
         """
-        return self.__core.apply_list([text])[0]
+        return self.apply_list([text])[0]
 
-    def apply_list(self, ilist, *, unicode=False):
+    def apply_list(self, ilist):
         """Segment a list of sentences.
 
         Args:
