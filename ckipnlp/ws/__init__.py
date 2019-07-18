@@ -4,15 +4,17 @@
 __author__ = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
-try:
-    from ckipnlp._core.ws import CkipWSCore
-except ImportError:
-    raise ImportError(
-        'Please reinstall "ckipnlp" with "--install-option=\'--ws\'". '
-        'Visit https://pypi.org/project/ckipnlp for more information.',
-    )
-
 import tempfile as _tempfile
+import warnings as _warnings
+
+try:
+    from ckipnlp._core.parser import CkipParserCore
+except ImportError:
+    _warnings.warn(
+        'Please reinstall "ckipnlp" with "--install-option=\'--parser\'". '
+        'Visit https://pypi.org/project/ckipnlp for more information.',
+        ImportWarning,
+    )
 
 from ckipnlp.util.ini import create_ws_ini
 
@@ -50,6 +52,9 @@ class CkipWS:
             pass
 
     def __call__(self, text):
+        return self.apply(text)
+
+    def apply(self, text):
         """Segment a sentence.
 
         Args:
@@ -57,6 +62,9 @@ class CkipWS:
 
         Return:
             str:        the output sentence.
+
+        Notes:
+            One may also call this method as :func:`__call__`.
         """
         return self.apply_list([text])[0]
 

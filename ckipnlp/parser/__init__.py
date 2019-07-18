@@ -4,16 +4,17 @@
 __author__ = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
+import tempfile as _tempfile
+import warnings as _warnings
+
 try:
     from ckipnlp._core.parser import CkipParserCore
 except ImportError:
-    raise ImportError(
+    _warnings.warn(
         'Please reinstall "ckipnlp" with "--install-option=\'--parser\'". '
         'Visit https://pypi.org/project/ckipnlp for more information.',
+        ImportWarning,
     )
-
-import tempfile as _tempfile
-import warnings as _warnings
 
 from ckipnlp.util.ini import create_ws_ini, create_parser_ini
 
@@ -66,6 +67,9 @@ class CkipParser:
             pass
 
     def __call__(self, text):
+        return self.apply(text)
+
+    def apply(self, text):
         """Segment a sentence.
 
         Args:
@@ -73,6 +77,9 @@ class CkipParser:
 
         Return:
             str:        the output sentence.
+
+        Notes:
+            One may also call this method as :func:`__call__`.
         """
         return self.apply_list([text])[0]
 

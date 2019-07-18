@@ -26,7 +26,7 @@ def create_ws_ini( # pylint: disable=too-many-statements
         data2dir (str): the path to the folder "Data2/".
         lexfile (str):  the path to the user-defined lexicon file.
 
-        new_style_format (bool): split sentences by newline characters ("\\n") rather than punctuations.
+        new_style_format (bool): split sentences by newline characters ("\\\\n") rather than punctuations.
         show_category (bool):    show part-of-speech tags.
 
         sentence_max_word_num (int): maximum number of words per sentence.
