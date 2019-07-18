@@ -9,43 +9,43 @@ Introduction
 Git
 ^^^
 
-https://github.com/emfomy/pyckip
+https://github.com/emfomy/ckipnlp
 
 |Github Release| |Github License| |Github Forks| |Github Stars| |Github Watchers|
 
-.. |Github Release| image:: https://img.shields.io/github/release/emfomy/pyckip/all.svg?maxAge=3600
-   :target: https://github.com/emfomy/pyckip/releases
+.. |Github Release| image:: https://img.shields.io/github/release/emfomy/ckipnlp/all.svg?maxAge=3600
+   :target: https://github.com/emfomy/ckipnlp/releases
 
-.. |Github License| image:: https://img.shields.io/github/license/emfomy/pyckip.svg?maxAge=3600
+.. |Github License| image:: https://img.shields.io/github/license/emfomy/ckipnlp.svg?maxAge=3600
 
-.. |Github Downloads| image:: https://img.shields.io/github/downloads/emfomy/pyckip/total.svg?maxAge=3600
-   :target: https://github.com/emfomy/pyckip/releases/latest
+.. |Github Downloads| image:: https://img.shields.io/github/downloads/emfomy/ckipnlp/total.svg?maxAge=3600
+   :target: https://github.com/emfomy/ckipnlp/releases/latest
 
-.. |Github Forks| image:: https://img.shields.io/github/forks/emfomy/pyckip.svg?style=social&label=Fork&maxAge=3600
+.. |Github Forks| image:: https://img.shields.io/github/forks/emfomy/ckipnlp.svg?style=social&label=Fork&maxAge=3600
 
-.. |Github Stars| image:: https://img.shields.io/github/stars/emfomy/pyckip.svg?style=social&label=Star&maxAge=3600
+.. |Github Stars| image:: https://img.shields.io/github/stars/emfomy/ckipnlp.svg?style=social&label=Star&maxAge=3600
 
-.. |Github Watchers| image:: https://img.shields.io/github/watchers/emfomy/pyckip.svg?style=social&label=Watch&maxAge=3600
+.. |Github Watchers| image:: https://img.shields.io/github/watchers/emfomy/ckipnlp.svg?style=social&label=Watch&maxAge=3600
 
 PyPI
 ^^^^
 
-https://pypi.org/project/pyckip
+https://pypi.org/project/ckipnlp
 
 |Pypi Version| |Pypi License| |Pypi Format| |Pypi Python| |Pypi Implementation| |Pypi Status|
 
-.. |Pypi Version| image:: https://img.shields.io/pypi/v/pyckip.svg?maxAge=3600
-   :target: https://pypi.org/project/pyckip
+.. |Pypi Version| image:: https://img.shields.io/pypi/v/ckipnlp.svg?maxAge=3600
+   :target: https://pypi.org/project/ckipnlp
 
-.. |Pypi License| image:: https://img.shields.io/pypi/l/pyckip.svg?maxAge=3600
+.. |Pypi License| image:: https://img.shields.io/pypi/l/ckipnlp.svg?maxAge=3600
 
-.. |Pypi Format| image:: https://img.shields.io/pypi/format/pyckip.svg?maxAge=3600
+.. |Pypi Format| image:: https://img.shields.io/pypi/format/ckipnlp.svg?maxAge=3600
 
-.. |Pypi Python| image:: https://img.shields.io/pypi/pyversions/pyckip.svg?maxAge=3600
+.. |Pypi Python| image:: https://img.shields.io/pypi/pyversions/ckipnlp.svg?maxAge=3600
 
-.. |Pypi Implementation| image:: https://img.shields.io/pypi/implementation/pyckip.svg?maxAge=3600
+.. |Pypi Implementation| image:: https://img.shields.io/pypi/implementation/ckipnlp.svg?maxAge=3600
 
-.. |Pypi Status| image:: https://img.shields.io/pypi/status/pyckip.svg?maxAge=3600
+.. |Pypi Status| image:: https://img.shields.io/pypi/status/ckipnlp.svg?maxAge=3600
 
 Author
 ^^^^^^
@@ -89,7 +89,7 @@ Step 2: Install Using Pip
 
 .. code-block:: bash
 
-   pip install pyckip \
+   pip install ckipnlp \
       --install-option='--ws' \
       --install-option='--ws-dir=<ckipws-linux-root>' \
       --install-option='--parser' \

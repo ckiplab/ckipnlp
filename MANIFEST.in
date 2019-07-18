@@ -1,3 +1,1 @@
-include about.pyx
-include ckipws/*.*
-include ckipparser/*.*
+recursive-include src *.*
