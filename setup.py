@@ -199,7 +199,7 @@ class DevelopCommand(CommandMixin, develop):
         develop.__init__(self, *args, **kwargs)
 
 setup(
-    name=about.__title__,
+    name=about.__name__,
     version=about.__version__,
     author=about.__author_name__,
     author_email=about.__author_email__,
@@ -214,8 +214,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
@@ -225,7 +223,8 @@ setup(
         'Operating System :: POSIX :: Linux',
         'Natural Language :: Chinese (Traditional)',
     ],
-    packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*']),
+    python_requires='>=3.5',
+    packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*', 'ckipws', 'ckipparser',]),
     install_requires=[
     ],
     ext_modules=cythonize(

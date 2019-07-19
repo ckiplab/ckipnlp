@@ -8,10 +8,10 @@ import tempfile as _tempfile
 import warnings as _warnings
 
 try:
-    from ckipnlp._core.parser import CkipParserCore
+    from ckipnlp._core.ws import CkipWSCore
 except ImportError:
     _warnings.warn(
-        'Please reinstall "ckipnlp" with "--install-option=\'--parser\'". '
+        'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--ws\'’. '
         'Visit https://pypi.org/project/ckipnlp for more information.',
         ImportWarning,
     )
