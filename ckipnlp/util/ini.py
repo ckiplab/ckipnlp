@@ -313,6 +313,7 @@ def create_parser_ini( # pylint: disable=too-many-statements
         do_ws=True,
         do_parse=True,
         do_role=True,
+        sentence_delim='，,；。！？',
         **options,
 ):
     """Generate CKIP parser config.
@@ -324,6 +325,8 @@ def create_parser_ini( # pylint: disable=too-many-statements
         do_ws (bool):    do word-segmentation.
         do_parse (bool): do parsing.
         do_role (bool):  do role.
+
+        sentence_delim(str): the sentence delimiters.
     """
 
     # pylint: disable=invalid-name
@@ -352,7 +355,7 @@ def create_parser_ini( # pylint: disable=too-many-statements
         if not do_ws and not do_role:
             raise ValueError('Must select at least one task')
         if do_ws and not do_role:
-            raise ValueError('Use ckipws.CkipWS for word-segmentation')
+            raise ValueError('Use ckipws.CkipWs for word-segmentation')
         if not do_ws and do_role:
             AssignRoleOnly = True
         if do_ws and do_role:
@@ -386,7 +389,7 @@ def create_parser_ini( # pylint: disable=too-many-statements
     cfg.append('')
 
     cfg.append('SetChangePos=1')
-    cfg.append('SentenceDelimiter=，,；。！？')
+    cfg.append('SentenceDelimiter={SentenceDelimiter}'.format(SentenceDelimiter=sentence_delim))
     cfg.append('SetLength=15')
     cfg.append('NormalPos=1')
     cfg.append('NormalTree=1')

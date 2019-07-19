@@ -58,7 +58,7 @@ Requirements
 * `Python <http://www.python.org>`_ 2.7+, 3.5+
 * `Cython <http://cython.org>`_ 0.29+
 
-CkipWS (Optional)
+CkipWs (Optional)
 """""""""""""""""
 
 * `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version (20190524+)
@@ -129,12 +129,12 @@ Installation Options
 API
 ---
 
-CkipWS
+CkipWs
 ^^^^^^
 
 .. code-block:: python
 
-   class ckipws.CkipWS(
+   class ckipws.CkipWs(
       logger                = False,
       inifile               = None,
       data2dir              = None,
@@ -171,7 +171,7 @@ The CKIP word segmentation driver.
 
 .. code-block:: python
 
-   def ckipws.CkipWS.__call__(text, unicode=False)
+   def ckipws.CkipWs.__call__(text, unicode=False)
 
 Segment a sentence.
 
@@ -188,7 +188,7 @@ Segment a sentence.
 
 .. code-block:: python
 
-   def ckipws.CkipWS.apply_list(text, unicode=False)
+   def ckipws.CkipWs.apply_list(text, unicode=False)
 
 Segment a list of sentences.
 
@@ -205,7 +205,7 @@ Segment a list of sentences.
 
 .. code-block:: python
 
-   def ckipws.CkipWS.apply_file(ifile, ofile, uwfile)
+   def ckipws.CkipWs.apply_file(ifile, ofile, uwfile)
 
 Segment a file.
 

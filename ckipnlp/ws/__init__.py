@@ -8,7 +8,7 @@ import tempfile as _tempfile
 import warnings as _warnings
 
 try:
-    from ckipnlp._core.ws import CkipWSCore
+    from ckipnlp._core.ws import CkipWsCore
 except ImportError:
     _warnings.warn(
         'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--ws\'’. '
@@ -18,7 +18,7 @@ except ImportError:
 
 from ckipnlp.util.ini import create_ws_ini
 
-class CkipWS:
+class CkipWs:
     """The CKIP word segmentation driver.
 
     Args:
@@ -29,7 +29,7 @@ class CkipWS:
 
     def __init__(self, *, logger=False, inifile=None, **options):
 
-        self.__core = CkipWSCore()
+        self.__core = CkipWsCore()
 
         if logger:
             self.__core.enable_logger()
@@ -41,8 +41,8 @@ class CkipWS:
             fini.write(inidata)
             fini.flush()
 
-        def CkipWS(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
-        CkipWS(**options)
+        def CkipWs(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
+        CkipWs(**options)
 
         self.__core.init_data(inifile)
 

@@ -34,6 +34,8 @@ import ckipnlp as about
 with open('README.rst') as fin:
     readme = fin.read()
 
+################################################################################
+
 def os_environ_append(name, dirpath):
     if name in os.environ:
         os.environ[name] += os.pathsep + dirpath
@@ -45,7 +47,6 @@ def os_environ_prepend(name, dirpath):
         os.environ[name] = dirpath + os.pathsep + os.environ[name]
     else:
         os.environ[name] = dirpath
-
 
 class CommandMixin(object):
 
@@ -198,6 +199,8 @@ class DevelopCommand(CommandMixin, develop):
     def __init__(self, *args, **kwargs):
         develop.__init__(self, *args, **kwargs)
 
+################################################################################
+
 setup(
     name=about.__name__,
     version=about.__version__,
@@ -226,6 +229,7 @@ setup(
     python_requires='>=3.5',
     packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*', 'ckipws', 'ckipparser',]),
     install_requires=[
+        'treelib>=1.5.5',
     ],
     ext_modules=cythonize(
         [

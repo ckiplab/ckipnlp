@@ -2,4 +2,5 @@
 # -*- coding:utf-8 -*-
 
 from . import ini
-from . import text
+from . import ws
+from . import parser

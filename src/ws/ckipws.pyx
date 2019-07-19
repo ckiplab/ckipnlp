@@ -8,7 +8,7 @@ cimport src.ws.cckipws as cckipws
 from libc.stdlib cimport malloc, free
 from cpython.unicode cimport PyUnicode_AsUnicode
 
-cdef class CkipWSCore:
+cdef class CkipWsCore:
 
     cdef cckipws.wordseg_t __obj
 
