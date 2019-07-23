@@ -22,14 +22,20 @@ def create_ws_ini( # pylint: disable=too-many-statements
 ):
     """Generate CKIP word segmentation config.
 
-    Args:
-        data2dir (str): the path to the folder "Data2/".
-        lexfile (str):  the path to the user-defined lexicon file.
+    Parameters
+    ----------
+    data2dir : str
+        the path to the folder "Data2/".
+    lexfile : str
+        the path to the user-defined lexicon file.
 
-        new_style_format (bool): split sentences by newline characters ("\\\\n") rather than punctuations.
-        show_category (bool):    show part-of-speech tags.
+    new_style_format : bool
+        split sentences by newline characters ("\\\\n") rather than punctuations.
+    show_category : bool
+        show part-of-speech tags.
 
-        sentence_max_word_num (int): maximum number of words per sentence.
+    sentence_max_word_num : int
+        maximum number of words per sentence.
     """
 
     # pylint: disable=invalid-name
@@ -318,15 +324,22 @@ def create_parser_ini( # pylint: disable=too-many-statements
 ):
     """Generate CKIP parser config.
 
-    Args:
-        ruledir (str): the path to "Rule/".
-        rdbdir (str):  the path to "RDB/".
+    Parameters
+    ----------
+    ruledir : str
+        the path to "Rule/".
+    rdbdir : str
+        the path to "RDB/".
 
-        do_ws (bool):    do word-segmentation.
-        do_parse (bool): do parsing.
-        do_role (bool):  do role.
+    do_ws : bool
+        do word-segmentation.
+    do_parse : bool
+        do parsing.
+    do_role : bool
+        do role.
 
-        sentence_delim(str): the sentence delimiters.
+    sentence_delim: str
+        the sentence delimiters.
     """
 
     # pylint: disable=invalid-name

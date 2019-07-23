@@ -6,12 +6,12 @@ __copyright__ = 'Copyright 2018-2019'
 
 import collections as _collections
 
-class WsWord(_collections.namedtuple('_WsWord', ['word', 'pos',])):
+class WsWord(_collections.namedtuple('_WsWord', ('word', 'pos',))):
     """A word-segmented word.
 
-        Fields:
-            * word: the word.
-            * pos: the post-tag.
+    Fields:
+        * **word** (*str*): the word.
+        * **pos** (*str*): the post-tag.
     """
 
     @classmethod
@@ -22,10 +22,11 @@ class WsWord(_collections.namedtuple('_WsWord', ['word', 'pos',])):
     def __str__(self):
         return '{}({})'.format(self.word, self.pos)
 
-class WsSentence(_collections.UserList):
+class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
     """A word-segmented sentence.
 
-        * Items: :class:`WsWord`.
+    Items:
+        :class:`WsWord`: the words.
     """
 
     @classmethod

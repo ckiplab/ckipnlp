@@ -21,12 +21,16 @@ from ckipnlp.util.ini import create_ws_ini, create_parser_ini
 class CkipParser:
     """The CKIP sentence parsing driver.
 
-    Args:
-        logger (bool):   enable logger.
-        inifile (str):   the path to the INI file.
-        wsinifile (str): the path to the INI file for CKIPWS.
-        options:         the options (see :func:`ckipnlp.util.ini.create_ws_ini`
-                                      and :func:`ckipnlp.util.ini.create_parser_ini`).
+    Parameters
+    ----------
+    logger : bool
+        enable logger.
+    inifile : str
+        the path to the INI file.
+    wsinifile : str
+        the path to the INI file for CKIPWS.
+    options:
+        the options, see :func:`ckipnlp.util.ini.create_ws_ini` and :func:`ckipnlp.util.ini.create_parser_ini`
     """
 
     def __init__(self, *, logger=False, inifile=None, wsinifile=None, **options):
@@ -72,33 +76,45 @@ class CkipParser:
     def apply(self, text):
         """Segment a sentence.
 
-        Args:
-            text (str): the input sentence.
+        Parameters
+        ----------
+        text : str
+            the input sentence.
 
-        Return:
-            str:        the output sentence.
+        Return
+        ------
+        str
+            the output sentence.
 
-        Notes:
-            One may also call this method as :func:`__call__`.
+        Notes
+        -----
+        One may also call this method as :func:`__call__`.
         """
         return self.apply_list([text])[0]
 
     def apply_list(self, ilist):
         """Segment a list of sentences.
 
-        Args:
-            ilist (list): the list of input sentences (str).
+        Parameters
+        ----------
+        ilist: list
+            the list of input sentences (str).
 
-        Return:
-            list:         the list of output sentences (str).
+        Return
+        ------
+        olist: list
+            the list of output sentences (str).
         """
         return self.__core.apply_list(ilist)
 
     def apply_file(self, ifile, ofile):
         """Segment a file.
 
-        Args:
-            ifile (str): the input file.
-            ofile (str): he output file (will be overwritten).
+        Parameters
+        ----------
+        ifile: str
+             the input file.
+        ofile: str
+             the output file (will be overwritten).
         """
         return self.__core.apply_file(ifile, ofile)

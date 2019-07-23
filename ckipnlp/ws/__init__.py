@@ -21,10 +21,14 @@ from ckipnlp.util.ini import create_ws_ini
 class CkipWs:
     """The CKIP word segmentation driver.
 
-    Args:
-        logger (bool): enable logger.
-        inifile (str): the path to the INI file.
-        options:       the options (see :func:`ckipnlp.util.ini.create_ws_ini`).
+    Parameters
+    ----------
+    logger : bool
+        enable logger.
+    inifile : str
+        the path to the INI file.
+    options:
+        the options, see :func:`ckipnlp.util.ini.create_ws_ini`.
     """
 
     def __init__(self, *, logger=False, inifile=None, **options):
@@ -57,34 +61,47 @@ class CkipWs:
     def apply(self, text):
         """Segment a sentence.
 
-        Args:
-            text (str): the input sentence.
+        Parameters
+        ----------
+        text : str
+            the input sentence.
 
-        Return:
-            str:        the output sentence.
+        Return
+        ------
+        str
+            the output sentence.
 
-        Notes:
-            One may also call this method as :func:`__call__`.
+        Notes
+        -----
+        One may also call this method as :func:`__call__`.
         """
         return self.apply_list([text])[0]
 
     def apply_list(self, ilist):
         """Segment a list of sentences.
 
-        Args:
-            ilist (list): the list of input sentences (str).
+        Parameters
+        ----------
+        ilist: list
+            the list of input sentences (str).
 
-        Return:
-            list:         the list of output sentences (str).
+        Return
+        ------
+        olist: list
+            the list of output sentences (str).
         """
         return self.__core.apply_list(ilist)
 
     def apply_file(self, ifile, ofile, uwfile=''):
         """Segment a file.
 
-        Args:
-            ifile (str):  the input file.
-            ofile (str):  the output file (will be overwritten).
-            uwfile (str): the unknown word file (will be overwritten).
+        Parameters
+        ----------
+        ifile: str
+             the input file.
+        ofile: str
+             the output file (will be overwritten).
+        uwfile: str
+            the unknown word file (will be overwritten).
         """
         return self.__core.apply_file(ifile, ofile, uwfile)
