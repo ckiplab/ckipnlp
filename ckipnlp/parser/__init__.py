@@ -4,18 +4,20 @@
 __author__ = 'Mu Yang <emfomy@gmail.com>'
 __copyright__ = 'Copyright 2018-2019'
 
+import os as _os
 import tempfile as _tempfile
 import warnings as _warnings
 
 try:
-    from ckipnlp._core.parser import CkipParserCore
-except ImportError as e:
+    if not _os.environ.get('_SPHINX'):
+        from ckipnlp._core.parser import CkipParserCore
+except ImportError as exc:
     raise ImportError(
         'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--parser\'’. '
         'Visit https://pypi.org/project/ckipnlp for more information.'
-    ) from e
-except Exception as e:
-    raise e
+    ) from exc
+except Exception as exc:
+    raise exc
 
 from ckipnlp.util.ini import create_ws_ini, create_parser_ini
 
