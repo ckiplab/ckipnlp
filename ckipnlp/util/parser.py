@@ -173,8 +173,8 @@ class ParserTree(_treelib.Tree):
 
         return (*dummy1, *dummy2,)
 
-    def find_heads(self, root_id=0, deep=True): # pylint: disable=too-many-branches
-        """Find head node of a subtree.
+    def get_heads(self, root_id=0, deep=True): # pylint: disable=too-many-branches
+        """Get all head nodes of a subtree.
 
         Parameters
         ----------
@@ -210,10 +210,10 @@ class ParserTree(_treelib.Tree):
                     else:
                         if child.data.pos == 'Caa': # Found Caa, choose dummies of root instead
                             head_nodes = tuple(_itertools.chain.from_iterable(
-                                self.find_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
+                                self.get_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
                             ))
                         else:
-                            head_nodes = self.find_heads(child.identifier)
+                            head_nodes = self.get_heads(child.identifier)
                     break
 
         # Find Head
@@ -225,10 +225,10 @@ class ParserTree(_treelib.Tree):
                     else:
                         if child.data.pos == 'Caa': # Found Caa, choose dummies of root instead
                             head_nodes = tuple(_itertools.chain.from_iterable(
-                                self.find_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
+                                self.get_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
                             ))
                         else:
-                            head_nodes = self.find_heads(child.identifier)
+                            head_nodes = self.get_heads(child.identifier)
                     break
 
         # Found no head, choose the last child instead
@@ -252,14 +252,14 @@ class ParserTree(_treelib.Tree):
         """
 
         root_node = self.get_node(root_id)
-        head_root_node = self.find_heads(root_id, deep=False)
+        head_root_node = self.get_heads(root_id, deep=False)
 
         # Skip Caa
         if head_root_node.data.pos == 'Caa':
             return
 
         # Get heads
-        for head_node in self.find_heads(root_id):
+        for head_node in self.get_heads(root_id):
 
             if head_node.data.role.lower() == 'head':
                 head_pair = ParserRelationNode(node=head_node, role=root_node.data.pos)
@@ -272,7 +272,7 @@ class ParserTree(_treelib.Tree):
                     if tail.data.term: # if tail is a leaf node
                         yield ParserRelation(head=head_pair, tail=ParserRelationNode(tail, role=tail.data.role))
                     else:
-                        for node in self.find_heads(tail.identifier):
+                        for node in self.get_heads(tail.identifier):
                             yield ParserRelation(head=head_pair, tail=ParserRelationNode(node, role=tail.data.role))
 
         # Recursion
