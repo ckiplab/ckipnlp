@@ -21,5 +21,6 @@ upload: dist
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz --verbose
 
 clean:
+	( cd docs ; make clean )
 	$(PY) setup.py clean -a
 	$(RM) build dist *.egg-info *.so __pycache__

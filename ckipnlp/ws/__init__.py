@@ -9,12 +9,13 @@ import warnings as _warnings
 
 try:
     from ckipnlp._core.ws import CkipWsCore
-except ImportError:
-    _warnings.warn(
+except ImportError as e:
+    raise ImportError(
         'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--ws\'’. '
-        'Visit https://pypi.org/project/ckipnlp for more information.',
-        ImportWarning,
-    )
+        'Visit https://pypi.org/project/ckipnlp for more information.'
+    ) from e
+except Exception as e:
+    raise e
 
 from ckipnlp.util.ini import create_ws_ini
 
