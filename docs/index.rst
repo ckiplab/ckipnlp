@@ -8,16 +8,19 @@ Welcome to CKIP CoreNLP Wrappers's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    _api/ckipnlp.ws
    _api/ckipnlp.parser
    _api/ckipnlp.util
 
+Todo list
+---------
 
+   .. todolist::
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

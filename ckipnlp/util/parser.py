@@ -53,10 +53,9 @@ class ParserRelation(_ParserRelation):
         """
 
     def __str__(self):
-        if self.head.node.identifier <= self.tail.node.identifier:
-            return '{name}(head={head}, tail={tail})'.format(name=type(self).__name__, head=self.head, tail=self.tail)
-        else:
-            return '{name}(tail={tail}, head={head})'.format(name=type(self).__name__, head=self.head, tail=self.tail)
+        return '{name}(head={head}, tail={tail})'.format(name=type(self).__name__, head=self.head, tail=self.tail) \
+            if self.head.node.identifier <= self.tail.node.identifier \
+            else '{name}(tail={tail}, head={head})'.format(name=type(self).__name__, head=self.head, tail=self.tail)
 
     def __repr__(self):
         return str(self)
@@ -174,7 +173,7 @@ class ParserTree(_treelib.Tree):
 
         return (*dummy1, *dummy2,)
 
-    def find_heads(self, root_id=0, deep=True):
+    def find_heads(self, root_id=0, deep=True): # pylint: disable=too-many-branches
         """Find head node of a subtree.
 
         Parameters
@@ -188,37 +187,44 @@ class ParserTree(_treelib.Tree):
         -------
         list
             the head nodes (:class:`ParserNode`).
+        :class:`ParserNode`
+            the head node (when **deep** is set).
+
+        Todo
+        ----
+        Get information of nodes with pos type PP or GP.
         """
         head_nodes = None
         children = list(self.children(root_id))
 
         # No child, choose the root node instead
-        if len(children) == 0:
-            return [self.get_node(root_id)]
+        if not children:
+            head_nodes = (self.get_node(root_id),)
 
         # Find head
-        for child in children:
-            if child.data.role == 'head':
-                if not deep:
-                    head_nodes = [child]
-                else:
-                    if child.data.pos == 'Caa': # Found Caa, choose dummies of root instead
-                        head_nodes = list(_itertools.chain.from_iterable(
-                            self.find_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
-                        ))
+        if head_nodes is None:
+            for child in children:
+                if child.data.role == 'head':
+                    if not deep:
+                        head_nodes = (child,)
                     else:
-                        head_nodes = self.find_heads(child.identifier)
-                break
+                        if child.data.pos == 'Caa': # Found Caa, choose dummies of root instead
+                            head_nodes = tuple(_itertools.chain.from_iterable(
+                                self.find_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
+                            ))
+                        else:
+                            head_nodes = self.find_heads(child.identifier)
+                    break
 
         # Find Head
         if head_nodes is None:
             for child in children:
                 if child.data.role == 'Head':
                     if not deep:
-                        head_nodes = [child]
+                        head_nodes = (child,)
                     else:
                         if child.data.pos == 'Caa': # Found Caa, choose dummies of root instead
-                            head_nodes = list(_itertools.chain.from_iterable(
+                            head_nodes = tuple(_itertools.chain.from_iterable(
                                 self.find_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
                             ))
                         else:
@@ -227,9 +233,9 @@ class ParserTree(_treelib.Tree):
 
         # Found no head, choose the last child instead
         if head_nodes is None:
-            head_nodes = [children[-1]]
+            head_nodes = (children[-1],)
 
-        return head_nodes
+        return head_nodes[0] if not deep else head_nodes
 
     def get_relations(self, root_id=0):
         """Get all relations of a subtree.
@@ -238,10 +244,15 @@ class ParserTree(_treelib.Tree):
         ----------
         node_id : int
             ID of the subtree root node.
+
+        Yields
+        ------
+        :class:`ParserRelation`
+            the relation.
         """
 
         root_node = self.get_node(root_id)
-        head_root_node = self.find_heads(root_id, deep=False)[0]
+        head_root_node = self.find_heads(root_id, deep=False)
 
         # Skip Caa
         if head_root_node.data.pos == 'Caa':
