@@ -47,6 +47,11 @@ Author
 
 * Mu Yang <emfomy@gmail.com>
 
+Documentation
+-------------
+
+http://ckipnlp.readthedocs.io/
+
 Requirements
 ------------
 
@@ -120,6 +125,80 @@ Installation Options
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 | ``--rdb-dir=<rdb-dir>``                       | "RDB" directory                       | ``<parser-share-dir>/RDB``    |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
+
+Usage
+=====
+
+See http://ckipnlp.readthedocs.io/ for API details.
+
+CKIPWS
+------
+
+.. code-block:: python
+
+   import ckipnlp.ws
+   print(ckipnlp.__name__, ckipnlp.__version__)
+
+   ws = ckipnlp.ws.CkipWs(logger=False)
+   print(ws('中文字喔'))
+   for l in ws.apply_list(['中文字喔', '啊哈哈哈']): print(l)
+
+   ws.apply_file(ifile='sample/sample.txt', ofile='output/sample.tag', uwfile='output/sample.uw')
+   with open('output/sample.tag') as fin:
+       print(fin.read())
+   with open('output/sample.uw') as fin:
+       print(fin.read())
+
+
+CKIP-Parser
+-----------
+
+.. code-block:: python
+
+   import ckipnlp.parser
+   print(ckipnlp.__name__, ckipnlp.__version__)
+
+   ps = ckipnlp.parser.CkipParser(logger=False)
+   print(ps('中文字喔'))
+   for l in ps.apply_list(['中文字喔', '啊哈哈哈']): print(l)
+
+   ps = ckipnlp.parser.CkipParser(logger=False)
+   print(ps('中文字喔'))
+   for l in ps.apply_list(['中文字喔', '啊哈哈哈']): print(l)
+   ps.apply_file(ifile='sample/sample.txt', ofile='output/sample.tree')
+   with open('output/sample.tree') as fin:
+       print(fin.read())
+
+Utilities
+---------
+
+.. code-block:: python
+
+   import ckipnlp
+   print(ckipnlp.__name__, ckipnlp.__version__)
+
+   from ckipnlp.util.ws import *
+   from ckipnlp.util.parser import *
+
+   # Format CkipWs output
+   ws_text = ['中文字(Na)　喔(T)', '啊哈(I)　哈哈(D)']
+   for text in ws_text: print(ckipnlp.util.ws.WsSentence.from_text(text))
+   for text in ws_text: print(repr(ckipnlp.util.ws.WsSentence.from_text(text)))
+
+   # Show CkipParser output as tree
+   tree_text = 'S(theme:NP(property:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nad(DUMMY1:Nab:早餐|Head:Caa:和|DUMMY2:Naa:午餐))|quantity:Dab:都|Head:VC31:吃完|aspect:Di:了)'
+   tree = ParserTree.from_text(tree_text)
+   tree.show()
+
+   # Get dummies of node 5
+   for node in tree.get_dummies(5): print(node)
+
+   # Get heads of node 1
+   for node in tree.get_heads(1): print(node)
+
+   # Get relations
+   for r in tree.get_relations(0): print(r)
+
 
 FAQ
 ===
