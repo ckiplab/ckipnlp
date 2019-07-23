@@ -3,8 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to CKIP CoreNLP Wrappers's documentation!
-=================================================
+CKIP CoreNLP Wrappers
+=====================
+
+.. toctree::
+   :caption: Overview
+   :maxdepth: 2
+
+   src/readme
 
 .. toctree::
    :maxdepth: 2
@@ -14,14 +20,10 @@ Welcome to CKIP CoreNLP Wrappers's documentation!
    _api/ckipnlp.parser
    _api/ckipnlp.util
 
-Todo list
----------
+.. toctree::
+   :caption: Appendix
+   :maxdepth: 2
 
-   .. todolist::
-
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   src/todo
+   genindex
+   modindex
