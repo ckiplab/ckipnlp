@@ -13,7 +13,15 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
+os.environ['_SPHINX'] = "1"
 import ckipnlp as __about
+
+def run_apidoc(_):
+    from sphinx.ext.apidoc import main
+    main(['-feTM', '-o', '_api', '../ckipnlp'])
+
+def setup(app):
+    app.connect('builder-inited', run_apidoc)
 
 
 # -- Project information -----------------------------------------------------
@@ -27,6 +35,8 @@ version = __about.__version__
 # The full version, including alpha/beta/rc tags
 release = 'v'+__about.__version__
 
+# Master documentation
+master_doc = 'index'
 
 # -- General configuration ---------------------------------------------------
 
