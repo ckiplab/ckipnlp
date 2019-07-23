@@ -1,0 +1,7 @@
+[MASTER]
+
+max-line-length = 128
+
+disable =
+	missing-docstring,
+	duplicate-code,
