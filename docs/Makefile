@@ -3,32 +3,26 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXBUILD     = _SPHINX=1 sphinx-build
-SPHINXBUILDOPTS =
-SPHINXAPI       = sphinx-apidoc
-SPHINXAPIOPTS   =
+SPHINX     = _SPHINX=1 sphinx-build
+SPHINXOPTS =
 
 DOCDIR     = .
 BUILDDIR   = _build
-APIDIR     = _api
 
 # Put it first so that "make" without argument is like "make help".
 help:
-	@$(SPHINXBUILD) -M help "$(DOCDIR)" "$(BUILDDIR)" $(SPHINXBUILDOPTS) $(O)
+	@$(SPHINX) -M help "$(DOCDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile api clean run
-
-api:
-	@$(SPHINXAPI) -feTM -o "$(APIDIR)" "../ckipnlp" $(SPHINXAPIOPTS)
+.PHONY: help Makefile api clean serve
 
 clean: Makefile
-	@$(SPHINXBUILD) -M $@ "$(DOCDIR)" "$(BUILDDIR)" $(SPHINXBUILDOPTS)
-	@$(SPHINXBUILD) -M $@ "$(DOCDIR)" "$(APIDIR)"   $(SPHINXBUILDOPTS)
+	@$(SPHINX) -M $@ "$(DOCDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
+	@$(SPHINX) -M $@ "$(DOCDIR)" "$(APIDIR)"   $(SPHINXOPTS)
 
-run:
-	( cd _build/html/ && python3 -m http.server 8080 )
+serve:
+	( cd $(BUILDDIR)/html/ && python3 -m http.server 8080 )
 
 # Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXBUILDOPTS).
-%: api Makefile
-	@$(SPHINXBUILD) -M $@ "$(DOCDIR)" "$(BUILDDIR)" $(SPHINXBUILDOPTS) $(O)
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINX) -M $@ "$(DOCDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

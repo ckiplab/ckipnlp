@@ -4,6 +4,16 @@
 # list see the documentation:
 # http://www.sphinx-doc.org/en/master/config
 
+
+# -- APIDOC ------------------------------------------------------------------
+
+def run_apidoc(_):
+    from sphinx.ext.apidoc import main
+    main(['-feTM', '-o', '_api', '../ckipnlp'])
+
+def setup(app):
+    app.connect('builder-inited', run_apidoc)
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
