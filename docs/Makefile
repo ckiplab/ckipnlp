@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINX     = _SPHINX=1 sphinx-build
+SPHINX     = sphinx-build
 SPHINXOPTS =
 
 DOCDIR     = .
