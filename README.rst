@@ -58,7 +58,8 @@ Requirements
 * `Python <http://www.python.org>`_ 3.5+
 * `Cython <http://cython.org>`_ 0.29+
 
-Note: For Python 2 users, please use `PyCkip 0.4.2 <https://pypi.org/project/pyckip/0.4.2/>`_ instead.
+.. note::
+   For Python 2 users, please use `PyCkip 0.4.2 <https://pypi.org/project/pyckip/0.4.2/>`_ instead.
 
 CkipWs (Optional)
 ^^^^^^^^^^^^^^^^^
@@ -75,22 +76,13 @@ Installation
 
 Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version, and ``<ckipparser-linux-root>`` as the root path of CKIP-Parser Linux Version.
 
-Step 1: Setup CKIPWS & CKIP-Parser environment
-----------------------------------------------
-
-Add below command to ``~/.bashrc``:
+Install Using Pip
+-----------------
 
 .. code-block:: bash
 
-   export LD_LIBRARY_PATH=<ckipws-linux-root>/lib:<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
-
-
-Step 2: Install Using Pip
--------------------------
-
-.. code-block:: bash
-
-   pip install ckipnlp \
+   pip install --upgrade ckipnlp
+   pip install --no-deps --force-reinstall --upgrade ckipnlp \
       --install-option='--ws' \
       --install-option='--ws-dir=<ckipws-linux-root>' \
       --install-option='--parser' \
@@ -204,11 +196,25 @@ Utilities
 FAQ
 ===
 
-* The CKIPWS throws "``what():  locale::facet::_S_create_c_locale name not valid``". What should I do?
+.. warning::
+
+   The CKIPWS throws "``what():  locale::facet::_S_create_c_locale name not valid``". What should I do?
+
+Install locale data.
 
 .. code-block:: bash
 
    apt-get install locales-all
+
+.. warning::
+
+   The CKIPParser throws "``ImportError: libCKIPParser.so: cannot open shared object file: No such file or directory``". What should I do?
+
+Add below command to ``~/.bashrc``:
+
+.. code-block:: bash
+
+   export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
 
 License
 =======
