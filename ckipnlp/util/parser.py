@@ -28,34 +28,20 @@ class ParserNode(_ParserNode):
         fields = text.split(':')
         return cls(*fields)
 
-_ParserRelationNode = _collections.namedtuple('_ParserRelationNode', ('node', 'role',))
-class ParserRelationNode(_ParserRelationNode):
-    """A parser relation node.
-
-    Fields:
-        * **node** (:class:`treelib.Node`): the node.
-        * **role** (*str*): the relation role.
-    """
-
-    def __str__(self):
-        return '(id={ID}, tag={tag}, role={role})'.format(ID=self.node.identifier, tag=self.node.tag, role=self.role)
-
-    def __repr__(self):
-        return str(self)
-
-_ParserRelation = _collections.namedtuple('_ParserRelation', ('head', 'tail',))
+_ParserRelation = _collections.namedtuple('_ParserRelation', ('head', 'tail', 'relation'))
 class ParserRelation(_ParserRelation):
     """A parser relation.
 
     Fields:
-        * **head** (:class:`ParserRelationNode`): the head node.
-        * **tail** (:class:`ParserRelationNode`): the tail node.
+        * **head** (:class:`treelib.Node`): the head node.
+        * **tail** (:class:`treelib.Node`): the tail node.
+        * **relation** (str): the relation.
         """
 
     def __str__(self):
-        return '{name}(head={head}, tail={tail})'.format(name=type(self).__name__, head=self.head, tail=self.tail) \
-            if self.head.node.identifier <= self.tail.node.identifier \
-            else '{name}(tail={tail}, head={head})'.format(name=type(self).__name__, head=self.head, tail=self.tail)
+        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head.identifier <= self.tail.identifier \
+         else '{name}(tail={tail}, head={head}, relation={relation})'
+        return ret.format(name=type(self).__name__, head=self.head, tail=self.tail, relation=self.relation)
 
     def __repr__(self):
         return str(self)
@@ -264,19 +250,14 @@ class ParserTree(_treelib.Tree):
         # Get heads
         for head_node in self.get_heads(root_id):
 
-            if head_node.data.role.lower() == 'head':
-                head_pair = ParserRelationNode(node=head_node, role=root_node.data.pos)
-            else:
-                head_pair = ParserRelationNode(node=head_node, role=head_node.data.pos)
-
             # Get tails
             for tail in self.children(root_id):
                 if tail.identifier != head_root_node.identifier:
                     if tail.data.term: # if tail is a leaf node
-                        yield ParserRelation(head=head_pair, tail=ParserRelationNode(tail, role=tail.data.role))
+                        yield ParserRelation(head=head_node, tail=tail, relation=tail.data.role)
                     else:
                         for node in self.get_heads(tail.identifier):
-                            yield ParserRelation(head=head_pair, tail=ParserRelationNode(node, role=tail.data.role))
+                            yield ParserRelation(head=head_node, tail=node, relation=tail.data.role)
 
         # Recursion
         for child in self.children(root_id):
