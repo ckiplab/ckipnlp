@@ -26,4 +26,4 @@ CKIP CoreNLP Wrappers
 
    src/todo
    genindex
-   modindex
+   py-modindex

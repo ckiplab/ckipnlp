@@ -8,6 +8,7 @@ SPHINXOPTS =
 
 DOCDIR     = .
 BUILDDIR   = _build
+APIDIR     = _api
 
 # Put it first so that "make" without argument is like "make help".
 help:
