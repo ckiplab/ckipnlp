@@ -70,6 +70,9 @@ class ParserTree(_treelib.Tree):
         """Create :class:`ParserTree` object from :class:`ckipnlp.parser.CkipParser` output."""
         tree = cls()
 
+        if '#' in tree_text:
+            tree_text = tree_text.split(' ', 2)[-1].split('#')[0]
+
         node_id = 0
         node_queue = [None]
         text = 'root:'
