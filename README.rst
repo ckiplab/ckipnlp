@@ -6,51 +6,66 @@ Git
 
 https://github.com/emfomy/ckipnlp
 
-|Github Release| |Github License| |Github Forks| |Github Stars| |Github Watchers|
+|GitHub Version| |GitHub Release| |GitHub Issues|
 
-.. |Github Release| image:: https://img.shields.io/github/release/emfomy/ckipnlp/all.svg?maxAge=3600
+.. |GitHub Version| image:: https://img.shields.io/github/release/emfomy/ckipnlp/all.svg?maxAge=3600
    :target: https://github.com/emfomy/ckipnlp/releases
 
-.. |Github License| image:: https://img.shields.io/github/license/emfomy/ckipnlp.svg?maxAge=3600
+.. |GitHub License| image:: https://img.shields.io/github/license/emfomy/ckipnlp.svg?maxAge=3600
+   :target: https://github.com/emfomy/ckipnlp/blob/master/LICENSE
 
-.. |Github Downloads| image:: https://img.shields.io/github/downloads/emfomy/ckipnlp/total.svg?maxAge=3600
+.. |GitHub Release| image:: https://img.shields.io/github/release-date/emfomy/ckipnlp.svg?maxAge=3600
+
+.. |GitHub Downloads| image:: https://img.shields.io/github/downloads/emfomy/ckipnlp/total.svg?maxAge=3600
    :target: https://github.com/emfomy/ckipnlp/releases/latest
 
-.. |Github Forks| image:: https://img.shields.io/github/forks/emfomy/ckipnlp.svg?style=social&label=Fork&maxAge=3600
+.. |GitHub Issues| image:: https://img.shields.io/github/issues/emfomy/ckipnlp.svg?maxAge=3600
+   :target: https://github.com/emfomy/ckipnlp/issues
 
-.. |Github Stars| image:: https://img.shields.io/github/stars/emfomy/ckipnlp.svg?style=social&label=Star&maxAge=3600
+.. |GitHub Forks| image:: https://img.shields.io/github/forks/emfomy/ckipnlp.svg?style=social&label=Fork&maxAge=3600
 
-.. |Github Watchers| image:: https://img.shields.io/github/watchers/emfomy/ckipnlp.svg?style=social&label=Watch&maxAge=3600
+.. |GitHub Stars| image:: https://img.shields.io/github/stars/emfomy/ckipnlp.svg?style=social&label=Star&maxAge=3600
+
+.. |GitHub Watchers| image:: https://img.shields.io/github/watchers/emfomy/ckipnlp.svg?style=social&label=Watch&maxAge=3600
 
 PyPI
 ----
 
 https://pypi.org/project/ckipnlp
 
-|Pypi Version| |Pypi License| |Pypi Format| |Pypi Python| |Pypi Implementation| |Pypi Status|
+|PyPI Version| |PyPI License| |PyPI Downloads| |PyPI Python| |PyPI Implementation| |PyPI Status|
 
-.. |Pypi Version| image:: https://img.shields.io/pypi/v/ckipnlp.svg?maxAge=3600
+.. |PyPI Version| image:: https://img.shields.io/pypi/v/ckipnlp.svg?maxAge=3600
    :target: https://pypi.org/project/ckipnlp
 
-.. |Pypi License| image:: https://img.shields.io/pypi/l/ckipnlp.svg?maxAge=3600
+.. |PyPI License| image:: https://img.shields.io/pypi/l/ckipnlp.svg?maxAge=3600
+   :target: https://github.com/emfomy/ckipnlp/blob/master/LICENSE
 
-.. |Pypi Format| image:: https://img.shields.io/pypi/format/ckipnlp.svg?maxAge=3600
+.. |PyPI Downloads| image:: https://img.shields.io/pypi/dm/ckipnlp.svg?maxAge=3600
+   :target: https://pypi.org/project/ckipnlp#files
 
-.. |Pypi Python| image:: https://img.shields.io/pypi/pyversions/ckipnlp.svg?maxAge=3600
+.. |PyPI Python| image:: https://img.shields.io/pypi/pyversions/ckipnlp.svg?maxAge=3600
 
-.. |Pypi Implementation| image:: https://img.shields.io/pypi/implementation/ckipnlp.svg?maxAge=3600
+.. |PyPI Implementation| image:: https://img.shields.io/pypi/implementation/ckipnlp.svg?maxAge=3600
 
-.. |Pypi Status| image:: https://img.shields.io/pypi/status/ckipnlp.svg?maxAge=3600
+.. |PyPI Format| image:: https://img.shields.io/pypi/format/ckipnlp.svg?maxAge=3600
 
-Author
-------
-
-* Mu Yang <emfomy@gmail.com>
+.. |PyPI Status| image:: https://img.shields.io/pypi/status/ckipnlp.svg?maxAge=3600
 
 Documentation
 -------------
 
 http://ckipnlp.readthedocs.io/
+
+|ReadTheDocs Home|
+
+.. |ReadTheDocs Home| image:: https://img.shields.io/website/https/ckipnlp.readthedocs.io.svg?maxAge=3600&up_message=online&down_message=offline
+   :target: http://ckipnlp.readthedocs.io
+
+Author
+------
+
+* Mu Yang <emfomy@gmail.com>
 
 Requirements
 ------------
@@ -219,4 +234,9 @@ Add below command to ``~/.bashrc``:
 License
 =======
 
-* `MIT License <LICENSE>`_
+|CC BY-NC-SA 4.0|
+
+Copyright (c) 2018-2019 Mu Yang under the `CC-BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`_. All rights reserved.
+
+.. |CC BY-NC-SA 4.0| image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
+   :target: http://creativecommons.org/licenses/by-nc-sa/4.0/
