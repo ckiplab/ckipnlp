@@ -6,14 +6,15 @@ __copyright__ = 'Copyright 2018-2019'
 
 import collections as _collections
 import itertools as _itertools
+import json as _json
 
 import treelib as _treelib
 
 ################################################################################################################################
 
-_ParserNode = _collections.namedtuple('_ParserNode', ('role', 'pos', 'term',))
-_ParserNode.__new__.__defaults__ = (None, None, None,)
-class ParserNode(_ParserNode):
+_ParserNodeData = _collections.namedtuple('_ParserNodeData', ('role', 'pos', 'term',))
+_ParserNodeData.__new__.__defaults__ = (None, None, None,)
+class ParserNodeData(_ParserNodeData):
     """A parser node.
 
     Fields:
@@ -24,17 +25,32 @@ class ParserNode(_ParserNode):
 
     @classmethod
     def from_text(cls, text):
-        """Create :class:`ParserNode` object from :class:`ckipnlp.parser.CkipParser` output."""
+        """Create :class:`ParserNodeData` object from :class:`ckipnlp.parser.CkipParser` output."""
         fields = text.split(':')
         return cls(*fields)
+
+    def to_dict(self):
+        return self._asdict()
+
+    def to_json(self, **kwargs):
+        return _json.dumps(self.to_dict(), **kwargs)
+
+class ParserNode(_treelib.Node):
+    """A parser node for tree."""
+
+    def to_dict(self):
+        return _collections.OrderedDict(id=self.identifier, **self.data.to_dict())
+
+    def to_json(self, **kwargs):
+        return _json.dumps(self.to_dict(), **kwargs)
 
 _ParserRelation = _collections.namedtuple('_ParserRelation', ('head', 'tail', 'relation'))
 class ParserRelation(_ParserRelation):
     """A parser relation.
 
     Fields:
-        * **head** (:class:`treelib.Node`): the head node.
-        * **tail** (:class:`treelib.Node`): the tail node.
+        * **head** (:class:`ParserNode`): the head node.
+        * **tail** (:class:`ParserNode`): the tail node.
         * **relation** (str): the relation.
         """
 
@@ -46,6 +62,12 @@ class ParserRelation(_ParserRelation):
     def __repr__(self):
         return str(self)
 
+    def to_dict(self):
+        return _collections.OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation)
+
+    def to_json(self, **kwargs):
+        return _json.dumps(self.to_dict(), **kwargs)
+
 ################################################################################################################################
 
 class ParserTree(_treelib.Tree):
@@ -54,7 +76,7 @@ class ParserTree(_treelib.Tree):
     @classmethod
     def from_text(cls, tree_text):
         """Create :class:`ParserTree` object from :class:`ckipnlp.parser.CkipParser` output."""
-        tree = cls()
+        tree = cls(node_class=ParserNode)
 
         if '#' in tree_text:
             tree_text = tree_text.split(' ', 2)[-1].split('#')[0]
@@ -66,7 +88,7 @@ class ParserTree(_treelib.Tree):
 
         for char in tree_text:
             if char == '(':
-                node_data = ParserNode.from_text(text)
+                node_data = ParserNodeData.from_text(text)
                 tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
 
                 node_queue.append(node_id)
@@ -75,7 +97,7 @@ class ParserTree(_treelib.Tree):
 
             elif char == ')':
                 if not ending:
-                    node_data = ParserNode.from_text(text)
+                    node_data = ParserNodeData.from_text(text)
                     tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
                     node_id += 1
 
@@ -85,7 +107,7 @@ class ParserTree(_treelib.Tree):
 
             elif char == '|':
                 if not ending:
-                    node_data = ParserNode.from_text(text)
+                    node_data = ParserNodeData.from_text(text)
                     tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
                     node_id += 1
 
@@ -97,6 +119,18 @@ class ParserTree(_treelib.Tree):
                 text += char
 
         return tree
+
+    def to_dict(self, node_id=0):
+        node = self.get_node(node_id)
+        tree_dict = node.to_dict()
+
+        for child in self.children(node_id):
+            tree_dict.setdefault('children', list()).append(self.to_dict(child.identifier))
+
+        return tree_dict
+
+    def to_json(self, **kwargs):
+        return _json.dumps(self.to_dict(), **kwargs)
 
     def show(self, *, key=lambda node: node.identifier, idhidden=False, **kwargs): # pylint: disable=arguments-differ
         """Show pretty tree."""
