@@ -58,16 +58,17 @@ Requirements
 * `Python <http://www.python.org>`_ 3.5+
 * `Cython <http://cython.org>`_ 0.29+
 
+Note: For Python 2 users, please use `PyCkip 0.4.2 <https://pypi.org/project/pyckip/0.4.2/>`_ instead.
+
 CkipWs (Optional)
 ^^^^^^^^^^^^^^^^^
 
-* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version (20190524+)
+* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version 20190524+
 
 CkipParser (Optional)
 ^^^^^^^^^^^^^^^^^^^^^
 
-* `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version (20190506+)
-* `Boost C++ Libraries <https://www.boost.org/>`_ 1.54.0
+* `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version 20190506+ (20190725+ recommended)
 
 Installation
 ============
