@@ -132,7 +132,6 @@ class CommandMixin(object):
         # CKIPWS
         if self.ws:
             print('- Enable CKIPWS support')
-            # self.distribution.package_dir.pop('ckipws')
             if self.ws_lib_dir:
                 print('- Use CKIPWS library from (%s)' % self.ws_lib_dir)
                 i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.ws'), None)
@@ -146,7 +145,6 @@ class CommandMixin(object):
         # CKIP-Parser
         if self.parser:
             print('- Enable CKIP-Parser support')
-            # self.distribution.package_dir.pop('ckipparser')
             if self.parser_lib_dir:
                 print('- Use CKIP-Parser library from (%s)' % self.parser_lib_dir)
                 i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.parser'), None)
@@ -156,7 +154,6 @@ class CommandMixin(object):
             print('- Disable CKIP-Parser support')
             i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.parser'), None)
             if i is not None: del self.distribution.ext_modules[i]
-
 
         # Data
         if self.data2_dir:

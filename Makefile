@@ -2,7 +2,7 @@ PY = python
 RM = rm -rf
 LINT = pylint --rcfile=./.pylintrc
 
-.PHONY: all dist bdist bdist_wheel sdist test lint doc upload clean
+.PHONY: all dist sdist test lint doc upload clean
 
 all: dist
 
