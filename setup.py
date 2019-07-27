@@ -219,7 +219,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Cython',
-        'License :: OSI Approved :: MIT License',
+        'License :: Free for non-commercial use',
         'Operating System :: POSIX :: Linux',
         'Natural Language :: Chinese (Traditional)',
     ],
