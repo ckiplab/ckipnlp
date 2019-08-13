@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-__author__ = 'Mu Yang <emfomy@gmail.com>'
+__author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = 'Copyright 2018-2019'
 
 import collections as _collections
@@ -121,7 +121,7 @@ class ParserTree(_treelib.Tree):
         return tree
 
     def to_dict(self, node_id=0):
-        node = self.get_node(node_id)
+        node = self[node_id]
         tree_dict = node.to_dict()
 
         for child in self.children(node_id):
@@ -222,7 +222,7 @@ class ParserTree(_treelib.Tree):
 
         # No child, choose the root node instead
         if not children:
-            head_nodes = (self.get_node(root_id),)
+            head_nodes = (self[root_id],)
 
         # Find head
         if head_nodes is None:
@@ -274,7 +274,7 @@ class ParserTree(_treelib.Tree):
             the relation.
         """
 
-        root_node = self.get_node(root_id)
+        root_node = self[root_id]
         head_root_node = self.get_heads(root_id, deep=False)
 
         # Skip Caa
