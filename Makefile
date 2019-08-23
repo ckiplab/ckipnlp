@@ -4,7 +4,7 @@ LINT = pylint --rcfile=./.pylintrc
 
 .PHONY: all check dist sdist test lint doc upload clean
 
-all: dist
+all: dist check
 
 dist: sdist
 
