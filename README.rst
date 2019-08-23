@@ -111,27 +111,27 @@ Installation Options
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 | Option                                        | Detail                                | Default Value                 |
 +===============================================+=======================================+===============================+
-| :kbd:`--[no-]ws`                              | Enable/disable CKIPWS.                | False                         |
+| ``--[no-]ws``                                 | Enable/disable CKIPWS.                | False                         |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--[no-]parser`                          | Enable/disable CKIP-Parser.           | False                         |
+| ``--[no-]parser``                             | Enable/disable CKIP-Parser.           | False                         |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--ws-dir=<ws-dir>`                      | CKIPWS root directory.                |                               |
+| ``--ws-dir=<ws-dir>``                         | CKIPWS root directory.                |                               |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--ws-lib-dir=<ws-lib-dir>`              | CKIPWS libraries directory            | ``<ws-dir>/lib``              |
+| ``--ws-lib-dir=<ws-lib-dir>``                 | CKIPWS libraries directory            | ``<ws-dir>/lib``              |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--ws-share-dir=<ws-share-dir>`          | CKIPWS share directory                | ``<ws-dir>``                  |
+| ``--ws-share-dir=<ws-share-dir>``             | CKIPWS share directory                | ``<ws-dir>``                  |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--parser-dir=<parser-dir>`              | CKIP-Parser root directory.           |                               |
+| ``--parser-dir=<parser-dir>``                 | CKIP-Parser root directory.           |                               |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--parser-lib-dir=<parser-lib-dir>`      | CKIP-Parser libraries directory       | ``<parser-dir>/lib``          |
+| ``--parser-lib-dir=<parser-lib-dir>``         | CKIP-Parser libraries directory       | ``<parser-dir>/lib``          |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--parser-share-dir=<parser-share-dir>`  | CKIP-Parser share directory           | ``<parser-dir>``              |
+| ``--parser-share-dir=<parser-share-dir>``     | CKIP-Parser share directory           | ``<parser-dir>``              |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--data2-dir=<data2-dir>`                | "Data2" directory                     | ``<ws-share-dir>/Data2``      |
+| ``--data2-dir=<data2-dir>``                   | "Data2" directory                     | ``<ws-share-dir>/Data2``      |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--rule-dir=<rule-dir>`                  | "Rule" directory                      | ``<parser-share-dir>/Rule``   |
+| ``--rule-dir=<rule-dir>``                     | "Rule" directory                      | ``<parser-share-dir>/Rule``   |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--rdb-dir=<rdb-dir>`                    | "RDB" directory                       | ``<parser-share-dir>/RDB``    |
+| ``--rdb-dir=<rdb-dir>``                       | "RDB" directory                       | ``<parser-share-dir>/RDB``    |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 
 Usage
