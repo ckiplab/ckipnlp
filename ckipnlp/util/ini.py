@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 
 __author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = 'Copyright 2018-2019 CKIP Lab'
+__copyright__ = '2018-2019 CKIP Lab'
+__license__ = 'CC-BY-NC-SA 4.0'
 
 import datetime as _datetime
 import os as _os
