@@ -4,29 +4,29 @@ Introduction
 Git
 ---
 
-https://github.com/emfomy/ckipnlp
+https://github.com/ckiplab/ckipnlp
 
 |GitHub Version| |GitHub Release| |GitHub Issues|
 
-.. |GitHub Version| image:: https://img.shields.io/github/release/emfomy/ckipnlp/all.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/releases
+.. |GitHub Version| image:: https://img.shields.io/github/release/ckiplab/ckipnlp/all.svg?maxAge=3600
+   :target: https://github.com/ckiplab/ckipnlp/releases
 
-.. |GitHub License| image:: https://img.shields.io/github/license/emfomy/ckipnlp.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/blob/master/LICENSE
+.. |GitHub License| image:: https://img.shields.io/github/license/ckiplab/ckipnlp.svg?maxAge=3600
+   :target: https://github.com/ckiplab/ckipnlp/blob/master/LICENSE
 
-.. |GitHub Release| image:: https://img.shields.io/github/release-date/emfomy/ckipnlp.svg?maxAge=3600
+.. |GitHub Release| image:: https://img.shields.io/github/release-date/ckiplab/ckipnlp.svg?maxAge=3600
 
-.. |GitHub Downloads| image:: https://img.shields.io/github/downloads/emfomy/ckipnlp/total.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/releases/latest
+.. |GitHub Downloads| image:: https://img.shields.io/github/downloads/ckiplab/ckipnlp/total.svg?maxAge=3600
+   :target: https://github.com/ckiplab/ckipnlp/releases/latest
 
-.. |GitHub Issues| image:: https://img.shields.io/github/issues/emfomy/ckipnlp.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/issues
+.. |GitHub Issues| image:: https://img.shields.io/github/issues/ckiplab/ckipnlp.svg?maxAge=3600
+   :target: https://github.com/ckiplab/ckipnlp/issues
 
-.. |GitHub Forks| image:: https://img.shields.io/github/forks/emfomy/ckipnlp.svg?style=social&label=Fork&maxAge=3600
+.. |GitHub Forks| image:: https://img.shields.io/github/forks/ckiplab/ckipnlp.svg?style=social&label=Fork&maxAge=3600
 
-.. |GitHub Stars| image:: https://img.shields.io/github/stars/emfomy/ckipnlp.svg?style=social&label=Star&maxAge=3600
+.. |GitHub Stars| image:: https://img.shields.io/github/stars/ckiplab/ckipnlp.svg?style=social&label=Star&maxAge=3600
 
-.. |GitHub Watchers| image:: https://img.shields.io/github/watchers/emfomy/ckipnlp.svg?style=social&label=Watch&maxAge=3600
+.. |GitHub Watchers| image:: https://img.shields.io/github/watchers/ckiplab/ckipnlp.svg?style=social&label=Watch&maxAge=3600
 
 PyPI
 ----
@@ -39,7 +39,7 @@ https://pypi.org/project/ckipnlp
    :target: https://pypi.org/project/ckipnlp
 
 .. |PyPI License| image:: https://img.shields.io/pypi/l/ckipnlp.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/blob/master/LICENSE
+   :target: https://github.com/ckiplab/ckipnlp/blob/master/LICENSE
 
 .. |PyPI Downloads| image:: https://img.shields.io/pypi/dm/ckipnlp.svg?maxAge=3600
    :target: https://pypi.org/project/ckipnlp#files
@@ -111,27 +111,27 @@ Installation Options
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 | Option                                        | Detail                                | Default Value                 |
 +===============================================+=======================================+===============================+
-| :kbd:`--[no-]ws`                              | Enable/disable CKIPWS.                | False                         |
+| ``--[no-]ws``                                 | Enable/disable CKIPWS.                | False                         |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--[no-]parser`                          | Enable/disable CKIP-Parser.           | False                         |
+| ``--[no-]parser``                             | Enable/disable CKIP-Parser.           | False                         |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--ws-dir=<ws-dir>`                      | CKIPWS root directory.                |                               |
+| ``--ws-dir=<ws-dir>``                         | CKIPWS root directory.                |                               |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--ws-lib-dir=<ws-lib-dir>`              | CKIPWS libraries directory            | ``<ws-dir>/lib``              |
+| ``--ws-lib-dir=<ws-lib-dir>``                 | CKIPWS libraries directory            | ``<ws-dir>/lib``              |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--ws-share-dir=<ws-share-dir>`          | CKIPWS share directory                | ``<ws-dir>``                  |
+| ``--ws-share-dir=<ws-share-dir>``             | CKIPWS share directory                | ``<ws-dir>``                  |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--parser-dir=<parser-dir>`              | CKIP-Parser root directory.           |                               |
+| ``--parser-dir=<parser-dir>``                 | CKIP-Parser root directory.           |                               |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--parser-lib-dir=<parser-lib-dir>`      | CKIP-Parser libraries directory       | ``<parser-dir>/lib``          |
+| ``--parser-lib-dir=<parser-lib-dir>``         | CKIP-Parser libraries directory       | ``<parser-dir>/lib``          |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--parser-share-dir=<parser-share-dir>`  | CKIP-Parser share directory           | ``<parser-dir>``              |
+| ``--parser-share-dir=<parser-share-dir>``     | CKIP-Parser share directory           | ``<parser-dir>``              |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--data2-dir=<data2-dir>`                | "Data2" directory                     | ``<ws-share-dir>/Data2``      |
+| ``--data2-dir=<data2-dir>``                   | "Data2" directory                     | ``<ws-share-dir>/Data2``      |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--rule-dir=<rule-dir>`                  | "Rule" directory                      | ``<parser-share-dir>/Rule``   |
+| ``--rule-dir=<rule-dir>``                     | "Rule" directory                      | ``<parser-share-dir>/Rule``   |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| :kbd:`--rdb-dir=<rdb-dir>`                    | "RDB" directory                       | ``<parser-share-dir>/RDB``    |
+| ``--rdb-dir=<rdb-dir>``                       | "RDB" directory                       | ``<parser-share-dir>/RDB``    |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 
 Usage

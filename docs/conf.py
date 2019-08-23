@@ -28,7 +28,7 @@ def setup(app):
 
 project = __about.__title__
 author = __about.__author_name__
-copyright = __about.__copyright__ + ', ' + __about.__author_name__
+copyright = __about.__copyright__
 
 # The short X.Y version.
 version = __about.__version__
