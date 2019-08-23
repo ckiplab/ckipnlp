@@ -2,14 +2,17 @@ PY = python
 RM = rm -rf
 LINT = pylint --rcfile=./.pylintrc
 
-.PHONY: all dist sdist test lint doc upload clean
+.PHONY: all check dist sdist test lint doc upload clean
 
-all: dist
+all: dist check
 
 dist: sdist
 
 sdist test:
 	$(PY) setup.py $@
+
+check:
+	$(PY) setup.py check -r -s
 
 lint:
 	$(LINT) ckipnlp
@@ -17,7 +20,7 @@ lint:
 doc:
 	( cd docs ; make clean ; make html )
 
-upload: dist
+upload: dist check
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz --verbose
 
 clean:

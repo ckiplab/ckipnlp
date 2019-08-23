@@ -4,29 +4,29 @@ Introduction
 Git
 ---
 
-https://github.com/emfomy/ckipnlp
+https://github.com/ckiplab/ckipnlp
 
 |GitHub Version| |GitHub Release| |GitHub Issues|
 
-.. |GitHub Version| image:: https://img.shields.io/github/release/emfomy/ckipnlp/all.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/releases
+.. |GitHub Version| image:: https://img.shields.io/github/release/ckiplab/ckipnlp/all.svg?maxAge=3600
+   :target: https://github.com/ckiplab/ckipnlp/releases
 
-.. |GitHub License| image:: https://img.shields.io/github/license/emfomy/ckipnlp.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/blob/master/LICENSE
+.. |GitHub License| image:: https://img.shields.io/github/license/ckiplab/ckipnlp.svg?maxAge=3600
+   :target: https://github.com/ckiplab/ckipnlp/blob/master/LICENSE
 
-.. |GitHub Release| image:: https://img.shields.io/github/release-date/emfomy/ckipnlp.svg?maxAge=3600
+.. |GitHub Release| image:: https://img.shields.io/github/release-date/ckiplab/ckipnlp.svg?maxAge=3600
 
-.. |GitHub Downloads| image:: https://img.shields.io/github/downloads/emfomy/ckipnlp/total.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/releases/latest
+.. |GitHub Downloads| image:: https://img.shields.io/github/downloads/ckiplab/ckipnlp/total.svg?maxAge=3600
+   :target: https://github.com/ckiplab/ckipnlp/releases/latest
 
-.. |GitHub Issues| image:: https://img.shields.io/github/issues/emfomy/ckipnlp.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/issues
+.. |GitHub Issues| image:: https://img.shields.io/github/issues/ckiplab/ckipnlp.svg?maxAge=3600
+   :target: https://github.com/ckiplab/ckipnlp/issues
 
-.. |GitHub Forks| image:: https://img.shields.io/github/forks/emfomy/ckipnlp.svg?style=social&label=Fork&maxAge=3600
+.. |GitHub Forks| image:: https://img.shields.io/github/forks/ckiplab/ckipnlp.svg?style=social&label=Fork&maxAge=3600
 
-.. |GitHub Stars| image:: https://img.shields.io/github/stars/emfomy/ckipnlp.svg?style=social&label=Star&maxAge=3600
+.. |GitHub Stars| image:: https://img.shields.io/github/stars/ckiplab/ckipnlp.svg?style=social&label=Star&maxAge=3600
 
-.. |GitHub Watchers| image:: https://img.shields.io/github/watchers/emfomy/ckipnlp.svg?style=social&label=Watch&maxAge=3600
+.. |GitHub Watchers| image:: https://img.shields.io/github/watchers/ckiplab/ckipnlp.svg?style=social&label=Watch&maxAge=3600
 
 PyPI
 ----
@@ -39,7 +39,7 @@ https://pypi.org/project/ckipnlp
    :target: https://pypi.org/project/ckipnlp
 
 .. |PyPI License| image:: https://img.shields.io/pypi/l/ckipnlp.svg?maxAge=3600
-   :target: https://github.com/emfomy/ckipnlp/blob/master/LICENSE
+   :target: https://github.com/ckiplab/ckipnlp/blob/master/LICENSE
 
 .. |PyPI Downloads| image:: https://img.shields.io/pypi/dm/ckipnlp.svg?maxAge=3600
    :target: https://pypi.org/project/ckipnlp#files
@@ -65,7 +65,7 @@ http://ckipnlp.readthedocs.io/
 Author
 ------
 
-* Mu Yang <emfomy@gmail.com>
+* Mu Yang <http://muyang.pro>
 
 Requirements
 ------------
@@ -236,7 +236,7 @@ License
 
 |CC BY-NC-SA 4.0|
 
-Copyright (c) 2018-2019 Mu Yang under the `CC-BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`_. All rights reserved.
+Copyright (c) 2018-2019 CKIP Lab under the `CC-BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`_. All rights reserved.
 
 .. |CC BY-NC-SA 4.0| image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
    :target: http://creativecommons.org/licenses/by-nc-sa/4.0/

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-__author__ = 'Mu Yang <emfomy@gmail.com>'
-__copyright__ = 'Copyright 2018-2019'
+__author__ = 'Mu Yang <http://muyang.pro>'
+__copyright__ = '2018-2019 CKIP Lab'
+__license__ = 'CC-BY-NC-SA 4.0'
 
 from setuptools import dist
 dist.Distribution().fetch_build_eggs([
@@ -219,7 +220,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Cython',
-        'License :: OSI Approved :: MIT License',
+        'License :: Free for non-commercial use',
         'Operating System :: POSIX :: Linux',
         'Natural Language :: Chinese (Traditional)',
     ],
