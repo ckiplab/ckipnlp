@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 __author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = 'Copyright 2018-2019'
+__copyright__ = 'Copyright 2018-2019 CKIP Lab'
 
 from setuptools import dist
 dist.Distribution().fetch_build_eggs([

@@ -2,7 +2,7 @@
 # cython: language_level=3
 
 __author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = 'Copyright 2018-2019'
+__copyright__ = 'Copyright 2018-2019 CKIP Lab'
 
 cimport src.ws.cckipws as cckipws
 from libc.stdlib cimport malloc, free
