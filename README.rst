@@ -8,7 +8,7 @@ https://github.com/ckiplab/ckipnlp
 
 |GitHub Version| |GitHub Release| |GitHub Issues|
 
-.. |GitHub Version| image:: https://img.shields.io/github/release/ckiplab/ckipnlp/all.svg?maxAge=3600
+.. |GitHub Version| image:: https://img.shields.io/github/v/release/ckiplab/ckipnlp.svg?maxAge=3600
    :target: https://github.com/ckiplab/ckipnlp/releases
 
 .. |GitHub License| image:: https://img.shields.io/github/license/ckiplab/ckipnlp.svg?maxAge=3600
