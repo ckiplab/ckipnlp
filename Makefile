@@ -1,6 +1,7 @@
 PY = python
 RM = rm -rf
 LINT = pylint --rcfile=./.pylintrc
+TWINE = twine
 
 .PHONY: all check dist sdist test lint doc upload clean
 
@@ -21,7 +22,7 @@ doc:
 	( cd docs ; make clean ; make html )
 
 upload: dist check
-	twine upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz --verbose
+	$(TWINE) upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz --verbose
 
 clean:
 	( cd docs ; make clean )

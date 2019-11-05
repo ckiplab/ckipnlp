@@ -227,7 +227,7 @@ setup(
     python_requires='>=3.5',
     packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*', 'ckipws', 'ckipparser',]),
     install_requires=[
-        'treelib>=1.5.5',
+        'treelib>=1.5',
     ],
     ext_modules=cythonize(
         [
