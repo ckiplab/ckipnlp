@@ -3,7 +3,7 @@
 
 __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2019 CKIP Lab'
-__license__ = 'CC-BY-NC-SA 4.0'
+__license__ = 'CC BY-NC-SA 4.0'
 
 import collections as _collections
 import json as _json
