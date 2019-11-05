@@ -32,7 +32,7 @@ from Cython.Build import cythonize
 
 import ckipnlp as about
 
-with open('README.rst') as fin:
+with open('README.rst', encoding='utf-8') as fin:
     readme = fin.read()
 
 ################################################################################
