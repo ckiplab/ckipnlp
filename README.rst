@@ -62,10 +62,11 @@ http://ckipnlp.readthedocs.io/
 .. |ReadTheDocs Home| image:: https://img.shields.io/website/https/ckipnlp.readthedocs.io.svg?maxAge=3600&up_message=online&down_message=offline
    :target: http://ckipnlp.readthedocs.io
 
-Author
-------
+Author / Maintainer
+-------------------
 
-* Mu Yang <http://muyang.pro>
+* `Mu Yang <http://muyang.pro>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Author & Maintainer)
+* `Wei-Yun Ma <https://www.iis.sinica.edu.tw/pages/ma/>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Maintainer)
 
 Requirements
 ------------
@@ -236,7 +237,7 @@ License
 
 |CC BY-NC-SA 4.0|
 
-Copyright (c) 2018-2019 CKIP Lab under the `CC BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`_.
+Copyright (c) 2018-2019 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`_ under the `CC BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`_.
 
 .. |CC BY-NC-SA 4.0| image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
    :target: http://creativecommons.org/licenses/by-nc-sa/4.0/
