@@ -3,7 +3,7 @@
 
 __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2019 CKIP Lab'
-__license__ = 'CC-BY-NC-SA 4.0'
+__license__ = 'CC BY-NC-SA 4.0'
 
 from setuptools import dist
 dist.Distribution().fetch_build_eggs([
@@ -32,7 +32,7 @@ from Cython.Build import cythonize
 
 import ckipnlp as about
 
-with open('README.rst') as fin:
+with open('README.rst', encoding='utf-8') as fin:
     readme = fin.read()
 
 ################################################################################
@@ -227,7 +227,7 @@ setup(
     python_requires='>=3.5',
     packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*', 'ckipws', 'ckipparser',]),
     install_requires=[
-        'treelib>=1.5.5',
+        'treelib>=1.5',
     ],
     ext_modules=cythonize(
         [
