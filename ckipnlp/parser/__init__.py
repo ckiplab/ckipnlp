@@ -9,11 +9,6 @@ import os as _os
 import tempfile as _tempfile
 import warnings as _warnings
 
-from typing import (
-    List,
-    NoReturn,
-)
-
 try:
     if not _os.environ.get('_SPHINX'):
         from ckipnlp._core.parser import CkipParserCore
@@ -32,26 +27,26 @@ class CkipParser:
 
     Parameters
     ----------
-    logger
-        enable logger.
-    inifile
-        the path to the INI file.
-    wsinifile
-        the path to the INI file for CKIPWS.
-    options:
-        the options, see :func:`ckipnlp.util.ini.create_ws_ini` and :func:`ckipnlp.util.ini.create_parser_ini`
+        logger : bool
+            enable logger.
+        inifile : str
+            the path to the INI file.
+        wsinifile : str
+            the path to the INI file for CKIPWS.
+        options:
+            the options, see :func:`ckipnlp.util.ini.create_ws_ini` and :func:`ckipnlp.util.ini.create_parser_ini`
 
     Warning
     -------
-    Never instance more than one object of this class!
+        Never instance more than one object of this class!
     """
 
     def __init__(self, *,
-        logger: bool = False,
-        inifile: str = None,
-        wsinifile: str = None,
+        logger=False,
+        inifile=None,
+        wsinifile=None,
         **options,
-    ) -> NoReturn:
+    ):
 
         self.__core = CkipParserCore()
 
@@ -88,55 +83,50 @@ class CkipParser:
         except: # pylint: disable=bare-except
             pass
 
-    def __call__(self,
-        text: str,
-    ) -> str:
+    def __call__(self, text):
         return self.apply(text)
 
-    def apply(self,
-        text: str,
-    ) -> str:
+    def apply(self, text):
         """Segment a sentence.
 
         Parameters
         ----------
-        text
-            the input sentence.
+            text : str
+                the input sentence.
 
         Return
         ------
-            the output sentence.
+            str
+                the output sentence.
 
         .. note::
             One may also call this method as :func:`__call__`.
         """
         return self.apply_list([text])[0]
 
-    def apply_list(self, ilist: List[str]) -> List[str]:
+    def apply_list(self, ilist):
         """Segment a list of sentences.
 
         Parameters
         ----------
-        ilist
-            the list of input sentences.
+            ilist
+                the list of input sentences.
 
         Return
         ------
-            the list of output sentences.
+            List[str]
+                the list of output sentences.
         """
         return self.__core.apply_list(ilist)
 
-    def apply_file(self,
-        ifile: str,
-        ofile: str,
-    ) -> NoReturn:
+    def apply_file(self, ifile, ofile):
         """Segment a file.
 
         Parameters
         ----------
-        ifile: str
-             the input file.
-        ofile: str
-             the output file (will be overwritten).
+            ifile : str
+                 the input file.
+            ofile : str
+                 the output file (will be overwritten).
         """
         return self.__core.apply_file(ifile, ofile)

@@ -217,6 +217,8 @@ FAQ
 
    Due to C code implementation, one should not instance more than one ``CkipWs`` driver object and one ``CkipParser`` driver object.
 
+------------
+
 .. warning::
 
    The CKIPWS throws "``what():  locale::facet::_S_create_c_locale name not valid``". What should I do?
@@ -226,6 +228,8 @@ FAQ
    .. code-block:: bash
 
       apt-get install locales-all
+
+------------
 
 .. warning::
 

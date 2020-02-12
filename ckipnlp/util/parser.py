@@ -10,7 +10,6 @@ import itertools as _itertools
 import json as _json
 
 from typing import (
-    Callable,
     NamedTuple,
 )
 
@@ -42,7 +41,7 @@ class ParserNode(_treelib.Node):
 
     See Also
     --------
-    treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+        treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
     """
 
     def to_dict(self):
@@ -79,11 +78,11 @@ class ParserTree(_treelib.Tree):
 
     See Also
     --------
-    treelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+    treereelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
     """
 
     @classmethod
-    def from_text(cls, tree_text: str):
+    def from_text(cls, tree_text):
         """Create :class:`ParserTree` object from :class:`ckipnlp.parser.CkipParser` output."""
         tree = cls(node_class=ParserNode)
 
@@ -129,7 +128,7 @@ class ParserTree(_treelib.Tree):
 
         return tree
 
-    def to_dict(self, node_id: int = 0): # pylint: disable=arguments-differ
+    def to_dict(self, node_id=0): # pylint: disable=arguments-differ
         node = self[node_id]
         tree_dict = node.to_dict()
 
@@ -141,51 +140,49 @@ class ParserTree(_treelib.Tree):
     def to_json(self, **kwargs): # pylint: disable=arguments-differ
         return _json.dumps(self.to_dict(), **kwargs)
 
-    def show(self, *,
-        key: Callable = lambda node: node.identifier,
-        idhidden: bool = False,
+    def show(self, *, # pylint: disable=arguments-differ
+        key=lambda node: node.identifier,
+        idhidden=False,
         **kwargs,
-    ): # pylint: disable=arguments-differ
+    ):
         """Show pretty tree."""
         super().show(key=key, idhidden=idhidden, **kwargs)
 
-    def has_dummies(self, node_id: int):
+    def has_dummies(self, node_id):
         """Determine if a node has dummies.
 
         Parameters
         ----------
-        node_id : int
-            ID of target node.
+            node_id : int
+                ID of target node.
 
         Returns
         -------
-        bool
-            whether or not target node has dummies.
-
+            bool
+                whether or not target node has dummies.
         """
         roles = [node.data.role for node in self.children(node_id)]
         return 'DUMMY1' in roles and 'DUMMY2' in roles
 
-    def get_dummies(self, node_id: int, deep: bool = True, _check: bool = True):
+    def get_dummies(self, node_id, deep=True, _check=True):
         """Get dummies of a node.
 
         Parameters
         ----------
-        node_id : int
-            ID of target node.
-        deep : bool
-            find dummies recursively.
+            node_id : int
+                ID of target node.
+            deep : bool
+                find dummies recursively.
 
         Returns
         -------
-        tuple
-            the dummies (:class:`ParserNode`).
+            Tuple[:class:`ParserNode`]
+                the dummies (:class:`ParserNode`).
 
         Raises
         ------
-        LookupError
-            when target node has no dummy (only when **_check** is set).
-
+            LookupError
+                when target node has no dummy (only when **_check** is set).
         """
         if _check and not self.has_dummies(node_id):
             raise LookupError('Node ({node_id}) does not have dummies!'.format(node_id=node_id))
@@ -209,26 +206,26 @@ class ParserTree(_treelib.Tree):
 
         return (*dummy1, *dummy2,)
 
-    def get_heads(self, root_id: int = 0, deep: bool = True): # pylint: disable=too-many-branches
+    def get_heads(self, root_id=0, deep=True): # pylint: disable=too-many-branches
         """Get all head nodes of a subtree.
 
         Parameters
         ----------
-        node_id : int
-            ID of the root node of target subtree.
-        deep : bool
-            find heads recursively.
+            root_id : int
+                ID of the root node of target subtree.
+            deep : bool
+                find heads recursively.
 
         Returns
         -------
-        list
-            the head nodes (:class:`ParserNode`).
-        :class:`ParserNode`
-            the head node (when **deep** is set).
+            List[:class:`ParserNode`]
+                the head nodes (when **deep** is set).
+            :class:`ParserNode`
+                the head node (when **deep** is not set).
 
         Todo
         ----
-        Get information of nodes with pos type PP or GP.
+            Get information of nodes with pos type PP or GP.
         """
         head_nodes = None
         children = list(self.children(root_id))
@@ -273,18 +270,18 @@ class ParserTree(_treelib.Tree):
 
         return head_nodes[0] if not deep else head_nodes
 
-    def get_relations(self, root_id: int = 0):
+    def get_relations(self, root_id=0):
         """Get all relations of a subtree.
 
         Parameters
         ----------
-        node_id : int
-            ID of the subtree root node.
+            root_id : int
+                ID of the subtree root node.
 
         Yields
         ------
-        :class:`ParserRelation`
-            the relation.
+            :class:`ParserRelation`
+                the relation.
         """
 
         head_root_node = self.get_heads(root_id, deep=False)
