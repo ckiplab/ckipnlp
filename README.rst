@@ -215,7 +215,7 @@ FAQ
 
 .. warning::
 
-   Due to C code implementation, one should not instance more than one :class:`CkipWs` driver object and one :class:`CkipParser` driver object.
+   Due to C code implementation, one should not instance more than one ``CkipWs`` driver object and one ``CkipParser`` driver object.
 
 .. warning::
 
