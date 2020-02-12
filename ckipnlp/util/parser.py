@@ -8,21 +8,24 @@ __license__ = 'CC BY-NC-SA 4.0'
 import collections as _collections
 import itertools as _itertools
 import json as _json
+import typing as _typing
 
 import treelib as _treelib
 
 ################################################################################################################################
 
-_ParserNodeData = _collections.namedtuple('_ParserNodeData', ('role', 'pos', 'term',))
-_ParserNodeData.__new__.__defaults__ = (None, None, None,)
-class ParserNodeData(_ParserNodeData):
+class ParserNodeData(_typing.NamedTuple):
     """A parser node.
 
-    Fields:
-        * **role** (*str*): the role.
-        * **pos** (*str*): the post-tag.
-        * **term** (*str*): the text term.
+    Fields
+        * **role** (*str*) – the role.
+        * **pos** (*str*) – the post-tag.
+        * **term** (*str*) – the text term.
     """
+
+    role: str = None
+    pos:  str = None
+    term: str = None
 
     @classmethod
     def from_text(cls, text):
@@ -45,15 +48,17 @@ class ParserNode(_treelib.Node):
     def to_json(self, **kwargs):
         return _json.dumps(self.to_dict(), **kwargs)
 
-_ParserRelation = _collections.namedtuple('_ParserRelation', ('head', 'tail', 'relation'))
-class ParserRelation(_ParserRelation):
+class ParserRelation(_typing.NamedTuple):
     """A parser relation.
 
-    Fields:
-        * **head** (:class:`ParserNode`): the head node.
-        * **tail** (:class:`ParserNode`): the tail node.
-        * **relation** (str): the relation.
-        """
+    Fields
+        * **head** (:class:`ParserNode`) – the head node.
+        * **tail** (:class:`ParserNode`) – the tail node.
+        * **relation** (str) – the relation.
+    """
+    head: ParserNode
+    tail: ParserNode
+    relation: str
 
     def __str__(self):
         ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head.identifier <= self.tail.identifier \
@@ -72,7 +77,12 @@ class ParserRelation(_ParserRelation):
 ################################################################################################################################
 
 class ParserTree(_treelib.Tree):
-    """A parsed tree."""
+    """A parsed tree.
+
+    See Also
+    --------
+    treelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+    """
 
     @classmethod
     def from_text(cls, tree_text):

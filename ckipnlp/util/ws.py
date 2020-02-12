@@ -7,14 +7,18 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 import collections as _collections
 import json as _json
+import typing as _typing
 
-class WsWord(_collections.namedtuple('_WsWord', ('word', 'pos',))):
+class WsWord(_typing.NamedTuple):
     """A word-segmented word.
 
-    Fields:
-        * **word** (*str*): the word.
-        * **pos** (*str*): the post-tag.
+    Fields
+        * **word** (str) – the word.
+        * **pos** (str) – the post-tag.
     """
+
+    word: str
+    pos: str
 
     @classmethod
     def from_text(cls, text):
@@ -33,8 +37,8 @@ class WsWord(_collections.namedtuple('_WsWord', ('word', 'pos',))):
 class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
     """A word-segmented sentence.
 
-    Items:
-        :class:`WsWord`: the words.
+    Items
+        :class:`WsWord` : the words.
     """
 
     @classmethod

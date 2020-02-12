@@ -73,6 +73,7 @@ Requirements
 
 * `Python <http://www.python.org>`_ 3.5+
 * `Cython <http://cython.org>`_ 0.29+
+* `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
 
 .. note::
    For Python 2 users, please use `PyCkip 0.4.2 <https://pypi.org/project/pyckip/0.4.2/>`_ instead.
@@ -191,8 +192,8 @@ Utilities
 
    # Format CkipWs output
    ws_text = ['中文字(Na)　喔(T)', '啊哈(I)　哈哈(D)']
-   for text in ws_text: print(ckipnlp.util.ws.WsSentence.from_text(text))
-   for text in ws_text: print(repr(ckipnlp.util.ws.WsSentence.from_text(text)))
+   for text in ws_text: print(WsSentence.from_text(text))
+   for text in ws_text: print(repr(WsSentence.from_text(text)))
 
    # Show CkipParser output as tree
    tree_text = 'S(theme:NP(property:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nad(DUMMY1:Nab:早餐|Head:Caa:和|DUMMY2:Naa:午餐))|quantity:Dab:都|Head:VC31:吃完|aspect:Di:了)'
