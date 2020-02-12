@@ -12,30 +12,29 @@ import warnings as _warnings
 
 import ckipnlp as _about
 
-def create_ws_ini( # pylint: disable=too-many-statements
-        *,
-        data2dir=None,
-        lexfile=None,
-        new_style_format=False,
-        show_category=True,
-        sentence_max_word_num=80,
-        **options,
+def create_ws_ini(*, # pylint: disable=too-many-statements
+    data2dir: str = None,
+    lexfile: str = None,
+    new_style_format: bool = False,
+    show_category: bool = True,
+    sentence_max_word_num: int = 80,
+    **options,
 ):
     """Generate CKIP word segmentation config.
 
     Parameters
     ----------
-    data2dir : str
+    data2dir
         the path to the folder "Data2/".
-    lexfile : str
+    lexfile
         the path to the user-defined lexicon file.
 
-    new_style_format : bool
+    new_style_format
         split sentences by newline characters ("\\\\n") rather than punctuations.
-    show_category : bool
+    show_category
         show part-of-speech tags.
 
-    sentence_max_word_num : int
+    sentence_max_word_num
         maximum number of words per sentence.
     """
 
@@ -312,34 +311,33 @@ def create_ws_ini( # pylint: disable=too-many-statements
 
     return '\n'.join(cfg), options
 
-def create_parser_ini( # pylint: disable=too-many-statements
-        *,
-        wsinifile,
-        ruledir=None,
-        rdbdir=None,
-        do_ws=True,
-        do_parse=True,
-        do_role=True,
-        sentence_delim='，,；。！？',
-        **options,
+def create_parser_ini(*, # pylint: disable=too-many-statements
+    wsinifile,
+    ruledir: str = None,
+    rdbdir: str = None,
+    do_ws: bool = True,
+    do_parse: bool = True,
+    do_role: bool = True,
+    sentence_delim: str = '，,；。！？',
+    **options,
 ):
     """Generate CKIP parser config.
 
     Parameters
     ----------
-    ruledir : str
+    ruledir
         the path to "Rule/".
-    rdbdir : str
+    rdbdir
         the path to "RDB/".
 
-    do_ws : bool
+    do_ws
         do word-segmentation.
-    do_parse : bool
+    do_parse
         do parsing.
-    do_role : bool
+    do_role
         do role.
 
-    sentence_delim: str
+    sentence_delim
         the sentence delimiters.
     """
 

@@ -7,21 +7,19 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 import collections as _collections
 import json as _json
-import typing as _typing
 
-class WsWord(_typing.NamedTuple):
-    """A word-segmented word.
+from typing import (
+    NamedTuple,
+)
 
-    Fields
-        * **word** (str) – the word.
-        * **pos** (str) – the post-tag.
-    """
+class WsWord(NamedTuple):
+    """A word-segmented word."""
 
-    word: str
-    pos: str
+    word: str #: *str* – the word.
+    pos: str  #: *str* – the post-tag.
 
     @classmethod
-    def from_text(cls, text):
+    def from_text(cls, text: str):
         """Create :class:`WsWord` object from :class:`ckipnlp.ws.CkipWs` output."""
         return cls(*text.strip(')').rsplit('(', 1))
 
@@ -29,7 +27,7 @@ class WsWord(_typing.NamedTuple):
         return '{}({})'.format(self.word, self.pos)
 
     def to_dict(self):
-        return self._asdict()
+        return self._asdict() # pylint: disable=no-member
 
     def to_json(self, **kwargs):
         return _json.dumps(self.to_dict(), **kwargs)
@@ -42,7 +40,7 @@ class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
     """
 
     @classmethod
-    def from_text(cls, text):
+    def from_text(cls, text: str):
         """Create :class:`WsSentence` object from :class:`ckipnlp.ws.CkipWs` output."""
         return cls(map(WsWord.from_text, text.split('\u3000')))
 

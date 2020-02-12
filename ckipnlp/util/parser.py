@@ -8,39 +8,42 @@ __license__ = 'CC BY-NC-SA 4.0'
 import collections as _collections
 import itertools as _itertools
 import json as _json
-import typing as _typing
+
+from typing import (
+    Callable,
+    NamedTuple,
+)
 
 import treelib as _treelib
 
 ################################################################################################################################
 
-class ParserNodeData(_typing.NamedTuple):
-    """A parser node.
+class ParserNodeData(NamedTuple):
+    """A parser node."""
 
-    Fields
-        * **role** (*str*) – the role.
-        * **pos** (*str*) – the post-tag.
-        * **term** (*str*) – the text term.
-    """
-
-    role: str = None
-    pos:  str = None
-    term: str = None
+    role: str = None #: *str* – the role.
+    pos: str = None  #: *str* – the post-tag.
+    term: str = None #: *str* – the text term.
 
     @classmethod
-    def from_text(cls, text):
+    def from_text(cls, text: str):
         """Create :class:`ParserNodeData` object from :class:`ckipnlp.parser.CkipParser` output."""
         fields = text.split(':')
         return cls(*fields)
 
     def to_dict(self):
-        return self._asdict()
+        return self._asdict() # pylint: disable=no-member
 
     def to_json(self, **kwargs):
         return _json.dumps(self.to_dict(), **kwargs)
 
 class ParserNode(_treelib.Node):
-    """A parser node for tree."""
+    """A parser node for tree.
+
+    See Also
+    --------
+    treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+    """
 
     def to_dict(self):
         return _collections.OrderedDict(id=self.identifier, **self.data.to_dict())
@@ -48,17 +51,12 @@ class ParserNode(_treelib.Node):
     def to_json(self, **kwargs):
         return _json.dumps(self.to_dict(), **kwargs)
 
-class ParserRelation(_typing.NamedTuple):
-    """A parser relation.
+class ParserRelation(NamedTuple):
+    """A parser relation."""
 
-    Fields
-        * **head** (:class:`ParserNode`) – the head node.
-        * **tail** (:class:`ParserNode`) – the tail node.
-        * **relation** (str) – the relation.
-    """
-    head: ParserNode
-    tail: ParserNode
-    relation: str
+    head: ParserNode #: :class:`ParserNode` – the head node.
+    tail: ParserNode #: :class:`ParserNode` – the tail node.
+    relation: str #: *str* – the relation.
 
     def __str__(self):
         ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head.identifier <= self.tail.identifier \
@@ -85,7 +83,7 @@ class ParserTree(_treelib.Tree):
     """
 
     @classmethod
-    def from_text(cls, tree_text):
+    def from_text(cls, tree_text: str):
         """Create :class:`ParserTree` object from :class:`ckipnlp.parser.CkipParser` output."""
         tree = cls(node_class=ParserNode)
 
@@ -131,7 +129,7 @@ class ParserTree(_treelib.Tree):
 
         return tree
 
-    def to_dict(self, node_id=0): # pylint: disable=arguments-differ
+    def to_dict(self, node_id: int = 0): # pylint: disable=arguments-differ
         node = self[node_id]
         tree_dict = node.to_dict()
 
@@ -143,11 +141,15 @@ class ParserTree(_treelib.Tree):
     def to_json(self, **kwargs): # pylint: disable=arguments-differ
         return _json.dumps(self.to_dict(), **kwargs)
 
-    def show(self, *, key=lambda node: node.identifier, idhidden=False, **kwargs): # pylint: disable=arguments-differ
+    def show(self, *,
+        key: Callable = lambda node: node.identifier,
+        idhidden: bool = False,
+        **kwargs,
+    ): # pylint: disable=arguments-differ
         """Show pretty tree."""
         super().show(key=key, idhidden=idhidden, **kwargs)
 
-    def has_dummies(self, node_id):
+    def has_dummies(self, node_id: int):
         """Determine if a node has dummies.
 
         Parameters
@@ -164,7 +166,7 @@ class ParserTree(_treelib.Tree):
         roles = [node.data.role for node in self.children(node_id)]
         return 'DUMMY1' in roles and 'DUMMY2' in roles
 
-    def get_dummies(self, node_id, deep=True, _check=True):
+    def get_dummies(self, node_id: int, deep: bool = True, _check: bool = True):
         """Get dummies of a node.
 
         Parameters
@@ -207,7 +209,7 @@ class ParserTree(_treelib.Tree):
 
         return (*dummy1, *dummy2,)
 
-    def get_heads(self, root_id=0, deep=True): # pylint: disable=too-many-branches
+    def get_heads(self, root_id: int = 0, deep: bool = True): # pylint: disable=too-many-branches
         """Get all head nodes of a subtree.
 
         Parameters
@@ -271,7 +273,7 @@ class ParserTree(_treelib.Tree):
 
         return head_nodes[0] if not deep else head_nodes
 
-    def get_relations(self, root_id=0):
+    def get_relations(self, root_id: int = 0):
         """Get all relations of a subtree.
 
         Parameters

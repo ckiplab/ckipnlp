@@ -9,6 +9,11 @@ import os as _os
 import tempfile as _tempfile
 import warnings as _warnings
 
+from typing import (
+    List,
+    NoReturn,
+)
+
 try:
     if not _os.environ.get('_SPHINX'):
         from ckipnlp._core.ws import CkipWsCore
@@ -27,15 +32,23 @@ class CkipWs:
 
     Parameters
     ----------
-    logger : bool
+    logger
         enable logger.
-    inifile : str
+    inifile
         the path to the INI file.
     options:
         the options, see :func:`ckipnlp.util.ini.create_ws_ini`.
+
+    Warning
+    -------
+    Never instance more than one object of this class!
     """
 
-    def __init__(self, *, logger=False, inifile=None, **options):
+    def __init__(self, *,
+        logger: bool = False,
+        inifile: str = None,
+        **options,
+    ) -> NoReturn:
 
         self.__core = CkipWsCore()
 
@@ -59,53 +72,58 @@ class CkipWs:
         except: # pylint: disable=bare-except
             pass
 
-    def __call__(self, text):
+    def __call__(self,
+        text: str,
+    ) -> str:
         return self.apply(text)
 
-    def apply(self, text):
+    def apply(self,
+        text: str,
+    ) -> str:
         """Segment a sentence.
 
         Parameters
         ----------
-        text : str
+        text
             the input sentence.
 
         Return
         ------
-        str
             the output sentence.
 
-        Notes
-        -----
-        One may also call this method as :func:`__call__`.
+        .. note::
+            One may also call this method as :func:`__call__`.
         """
         return self.apply_list([text])[0]
 
-    def apply_list(self, ilist):
+    def apply_list(self, ilist: List[str]) -> List[str]:
         """Segment a list of sentences.
 
         Parameters
         ----------
-        ilist: list
-            the list of input sentences (str).
+        ilist
+            the list of input sentences.
 
         Return
         ------
-        olist: list
-            the list of output sentences (str).
+            the list of output sentences.
         """
         return self.__core.apply_list(ilist)
 
-    def apply_file(self, ifile, ofile, uwfile=''):
+    def apply_file(self,
+        ifile: str,
+        ofile: str,
+        uwfile: str = '',
+    ) -> NoReturn:
         """Segment a file.
 
         Parameters
         ----------
-        ifile: str
-             the input file.
-        ofile: str
-             the output file (will be overwritten).
-        uwfile: str
+        ifile
+            the input file.
+        ofile
+            the output file (will be overwritten).
+        uwfile
             the unknown word file (will be overwritten).
         """
         return self.__core.apply_file(ifile, ofile, uwfile)
