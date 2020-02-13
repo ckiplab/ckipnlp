@@ -33,8 +33,12 @@ class CkipParser:
             the path to the INI file.
         wsinifile : str
             the path to the INI file for CKIPWS.
-        options:
-            the options, see :func:`ckipnlp.util.ini.create_ws_ini` and :func:`ckipnlp.util.ini.create_parser_ini`
+    Other Parameters
+    ----------------
+        **
+            the configs for CKIPParser, ignored if **inifile** is set. Please refer :func:`ckipnlp.util.ini.create_parser_ini`.
+        **
+            the configs for CKIPWS, ignored if **wsinifile** is set. Please refer :func:`ckipnlp.util.ini.create_ws_ini`.
 
     Warning
     -------
@@ -45,7 +49,7 @@ class CkipParser:
         logger=False,
         inifile=None,
         wsinifile=None,
-        **options,
+        **kwargs,
     ):
 
         self.__core = CkipParserCore()
@@ -57,19 +61,19 @@ class CkipParser:
         if not wsinifile:
             fwsini = _tempfile.NamedTemporaryFile(mode='w')
             wsinifile = fwsini.name
-            wsinidata, options = create_ws_ini(**options)
+            wsinidata, kwargs = create_ws_ini(**kwargs)
             fwsini.write(wsinidata)
             fwsini.flush()
 
         if not inifile:
             fini = _tempfile.NamedTemporaryFile(mode='w')
             inifile = fini.name
-            inidata, options = create_parser_ini(wsinifile=wsinifile, **options)
+            inidata, kwargs = create_parser_ini(wsinifile=wsinifile, **kwargs)
             fini.write(inidata)
             fini.flush()
 
         def CkipParser(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
-        CkipParser(**options)
+        CkipParser(**kwargs)
 
         self.__core.init_data(inifile)
 

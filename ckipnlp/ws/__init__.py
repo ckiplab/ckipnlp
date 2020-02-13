@@ -31,8 +31,10 @@ class CkipWs:
             enable logger.
         inifile : str
             the path to the INI file.
-        options:
-            the options, see :func:`ckipnlp.util.ini.create_ws_ini`.
+    Other Parameters
+    ----------------
+        **
+            the configs for CKIPWS, ignored if **inifile** is set. Please refer :func:`ckipnlp.util.ini.create_ws_ini`.
 
     Warning
     -------
@@ -42,7 +44,7 @@ class CkipWs:
     def __init__(self, *,
         logger=False,
         inifile=None,
-        **options,
+        **kwargs,
     ):
 
         self.__core = CkipWsCore()
@@ -53,12 +55,12 @@ class CkipWs:
         if not inifile:
             fini = _tempfile.NamedTemporaryFile(mode='w')
             inifile = fini.name
-            inidata, options = create_ws_ini(**options)
+            inidata, kwargs = create_ws_ini(**kwargs)
             fini.write(inidata)
             fini.flush()
 
         def CkipWs(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
-        CkipWs(**options)
+        CkipWs(**kwargs)
 
         self.__core.init_data(inifile)
 
