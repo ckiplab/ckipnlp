@@ -73,17 +73,18 @@ Requirements
 
 * `Python <http://www.python.org>`_ 3.5+
 * `Cython <http://cython.org>`_ 0.29+
+* `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
 
 .. note::
    For Python 2 users, please use `PyCkip 0.4.2 <https://pypi.org/project/pyckip/0.4.2/>`_ instead.
 
-CkipWs (Optional)
+CKIPWS (Optional)
 ^^^^^^^^^^^^^^^^^
 
 * `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version 20190524+
 
-CkipParser (Optional)
-^^^^^^^^^^^^^^^^^^^^^
+CKIP-Parser (Optional)
+^^^^^^^^^^^^^^^^^^^^^^
 
 * `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version 20190506+ (20190725+ recommended)
 
@@ -191,8 +192,15 @@ Utilities
 
    # Format CkipWs output
    ws_text = ['中文字(Na)　喔(T)', '啊哈(I)　哈哈(D)']
-   for text in ws_text: print(ckipnlp.util.ws.WsSentence.from_text(text))
-   for text in ws_text: print(repr(ckipnlp.util.ws.WsSentence.from_text(text)))
+
+   # Show Sentence List
+   ws_sents = WsSentenceList.from_text(ws_text)
+   print(repr(ws_sents))
+   print(ws_sents.to_text())
+
+   # Show Each Sentence
+   for ws_sent in ws_sents: print(repr(ws_sent))
+   for ws_sent in ws_sents: print(ws_sent.to_text())
 
    # Show CkipParser output as tree
    tree_text = 'S(theme:NP(property:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nad(DUMMY1:Nab:早餐|Head:Caa:和|DUMMY2:Naa:午餐))|quantity:Dab:都|Head:VC31:吃完|aspect:Di:了)'
@@ -206,7 +214,7 @@ Utilities
    for node in tree.get_heads(1): print(node)
 
    # Get relations
-   for r in tree.get_relations(0): print(r)
+   for rel in tree.get_relations(0): print(rel)
 
 
 FAQ
@@ -214,23 +222,31 @@ FAQ
 
 .. warning::
 
+   Due to C code implementation, one should not instance more than one ``CkipWs`` driver object and one ``CkipParser`` driver object.
+
+------------
+
+.. warning::
+
    The CKIPWS throws "``what():  locale::facet::_S_create_c_locale name not valid``". What should I do?
 
-Install locale data.
+   Install locale data.
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   apt-get install locales-all
+      apt-get install locales-all
+
+------------
 
 .. warning::
 
    The CKIPParser throws "``ImportError: libCKIPParser.so: cannot open shared object file: No such file or directory``". What should I do?
 
-Add below command to ``~/.bashrc``:
+   Add below command to ``~/.bashrc``:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
+      export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
 
 License
 =======

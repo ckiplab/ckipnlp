@@ -12,31 +12,30 @@ import warnings as _warnings
 
 import ckipnlp as _about
 
-def create_ws_ini( # pylint: disable=too-many-statements
-        *,
-        data2dir=None,
-        lexfile=None,
-        new_style_format=False,
-        show_category=True,
-        sentence_max_word_num=80,
-        **options,
+def create_ws_ini(*, # pylint: disable=too-many-statements
+    data2dir=None,
+    lexfile=None,
+    new_style_format=False,
+    show_category=True,
+    sentence_max_word_num=80,
+    **options,
 ):
     """Generate CKIP word segmentation config.
 
     Parameters
     ----------
-    data2dir : str
-        the path to the folder "Data2/".
-    lexfile : str
-        the path to the user-defined lexicon file.
+        data2dir : str
+            the path to the folder "Data2/".
+        lexfile : str
+            the path to the user-defined lexicon file.
 
-    new_style_format : bool
-        split sentences by newline characters ("\\\\n") rather than punctuations.
-    show_category : bool
-        show part-of-speech tags.
+        new_style_format : bool
+            split sentences by newline characters ("\\\\n") rather than punctuations.
+        show_category : bool
+            show part-of-speech tags.
 
-    sentence_max_word_num : int
-        maximum number of words per sentence.
+        sentence_max_word_num : int
+            maximum number of words per sentence.
     """
 
     # pylint: disable=invalid-name
@@ -312,35 +311,34 @@ def create_ws_ini( # pylint: disable=too-many-statements
 
     return '\n'.join(cfg), options
 
-def create_parser_ini( # pylint: disable=too-many-statements
-        *,
-        wsinifile,
-        ruledir=None,
-        rdbdir=None,
-        do_ws=True,
-        do_parse=True,
-        do_role=True,
-        sentence_delim='，,；。！？',
-        **options,
+def create_parser_ini(*, # pylint: disable=too-many-statements
+    wsinifile,
+    ruledir=None,
+    rdbdir=None,
+    do_ws=True,
+    do_parse=True,
+    do_role=True,
+    sentence_delim='，,；。！？',
+    **options,
 ):
     """Generate CKIP parser config.
 
     Parameters
     ----------
-    ruledir : str
-        the path to "Rule/".
-    rdbdir : str
-        the path to "RDB/".
+        ruledir : str
+            the path to "Rule/".
+        rdbdir : str
+            the path to "RDB/".
 
-    do_ws : bool
-        do word-segmentation.
-    do_parse : bool
-        do parsing.
-    do_role : bool
-        do role.
+        do_ws : bool
+            do word-segmentation.
+        do_parse : bool
+            do parsing.
+        do_role : bool
+            do role.
 
-    sentence_delim: str
-        the sentence delimiters.
+        sentence_delim : str
+            the sentence delimiters.
     """
 
     # pylint: disable=invalid-name

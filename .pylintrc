@@ -3,5 +3,6 @@
 max-line-length = 128
 
 disable =
-	missing-docstring,
+	bad-continuation,
 	duplicate-code,
+	missing-docstring,

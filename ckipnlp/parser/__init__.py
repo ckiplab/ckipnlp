@@ -27,17 +27,30 @@ class CkipParser:
 
     Parameters
     ----------
-    logger : bool
-        enable logger.
-    inifile : str
-        the path to the INI file.
-    wsinifile : str
-        the path to the INI file for CKIPWS.
-    options:
-        the options, see :func:`ckipnlp.util.ini.create_ws_ini` and :func:`ckipnlp.util.ini.create_parser_ini`
+        logger : bool
+            enable logger.
+        inifile : str
+            the path to the INI file.
+        wsinifile : str
+            the path to the INI file for CKIPWS.
+    Other Parameters
+    ----------------
+        **
+            the configs for CKIPParser, ignored if **inifile** is set. Please refer :func:`ckipnlp.util.ini.create_parser_ini`.
+        **
+            the configs for CKIPWS, ignored if **wsinifile** is set. Please refer :func:`ckipnlp.util.ini.create_ws_ini`.
+
+    Warning
+    -------
+        Never instance more than one object of this class!
     """
 
-    def __init__(self, *, logger=False, inifile=None, wsinifile=None, **options):
+    def __init__(self, *,
+        logger=False,
+        inifile=None,
+        wsinifile=None,
+        **kwargs,
+    ):
 
         self.__core = CkipParserCore()
 
@@ -48,19 +61,19 @@ class CkipParser:
         if not wsinifile:
             fwsini = _tempfile.NamedTemporaryFile(mode='w')
             wsinifile = fwsini.name
-            wsinidata, options = create_ws_ini(**options)
+            wsinidata, kwargs = create_ws_ini(**kwargs)
             fwsini.write(wsinidata)
             fwsini.flush()
 
         if not inifile:
             fini = _tempfile.NamedTemporaryFile(mode='w')
             inifile = fini.name
-            inidata, options = create_parser_ini(wsinifile=wsinifile, **options)
+            inidata, kwargs = create_parser_ini(wsinifile=wsinifile, **kwargs)
             fini.write(inidata)
             fini.flush()
 
         def CkipParser(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
-        CkipParser(**options)
+        CkipParser(**kwargs)
 
         self.__core.init_data(inifile)
 
@@ -82,17 +95,16 @@ class CkipParser:
 
         Parameters
         ----------
-        text : str
-            the input sentence.
+            text : str
+                the input sentence.
 
         Return
         ------
-        str
-            the output sentence.
+            str
+                the output sentence.
 
-        Notes
-        -----
-        One may also call this method as :func:`__call__`.
+        .. note::
+            One may also call this method as :func:`__call__`.
         """
         return self.apply_list([text])[0]
 
@@ -101,13 +113,13 @@ class CkipParser:
 
         Parameters
         ----------
-        ilist: list
-            the list of input sentences (str).
+            ilist
+                the list of input sentences.
 
         Return
         ------
-        olist: list
-            the list of output sentences (str).
+            List[str]
+                the list of output sentences.
         """
         return self.__core.apply_list(ilist)
 
@@ -116,9 +128,9 @@ class CkipParser:
 
         Parameters
         ----------
-        ifile: str
-             the input file.
-        ofile: str
-             the output file (will be overwritten).
+            ifile : str
+                 the input file.
+            ofile : str
+                 the output file (will be overwritten).
         """
         return self.__core.apply_file(ifile, ofile)

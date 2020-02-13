@@ -27,15 +27,25 @@ class CkipWs:
 
     Parameters
     ----------
-    logger : bool
-        enable logger.
-    inifile : str
-        the path to the INI file.
-    options:
-        the options, see :func:`ckipnlp.util.ini.create_ws_ini`.
+        logger : bool
+            enable logger.
+        inifile : str
+            the path to the INI file.
+    Other Parameters
+    ----------------
+        **
+            the configs for CKIPWS, ignored if **inifile** is set. Please refer :func:`ckipnlp.util.ini.create_ws_ini`.
+
+    Warning
+    -------
+        Never instance more than one object of this class!
     """
 
-    def __init__(self, *, logger=False, inifile=None, **options):
+    def __init__(self, *,
+        logger=False,
+        inifile=None,
+        **kwargs,
+    ):
 
         self.__core = CkipWsCore()
 
@@ -45,12 +55,12 @@ class CkipWs:
         if not inifile:
             fini = _tempfile.NamedTemporaryFile(mode='w')
             inifile = fini.name
-            inidata, options = create_ws_ini(**options)
+            inidata, kwargs = create_ws_ini(**kwargs)
             fini.write(inidata)
             fini.flush()
 
         def CkipWs(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
-        CkipWs(**options)
+        CkipWs(**kwargs)
 
         self.__core.init_data(inifile)
 
@@ -67,17 +77,16 @@ class CkipWs:
 
         Parameters
         ----------
-        text : str
-            the input sentence.
+            text : str
+                the input sentence.
 
         Return
         ------
-        str
-            the output sentence.
+            str
+                the output sentence.
 
-        Notes
-        -----
-        One may also call this method as :func:`__call__`.
+        .. note::
+            One may also call this method as :func:`__call__`.
         """
         return self.apply_list([text])[0]
 
@@ -86,13 +95,13 @@ class CkipWs:
 
         Parameters
         ----------
-        ilist: list
-            the list of input sentences (str).
+            ilist
+                the list of input sentences.
 
         Return
         ------
-        olist: list
-            the list of output sentences (str).
+            List[str]
+                the list of output sentences.
         """
         return self.__core.apply_list(ilist)
 
@@ -101,11 +110,11 @@ class CkipWs:
 
         Parameters
         ----------
-        ifile: str
-             the input file.
-        ofile: str
-             the output file (will be overwritten).
-        uwfile: str
-            the unknown word file (will be overwritten).
+            ifile : str
+                the input file.
+            ofile : str
+                the output file (will be overwritten).
+            uwfile : str
+                the unknown word file (will be overwritten).
         """
         return self.__core.apply_file(ifile, ofile, uwfile)
