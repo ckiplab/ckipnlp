@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 __author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = '2018-2019 CKIP Lab'
+__copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 import collections as _collections
@@ -128,8 +128,8 @@ class ParserTree(_treelib.Tree):
         ----------
             text : str
                 A parsed tree from :class:`ckipnlp.parser.CkipParser` output.
-            normalize : str
-                Do text normalization. Please refer :func:`ParserTree.normalize_text`.
+            normalize : bool
+                Do text normalization using :meth:`normalize_text`.
         """
         if normalize:
             tree_text = cls.normalize_text(tree_text)

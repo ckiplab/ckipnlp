@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 __author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = '2018-2019 CKIP Lab'
+__copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 import os as _os
@@ -14,7 +14,7 @@ try:
         from ckipnlp._core.parser import CkipParserCore
 except ImportError as exc:
     raise ImportError(
-        'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--parser\'’. '
+        'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--parser\'’.  --install-option=\'--parser-dir=<...>\''
         'Visit https://pypi.org/project/ckipnlp for more information.'
     ) from exc
 except Exception as exc:
@@ -36,12 +36,11 @@ class CkipParser:
     Other Parameters
     ----------------
         **
-            the configs for CKIPParser, ignored if **inifile** is set. Please refer :func:`ckipnlp.util.ini.create_parser_ini`.
+            the configs for CKIPParser, ignored if **inifile** is set. Please refer :meth:`ckipnlp.util.ini.create_parser_ini`.
         **
-            the configs for CKIPWS, ignored if **wsinifile** is set. Please refer :func:`ckipnlp.util.ini.create_ws_ini`.
+            the configs for CKIPWS, ignored if **wsinifile** is set. Please refer :meth:`ckipnlp.util.ini.create_ws_ini`.
 
-    Warning
-    -------
+    .. danger::
         Never instance more than one object of this class!
     """
 
@@ -103,8 +102,8 @@ class CkipParser:
             str
                 the output sentence.
 
-        .. note::
-            One may also call this method as :func:`__call__`.
+        .. hint::
+            One may also call this method as :meth:`__call__`.
         """
         return self.apply_list([text])[0]
 
@@ -113,7 +112,7 @@ class CkipParser:
 
         Parameters
         ----------
-            ilist
+            ilist : List[str]
                 the list of input sentences.
 
         Return

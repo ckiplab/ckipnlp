@@ -3,10 +3,10 @@
 
 __author_name__ = 'Mu Yang'
 __author_email__ = 'emfomy@gmail.com'
-__copyright__ = '2018-2019 CKIP Lab'
+__copyright__ = '2018-2020 CKIP Lab'
 
 __title__ = 'CKIPNLP'
-__version__ = '0.6.3'
+__version__ = '0.6.4'
 __description__ = 'CKIP CoreNLP Wrappers'
 __license__ = 'CC BY-NC-SA 4.0'
 

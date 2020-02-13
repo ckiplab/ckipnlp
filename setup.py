@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 __author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = '2018-2019 CKIP Lab'
+__copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 from setuptools import dist
@@ -53,21 +53,21 @@ class CommandMixin(object):
 
     user_options = [
         ('ws',        None, 'with CKIPWS [default]'),
-        ('parser',    None, 'with CKIP-Parser [default]'),
+        ('parser',    None, 'with CKIPParser [default]'),
         ('no-ws',     None, 'without CKIPWS'),
-        ('no-parser', None, 'without CKIP-Parser'),
+        ('no-parser', None, 'without CKIPParser'),
 
         ('ws-dir=',       None, 'CKIPWS root directory'),
         ('ws-lib-dir=',   None, 'CKIPWS libraries directory [default is <ws-dir>/lib]'),
         ('ws-share-dir=', None, 'CKIPWS share directory [default is <ws-dir>]'),
 
-        ('parser-dir=',       None, 'CKIP-Parser root directory'),
-        ('parser-lib-dir=',   None, 'CKIP-Parser libraries directory [default is "<parser-dir>/lib"]'),
+        ('parser-dir=',       None, 'CKIPParser root directory'),
+        ('parser-lib-dir=',   None, 'CKIPParser libraries directory [default is "<parser-dir>/lib"]'),
         ('parser-share-dir=', None, 'CKIPWS share directory [default is "<parser-dir>"]'),
 
         ('data2-dir=', None, 'CKIPWS "Data2" directory [default is "<ws-share-dir>/Data2" or "<parser-share-dir>/Data2"]'),
-        ('rule-dir=',  None, 'CKIP-Parser "Rule" directory [default is "<parser-share-dir>/Rule"]'),
-        ('rdb-dir=',   None, 'CKIP-Parser "RDB" directory [default is "<parser-share-dir>/RDB"]'),
+        ('rule-dir=',  None, 'CKIPParser "Rule" directory [default is "<parser-share-dir>/Rule"]'),
+        ('rdb-dir=',   None, 'CKIPParser "RDB" directory [default is "<parser-share-dir>/RDB"]'),
     ]
 
     negative_opt = {
@@ -143,16 +143,16 @@ class CommandMixin(object):
             i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.ws'), None)
             if i is not None: del self.distribution.ext_modules[i]
 
-        # CKIP-Parser
+        # CKIPParser
         if self.parser:
-            print('- Enable CKIP-Parser support')
+            print('- Enable CKIPParser support')
             if self.parser_lib_dir:
-                print('- Use CKIP-Parser library from (%s)' % self.parser_lib_dir)
+                print('- Use CKIPParser library from (%s)' % self.parser_lib_dir)
                 i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.parser'), None)
                 self.distribution.ext_modules[i].library_dirs.append(self.parser_lib_dir)
                 self.distribution.ext_modules[i].runtime_library_dirs.append(self.parser_lib_dir)
         else:
-            print('- Disable CKIP-Parser support')
+            print('- Disable CKIPParser support')
             i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.parser'), None)
             if i is not None: del self.distribution.ext_modules[i]
 
