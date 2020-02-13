@@ -34,10 +34,9 @@ class CkipWs:
     Other Parameters
     ----------------
         **
-            the configs for CKIPWS, ignored if **inifile** is set. Please refer :func:`ckipnlp.util.ini.create_ws_ini`.
+            the configs for CKIPWS, ignored if **inifile** is set. Please refer :meth:`ckipnlp.util.ini.create_ws_ini`.
 
-    Warning
-    -------
+    .. danger::
         Never instance more than one object of this class!
     """
 
@@ -85,8 +84,8 @@ class CkipWs:
             str
                 the output sentence.
 
-        .. note::
-            One may also call this method as :func:`__call__`.
+        .. hint::
+            One may also call this method as :meth:`__call__`.
         """
         return self.apply_list([text])[0]
 
