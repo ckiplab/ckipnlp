@@ -222,31 +222,31 @@ FAQ
 
 .. danger::
 
-   Due to C code implementation, one should not instance more than one ``CkipWs`` driver object and one ``CkipParser`` driver object.
+   Due to C code implementation, both ``CkipWs`` and ``CkipParser`` can only be instance once.
 
 ------------
 
 .. tip::
 
-   The CKIPWS throws "what():  locale::facet::_S_create_c_locale name not valid". What should I do?
+   **The CKIPWS throws "what():  locale::facet::_S_create_c_locale name not valid". What should I do?**
 
-      Install locale data.
+   Install locale data.
 
-      .. code-block:: bash
+   .. code-block:: bash
 
-         apt-get install locales-all
+      apt-get install locales-all
 
 ------------
 
 .. tip::
 
-   The CKIPParser throws "ImportError: libCKIPParser.so: cannot open shared object file: No such file or directory". What should I do?
+   **The CKIPParser throws "ImportError: libCKIPParser.so: cannot open shared object file: No such file or directory". What should I do?**
 
-      Add below command to ``~/.bashrc``:
+   Add below command to ``~/.bashrc``:
 
-      .. code-block:: bash
+   .. code-block:: bash
 
-         export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
+      export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
 
 License
 =======
