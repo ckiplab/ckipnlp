@@ -65,7 +65,7 @@ class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
 
     def to_text(self):
         """Transform to plain text."""
-        return '\u3000'.join(map(str, self))
+        return '\u3000'.join(map(self.item_class.to_text, self))
 
     def to_dict(self):
         """Transform to python dict/list."""
@@ -97,7 +97,7 @@ class WsSentenceList(_collections.UserList): # pylint: disable=too-many-ancestor
 
     def to_text(self):
         """Transform to plain text."""
-        return '\n'.join(map(str, self))
+        return '\n'.join(map(self.item_class.to_text, self))
 
     def to_dict(self):
         """Transform to python dict/list."""

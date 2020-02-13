@@ -25,29 +25,55 @@ class ParserNodeData(NamedTuple):
     term: str = None #: *str* – the text term.
 
     @classmethod
-    def from_text(cls, text: str):
-        """Create :class:`ParserNodeData` object from :class:`ckipnlp.parser.CkipParser` output."""
+    def from_text(cls, text):
+        """Create a :class:`ParserNodeData` object from :class:`ckipnlp.parser.CkipParser` output."""
         fields = text.split(':')
         return cls(*fields)
 
+    def __str__(self):
+        return self.to_text()
+
+    def to_text(self):
+        """Transform to plain text."""
+        return ':'.join(filter(None, self))
+
     def to_dict(self):
+        """Transform to python dict/list."""
         return self._asdict() # pylint: disable=no-member
 
     def to_json(self, **kwargs):
+        """Transform to JSON format."""
         return _json.dumps(self.to_dict(), **kwargs)
 
 class ParserNode(_treelib.Node):
     """A parser node for tree.
+
+    Attributes
+    ----------
+        data : :class:`ParserNodeData`
 
     See Also
     --------
         treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
     """
 
+    def __repr__(self):
+        return '{name}(tag={tag}, identifier={identifier})'.format(
+            name=self.__class__.__name__,
+            tag=self.tag,
+            identifier=self.identifier,
+        )
+
+    def to_text(self):
+        """Transform to plain text."""
+        return self.data.to_text()
+
     def to_dict(self):
+        """Transform to python dict/list."""
         return _collections.OrderedDict(id=self.identifier, **self.data.to_dict())
 
     def to_json(self, **kwargs):
+        """Transform to JSON format."""
         return _json.dumps(self.to_dict(), **kwargs)
 
 class ParserRelation(NamedTuple):
@@ -57,18 +83,21 @@ class ParserRelation(NamedTuple):
     tail: ParserNode #: :class:`ParserNode` – the tail node.
     relation: str #: *str* – the relation.
 
-    def __str__(self):
-        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head.identifier <= self.tail.identifier \
+    def __repr__(self):
+        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head_first \
          else '{name}(tail={tail}, head={head}, relation={relation})'
         return ret.format(name=type(self).__name__, head=self.head, tail=self.tail, relation=self.relation)
 
-    def __repr__(self):
-        return str(self)
+    @property
+    def head_first(self):
+        return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):
+        """Transform to python dict/list."""
         return _collections.OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation)
 
     def to_json(self, **kwargs):
+        """Transform to JSON format."""
         return _json.dumps(self.to_dict(), **kwargs)
 
 ################################################################################################################################
@@ -81,17 +110,34 @@ class ParserTree(_treelib.Tree):
     treereelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
     """
 
+    node_class = ParserNode
+
+    @staticmethod
+    def normalize_text(tree_text):
+        """Text normalization for :class:`ckipnlp.parser.CkipParser` output.
+
+        Remove leading number and trailing ``#``. Prepend ``root:`` at beginning.
+        """
+        return 'root:' + tree_text.split(' ', 2)[-1].split('#')[0]
+
     @classmethod
-    def from_text(cls, tree_text):
-        """Create :class:`ParserTree` object from :class:`ckipnlp.parser.CkipParser` output."""
-        tree = cls(node_class=ParserNode)
+    def from_text(cls, tree_text, *, normalize=True):
+        """Create a :class:`ParserTree` object from :class:`ckipnlp.parser.CkipParser` output.
 
-        if '#' in tree_text:
-            tree_text = tree_text.split(' ', 2)[-1].split('#')[0]
+        Parameters
+        ----------
+            text : str
+                A parsed tree from :class:`ckipnlp.parser.CkipParser` output.
+            normalize : str
+                Do text normalization. Please refer :func:`ParserTree.normalize_text`.
+        """
+        if normalize:
+            tree_text = cls.normalize_text(tree_text)
 
+        tree = cls()
         node_id = 0
         node_queue = [None]
-        text = 'root:'
+        text = ''
         ending = True
 
         for char in tree_text:
@@ -128,7 +174,22 @@ class ParserTree(_treelib.Tree):
 
         return tree
 
+    def __str__(self):
+        self.to_text()
+
+    def to_text(self, node_id=0):
+        """Transform to plain text."""
+        node = self[node_id]
+        tree_text = node.to_text()
+
+        children_text = '|'.join((self.to_text(child.identifier) for child in self.children(node_id)))
+        if children_text:
+            tree_text = '{}({})'.format(tree_text, children_text)
+
+        return tree_text
+
     def to_dict(self, node_id=0): # pylint: disable=arguments-differ
+        """Transform to python dict/list."""
         node = self[node_id]
         tree_dict = node.to_dict()
 
@@ -138,6 +199,7 @@ class ParserTree(_treelib.Tree):
         return tree_dict
 
     def to_json(self, **kwargs): # pylint: disable=arguments-differ
+        """Transform to JSON format."""
         return _json.dumps(self.to_dict(), **kwargs)
 
     def show(self, *, # pylint: disable=arguments-differ
@@ -177,7 +239,7 @@ class ParserTree(_treelib.Tree):
         Returns
         -------
             Tuple[:class:`ParserNode`]
-                the dummies (:class:`ParserNode`).
+                the dummies.
 
         Raises
         ------
