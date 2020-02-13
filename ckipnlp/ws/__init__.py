@@ -14,7 +14,7 @@ try:
         from ckipnlp._core.ws import CkipWsCore
 except ImportError as exc:
     raise ImportError(
-        'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--ws\'’. '
+        'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--ws\' --install-option=\'--ws-dir=<...>\'’. '
         'Visit https://pypi.org/project/ckipnlp for more information.'
     ) from exc
 except Exception as exc:

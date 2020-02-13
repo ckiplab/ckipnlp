@@ -14,7 +14,7 @@ try:
         from ckipnlp._core.parser import CkipParserCore
 except ImportError as exc:
     raise ImportError(
-        'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--parser\'’. '
+        'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--parser\'’.  --install-option=\'--parser-dir=<...>\''
         'Visit https://pypi.org/project/ckipnlp for more information.'
     ) from exc
 except Exception as exc:
