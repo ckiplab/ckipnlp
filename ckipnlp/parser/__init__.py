@@ -113,7 +113,7 @@ class CkipParser:
 
         Parameters
         ----------
-            ilist
+            ilist : List[str]
                 the list of input sentences.
 
         Return
