@@ -17,14 +17,6 @@ sys.path.insert(0, os.path.abspath('..'))
 os.environ['_SPHINX'] = "1"
 import ckipnlp as __about
 
-def run_apidoc(_):
-    from sphinx.ext.apidoc import main
-    main(['-feTM', '-o', '_api', '../ckipnlp'])
-
-def setup(app):
-    app.connect('builder-inited', run_apidoc)
-
-
 # -- Project information -----------------------------------------------------
 
 project = __about.__title__
@@ -46,15 +38,11 @@ master_doc = 'index'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autodoc.typehints',
+    # 'sphinx.ext.autodoc.typehints',
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
 ]
-napoleon_google_docstring = False
-napoleon_numpy_docstring = True
-napoleon_use_rtype = False
-todo_include_todos = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -82,4 +70,18 @@ html_css_files = ['./custom.css']
 # -- Settings of autodoc -----------------------------------------------------
 
 autodoc_member_order = 'bysource'
-autodoc_typehints = 'description'
+# autodoc_typehints = 'description'
+
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_rtype = False
+todo_include_todos = True
+
+# -- Events ------------------------------------------------------------------
+
+def run_apidoc(_):
+    from sphinx.ext.apidoc import main
+    main(['-feTM', '-o', '_api', '../ckipnlp'])
+
+def setup(app):
+    app.connect('builder-inited', run_apidoc)

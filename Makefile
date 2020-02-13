@@ -22,6 +22,7 @@ doc:
 	( cd docs ; make clean ; make html )
 
 upload: dist check
+	ls dist/*.tar.gz
 	$(TWINE) upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz --verbose
 
 clean:

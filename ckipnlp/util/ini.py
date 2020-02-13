@@ -13,29 +13,29 @@ import warnings as _warnings
 import ckipnlp as _about
 
 def create_ws_ini(*, # pylint: disable=too-many-statements
-    data2dir: str = None,
-    lexfile: str = None,
-    new_style_format: bool = False,
-    show_category: bool = True,
-    sentence_max_word_num: int = 80,
+    data2dir=None,
+    lexfile=None,
+    new_style_format=False,
+    show_category=True,
+    sentence_max_word_num=80,
     **options,
 ):
     """Generate CKIP word segmentation config.
 
     Parameters
     ----------
-    data2dir
-        the path to the folder "Data2/".
-    lexfile
-        the path to the user-defined lexicon file.
+        data2dir : str
+            the path to the folder "Data2/".
+        lexfile : str
+            the path to the user-defined lexicon file.
 
-    new_style_format
-        split sentences by newline characters ("\\\\n") rather than punctuations.
-    show_category
-        show part-of-speech tags.
+        new_style_format : bool
+            split sentences by newline characters ("\\\\n") rather than punctuations.
+        show_category : bool
+            show part-of-speech tags.
 
-    sentence_max_word_num
-        maximum number of words per sentence.
+        sentence_max_word_num : int
+            maximum number of words per sentence.
     """
 
     # pylint: disable=invalid-name
@@ -313,32 +313,32 @@ def create_ws_ini(*, # pylint: disable=too-many-statements
 
 def create_parser_ini(*, # pylint: disable=too-many-statements
     wsinifile,
-    ruledir: str = None,
-    rdbdir: str = None,
-    do_ws: bool = True,
-    do_parse: bool = True,
-    do_role: bool = True,
-    sentence_delim: str = '，,；。！？',
+    ruledir=None,
+    rdbdir=None,
+    do_ws=True,
+    do_parse=True,
+    do_role=True,
+    sentence_delim='，,；。！？',
     **options,
 ):
     """Generate CKIP parser config.
 
     Parameters
     ----------
-    ruledir
-        the path to "Rule/".
-    rdbdir
-        the path to "RDB/".
+        ruledir : str
+            the path to "Rule/".
+        rdbdir : str
+            the path to "RDB/".
 
-    do_ws
-        do word-segmentation.
-    do_parse
-        do parsing.
-    do_role
-        do role.
+        do_ws : bool
+            do word-segmentation.
+        do_parse : bool
+            do parsing.
+        do_role : bool
+            do role.
 
-    sentence_delim
-        the sentence delimiters.
+        sentence_delim : str
+            the sentence delimiters.
     """
 
     # pylint: disable=invalid-name
