@@ -75,7 +75,7 @@ Requirements
 * `Cython <http://cython.org>`_ 0.29+
 * `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
 
-.. note::
+.. attention::
    For Python 2 users, please use `PyCkip 0.4.2 <https://pypi.org/project/pyckip/0.4.2/>`_ instead.
 
 CKIPWS (Optional)
@@ -83,15 +83,15 @@ CKIPWS (Optional)
 
 * `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version 20190524+
 
-CKIP-Parser (Optional)
-^^^^^^^^^^^^^^^^^^^^^^
+CKIPParser (Optional)
+^^^^^^^^^^^^^^^^^^^^^
 
 * `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version 20190506+ (20190725+ recommended)
 
 Installation
 ============
 
-Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version, and ``<ckipparser-linux-root>`` as the root path of CKIP-Parser Linux Version.
+Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version, and ``<ckipparser-linux-root>`` as the root path of CKIPParser Linux Version.
 
 Install Using Pip
 -----------------
@@ -105,7 +105,7 @@ Install Using Pip
       --install-option='--parser' \
       --install-option='--parser-dir=<ckipparser-linux-root>'
 
-Ignore ws/parser options if one doesn't have CKIPWS/CKIP-Parser.
+Ignore ws/parser options if one doesn't have CKIPWS/CKIPParser.
 
 Installation Options
 --------------------
@@ -115,7 +115,7 @@ Installation Options
 +===============================================+=======================================+===============================+
 | ``--[no-]ws``                                 | Enable/disable CKIPWS.                | False                         |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--[no-]parser``                             | Enable/disable CKIP-Parser.           | False                         |
+| ``--[no-]parser``                             | Enable/disable CKIPParser.            | False                         |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 | ``--ws-dir=<ws-dir>``                         | CKIPWS root directory.                |                               |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
@@ -123,11 +123,11 @@ Installation Options
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 | ``--ws-share-dir=<ws-share-dir>``             | CKIPWS share directory                | ``<ws-dir>``                  |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-dir=<parser-dir>``                 | CKIP-Parser root directory.           |                               |
+| ``--parser-dir=<parser-dir>``                 | CKIPParser root directory.            |                               |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-lib-dir=<parser-lib-dir>``         | CKIP-Parser libraries directory       | ``<parser-dir>/lib``          |
+| ``--parser-lib-dir=<parser-lib-dir>``         | CKIPParser libraries directory        | ``<parser-dir>/lib``          |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-share-dir=<parser-share-dir>``     | CKIP-Parser share directory           | ``<parser-dir>``              |
+| ``--parser-share-dir=<parser-share-dir>``     | CKIPParser share directory            | ``<parser-dir>``              |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
 | ``--data2-dir=<data2-dir>``                   | "Data2" directory                     | ``<ws-share-dir>/Data2``      |
 +-----------------------------------------------+---------------------------------------+-------------------------------+
@@ -160,7 +160,7 @@ CKIPWS
        print(fin.read())
 
 
-CKIP-Parser
+CKIPParser
 -----------
 
 .. code-block:: python
@@ -220,15 +220,15 @@ Utilities
 FAQ
 ===
 
-.. warning::
+.. danger::
 
-   Due to C code implementation, one should not instance more than one ``CkipWs`` driver object and one ``CkipParser`` driver object.
+   Due to C code implementation, both ``CkipWs`` and ``CkipParser`` can only be instance once.
 
 ------------
 
-.. warning::
+.. tip::
 
-   The CKIPWS throws "``what():  locale::facet::_S_create_c_locale name not valid``". What should I do?
+   **The CKIPWS throws "what():  locale::facet::_S_create_c_locale name not valid". What should I do?**
 
    Install locale data.
 
@@ -238,9 +238,9 @@ FAQ
 
 ------------
 
-.. warning::
+.. tip::
 
-   The CKIPParser throws "``ImportError: libCKIPParser.so: cannot open shared object file: No such file or directory``". What should I do?
+   **The CKIPParser throws "ImportError: libCKIPParser.so: cannot open shared object file: No such file or directory". What should I do?**
 
    Add below command to ``~/.bashrc``:
 
@@ -253,7 +253,7 @@ License
 
 |CC BY-NC-SA 4.0|
 
-Copyright (c) 2018-2019 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`_ under the `CC BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`_.
+Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`_ under the `CC BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`_.
 
 .. |CC BY-NC-SA 4.0| image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
    :target: http://creativecommons.org/licenses/by-nc-sa/4.0/
