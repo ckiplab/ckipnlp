@@ -90,7 +90,7 @@ class CkipParser:
         return self.apply(text)
 
     def apply(self, text):
-        """Segment a sentence.
+        """Parse a sentence.
 
         Parameters
         ----------
@@ -108,7 +108,7 @@ class CkipParser:
         return self.apply_list([text])[0]
 
     def apply_list(self, ilist):
-        """Segment a list of sentences.
+        """Parse a list of sentences.
 
         Parameters
         ----------
@@ -123,7 +123,7 @@ class CkipParser:
         return self.__core.apply_list(ilist)
 
     def apply_file(self, ifile, ofile):
-        """Segment a file.
+        """Parse a file.
 
         Parameters
         ----------

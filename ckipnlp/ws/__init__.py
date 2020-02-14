@@ -31,6 +31,7 @@ class CkipWs:
             enable logger.
         inifile : str
             the path to the INI file.
+
     Other Parameters
     ----------------
         **
