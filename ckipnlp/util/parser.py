@@ -6,7 +6,6 @@ __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 import collections as _collections
-import itertools as _itertools
 import json as _json
 
 from typing import (
@@ -30,8 +29,7 @@ class ParserNodeData(NamedTuple):
         if ':' in text:
             fields = text.split(':')
             return cls(*fields)
-        else:
-            return cls(pos=text)
+        return cls(pos=text)
 
     def __str__(self):
         return self.to_text()
@@ -41,7 +39,7 @@ class ParserNodeData(NamedTuple):
         return ':'.join(filter(None, self))
 
     def to_dict(self):
-        """Transform to python dict/list."""
+        """Transform to pypython built-in containers."""
         return self._asdict() # pylint: disable=no-member
 
     def to_json(self, **kwargs):
@@ -72,7 +70,7 @@ class ParserNode(_treelib.Node):
         return self.data.to_text()
 
     def to_dict(self):
-        """Transform to python dict/list."""
+        """Transform to pypython built-in containers."""
         return _collections.OrderedDict(id=self.identifier, **self.data.to_dict())
 
     def to_json(self, **kwargs):
@@ -96,7 +94,7 @@ class ParserRelation(NamedTuple):
         return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):
-        """Transform to python dict/list."""
+        """Transform to pypython built-in containers."""
         return _collections.OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation)
 
     def to_json(self, **kwargs):
@@ -194,7 +192,7 @@ class ParserTree(_treelib.Tree):
         return tree_text
 
     def to_dict(self, node_id=0): # pylint: disable=arguments-differ
-        """Transform to python dict/list."""
+        """Transform to pypython built-in containers."""
         node = self[node_id]
         tree_dict = node.to_dict()
 

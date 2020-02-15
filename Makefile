@@ -3,20 +3,26 @@ RM = rm -rf
 LINT = pylint --rcfile=./.pylintrc
 TWINE = twine
 
-.PHONY: all check dist sdist test lint doc upload clean
+.PHONY: all check dist sdist test unittest lint doc upload clean
 
-all: dist check
+all: dist check test
 
 dist: sdist
 
-sdist test:
+sdist:
 	$(PY) setup.py $@
 
 check:
-	$(PY) setup.py check -r -s
+	$(TWINE) check dist/*
+	# $(PY) setup.py check -r -s
+
+test: lint unittest
 
 lint:
 	$(LINT) ckipnlp
+
+unittest:
+	$(PY) -m unittest test -v
 
 doc:
 	( cd docs ; make clean ; make html )
