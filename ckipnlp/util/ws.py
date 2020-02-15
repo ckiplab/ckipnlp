@@ -24,19 +24,15 @@ class WsWord(NamedTuple):
         return self.to_text()
 
     @classmethod
-    def from_text(cls, text):
-        """Construct from :class:`ckipnlp.ws.CkipWs` output.
+    def from_text(cls, data):
+        """Construct an instance from :class:`ckipnlp.ws.CkipWs` output.
 
         Parameters
         ----------
-            text : str
-                A word from :class:`ckipnlp.ws.CkipWs` output.
-
-        Return
-        ------
-            WsWord
+            data : str
+                text like ``'中文字(Na)'``.
         """
-        return cls(*text.strip(')').rsplit('(', 1))
+        return cls(*data.strip(')').rsplit('(', 1))
 
     def to_text(self):
         """Transform to plain text.
@@ -44,20 +40,17 @@ class WsWord(NamedTuple):
         Return
         ------
             str
-
-        Return
-        ------
-            WsWord
         """
         return '{}({})'.format(self.word, self.pos)
 
     @classmethod
     def from_dict(cls, data):
-        """Construct from python built-in containers.
+        """Construct an instance from python built-in containers.
 
         Parameters
         ----------
             data : dict
+                dictionary like ``{ 'word': '中文字', 'pos': 'Na' }``
         """
         return cls(**data)
 
@@ -72,15 +65,12 @@ class WsWord(NamedTuple):
 
     @classmethod
     def from_json(cls, data, **kwargs):
-        """Construct from JSON format.
+        """Construct an instance from JSON format.
 
         Parameters
         ----------
             data : str
-
-        Return
-        ------
-            :class:`WsWord`
+                please refer :meth:`from_dict` for format details.
         """
         return cls.from_dict(_json.loads(data, **kwargs))
 
@@ -104,19 +94,15 @@ class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
         return self.to_text()
 
     @classmethod
-    def from_text(cls, text):
-        """Construct from :class:`ckipnlp.ws.CkipWs` output.
+    def from_text(cls, data):
+        """Construct an instance from :class:`ckipnlp.ws.CkipWs` output.
 
         Parameters
         ----------
-            text : str
-                A sentence from :class:`ckipnlp.ws.CkipWs` output.
-
-        Return
-        ------
-            :class:`WsSentence`
+            data : str
+                text like ``'中文字(Na)\\u3000喔(T)'``.
         """
-        return cls(map(cls.item_class.from_text, text.split('\u3000')))
+        return cls(map(cls.item_class.from_text, data.split('\u3000')))
 
     def to_text(self):
         """Transform to plain text.
@@ -129,15 +115,12 @@ class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
 
     @classmethod
     def from_dict(cls, data):
-        """Construct a from python built-in containers.
+        """Construct an instance a from python built-in containers.
 
         Parameters
         ----------
             data : List[dict]
-
-        Return
-        ------
-            :class:`WsSentence`
+                list of objects as :meth:`WsWord.from_dict` input.
         """
         return cls(map(cls.item_class.from_dict, data))
 
@@ -152,15 +135,12 @@ class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
 
     @classmethod
     def from_json(cls, data, **kwargs):
-        """Construct from JSON format.
+        """Construct an instance from JSON format.
 
         Parameters
         ----------
             data : str
-
-        Return
-        ------
-            :class:`WsSentence`
+                please refer :meth:`from_dict` for format details.
         """
         return cls.from_dict(_json.loads(data, **kwargs))
 
@@ -184,19 +164,15 @@ class WsSentenceList(_collections.UserList): # pylint: disable=too-many-ancestor
         return self.to_text()
 
     @classmethod
-    def from_text(cls, text_list):
-        """Construct from :class:`ckipnlp.ws.CkipWs` output.
+    def from_text(cls, data):
+        """Construct an instance from :class:`ckipnlp.ws.CkipWs` output.
 
         Parameters
         ----------
-            text_list : List[str]
-                A list of sentence from :class:`ckipnlp.ws.CkipWs` output.
-
-        Return
-        ------
-            :class:`WsSentenceList`
+            data : List[str]
+                list of texts as :meth:`WsSentence.from_text` input.
         """
-        return cls(map(cls.item_class.from_text, text_list))
+        return cls(map(cls.item_class.from_text, data))
 
     def to_text(self):
         """Transform to plain text.
@@ -209,15 +185,12 @@ class WsSentenceList(_collections.UserList): # pylint: disable=too-many-ancestor
 
     @classmethod
     def from_dict(cls, data):
-        """Construct a from python built-in containers.
+        """Construct an instance a from python built-in containers.
 
         Parameters
         ----------
             data : List[List[dict]]
-
-        Return
-        ------
-            :class:`WsSentenceList`
+                list of objects as :meth:`WsSentence.from_dict` input.
         """
         return cls(map(cls.item_class.from_dict, data))
 
@@ -232,15 +205,12 @@ class WsSentenceList(_collections.UserList): # pylint: disable=too-many-ancestor
 
     @classmethod
     def from_json(cls, data, **kwargs):
-        """Construct from JSON format.
+        """Construct an instance from JSON format.
 
         Parameters
         ----------
             data : str
-
-        Return
-        ------
-            :class:`WsSentenceList`
+                please refer :meth:`from_dict` for format details.
         """
         return cls.from_dict(_json.loads(data, **kwargs))
 

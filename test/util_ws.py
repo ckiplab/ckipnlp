@@ -14,7 +14,6 @@ from ckipnlp.util.ws import *
 
 class _TestCaseBase:
 
-
     @property
     def obj_class(self):
         raise NotImplementedError
