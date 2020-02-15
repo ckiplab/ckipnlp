@@ -55,7 +55,7 @@ https://pypi.org/project/ckipnlp
 Documentation
 -------------
 
-http://ckipnlp.readthedocs.io/
+https://ckipnlp.readthedocs.io/
 
 |ReadTheDocs Home|
 
@@ -67,6 +67,11 @@ Author / Maintainer
 
 * `Mu Yang <http://muyang.pro>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Author & Maintainer)
 * `Wei-Yun Ma <https://www.iis.sinica.edu.tw/pages/ma/>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Maintainer)
+
+References
+----------
+
+- `Online Demo <https://ckip.iis.sinica.edu.tw/service/corenlp>`_
 
 Requirements
 ------------
@@ -206,9 +211,6 @@ Utilities
    tree_text = 'S(theme:NP(property:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nad(DUMMY1:Nab:早餐|Head:Caa:和|DUMMY2:Naa:午餐))|quantity:Dab:都|Head:VC31:吃完|aspect:Di:了)'
    tree = ParserTree.from_text(tree_text)
    tree.show()
-
-   # Get dummies of node 5
-   for node in tree.get_dummies(5): print(node)
 
    # Get heads of node 1
    for node in tree.get_heads(1): print(node)

@@ -27,8 +27,11 @@ class ParserNodeData(NamedTuple):
     @classmethod
     def from_text(cls, text):
         """Create a :class:`ParserNodeData` object from :class:`ckipnlp.parser.CkipParser` output."""
-        fields = text.split(':')
-        return cls(*fields)
+        if ':' in text:
+            fields = text.split(':')
+            return cls(*fields)
+        else:
+            return cls(pos=text)
 
     def __str__(self):
         return self.to_text()
@@ -84,12 +87,12 @@ class ParserRelation(NamedTuple):
     relation: str #: *str* – the relation.
 
     def __repr__(self):
-        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head_first \
+        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self._head_first \
          else '{name}(tail={tail}, head={head}, relation={relation})'
         return ret.format(name=type(self).__name__, head=self.head, tail=self.tail, relation=self.relation)
 
     @property
-    def head_first(self):
+    def _head_first(self):
         return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):
@@ -116,9 +119,11 @@ class ParserTree(_treelib.Tree):
     def normalize_text(tree_text):
         """Text normalization for :class:`ckipnlp.parser.CkipParser` output.
 
-        Remove leading number and trailing ``#``. Prepend ``root:`` at beginning.
+        Remove leading number and trailing ``#``.
         """
-        return 'root:' + tree_text.split(' ', 2)[-1].split('#')[0]
+        if '#' in tree_text:
+            tree_text = tree_text.split('] ', 2)[-1].rstrip('#')
+        return tree_text
 
     @classmethod
     def from_text(cls, tree_text, *, normalize=True):
@@ -210,65 +215,26 @@ class ParserTree(_treelib.Tree):
         """Show pretty tree."""
         super().show(key=key, idhidden=idhidden, **kwargs)
 
-    def has_dummies(self, node_id):
-        """Determine if a node has dummies.
+    def get_children(self, node_id, *, role):
+        """Get children of a node with given role.
 
         Parameters
         ----------
             node_id : int
                 ID of target node.
+            role : str
+                the target role.
 
-        Returns
-        -------
-            bool
-                whether or not target node has dummies.
-        """
-        roles = [node.data.role for node in self.children(node_id)]
-        return 'DUMMY1' in roles and 'DUMMY2' in roles
-
-    def get_dummies(self, node_id, deep=True, _check=True):
-        """Get dummies of a node.
-
-        Parameters
-        ----------
-            node_id : int
-                ID of target node.
-            deep : bool
-                find dummies recursively.
-
-        Returns
-        -------
-            Tuple[:class:`ParserNode`]
-                the dummies.
-
-        Raises
+        Yields
         ------
-            LookupError
-                when target node has no dummy (only when **_check** is set).
+            :class:`ParserNode`
+                the children nodes with given role.
         """
-        if _check and not self.has_dummies(node_id):
-            raise LookupError('Node ({node_id}) does not have dummies!'.format(node_id=node_id))
-
-        dummy1 = ()
-        dummy2 = ()
-
         for child in self.children(node_id):
+            if child.data.role == role:
+                yield child
 
-            if child.data.role == 'DUMMY1':
-                if deep and self.has_dummies(child.identifier):
-                    dummy1 = self.get_dummies(child.identifier, deep=True, _check=False)
-                else:
-                    dummy1 = (child,)
-
-            if child.data.role == 'DUMMY2':
-                if deep and self.has_dummies(child.identifier):
-                    dummy2 = self.get_dummies(child.identifier, deep=True, _check=False)
-                else:
-                    dummy2 = (child,)
-
-        return (*dummy1, *dummy2,)
-
-    def get_heads(self, root_id=0, deep=True): # pylint: disable=too-many-branches
+    def get_heads(self, root_id=0, *, deep=True): # pylint: disable=too-many-branches
         """Get all head nodes of a subtree.
 
         Parameters
@@ -278,59 +244,46 @@ class ParserTree(_treelib.Tree):
             deep : bool
                 find heads recursively.
 
-        Returns
-        -------
-            List[:class:`ParserNode`]
-                the head nodes (when **deep** is set).
+        Yields
+        ------
             :class:`ParserNode`
-                the head node (when **deep** is not set).
-
-        Todo
-        ----
-            Get information of nodes with pos type PP or GP.
+                the head nodes.
         """
-        head_nodes = None
+        head_nodes = []
         children = list(self.children(root_id))
 
         # No child, choose the root node instead
         if not children:
-            head_nodes = (self[root_id],)
+            head_nodes.append(self[root_id])
+
+        # Find DUMMY
+        if not head_nodes:
+            for child in children:
+                if child.data.role in ('DUMMY', 'DUMMY1', 'DUMMY2',):
+                    head_nodes.append(child)
 
         # Find head
-        if head_nodes is None:
+        if not head_nodes:
             for child in children:
                 if child.data.role == 'head':
-                    if not deep:
-                        head_nodes = (child,)
-                    else:
-                        if child.data.pos == 'Caa': # Found Caa, choose dummies of root instead
-                            head_nodes = tuple(_itertools.chain.from_iterable(
-                                self.get_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
-                            ))
-                        else:
-                            head_nodes = self.get_heads(child.identifier)
-                    break
+                    head_nodes.append(child)
 
         # Find Head
-        if head_nodes is None:
+        if not head_nodes:
             for child in children:
                 if child.data.role == 'Head':
-                    if not deep:
-                        head_nodes = (child,)
-                    else:
-                        if child.data.pos == 'Caa': # Found Caa, choose dummies of root instead
-                            head_nodes = tuple(_itertools.chain.from_iterable(
-                                self.get_heads(node.identifier) for node in self.get_dummies(root_id, _check=False)
-                            ))
-                        else:
-                            head_nodes = self.get_heads(child.identifier)
-                    break
+                    head_nodes.append(child)
 
         # Found no head, choose the last child instead
-        if head_nodes is None:
-            head_nodes = (children[-1],)
+        if not head_nodes:
+            head_nodes.append(children[-1])
 
-        return head_nodes[0] if not deep else head_nodes
+        # Recursion
+        for node in head_nodes:
+            if deep and not node.is_leaf():
+                yield from self.get_heads(node.identifier)
+            else:
+                yield node
 
     def get_relations(self, root_id=0):
         """Get all relations of a subtree.
@@ -343,27 +296,24 @@ class ParserTree(_treelib.Tree):
         Yields
         ------
             :class:`ParserRelation`
-                the relation.
+                the relations.
         """
 
-        head_root_node = self.get_heads(root_id, deep=False)
-
-        # Skip Caa
-        if head_root_node.data.pos == 'Caa':
-            return
+        children = list(self.children(root_id))
+        head_children = list(self.get_heads(root_id, deep=False))
 
         # Get heads
         for head_node in self.get_heads(root_id):
 
             # Get tails
-            for tail in self.children(root_id):
-                if tail.identifier != head_root_node.identifier:
-                    if tail.data.term: # if tail is a leaf node
+            for tail in children:
+                if tail.data.role != 'Head' and tail not in head_children:
+                    if tail.is_leaf():
                         yield ParserRelation(head=head_node, tail=tail, relation=tail.data.role)
                     else:
                         for node in self.get_heads(tail.identifier):
                             yield ParserRelation(head=head_node, tail=node, relation=tail.data.role)
 
         # Recursion
-        for child in self.children(root_id):
+        for child in children:
             yield from self.get_relations(child.identifier)
