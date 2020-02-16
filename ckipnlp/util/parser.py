@@ -23,27 +23,76 @@ class ParserNodeData(NamedTuple):
     pos: str = None  #: *str* – the post-tag.
     term: str = None #: *str* – the text term.
 
+    def __str__(self):
+        return self.to_text()
+
     @classmethod
     def from_text(cls, text):
-        """Create a :class:`ParserNodeData` object from :class:`ckipnlp.parser.CkipParser` output."""
+        """Construct an instance from :class:`ckipnlp.ws.CkipParser` output.
+
+        Parameters
+        ----------
+            data : str
+                text such as ``'Head:Na:中文字'``.
+
+        Notes
+        -----
+            - ``'Head:Na:中文字'`` -> role = ``'Head'``, pos = ``'Na'``, term = ``'中文字'``
+            - ``'Head:Na'``       -> role = ``'Head'``, pos = ``'Na'``, term = ``None``
+            - ``'Na'``            -> role = ``None``,   pos = ``'Na'``, term = ``None``
+        """
         if ':' in text:
             fields = text.split(':')
             return cls(*fields)
         return cls(pos=text)
 
-    def __str__(self):
-        return self.to_text()
-
     def to_text(self):
-        """Transform to plain text."""
+        """Transform to plain text.
+
+        Return
+        ------
+            str
+        """
         return ':'.join(filter(None, self))
 
+    @classmethod
+    def from_dict(cls, data):
+        """Construct an instance from python built-in containers.
+
+        Parameters
+        ----------
+            data : dict
+                dictionary such as ``{ 'role': 'Head', 'pos': 'Na', 'term': '中文字' }``
+        """
+        return cls(**data)
+
     def to_dict(self):
-        """Transform to pypython built-in containers."""
+        """Transform to python built-in containers.
+
+        Return
+        ------
+            dict
+        """
         return self._asdict() # pylint: disable=no-member
 
+    @classmethod
+    def from_json(cls, data, **kwargs):
+        """Construct an instance from JSON format.
+
+        Parameters
+        ----------
+            data : str
+                please refer :meth:`from_dict` for format details.
+        """
+        return cls.from_dict(_json.loads(data, **kwargs))
+
     def to_json(self, **kwargs):
-        """Transform to JSON format."""
+        """Transform to JSON format.
+
+        Return
+        ------
+            str
+        """
         return _json.dumps(self.to_dict(), **kwargs)
 
 class ParserNode(_treelib.Node):
@@ -58,6 +107,8 @@ class ParserNode(_treelib.Node):
         treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
     """
 
+    data_class = ParserNodeData
+
     def __repr__(self):
         return '{name}(tag={tag}, identifier={identifier})'.format(
             name=self.__class__.__name__,
@@ -66,15 +117,30 @@ class ParserNode(_treelib.Node):
         )
 
     def to_text(self):
-        """Transform to plain text."""
+        """Transform to plain text.
+
+        Return
+        ------
+            str
+        """
         return self.data.to_text()
 
     def to_dict(self):
-        """Transform to pypython built-in containers."""
-        return _collections.OrderedDict(id=self.identifier, **self.data.to_dict())
+        """Transform to python built-in containers.
+
+        Return
+        ------
+            dict
+        """
+        return _collections.OrderedDict(id=self.identifier, data=self.data.to_dict())
 
     def to_json(self, **kwargs):
-        """Transform to JSON format."""
+        """Transform to JSON format.
+
+        Return
+        ------
+            str
+        """
         return _json.dumps(self.to_dict(), **kwargs)
 
 class ParserRelation(NamedTuple):
@@ -94,11 +160,21 @@ class ParserRelation(NamedTuple):
         return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):
-        """Transform to pypython built-in containers."""
+        """Transform to python built-in containers.
+
+        Return
+        ------
+            dict
+        """
         return _collections.OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation)
 
     def to_json(self, **kwargs):
-        """Transform to JSON format."""
+        """Transform to JSON format.
+
+        Return
+        ------
+            str
+        """
         return _json.dumps(self.to_dict(), **kwargs)
 
 ################################################################################################################################
@@ -123,6 +199,9 @@ class ParserTree(_treelib.Tree):
             tree_text = tree_text.split('] ', 2)[-1].rstrip('#')
         return tree_text
 
+    def __str__(self):
+        self.to_text()
+
     @classmethod
     def from_text(cls, tree_text, *, normalize=True):
         """Create a :class:`ParserTree` object from :class:`ckipnlp.parser.CkipParser` output.
@@ -145,7 +224,7 @@ class ParserTree(_treelib.Tree):
 
         for char in tree_text:
             if char == '(':
-                node_data = ParserNodeData.from_text(text)
+                node_data = cls.node_class.data_class.from_text(text)
                 tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
 
                 node_queue.append(node_id)
@@ -154,7 +233,7 @@ class ParserTree(_treelib.Tree):
 
             elif char == ')':
                 if not ending:
-                    node_data = ParserNodeData.from_text(text)
+                    node_data = cls.node_class.data_class.from_text(text)
                     tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
                     node_id += 1
 
@@ -164,7 +243,7 @@ class ParserTree(_treelib.Tree):
 
             elif char == '|':
                 if not ending:
-                    node_data = ParserNodeData.from_text(text)
+                    node_data = cls.node_class.data_class.from_text(text)
                     tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
                     node_id += 1
 
@@ -177,11 +256,13 @@ class ParserTree(_treelib.Tree):
 
         return tree
 
-    def __str__(self):
-        self.to_text()
-
     def to_text(self, node_id=0):
-        """Transform to plain text."""
+        """Transform to plain text.
+
+        Return
+        ------
+            str
+        """
         node = self[node_id]
         tree_text = node.to_text()
 
@@ -191,19 +272,64 @@ class ParserTree(_treelib.Tree):
 
         return tree_text
 
+    @classmethod
+    def from_dict(cls, data):
+        """Construct an instance from python built-in containers.
+
+        Parameters
+        ----------
+            data : dict
+        """
+        tree = cls()
+
+        queue = _collections.deque()
+        queue.append((data, None,))
+
+        while queue:
+            node_dict, parent_id = queue.popleft()
+            node_id = node_dict['id']
+            node_data = cls.node_class.data_class.from_dict(node_dict['data'])
+            tree.create_node(tag=node_data.to_text(), identifier=node_id, parent=parent_id, data=node_data)
+
+            for child in node_dict['children']:
+                queue.append((child, node_id,))
+
+        return tree
+
     def to_dict(self, node_id=0): # pylint: disable=arguments-differ
-        """Transform to pypython built-in containers."""
-        node = self[node_id]
-        tree_dict = node.to_dict()
+        """Transform to python built-in containers.
+
+        Return
+        ------
+            dict
+        """
+        tree_dict = self[node_id].to_dict()
+        tree_dict['children'] = []
 
         for child in self.children(node_id):
-            tree_dict.setdefault('children', list()).append(self.to_dict(child.identifier))
+            tree_dict['children'].append(self.to_dict(child.identifier))
 
         return tree_dict
 
-    def to_json(self, **kwargs): # pylint: disable=arguments-differ
-        """Transform to JSON format."""
-        return _json.dumps(self.to_dict(), **kwargs)
+    @classmethod
+    def from_json(cls, data, **kwargs):
+        """Construct an instance from JSON format.
+
+        Parameters
+        ----------
+            data : str
+                please refer :meth:`from_dict` for format details.
+        """
+        return cls.from_dict(_json.loads(data, **kwargs))
+
+    def to_json(self, node_id=0, **kwargs): # pylint: disable=arguments-differ
+        """Transform to JSON format.
+
+        Return
+        ------
+            str
+        """
+        return _json.dumps(self.to_dict(node_id=node_id), **kwargs)
 
     def show(self, *, # pylint: disable=arguments-differ
         key=lambda node: node.identifier,

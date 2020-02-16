@@ -17,8 +17,8 @@ from typing import (
 class WsWord(NamedTuple):
     """A word-segmented word."""
 
-    word: str #: *str* – the word.
-    pos: str  #: *str* – the post-tag.
+    word: str = None #: *str* – the word.
+    pos: str = None  #: *str* – the post-tag.
 
     def __str__(self):
         return self.to_text()
@@ -30,7 +30,12 @@ class WsWord(NamedTuple):
         Parameters
         ----------
             data : str
-                text like ``'中文字(Na)'``.
+                text such as ``'中文字(Na)'``.
+
+        Notes
+        -----
+            - ``'中文字(Na)'`` -> word = ``'中文字'``, pos = ``'Na'``
+            - ``'中文字'``     -> word = ``'中文字'``, pos = ``None``
         """
         return cls(*data.strip(')').rsplit('(', 1))
 
@@ -50,7 +55,7 @@ class WsWord(NamedTuple):
         Parameters
         ----------
             data : dict
-                dictionary like ``{ 'word': '中文字', 'pos': 'Na' }``
+                dictionary such as ``{ 'word': '中文字', 'pos': 'Na' }``
         """
         return cls(**data)
 
@@ -100,7 +105,7 @@ class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
         Parameters
         ----------
             data : str
-                text like ``'中文字(Na)\\u3000喔(T)'``.
+                text such as ``'中文字(Na)\\u3000喔(T)'``.
         """
         return cls(map(cls.item_class.from_text, data.split('\u3000')))
 

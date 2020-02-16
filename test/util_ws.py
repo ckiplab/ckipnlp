@@ -28,7 +28,7 @@ class _TestCaseBase:
 
     @property
     def json_in(self):
-        raise NotImplementedError
+        return json.dumps(self.dict_in, ensure_ascii=False)
 
     def _assertEqual(self, obj):
         raise NotImplementedError
@@ -59,11 +59,15 @@ class TestWsWord(unittest.TestCase, _TestCaseBase):
 
     text_in = '中文字(Na)'
     dict_in = { 'word': '中文字', 'pos': 'Na' }
-    json_in = '{"word": "中文字", "pos": "Na"}'
 
     def _assertEqual(self, obj):
         self.assertEqual(obj.word, '中文字')
         self.assertEqual(obj.pos, 'Na')
+
+    def test_no_pos(self):
+        obj = self.obj_class.from_text('中文字')
+        self.assertEqual(obj.word, '中文字')
+        self.assertEqual(obj.pos, None)
 
 ################################################################################################################################
 
@@ -77,8 +81,6 @@ class TestWsSentence(unittest.TestCase, _TestCaseBase):
         { 'word': '中文字', 'pos': 'Na' },
         { 'word': '喔', 'pos': 'T' },
     ]
-
-    json_in = '[{"word": "中文字", "pos": "Na"}, {"word": "喔", "pos": "T"}]'
 
     def _assertEqual(self, obj):
         self.assertEqual(len(obj), 2)
@@ -105,9 +107,6 @@ class TestWsSentenceList(unittest.TestCase, _TestCaseBase):
             { 'word': '哈哈', 'pos': 'D' },
         ],
     ]
-
-    json_in = '[[{"word": "中文字", "pos": "Na"}, {"word": "喔", "pos": "T"}], ' \
-               '[{"word": "啊哈", "pos": "I"}, {"word": "哈哈", "pos": "D"}]]'
 
     def _assertEqual(self, obj):
         self.assertEqual(len(obj), 2)
