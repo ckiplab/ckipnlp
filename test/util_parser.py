@@ -80,6 +80,28 @@ class TestParserNodeData(unittest.TestCase, _TestCaseBase):
 ################################################################################################################################
 
 class TestParserTree(unittest.TestCase, _TestCaseBase):
+    """
+    S[0]
+    ├── theme:NP[1]
+    │   ├── possessor:N‧的[2]
+    │   │   ├── head:Nhaa:我[3]
+    │   │   └── Head:DE:的[4]
+    │   └── Head:Nab[5]
+    │       ├── DUMMY1:Nab[6]
+    │       │   ├── DUMMY1:Nab:早餐[7]
+    │       │   ├── Head:Caa:、[8]
+    │       │   └── DUMMY2:Naa:午餐[9]
+    │       ├── Head:Caa:和[10]
+    │       └── DUMMY2:Nab:晚餐[11]
+    ├── quantity:Dab:都[12]
+    ├── target:PP[13]
+    │   ├── Head:P30:往[14]
+    │   └── DUMMY:NP[15]
+    │       ├── property:Ncb:天[16]
+    │       └── Head:Ncda:上[17]
+    ├── Head:VA11:飛[18]
+    └── aspect:Di:了[19]
+    """
 
     obj_class = ParserTree
 
@@ -233,30 +255,68 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
         text_out = self.obj_class.normalize_text(text_orig)
         self.assertEqual(text_out, self.text_in)
 
-    def test_get_heads(self):
+    def test_get_heads_semantic(self):
         obj = self.obj_class.from_text(self.text_in)
-        self._assertGetHeads(obj, 0, [18])
-        self._assertGetHeads(obj, 1, [7, 9, 11])
-        self._assertGetHeads(obj, 2, [3])
-        self._assertGetHeads(obj, 13, [17])
+        self._assertGetHeads(obj, 0, [18], semantic=True)
+        self._assertGetHeads(obj, 1, [7, 9, 11], semantic=True)
+        self._assertGetHeads(obj, 2, [3], semantic=True)
+        self._assertGetHeads(obj, 5, [7, 9, 11], semantic=True)
+        self._assertGetHeads(obj, 6, [7, 9], semantic=True)
+        self._assertGetHeads(obj, 13, [17], semantic=True)
+        self._assertGetHeads(obj, 15, [17], semantic=True)
 
-    def _assertGetHeads(self, obj, node_id, heads_id):
-        heads_id_out = [node.identifier for node in obj.get_heads(node_id)]
+    def test_get_heads_syntactic(self):
+        obj = self.obj_class.from_text(self.text_in)
+        self._assertGetHeads(obj, 0, [18], semantic=False)
+        self._assertGetHeads(obj, 1, [10], semantic=False)
+        self._assertGetHeads(obj, 2, [4], semantic=False)
+        self._assertGetHeads(obj, 5, [10], semantic=False)
+        self._assertGetHeads(obj, 6, [8], semantic=False)
+        self._assertGetHeads(obj, 13, [14], semantic=False)
+        self._assertGetHeads(obj, 15, [17], semantic=False)
+
+    def _assertGetHeads(self, obj, node_id, heads_id, *, semantic):
+        heads_id_out = [node.identifier for node in obj.get_heads(node_id, semantic=semantic)]
         self.assertEqual(heads_id_out, heads_id)
 
-    def test_get_relations(self):
+    def test_get_relations_semantic(self):
         obj = self.obj_class.from_text(self.text_in)
         rels_id = {
             (7, 3, 'possessor',),
             (9, 3, 'possessor',),
             (11, 3, 'possessor',),
             (17, 16, 'property',),
+            (18, 7, 'theme',),
+            (18, 9, 'theme',),
             (18, 11, 'theme',),
             (18, 12, 'quantity',),
             (18, 17, 'target',),
             (18, 19, 'aspect',),
-            (18, 7, 'theme',),
-            (18, 9, 'theme',),
         }
-        rels_id_out = {(rel.head.identifier, rel.tail.identifier, rel.relation) for rel in obj.get_relations()}
+        rels_id_out = {
+            (rel.head.identifier, rel.tail.identifier, rel.relation)
+                for rel in obj.get_relations(semantic=True)
+        }
+        self.assertEqual(rels_id_out, rels_id)
+
+    def test_get_relations_syntactic(self):
+        obj = self.obj_class.from_text(self.text_in)
+        rels_id = {
+            (4, 3, 'head',),
+            (8, 7, 'DUMMY1',),
+            (8, 9, 'DUMMY2',),
+            (10, 4, 'possessor',),
+            (10, 8, 'DUMMY1',),
+            (10, 11, 'DUMMY2',),
+            (14, 17, 'DUMMY',),
+            (17, 16, 'property',),
+            (18, 10, 'theme',),
+            (18, 12, 'quantity',),
+            (18, 14, 'target',),
+            (18, 19, 'aspect',),
+        }
+        rels_id_out = {
+            (rel.head.identifier, rel.tail.identifier, rel.relation)
+                for rel in obj.get_relations(semantic=False)
+        }
         self.assertEqual(rels_id_out, rels_id)

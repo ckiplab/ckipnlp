@@ -62,14 +62,15 @@ https://ckipnlp.readthedocs.io/
 .. |ReadTheDocs Home| image:: https://img.shields.io/website/https/ckipnlp.readthedocs.io.svg?maxAge=3600&up_message=online&down_message=offline
    :target: http://ckipnlp.readthedocs.io
 
-Author / Maintainer
--------------------
+Contributers
+------------
 
 * `Mu Yang <http://muyang.pro>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Author & Maintainer)
 * `Wei-Yun Ma <https://www.iis.sinica.edu.tw/pages/ma/>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Maintainer)
+* `DouglasWu <dgrey1116@gmail.com>`_
 
-References
-----------
+External Links
+--------------
 
 - `Online Demo <https://ckip.iis.sinica.edu.tw/service/corenlp>`_
 
@@ -208,15 +209,24 @@ Utilities
    for ws_sent in ws_sents: print(ws_sent.to_text())
 
    # Show CkipParser output as tree
-   tree_text = 'S(theme:NP(property:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nad(DUMMY1:Nab:早餐|Head:Caa:和|DUMMY2:Naa:午餐))|quantity:Dab:都|Head:VC31:吃完|aspect:Di:了)'
+   tree_text = '#1:1.[0] S(theme:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|target:PP(Head:P30:往|DUMMY:NP(property:Ncb:天|Head:Ncda:上))|Head:VA11:飛|aspect:Di:了)#'
    tree = ParserTree.from_text(tree_text)
    tree.show()
+
+   # Get heads of tree
+   for node in tree.get_heads(): print(node)
 
    # Get heads of node 1
    for node in tree.get_heads(1): print(node)
 
+   # Get heads of node 2
+   for node in tree.get_heads(2): print(node)
+
+   # Get heads of node 13
+   for node in tree.get_heads(13): print(node)
+
    # Get relations
-   for rel in tree.get_relations(0): print(rel)
+   for rel in tree.get_relations(): print(rel)
 
 
 FAQ

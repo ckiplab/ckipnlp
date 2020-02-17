@@ -36,9 +36,9 @@ class CkipParser:
     Other Parameters
     ----------------
         **
-            the configs for CKIPParser, ignored if **inifile** is set. Please refer :meth:`ckipnlp.util.ini.create_parser_ini`.
+            the configs for CKIPParser, passed to :meth:`ckipnlp.util.ini.create_parser_ini`, ignored if **inifile** is set.
         **
-            the configs for CKIPWS, ignored if **wsinifile** is set. Please refer :meth:`ckipnlp.util.ini.create_ws_ini`.
+            the configs for CKIPWS, passed to :meth:`ckipnlp.util.ini.create_ws_ini`, ignored if **wsinifile** is set.
 
     .. danger::
         Never instance more than one object of this class!

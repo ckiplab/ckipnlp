@@ -28,7 +28,7 @@ class ParserNodeData(NamedTuple):
 
     @classmethod
     def from_text(cls, text):
-        """Construct an instance from :class:`ckipnlp.ws.CkipParser` output.
+        """Construct an instance from :class:`ckipnlp.parser.CkipParser` output.
 
         Parameters
         ----------
@@ -115,15 +115,6 @@ class ParserNode(_treelib.Node):
             tag=self.tag,
             identifier=self.identifier,
         )
-
-    def to_text(self):
-        """Transform to plain text.
-
-        Return
-        ------
-            str
-        """
-        return self.data.to_text()
 
     def to_dict(self):
         """Transform to python built-in containers.
@@ -264,7 +255,7 @@ class ParserTree(_treelib.Tree):
             str
         """
         node = self[node_id]
-        tree_text = node.to_text()
+        tree_text = node.data.to_text()
 
         children_text = '|'.join((self.to_text(child.identifier) for child in self.children(node_id)))
         if children_text:
@@ -279,6 +270,9 @@ class ParserTree(_treelib.Tree):
         Parameters
         ----------
             data : dict
+                dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
+                where ``'data'`` is a dictionary with the same format as :meth:`ParserNodeData.to_dict`,
+                and ``'children'`` is a list of dictionaries of subtrees with the same format as this tree.
         """
         tree = cls()
 
@@ -358,13 +352,15 @@ class ParserTree(_treelib.Tree):
             if child.data.role == role:
                 yield child
 
-    def get_heads(self, root_id=0, *, deep=True): # pylint: disable=too-many-branches
+    def get_heads(self, root_id=0, *, semantic=True, deep=True): # pylint: disable=too-many-branches
         """Get all head nodes of a subtree.
 
         Parameters
         ----------
             root_id : int
                 ID of the root node of target subtree.
+            semantic : bool
+                use semantic/syntactic policy. For semantic mode, return ``DUMMY`` or ``head`` instead of syntactic ``Head``.
             deep : bool
                 find heads recursively.
 
@@ -380,17 +376,19 @@ class ParserTree(_treelib.Tree):
         if not children:
             head_nodes.append(self[root_id])
 
-        # Find DUMMY
-        if not head_nodes:
-            for child in children:
-                if child.data.role in ('DUMMY', 'DUMMY1', 'DUMMY2',):
-                    head_nodes.append(child)
+        # Semantic mode
+        if semantic:
+            # Find DUMMY
+            if not head_nodes:
+                for child in children:
+                    if child.data.role in ('DUMMY', 'DUMMY1', 'DUMMY2',):
+                        head_nodes.append(child)
 
-        # Find head
-        if not head_nodes:
-            for child in children:
-                if child.data.role == 'head':
-                    head_nodes.append(child)
+            # Find head
+            if not head_nodes:
+                for child in children:
+                    if child.data.role == 'head':
+                        head_nodes.append(child)
 
         # Find Head
         if not head_nodes:
@@ -405,17 +403,19 @@ class ParserTree(_treelib.Tree):
         # Recursion
         for node in head_nodes:
             if deep and not node.is_leaf():
-                yield from self.get_heads(node.identifier)
+                yield from self.get_heads(node.identifier, semantic=semantic)
             else:
                 yield node
 
-    def get_relations(self, root_id=0):
+    def get_relations(self, root_id=0, *, semantic=True):
         """Get all relations of a subtree.
 
         Parameters
         ----------
             root_id : int
                 ID of the subtree root node.
+            semantic : bool
+                please refer :meth:`get_heads` for policy detail.
 
         Yields
         ------
@@ -424,20 +424,19 @@ class ParserTree(_treelib.Tree):
         """
 
         children = list(self.children(root_id))
-        head_children = list(self.get_heads(root_id, deep=False))
+        head_children = list(self.get_heads(root_id, semantic=semantic, deep=False))
 
         # Get heads
-        for head_node in self.get_heads(root_id):
-
+        for head_node in self.get_heads(root_id, semantic=semantic):
             # Get tails
             for tail in children:
                 if tail.data.role != 'Head' and tail not in head_children:
                     if tail.is_leaf():
                         yield ParserRelation(head=head_node, tail=tail, relation=tail.data.role)
                     else:
-                        for node in self.get_heads(tail.identifier):
+                        for node in self.get_heads(tail.identifier, semantic=semantic):
                             yield ParserRelation(head=head_node, tail=node, relation=tail.data.role)
 
         # Recursion
         for child in children:
-            yield from self.get_relations(child.identifier)
+            yield from self.get_relations(child.identifier, semantic=semantic)

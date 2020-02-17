@@ -35,7 +35,7 @@ class CkipWs:
     Other Parameters
     ----------------
         **
-            the configs for CKIPWS, ignored if **inifile** is set. Please refer :meth:`ckipnlp.util.ini.create_ws_ini`.
+            the configs for CKIPWS, passed to :meth:`ckipnlp.util.ini.create_ws_ini`, ignored if **inifile** is set.
 
     .. danger::
         Never instance more than one object of this class!
