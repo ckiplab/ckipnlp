@@ -1,4 +1,4 @@
-PY = python
+PY = python3
 RM = rm -rf
 LINT = pylint --rcfile=./.pylintrc
 TWINE = twine
