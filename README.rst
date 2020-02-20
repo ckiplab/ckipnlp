@@ -178,12 +178,10 @@ CKIPParser
    print(ps('中文字喔'))
    for l in ps.apply_list(['中文字喔', '啊哈哈哈']): print(l)
 
-   ps = ckipnlp.parser.CkipParser(logger=False)
-   print(ps('中文字喔'))
-   for l in ps.apply_list(['中文字喔', '啊哈哈哈']): print(l)
    ps.apply_file(ifile='sample/sample.txt', ofile='output/sample.tree')
    with open('output/sample.tree') as fin:
        print(fin.read())
+
 
 Utilities
 ---------
