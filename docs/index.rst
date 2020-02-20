@@ -11,9 +11,7 @@ CKIP CoreNLP Wrappers
    :maxdepth: 2
    :caption: Contents
 
-   _api/ckipnlp.ws
-   _api/ckipnlp.parser
-   _api/ckipnlp.util
+   _api/ckipnlp
 
 .. toctree::
    :caption: Appendix
