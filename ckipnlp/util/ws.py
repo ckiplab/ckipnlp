@@ -124,7 +124,7 @@ class WsSentence(_collections.UserList): # pylint: disable=too-many-ancestors
 
         Parameters
         ----------
-            data : List[dict]
+            data : Sequence[dict]
                 list of objects as :meth:`WsWord.from_dict` input.
         """
         return cls(map(cls.item_class.from_dict, data))
@@ -174,7 +174,7 @@ class WsSentenceList(_collections.UserList): # pylint: disable=too-many-ancestor
 
         Parameters
         ----------
-            data : List[str]
+            data : Sequence[str]
                 list of texts as :meth:`WsSentence.from_text` input.
         """
         return cls(map(cls.item_class.from_text, data))
@@ -194,7 +194,7 @@ class WsSentenceList(_collections.UserList): # pylint: disable=too-many-ancestor
 
         Parameters
         ----------
-            data : List[List[dict]]
+            data : Sequence[Sequence[dict]]
                 list of objects as :meth:`WsSentence.from_dict` input.
         """
         return cls(map(cls.item_class.from_dict, data))
