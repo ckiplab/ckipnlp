@@ -28,10 +28,11 @@ class CkipWs:
     ----------
         logger : bool
             enable logger.
+        lex_list : Iterable
+            passed to :meth:`ckipnlp.util.ini.create_ws_lex`
+            overridden **lex_file** for :meth:`ckipnlp.util.ini.create_ws_ini`.
         ini_file : str
             the path to the INI file.
-        lex_list : Iterable
-            passed to :meth:`ckipnlp.util.ini.create_ws_lex`.
 
     Other Parameters
     ----------------

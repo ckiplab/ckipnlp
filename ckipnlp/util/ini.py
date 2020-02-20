@@ -20,7 +20,7 @@ def create_ws_lex(*lex_list
     Parameters
     ----------
         *lex_list : Tuple[str, str]
-            the lexicon word and its POS-tag for type *tuple*.
+            the lexicon word and its POS-tag.
 
     Returns
     -------
