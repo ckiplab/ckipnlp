@@ -225,7 +225,7 @@ setup(
         'Natural Language :: Chinese (Traditional)',
     ],
     python_requires='>=3.5',
-    packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*', 'ckipws', 'ckipparser',]),
+    packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*',]),
     install_requires=[
         'treelib>=1.5.5',
     ],
