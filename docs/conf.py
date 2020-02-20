@@ -82,7 +82,7 @@ todo_include_todos = True
 
 def run_apidoc(_):
     from sphinx.ext.apidoc import main
-    main(['-feTM', '-o', '_api', '../ckipnlp'])
+    main(['-feTM', '-t', './_templates', '-o', '_api', '../ckipnlp'])
 
 def setup(app):
     app.connect('builder-inited', run_apidoc)
