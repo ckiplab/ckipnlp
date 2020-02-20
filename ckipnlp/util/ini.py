@@ -8,13 +8,43 @@ __license__ = 'CC BY-NC-SA 4.0'
 import datetime as _datetime
 import os as _os
 import sys as _sys
+import tempfile as _tempfile
 import warnings as _warnings
 
 import ckipnlp as _about
 
+def create_ws_lex(*lex_list
+):
+    """Generate CKIP word segmentation lexicon file.
+
+    Parameters
+    ----------
+        *lex_list : Tuple[str, str]
+            the lexicon word and its POS-tag.
+
+    Returns
+    -------
+        lex_file : str
+            the name of the lexicon file.
+        f_lex : TextIO
+            the file object.
+
+    .. attention::
+        Remember to close **f_lex** manually.
+    """
+
+    f_lex = _tempfile.NamedTemporaryFile(mode='w')
+    lex_file = f_lex.name
+
+    for lex in lex_list:
+        print('\t'.join(lex), file=f_lex)
+
+    f_lex.flush()
+    return lex_file, f_lex
+
 def create_ws_ini(*, # pylint: disable=too-many-statements
-    data2dir=None,
-    lexfile=None,
+    data2_dir=None,
+    lex_file=None,
     new_style_format=False,
     show_category=True,
     sentence_max_word_num=80,
@@ -24,9 +54,9 @@ def create_ws_ini(*, # pylint: disable=too-many-statements
 
     Parameters
     ----------
-        data2dir : str
+        data2_dir : str
             the path to the folder "Data2/".
-        lexfile : str
+        lex_file : str
             the path to the user-defined lexicon file.
 
         new_style_format : bool
@@ -36,285 +66,297 @@ def create_ws_ini(*, # pylint: disable=too-many-statements
 
         sentence_max_word_num : int
             maximum number of words per sentence.
+
+    Returns
+    -------
+        ini_file : str
+            the name of the config file.
+        f_ini : TextIO
+            the file object.
+
+    .. attention::
+        Remember to close **f_ini** manually.
     """
 
     # pylint: disable=invalid-name
 
-    if data2dir is None:
-        data2dir = _os.getenv('CKIPWS_DATA2')
-        if not data2dir:
-            data2dir = _os.path.join(_sys.prefix, 'share', 'ckipnlp', 'Data2')
-        if not _os.path.isdir(data2dir):
-            _warnings.warn('Invalid data2dir (%s)' % data2dir)
-            data2dir = 'Data2'
+    f_ini = _tempfile.NamedTemporaryFile(mode='w')
+    ini_file = f_ini.name
 
-    cfg = []
+    if data2_dir is None:
+        data2_dir = _os.getenv('CKIPWS_DATA2')
+        if not data2_dir:
+            data2_dir = _os.path.join(_sys.prefix, 'share', 'ckipnlp', 'Data2')
+        if not _os.path.isdir(data2_dir):
+            _warnings.warn('Invalid data2_dir (%s)' % data2_dir)
+            data2_dir = 'Data2'
 
-    cfg.append(';PyCkip {version}'.format(version=_about.__version__))
-    cfg.append(';ws.ini')
-    cfg.append(';Auto-generated {date}'.format(date=_datetime.datetime.now()))
-    cfg.append('')
+    print(';PyCkip {version}'.format(version=_about.__version__), file=f_ini)
+    print(';ws.ini', file=f_ini)
+    print(';Auto-generated {date}'.format(date=_datetime.datetime.now()), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[ConsoleLogger]')
-    cfg.append('Name=ConsoleLogger')
-    cfg.append('')
+    print('[ConsoleLogger]', file=f_ini)
+    print('Name=ConsoleLogger', file=f_ini)
+    print('', file=f_ini)
 
-    if lexfile:
-        cfg.append('[CTextLexicon]')
-        cfg.append('Name=TextLex')
-        cfg.append('FileName={lexfile}'.format(lexfile=lexfile))
-        cfg.append('')
+    if lex_file:
+        print('[CTextLexicon]', file=f_ini)
+        print('Name=TextLex', file=f_ini)
+        print('FileName={lex_file}'.format(lex_file=lex_file), file=f_ini)
+        print('', file=f_ini)
 
-    cfg.append('[CLexicon]')
-    cfg.append('Name=Lex')
-    cfg.append('FileName={data2dir}/Lexicon.Dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CLexicon]', file=f_ini)
+    print('Name=Lex', file=f_ini)
+    print('FileName={data2_dir}/Lexicon.Dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CALexicon]')
-    cfg.append('Name=CALex')
-    cfg.append('FileName={data2dir}/CALexicon.Dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CALexicon]', file=f_ini)
+    print('Name=CALex', file=f_ini)
+    print('FileName={data2_dir}/CALexicon.Dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CDMMergedParser]')
-    cfg.append('Name=DMMergedParser')
-    cfg.append('GenerateMaxLengthWordOnly=no')
-    cfg.append('LexiconName=Lex')
-    cfg.append('')
+    print('[CDMMergedParser]', file=f_ini)
+    print('Name=DMMergedParser', file=f_ini)
+    print('GenerateMaxLengthWordOnly=no', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CDMSplittedParser]')
-    cfg.append('Name=DMSplittedParser')
-    cfg.append('GenerateMaxLengthWordOnly=no')
-    cfg.append('LexiconName=Lex')
-    cfg.append('')
+    print('[CDMSplittedParser]', file=f_ini)
+    print('Name=DMSplittedParser', file=f_ini)
+    print('GenerateMaxLengthWordOnly=no', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CHTRDRule3]')
-    cfg.append('Name=RD3')
-    cfg.append('LexiconName=Lex')
-    cfg.append('')
+    print('[CHTRDRule3]', file=f_ini)
+    print('Name=RD3', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CHTRDRule6]')
-    cfg.append('Name=RD6')
-    cfg.append('LexiconName=Lex')
-    cfg.append('')
+    print('[CHTRDRule6]', file=f_ini)
+    print('Name=RD6', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CHTRDRule7]')
-    cfg.append('Name=RD7')
-    cfg.append('LexiconName=Lex')
-    cfg.append('')
+    print('[CHTRDRule7]', file=f_ini)
+    print('Name=RD7', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CHTForeignWord]')
-    cfg.append('Name=FW')
-    cfg.append('LexiconName=Lex')
-    cfg.append('')
+    print('[CHTForeignWord]', file=f_ini)
+    print('Name=FW', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CHTBoundWord]')
-    cfg.append('Name=BW')
-    cfg.append('LexiconName=Lex')
-    cfg.append('')
+    print('[CHTBoundWord]', file=f_ini)
+    print('Name=BW', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CMaxMatch]')
-    cfg.append('Name=MaxMatch')
-    cfg.append('WindowSize=3')
-    cfg.append('')
+    print('[CMaxMatch]', file=f_ini)
+    print('Name=MaxMatch', file=f_ini)
+    print('WindowSize=3', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CHTCategoryPredictor]')
-    cfg.append('Name=CatPred')
-    cfg.append('PrefixCategoryFileName={data2dir}/CatPredictData/PrefixCategoryFreq'.format(data2dir=data2dir))
-    cfg.append('PrefixFileName={data2dir}/CatPredictData/PrefixFreq'.format(data2dir=data2dir))
-    cfg.append('SuffixCategoryFileName={data2dir}/CatPredictData/SuffixCategoryFreq'.format(data2dir=data2dir))
-    cfg.append('SuffixFileName={data2dir}/CatPredictData/SuffixFreq'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CHTCategoryPredictor]', file=f_ini)
+    print('Name=CatPred', file=f_ini)
+    print('PrefixCategoryFileName={data2_dir}/CatPredictData/PrefixCategoryFreq'.format(data2_dir=data2_dir), file=f_ini)
+    print('PrefixFileName={data2_dir}/CatPredictData/PrefixFreq'.format(data2_dir=data2_dir), file=f_ini)
+    print('SuffixCategoryFileName={data2_dir}/CatPredictData/SuffixCategoryFreq'.format(data2_dir=data2_dir), file=f_ini)
+    print('SuffixFileName={data2_dir}/CatPredictData/SuffixFreq'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CStatProb]')
-    cfg.append('Name=CAProb1')
-    cfg.append('FileName={data2dir}/CAStat-w(0)c(0)-w(-1).dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CStatProb]', file=f_ini)
+    print('Name=CAProb1', file=f_ini)
+    print('FileName={data2_dir}/CAStat-w(0)c(0)-w(-1).dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CStatProb]')
-    cfg.append('Name=CAProb2')
-    cfg.append('FileName={data2dir}/CAStat-w(0)c(0)-w(1).dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CStatProb]', file=f_ini)
+    print('Name=CAProb2', file=f_ini)
+    print('FileName={data2_dir}/CAStat-w(0)c(0)-w(1).dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CStatProb]')
-    cfg.append('Name=CAProb3')
-    cfg.append('FileName={data2dir}/CAStat-w(0)c(0)-w(-2).dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CStatProb]', file=f_ini)
+    print('Name=CAProb3', file=f_ini)
+    print('FileName={data2_dir}/CAStat-w(0)c(0)-w(-2).dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CStatProb]')
-    cfg.append('Name=CAProb4')
-    cfg.append('FileName={data2dir}/CAStat-w(0)c(0)-w(2).dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CStatProb]', file=f_ini)
+    print('Name=CAProb4', file=f_ini)
+    print('FileName={data2_dir}/CAStat-w(0)c(0)-w(2).dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CoveringAmbiguity]')
-    cfg.append('Name=CA')
-    cfg.append('LexiconName=Lex')
-    cfg.append('CoveringAmbiguityLexiconName=CALex')
-    cfg.append('InsertSplittedWordsOnly=false')
-    cfg.append('StatisticProbability1=CAProb1')
-    cfg.append('StatisticProbability2=CAProb2')
-    cfg.append('StatisticProbability3=CAProb3')
-    cfg.append('StatisticProbability4=CAProb4')
-    cfg.append('')
+    print('[CoveringAmbiguity]', file=f_ini)
+    print('Name=CA', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('CoveringAmbiguityLexiconName=CALex', file=f_ini)
+    print('InsertSplittedWordsOnly=false', file=f_ini)
+    print('StatisticProbability1=CAProb1', file=f_ini)
+    print('StatisticProbability2=CAProb2', file=f_ini)
+    print('StatisticProbability3=CAProb3', file=f_ini)
+    print('StatisticProbability4=CAProb4', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CStatProb]')
-    cfg.append('Name=Prob1')
-    cfg.append('FileName={data2dir}/CKIPWStatistic-w(-1)-w(0).dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CStatProb]', file=f_ini)
+    print('Name=Prob1', file=f_ini)
+    print('FileName={data2_dir}/CKIPWStatistic-w(-1)-w(0).dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CStatProb]')
-    cfg.append('Name=Prob2')
-    cfg.append('FileName={data2dir}/CKIPWStatistic-c(-1)-c(0).dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CStatProb]', file=f_ini)
+    print('Name=Prob2', file=f_ini)
+    print('FileName={data2_dir}/CKIPWStatistic-c(-1)-c(0).dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CStatProb]')
-    cfg.append('Name=Prob3')
-    cfg.append('FileName={data2dir}/CKIPWStatistic-c(0)-w(0).dat'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CStatProb]', file=f_ini)
+    print('Name=Prob3', file=f_ini)
+    print('FileName={data2_dir}/CKIPWStatistic-c(0)-w(0).dat'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CSimpleProbModel]')
-    cfg.append('Name=ProbModel')
-    cfg.append('StatisticProbability1=Prob1')
-    cfg.append('StatisticProbability2=Prob2')
-    cfg.append('StatisticProbability3=Prob3')
-    cfg.append('LexiconName=Lex')
-    if lexfile:
-        cfg.append('TextLexiconName=TextLex')
-    cfg.append('AdjustProb3=true')
-    cfg.append('CoveringAmbiguityLexiconName=CALex')
-    cfg.append('CategoryPredictor=CatPred')
-    cfg.append('KeepBestCategory=true')
-    cfg.append('SimplifiedCategory=false')
-    cfg.append('')
+    print('[CSimpleProbModel]', file=f_ini)
+    print('Name=ProbModel', file=f_ini)
+    print('StatisticProbability1=Prob1', file=f_ini)
+    print('StatisticProbability2=Prob2', file=f_ini)
+    print('StatisticProbability3=Prob3', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    if lex_file:
+        print('TextLexiconName=TextLex', file=f_ini)
+    print('AdjustProb3=true', file=f_ini)
+    print('CoveringAmbiguityLexiconName=CALex', file=f_ini)
+    print('CategoryPredictor=CatPred', file=f_ini)
+    print('KeepBestCategory=true', file=f_ini)
+    print('SimplifiedCategory=false', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CDetectMonosyllabicMorpheme]')
-    cfg.append('Name=DMM')
-    cfg.append('ApplyDefaultHeuristicDetectRule=yes')
-    cfg.append('InitDataPath={data2dir}/uwea/qrulepool/'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CDetectMonosyllabicMorpheme]', file=f_ini)
+    print('Name=DMM', file=f_ini)
+    print('ApplyDefaultHeuristicDetectRule=yes', file=f_ini)
+    print('InitDataPath={data2_dir}/uwea/qrulepool/'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[ChineseName]')
-    cfg.append('Name=CN')
-    cfg.append('LexiconName=Lex')
-    cfg.append('InitDataPath={data2dir}/uwea/data/'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[ChineseName]', file=f_ini)
+    print('Name=CN', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('InitDataPath={data2_dir}/uwea/data/'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CForeignName]')
-    cfg.append('Name=FN')
-    cfg.append('LexiconName=Lex')
-    if lexfile:
-        cfg.append('TextLexiconName=TextLex')
-    cfg.append('InitDataPath={data2dir}/uwea/data/'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CForeignName]', file=f_ini)
+    print('Name=FN', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    if lex_file:
+        print('TextLexiconName=TextLex', file=f_ini)
+    print('InitDataPath={data2_dir}/uwea/data/'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CompoundWord]')
-    cfg.append('Name=CW')
-    cfg.append('LexiconName=Lex')
-    cfg.append('InitDataPath={data2dir}/uwea/data/'.format(data2dir=data2dir))
-    cfg.append('')
+    print('[CompoundWord]', file=f_ini)
+    print('Name=CW', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('InitDataPath={data2_dir}/uwea/data/'.format(data2_dir=data2_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CStatisticWord]')
-    cfg.append('Name=SW')
-    cfg.append('LexiconName=Lex')
-    if lexfile:
-        cfg.append('TextLexiconName=TextLex')
-    cfg.append('CategoryPredictor=CatPred')
-    cfg.append('InitDataPath={data2dir}/uwea/data/'.format(data2dir=data2dir))
-    cfg.append('ApplyRule=639')
-    cfg.append('')
+    print('[CStatisticWord]', file=f_ini)
+    print('Name=SW', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    if lex_file:
+        print('TextLexiconName=TextLex', file=f_ini)
+    print('CategoryPredictor=CatPred', file=f_ini)
+    print('InitDataPath={data2_dir}/uwea/data/'.format(data2_dir=data2_dir), file=f_ini)
+    print('ApplyRule=639', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CAffixCombiner]')
-    cfg.append('Name=AC')
-    cfg.append('LexiconName=Lex')
-    if lexfile:
-        cfg.append('TextLexiconName=TextLex')
-    cfg.append('CategoryPredictor=CatPred')
-    cfg.append('')
+    print('[CAffixCombiner]', file=f_ini)
+    print('Name=AC', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    if lex_file:
+        print('TextLexiconName=TextLex', file=f_ini)
+    print('CategoryPredictor=CatPred', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CSimilarStructureCombiner]')
-    cfg.append('Name=SSC')
-    cfg.append('AutoCombineWordLen=2')
-    cfg.append('HeuristicCombinedWordMaxLen=3')
-    cfg.append('LexiconName=Lex')
-    cfg.append('CategoryPredictor=CatPred')
-    cfg.append('')
+    print('[CSimilarStructureCombiner]', file=f_ini)
+    print('Name=SSC', file=f_ini)
+    print('AutoCombineWordLen=2', file=f_ini)
+    print('HeuristicCombinedWordMaxLen=3', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('CategoryPredictor=CatPred', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[COnlineLexicon]')
-    cfg.append('Name=OnlineLexForUWGen')
-    cfg.append('')
+    print('[COnlineLexicon]', file=f_ini)
+    print('Name=OnlineLexForUWGen', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CUnknownWord]')
-    cfg.append('Name=UW')
-    cfg.append('UnknownWordGeneratorList=DMM CN FN CW SW SSC')
-    cfg.append('OnlineLexicon=OnlineLexForUWGen')
-    cfg.append('')
+    print('[CUnknownWord]', file=f_ini)
+    print('Name=UW', file=f_ini)
+    print('UnknownWordGeneratorList=DMM CN FN CW SW SSC', file=f_ini)
+    print('OnlineLexicon=OnlineLexForUWGen', file=f_ini)
+    print('', file=f_ini)
 
-    if lexfile:
-        cfg.append('[CLexWordGenerator]')
-        cfg.append('Name=myLWGen')
-        cfg.append('LexiconName=TextLex')
-        cfg.append('')
+    if lex_file:
+        print('[CLexWordGenerator]', file=f_ini)
+        print('Name=myLWGen', file=f_ini)
+        print('LexiconName=TextLex', file=f_ini)
+        print('', file=f_ini)
 
-    cfg.append('[CLexWordGenerator]')
-    cfg.append('Name=LWGen')
-    cfg.append('LexiconName=Lex')
-    cfg.append('')
+    print('[CLexWordGenerator]', file=f_ini)
+    print('Name=LWGen', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CLexWordGenerator]')
-    cfg.append('Name=LWGen1')
-    cfg.append('LexiconName=Lex')
-    cfg.append('MaxWordLen=1')
-    cfg.append('')
+    print('[CLexWordGenerator]', file=f_ini)
+    print('Name=LWGen1', file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('MaxWordLen=1', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CLexWordGenerator]')
-    cfg.append('Name=UWGen')
-    cfg.append('LexiconName=OnlineLexForUWGen')
-    cfg.append('')
+    print('[CLexWordGenerator]', file=f_ini)
+    print('Name=UWGen', file=f_ini)
+    print('LexiconName=OnlineLexForUWGen', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CSimpleProbModelResult]')
-    cfg.append('Name=ProbModelResult')
-    cfg.append('ProbabilityModelName=ProbModel')
-    cfg.append('NewStyleFormat={NewStyleFormat}'.format(NewStyleFormat=str(new_style_format).lower()))
-    cfg.append('ShowCategory={ShowCategory}'.format(ShowCategory=str(show_category).lower()))
-    cfg.append('LexiconName=Lex')
-    cfg.append('CategoryPredictor=CatPred')
-    cfg.append('KeepExistingWord=true')
-    cfg.append('FeatureAssigner=FA')
-    cfg.append('FilterBadWord=false')
-    cfg.append('')
+    print('[CSimpleProbModelResult]', file=f_ini)
+    print('Name=ProbModelResult', file=f_ini)
+    print('ProbabilityModelName=ProbModel', file=f_ini)
+    print('NewStyleFormat={NewStyleFormat}'.format(NewStyleFormat=str(new_style_format).lower()), file=f_ini)
+    print('ShowCategory={ShowCategory}'.format(ShowCategory=str(show_category).lower()), file=f_ini)
+    print('LexiconName=Lex', file=f_ini)
+    print('CategoryPredictor=CatPred', file=f_ini)
+    print('KeepExistingWord=true', file=f_ini)
+    print('FeatureAssigner=FA', file=f_ini)
+    print('FilterBadWord=false', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CDetectDMForPostProcess]')
-    cfg.append('Name=DDMFPP')
-    cfg.append('')
+    print('[CDetectDMForPostProcess]', file=f_ini)
+    print('Name=DDMFPP', file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[CRemoveWordToBePostProcessed]')
-    cfg.append('Name=RWTBPP')
-    cfg.append('')
+    print('[CRemoveWordToBePostProcessed]', file=f_ini)
+    print('Name=RWTBPP', file=f_ini)
+    print('', file=f_ini)
 
-    HandlerList = [
+    handler_list = [
         'LWGen', 'myLWGen', 'DMMergedParser', 'RD3', 'RD6', 'RD7', 'FW', 'BW', 'MaxMatch', 'ProbModel', 'UW', 'DDMFPP',
         'LWGen', 'UWGen', 'RWTBPP', 'LWGen', 'myLWGen', 'DMSplittedParser', 'BW', 'MaxMatch', 'ProbModel', 'CA'
     ]
 
-    if not lexfile:
-        while 'myLWGen' in HandlerList:
-            HandlerList.remove('myLWGen')
+    if not lex_file:
+        while 'myLWGen' in handler_list:
+            handler_list.remove('myLWGen')
 
-    cfg.append('[CWordSegmentor]')
-    cfg.append('Name=MainWS')
-    cfg.append('ArticleMaxLineNum=300')
-    cfg.append('SentenceMaxWordNum={sentence_max_word_num}'.format(sentence_max_word_num=sentence_max_word_num))
-    cfg.append('ReloadMyDic=false')
-    cfg.append('SentenceDelimiter=，,；。！？')
-    cfg.append('HandlerList={HandlerList}'.format(HandlerList=' '.join(HandlerList)))
-    cfg.append('Result=ProbModelResult')
-    cfg.append('')
+    print('[CWordSegmentor]', file=f_ini)
+    print('Name=MainWS', file=f_ini)
+    print('ArticleMaxLineNum=300', file=f_ini)
+    print('SentenceMaxWordNum={sentence_max_word_num}'.format(sentence_max_word_num=sentence_max_word_num), file=f_ini)
+    print('ReloadMyDic=false', file=f_ini)
+    print('SentenceDelimiter=，,；。！？', file=f_ini)
+    print('HandlerList={handler_list}'.format(handler_list=' '.join(handler_list)), file=f_ini)
+    print('Result=ProbModelResult', file=f_ini)
+    print('', file=f_ini)
 
-    return '\n'.join(cfg), options
+    f_ini.flush()
+    return ini_file, f_ini, options
 
 def create_parser_ini(*, # pylint: disable=too-many-statements
-    wsinifile,
-    ruledir=None,
-    rdbdir=None,
+    ws_ini_file,
+    rule_dir=None,
+    rdb_dir=None,
     do_ws=True,
     do_parse=True,
     do_role=True,
@@ -325,9 +367,9 @@ def create_parser_ini(*, # pylint: disable=too-many-statements
 
     Parameters
     ----------
-        ruledir : str
+        rule_dir : str
             the path to "Rule/".
-        rdbdir : str
+        rdb_dir : str
             the path to "RDB/".
 
         do_ws : bool
@@ -339,29 +381,42 @@ def create_parser_ini(*, # pylint: disable=too-many-statements
 
         sentence_delim : str
             the sentence delimiters.
+
+    Returns
+    -------
+        ini_file : str
+            the name of the config file.
+        f_ini : TextIO
+            the file object.
+
+    .. attention::
+        Remember to close **f_ini** manually.
     """
 
     # pylint: disable=invalid-name
 
-    if ruledir is None:
-        ruledir = _os.getenv('CKIPPARSER_RULE')
-        if not ruledir:
-            ruledir = _os.path.join(_sys.prefix, 'share', 'ckipnlp', 'Rule')
-        if not _os.path.isdir(ruledir):
-            _warnings.warn('Invalid ruledir (%s)' % ruledir)
-            ruledir = 'Rule'
+    f_ini = _tempfile.NamedTemporaryFile(mode='w')
+    ini_file = f_ini.name
 
-    if rdbdir is None:
-        rdbdir = _os.getenv('CKIPPARSER_RDB')
-        if not rdbdir:
-            rdbdir = _os.path.join(_sys.prefix, 'share', 'ckipnlp', 'RDB')
-        if not _os.path.isdir(rdbdir):
-            _warnings.warn('Invalid rdbdir (%s)' % rdbdir)
-            rdbdir = 'RDB'
+    if rule_dir is None:
+        rule_dir = _os.getenv('CKIPPARSER_RULE')
+        if not rule_dir:
+            rule_dir = _os.path.join(_sys.prefix, 'share', 'ckipnlp', 'Rule')
+        if not _os.path.isdir(rule_dir):
+            _warnings.warn('Invalid rule_dir (%s)' % rule_dir)
+            rule_dir = 'Rule'
 
-    IsTag = not do_ws
-    AssignRole = do_role
-    AssignRoleOnly = False
+    if rdb_dir is None:
+        rdb_dir = _os.getenv('CKIPPARSER_RDB')
+        if not rdb_dir:
+            rdb_dir = _os.path.join(_sys.prefix, 'share', 'ckipnlp', 'RDB')
+        if not _os.path.isdir(rdb_dir):
+            _warnings.warn('Invalid rdb_dir (%s)' % rdb_dir)
+            rdb_dir = 'RDB'
+
+    is_tag = not do_ws
+    assign_role = do_role
+    assign_role_only = False
 
     if not do_parse:
         if not do_ws and not do_role:
@@ -369,48 +424,47 @@ def create_parser_ini(*, # pylint: disable=too-many-statements
         if do_ws and not do_role:
             raise ValueError('Use ckipws.CkipWs for word-segmentation')
         if not do_ws and do_role:
-            AssignRoleOnly = True
+            assign_role_only = True
         if do_ws and do_role:
             raise ValueError('Invalid tasks')
 
-    cfg = []
+    print(';PyCkip {version}'.format(version=_about.__version__), file=f_ini)
+    print(';parser.ini', file=f_ini)
+    print(';Auto-generated {date}'.format(date=_datetime.datetime.now()), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append(';PyCkip {version}'.format(version=_about.__version__))
-    cfg.append(';parser.ini')
-    cfg.append(';Auto-generated {date}'.format(date=_datetime.datetime.now()))
-    cfg.append('')
+    print('[WordSeg]', file=f_ini)
+    print('ini={ws_ini_file}'.format(ws_ini_file=ws_ini_file), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[WordSeg]')
-    cfg.append('ini={wsinifile}'.format(wsinifile=wsinifile))
-    cfg.append('')
+    print('[Parser]', file=f_ini)
+    print('SetPos13=0', file=f_ini)
+    print('13CateFile={rule_dir}/13Cate.txt'.format(rule_dir=rule_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('[Parser]')
-    cfg.append('SetPos13=0')
-    cfg.append('13CateFile={ruledir}/13Cate.txt'.format(ruledir=ruledir))
-    cfg.append('')
+    print('SetMap=1', file=f_ini)
+    print('CatMapFile={rule_dir}/CatMap.txt'.format(rule_dir=rule_dir), file=f_ini)
+    print('WordLib1={rule_dir}/WordLib1.txt'.format(rule_dir=rule_dir), file=f_ini)
+    print('WordLib2={rule_dir}/WordLib2.txt'.format(rule_dir=rule_dir), file=f_ini)
+    print('WordLib3={rule_dir}/WordLib3.txt'.format(rule_dir=rule_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('SetMap=1')
-    cfg.append('CatMapFile={ruledir}/CatMap.txt'.format(ruledir=ruledir))
-    cfg.append('WordLib1={ruledir}/WordLib1.txt'.format(ruledir=ruledir))
-    cfg.append('WordLib2={ruledir}/WordLib2.txt'.format(ruledir=ruledir))
-    cfg.append('WordLib3={ruledir}/WordLib3.txt'.format(ruledir=ruledir))
-    cfg.append('')
+    print('GrammarRule={rule_dir}/CKIP-Rule.txt'.format(rule_dir=rule_dir), file=f_ini)
+    print('HeadRule={rule_dir}/CKIP-Head.txt'.format(rule_dir=rule_dir), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('GrammarRule={ruledir}/CKIP-Rule.txt'.format(ruledir=ruledir))
-    cfg.append('HeadRule={ruledir}/CKIP-Head.txt'.format(ruledir=ruledir))
-    cfg.append('')
+    print('SetChangePos=1', file=f_ini)
+    print('SentenceDelimiter={SentenceDelimiter}'.format(SentenceDelimiter=sentence_delim), file=f_ini)
+    print('SetLength=15', file=f_ini)
+    print('NormalPos=1', file=f_ini)
+    print('NormalTree=1', file=f_ini)
+    print('IsTag={is_tag}'.format(is_tag=int(is_tag)), file=f_ini)
+    print('', file=f_ini)
 
-    cfg.append('SetChangePos=1')
-    cfg.append('SentenceDelimiter={SentenceDelimiter}'.format(SentenceDelimiter=sentence_delim))
-    cfg.append('SetLength=15')
-    cfg.append('NormalPos=1')
-    cfg.append('NormalTree=1')
-    cfg.append('IsTag={IsTag}'.format(IsTag=int(IsTag)))
-    cfg.append('')
+    print('[SRL]', file=f_ini)
+    print('DataPath={rdb_dir}/'.format(rdb_dir=rdb_dir), file=f_ini)
+    print('AssignRole={assign_role}'.format(assign_role=int(assign_role)), file=f_ini)
+    print('AssignRoleOnly={assign_role_only}'.format(assign_role_only=int(assign_role_only)), file=f_ini)
 
-    cfg.append('[SRL]')
-    cfg.append('DataPath={rdbdir}/'.format(rdbdir=rdbdir))
-    cfg.append('AssignRole={AssignRole}'.format(AssignRole=int(AssignRole)))
-    cfg.append('AssignRoleOnly={AssignRoleOnly}'.format(AssignRoleOnly=int(AssignRoleOnly)))
-
-    return '\n'.join(cfg), options
+    f_ini.flush()
+    return ini_file, f_ini, options
