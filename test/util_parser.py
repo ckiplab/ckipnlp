@@ -81,8 +81,10 @@ class TestParserNodeData(unittest.TestCase, _TestCaseBase):
 
 class TestParserTree(unittest.TestCase, _TestCaseBase):
     """
+    我的早餐、午餐和晚餐都在比賽中被吃掉了
+
     S[0]
-    ├── theme:NP[1]
+    ├── goal:NP[1]
     │   ├── possessor:N‧的[2]
     │   │   ├── head:Nhaa:我[3]
     │   │   └── Head:DE:的[4]
@@ -94,18 +96,21 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
     │       ├── Head:Caa:和[10]
     │       └── DUMMY2:Nab:晚餐[11]
     ├── quantity:Dab:都[12]
-    ├── target:PP[13]
-    │   ├── Head:P30:往[14]
-    │   └── DUMMY:NP[15]
-    │       ├── property:Ncb:天[16]
-    │       └── Head:Ncda:上[17]
-    ├── Head:VA11:飛[18]
-    └── aspect:Di:了[19]
+    ├── condition:PP[13]
+    │   ├── Head:P21:在[14]
+    │   └── DUMMY:GP[15]
+    │       ├── DUMMY:NP[16]
+    │       │   └── Head:Nac:比賽[17]
+    │       └── Head:Ng:中[18]
+    ├── agent:PP[19]
+    │   └── Head:P02:被[20]
+    ├── Head:VC31:吃掉[21]
+    └── aspect:Di:了[22]
     """
 
     obj_class = ParserTree
 
-    text_in = 'S(theme:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|target:PP(Head:P30:往|DUMMY:NP(property:Ncb:天|Head:Ncda:上))|Head:VA11:飛|aspect:Di:了)'
+    text_in = 'S(goal:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|condition:PP(Head:P21:在|DUMMY:GP(DUMMY:NP(Head:Nac:比賽)|Head:Ng:中))|agent:PP(Head:P02:被)|Head:VC31:吃掉|aspect:Di:了)'
 
     dict_in = {
         'id': 0,
@@ -113,7 +118,7 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
         'children': [
             {
                 'id': 1,
-                'data': { 'role': 'theme', 'pos': 'NP', 'term': None, },
+                'data': { 'role': 'goal', 'pos': 'NP', 'term': None, },
                 'children': [
                     {
                         'id': 2,
@@ -177,25 +182,31 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
             },
             {
                 'id': 13,
-                'data': { 'role': 'target', 'pos': 'PP', 'term': None, },
+                'data': { 'role': 'condition', 'pos': 'PP', 'term': None, },
                 'children': [
                     {
                         'id': 14,
-                        'data': { 'role':  'Head', 'pos': 'P30', 'term': '往', },
+                        'data': { 'role': 'Head', 'pos': 'P21', 'term': '在', },
                         'children': [],
                     },
                     {
                         'id': 15,
-                        'data': { 'role':  'DUMMY', 'pos': 'NP', 'term': None, },
+                        'data': { 'role': 'DUMMY', 'pos': 'GP', 'term': None, },
                         'children': [
                             {
                                 'id': 16,
-                                'data': { 'role':  'property', 'pos': 'Ncb', 'term': '天', },
-                                'children': [],
+                                'data': { 'role': 'DUMMY', 'pos': 'NP', 'term': None, },
+                                'children': [
+                                    {
+                                        'id': 17,
+                                        'data': { 'role': 'Head', 'pos': 'Nac', 'term': '比賽', },
+                                        'children': [],
+                                    },
+                                ],
                             },
                             {
-                                'id': 17,
-                                'data': { 'role':  'Head', 'pos': 'Ncda', 'term': '上', },
+                                'id': 18,
+                                'data': { 'role': 'Head', 'pos': 'Ng', 'term': '中', },
                                 'children': [],
                             },
                         ],
@@ -203,12 +214,23 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
                 ],
             },
             {
-                'id': 18,
-                'data': { 'role': 'Head', 'pos': 'VA11', 'term': '飛', },
+                'id': 19,
+                'data': { 'role': 'agent', 'pos': 'PP', 'term': None, },
+                'children': [
+                    {
+                        'id': 20,
+                        'data': { 'role': 'Head', 'pos': 'P02', 'term': '被', },
+                        'children': [],
+                    },
+                ],
+            },
+            {
+                'id': 21,
+                'data': { 'role': 'Head', 'pos': 'VC31', 'term': '吃掉', },
                 'children': [],
             },
             {
-                'id': 19,
+                'id': 22,
                 'data': { 'role': 'aspect', 'pos': 'Di', 'term': '了', },
                 'children': [],
             },
@@ -216,9 +238,9 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
     }
 
     def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 20)
+        self.assertEqual(len(obj), 23)
         self._assertEqualNode(obj, 0, None, None, 'S', None)
-        self._assertEqualNode(obj, 1, 0, 'theme', 'NP', None)
+        self._assertEqualNode(obj, 1, 0, 'goal', 'NP', None)
         self._assertEqualNode(obj, 2, 1, 'possessor', 'N‧的', None)
         self._assertEqualNode(obj, 3, 2, 'head', 'Nhaa', '我')
         self._assertEqualNode(obj, 4, 2, 'Head', 'DE', '的')
@@ -230,13 +252,16 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
         self._assertEqualNode(obj, 10, 5, 'Head', 'Caa', '和')
         self._assertEqualNode(obj, 11, 5, 'DUMMY2', 'Nab', '晚餐')
         self._assertEqualNode(obj, 12, 0, 'quantity', 'Dab', '都')
-        self._assertEqualNode(obj, 13, 0, 'target', 'PP', None)
-        self._assertEqualNode(obj, 14, 13, 'Head', 'P30', '往')
-        self._assertEqualNode(obj, 15, 13, 'DUMMY', 'NP', None)
-        self._assertEqualNode(obj, 16, 15, 'property', 'Ncb', '天')
-        self._assertEqualNode(obj, 17, 15, 'Head', 'Ncda', '上')
-        self._assertEqualNode(obj, 18, 0, 'Head', 'VA11', '飛')
-        self._assertEqualNode(obj, 19, 0, 'aspect', 'Di', '了')
+        self._assertEqualNode(obj, 13, 0, 'condition', 'PP', None)
+        self._assertEqualNode(obj, 14, 13, 'Head', 'P21', '在')
+        self._assertEqualNode(obj, 15, 13, 'DUMMY', 'GP', None)
+        self._assertEqualNode(obj, 16, 15, 'DUMMY', 'NP', None)
+        self._assertEqualNode(obj, 17, 16, 'Head', 'Nac', '比賽')
+        self._assertEqualNode(obj, 18, 15, 'Head', 'Ng', '中')
+        self._assertEqualNode(obj, 19, 0, 'agent', 'PP', None)
+        self._assertEqualNode(obj, 20, 19, 'Head', 'P02', '被')
+        self._assertEqualNode(obj, 21, 0, 'Head', 'VC31', '吃掉')
+        self._assertEqualNode(obj, 22, 0, 'aspect', 'Di', '了')
 
     def _assertEqualNode(self, obj, node_id, parent_id, role, pos, term):
         node = obj[node_id]
@@ -257,23 +282,27 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
 
     def test_get_heads_semantic(self):
         obj = self.obj_class.from_text(self.text_in)
-        self._assertGetHeads(obj, 0, [18], semantic=True)
+        self._assertGetHeads(obj, 0, [21], semantic=True)
         self._assertGetHeads(obj, 1, [7, 9, 11], semantic=True)
         self._assertGetHeads(obj, 2, [3], semantic=True)
         self._assertGetHeads(obj, 5, [7, 9, 11], semantic=True)
         self._assertGetHeads(obj, 6, [7, 9], semantic=True)
         self._assertGetHeads(obj, 13, [17], semantic=True)
         self._assertGetHeads(obj, 15, [17], semantic=True)
+        self._assertGetHeads(obj, 16, [17], semantic=True)
+        self._assertGetHeads(obj, 19, [20], semantic=True)
 
     def test_get_heads_syntactic(self):
         obj = self.obj_class.from_text(self.text_in)
-        self._assertGetHeads(obj, 0, [18], semantic=False)
+        self._assertGetHeads(obj, 0, [21], semantic=False)
         self._assertGetHeads(obj, 1, [10], semantic=False)
         self._assertGetHeads(obj, 2, [4], semantic=False)
         self._assertGetHeads(obj, 5, [10], semantic=False)
         self._assertGetHeads(obj, 6, [8], semantic=False)
         self._assertGetHeads(obj, 13, [14], semantic=False)
-        self._assertGetHeads(obj, 15, [17], semantic=False)
+        self._assertGetHeads(obj, 15, [18], semantic=False)
+        self._assertGetHeads(obj, 16, [17], semantic=False)
+        self._assertGetHeads(obj, 19, [20], semantic=False)
 
     def _assertGetHeads(self, obj, node_id, heads_id, *, semantic):
         heads_id_out = [node.identifier for node in obj.get_heads(node_id, semantic=semantic)]
@@ -285,13 +314,13 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
             (7, 3, 'possessor',),
             (9, 3, 'possessor',),
             (11, 3, 'possessor',),
-            (17, 16, 'property',),
-            (18, 7, 'theme',),
-            (18, 9, 'theme',),
-            (18, 11, 'theme',),
-            (18, 12, 'quantity',),
-            (18, 17, 'target',),
-            (18, 19, 'aspect',),
+            (21, 7, 'goal',),
+            (21, 9, 'goal',),
+            (21, 11, 'goal',),
+            (21, 12, 'quantity',),
+            (21, 17, 'condition',),
+            (21, 20, 'agent',),
+            (21, 22, 'aspect',),
         }
         rels_id_out = {
             (rel.head.identifier, rel.tail.identifier, rel.relation)
@@ -308,12 +337,13 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
             (10, 4, 'possessor',),
             (10, 8, 'DUMMY1',),
             (10, 11, 'DUMMY2',),
-            (14, 17, 'DUMMY',),
-            (17, 16, 'property',),
-            (18, 10, 'theme',),
-            (18, 12, 'quantity',),
-            (18, 14, 'target',),
-            (18, 19, 'aspect',),
+            (14, 18, 'DUMMY',),
+            (18, 17, 'DUMMY',),
+            (21, 10, 'goal',),
+            (21, 12, 'quantity',),
+            (21, 14, 'condition',),
+            (21, 20, 'agent',),
+            (21, 22, 'aspect',),
         }
         rels_id_out = {
             (rel.head.identifier, rel.tail.identifier, rel.relation)
