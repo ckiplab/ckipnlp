@@ -32,8 +32,67 @@ from Cython.Build import cythonize
 
 import ckipnlp as about
 
-with open('README.rst', encoding='utf-8') as fin:
-    readme = fin.read()
+################################################################################
+
+def main():
+
+    with open('README.rst', encoding='utf-8') as fin:
+        readme = fin.read()
+
+    setup(
+        name=about.__name__,
+        version=about.__version__,
+        author=about.__author_name__,
+        author_email=about.__author_email__,
+        description=about.__description__,
+        long_description=readme,
+        long_description_content_type='text/x-rst',
+        url=about.__url__,
+        download_url=about.__download_url__,
+        platforms=['linux_x86_64'],
+        license=about.__license__,
+        classifiers=[
+            'Development Status :: 4 - Beta',
+            'Environment :: Console',
+            'Programming Language :: Python',
+            'Programming Language :: Python :: 3',
+            'Programming Language :: Python :: 3.5',
+            'Programming Language :: Python :: 3.6',
+            'Programming Language :: Python :: 3.7',
+            'Programming Language :: Python :: 3.8',
+            'Programming Language :: Python :: 3.9',
+            'Programming Language :: Python :: 3 :: Only',
+            'Programming Language :: Cython',
+            'License :: Free for non-commercial use',
+            'Operating System :: POSIX :: Linux',
+            'Natural Language :: Chinese (Traditional)',
+        ],
+        python_requires='>=3.5',
+        packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*',]),
+        install_requires=[
+            'treelib>=1.5.5',
+        ],
+        ext_modules=cythonize(
+            [
+                Extension('ckipnlp._core.ws',
+                    sources=['src/ws/ckipws.pyx'],
+                    libraries=['WordSeg'],
+                    language='c++',
+                ),
+                Extension('ckipnlp._core.parser',
+                    sources=['src/parser/ckipparser.pyx'],
+                    libraries=['CKIPCoreNLP', 'CKIPParser', 'CKIPWS', 'CKIPSRL'],
+                    language='c++',
+                ),
+            ],
+            build_dir='build',
+        ),
+        data_files=[],
+        cmdclass={
+            'install': InstallCommand,
+            'develop': DevelopCommand,
+        },
+    )
 
 ################################################################################
 
@@ -97,10 +156,10 @@ class CommandMixin(object):
 
         # subdirectory
         opt_subdirectory = [
-            ('ws_lib_dir',      'ws_dir',     'lib',),
-            ('ws_share_dir',    'ws_dir',     '',),
-            ('parser_lib_dir',  'parser_dir', 'lib',),
-            ('parser_share_dir','parser_dir', '',),
+            ('ws_lib_dir',       'ws_dir',     'lib',),
+            ('ws_share_dir',     'ws_dir',     '',),
+            ('parser_lib_dir',   'parser_dir', 'lib',),
+            ('parser_share_dir', 'parser_dir', '',),
 
             ('data2_dir', 'ws_share_dir',     'Data2',),
             ('data2_dir', 'parser_share_dir', 'Data2',),
@@ -199,55 +258,5 @@ class DevelopCommand(CommandMixin, develop):
 
 ################################################################################
 
-setup(
-    name=about.__name__,
-    version=about.__version__,
-    author=about.__author_name__,
-    author_email=about.__author_email__,
-    description=about.__description__,
-    long_description=readme,
-    long_description_content_type='text/x-rst',
-    url=about.__url__,
-    download_url=about.__download_url__,
-    platforms=['linux_x86_64'],
-    license=about.__license__,
-    classifiers=[
-        'Development Status :: 4 - Beta',
-        'Environment :: Console',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Cython',
-        'License :: Free for non-commercial use',
-        'Operating System :: POSIX :: Linux',
-        'Natural Language :: Chinese (Traditional)',
-    ],
-    python_requires='>=3.5',
-    packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*',]),
-    install_requires=[
-        'treelib>=1.5.5',
-    ],
-    ext_modules=cythonize(
-        [
-            Extension('ckipnlp._core.ws',
-                sources=['src/ws/ckipws.pyx'],
-                libraries=['WordSeg'],
-            ),
-            Extension('ckipnlp._core.parser',
-                sources=['src/parser/ckipparser.pyx'],
-                libraries=['CKIPCoreNLP','CKIPParser','CKIPWS','CKIPSRL'],
-            ),
-        ],
-        build_dir='build',
-    ),
-    data_files=[],
-    cmdclass={
-        'install': InstallCommand,
-        'develop': DevelopCommand,
-    },
-)
+if __name__ == '__main__':
+    main()

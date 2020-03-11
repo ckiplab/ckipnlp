@@ -6,9 +6,10 @@ __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 cimport src.parser.cckipparser as cckipparser
-from libc.stdlib cimport malloc, free
-from cpython.unicode cimport PyUnicode_AsUnicode
+cimport cython
+from libcpp.vector cimport vector
 
+@cython.final
 cdef class CkipParserCore:
 
     cdef cckipparser.corenlp_t __obj
@@ -19,31 +20,28 @@ cdef class CkipParserCore:
     def __dealloc__(self):
         if self.__obj is not NULL:
             cckipparser.CKIPCoreNLP_Destroy(self.__obj)
-            pass
 
-    def init_data(self, inifile):
+    def init_data(self, str inifile):
         ret = cckipparser.CKIPCoreNLP_InitData(self.__obj, inifile.encode())
         if not ret:
             raise IOError()
 
-    def apply_list(self, ilist):
-        inum = len(ilist)
+    # def enable_logger(self):
+    #     cckipparser.CKIPCoreNLP_EnableConsoleLogger(self.__obj)
 
-        iarr = <const Py_UNICODE**> malloc(sizeof(const Py_UNICODE*) * inum)
-        for i in range(inum):
-            iarr[i] = PyUnicode_AsUnicode(ilist[i])
-        ret = cckipparser.CKIPCoreNLP_ApplyList(self.__obj, inum, iarr)
-        free(iarr)
+    def apply_list(self, vector[const Py_UNICODE*] ilist):
+
+        ret = cckipparser.CKIPCoreNLP_ApplyList(self.__obj, ilist.size(), ilist.data())
         assert ret is not None
 
-        olist = []
+        cdef vector[const Py_UNICODE*] olist
         result = cckipparser.CKIPCoreNLP_GetResultBegin(self.__obj)
         while result is not NULL:
-            olist.append(result.strip())
+            olist.push_back(result)
             result = cckipparser.CKIPCoreNLP_GetResultNext(self.__obj)
 
         return olist
 
-    def apply_file(self, ifile, ofile):
+    def apply_file(self, str ifile, str ofile):
         ret = cckipparser.CKIPCoreNLP_ApplyFile(self.__obj, ifile.encode(), ofile.encode())
         assert ret is not None
