@@ -78,16 +78,29 @@ class CkipWs:
         except: # pylint: disable=bare-except
             pass
 
+    @staticmethod
+    def normalize_text(text):
+        """Text normalization output.
+
+        Replacing keywords ``()+-:|&#`` by by full-width ones.
+        """
+        return (text
+            .replace('(', '（')
+            .replace(')', '）') # for tree draw
+        )
+
     def __call__(self, text):
         return self.apply(text)
 
-    def apply(self, text):
-        """Segment a sentence.
+    def apply(self, text, *, normalize=True):
+        """Parse a sentence.
 
         Parameters
         ----------
             text : str
                 the input sentence.
+            normalize : bool
+                do text normalization (please refer :meth:`normalize_text`).
 
         Return
         ------
@@ -97,21 +110,25 @@ class CkipWs:
         .. hint::
             One may also call this method as :meth:`__call__`.
         """
-        return self.apply_list([text])[0]
+        return self.apply_list([text], normalize=normalize)[0]
 
-    def apply_list(self, ilist):
-        """Segment a list of sentences.
+    def apply_list(self, ilist, *, normalize=True):
+        """Parse a list of sentences.
 
         Parameters
         ----------
             ilist : List[str]
                 the list of input sentences.
+            normalize : bool
+                do text normalization (please refer :meth:`normalize_text`).
 
         Return
         ------
             List[str]
                 the list of output sentences.
         """
+        if normalize:
+            ilist = list(map(self.normalize_text, ilist))
         return self.__core.apply_list(ilist)
 
     def apply_file(self, ifile, ofile, uwfile=''):
