@@ -9,12 +9,12 @@ import collections as _collections
 import json as _json
 
 from typing import (
-    NamedTuple,
+    NamedTuple as _NamedTuple,
 )
 
 ################################################################################################################################
 
-class WsWord(NamedTuple):
+class WsWord(_NamedTuple):
     """A word-segmented word."""
 
     word: str = None #: *str* – the word.

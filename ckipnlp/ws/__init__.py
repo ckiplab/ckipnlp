@@ -19,7 +19,10 @@ except ImportError as exc:
 except Exception as exc:
     raise exc
 
-from ckipnlp.util.ini import create_ws_lex, create_ws_ini
+from ckipnlp.util.ini import (
+    create_ws_lex as _create_ws_lex,
+    create_ws_ini as _create_ws_ini,
+)
 
 class CkipWs:
     """The CKIP word segmentation driver.
@@ -56,12 +59,12 @@ class CkipWs:
             self.__core.enable_logger()
 
         if lex_list:
-            lex_file, f_lex = create_ws_lex(*lex_list)
+            lex_file, f_lex = _create_ws_lex(*lex_list)
 
             kwargs['lex_file'] = lex_file
 
         if not ini_file:
-            ini_file, f_ini, kwargs = create_ws_ini(**kwargs)
+            ini_file, f_ini, kwargs = _create_ws_ini(**kwargs)
 
         def CkipWs(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
         CkipWs(**kwargs)
@@ -82,7 +85,7 @@ class CkipWs:
     def normalize_text(text):
         """Text normalization output.
 
-        Replacing keywords ``()+-:|&#`` by by full-width ones.
+        Replacing keywords ``()`` by by full-width ones.
         """
         return (text
             .replace('(', '（')

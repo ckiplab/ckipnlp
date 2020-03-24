@@ -19,7 +19,11 @@ except ImportError as exc:
 except Exception as exc:
     raise exc
 
-from ckipnlp.util.ini import create_ws_lex, create_ws_ini, create_parser_ini
+from ckipnlp.util.ini import (
+    create_ws_lex as _create_ws_lex,
+    create_ws_ini as _create_ws_ini,
+    create_parser_ini as _create_parser_ini
+)
 
 class CkipParser:
     """The CKIP sentence parsing driver.
@@ -62,14 +66,14 @@ class CkipParser:
             _warnings.warn('Logger is not supported for CKIP Parser')
 
         if lex_list:
-            lex_file, f_lex = create_ws_lex(*lex_list)
+            lex_file, f_lex = _create_ws_lex(*lex_list)
             kwargs['lex_file'] = lex_file
 
         if not ws_ini_file:
-            ws_ini_file, f_ws_ini, kwargs = create_ws_ini(**kwargs)
+            ws_ini_file, f_ws_ini, kwargs = _create_ws_ini(**kwargs)
 
         if not ini_file:
-            ini_file, f_ini, kwargs = create_parser_ini(ws_ini_file=ws_ini_file, **kwargs)
+            ini_file, f_ini, kwargs = _create_parser_ini(ws_ini_file=ws_ini_file, **kwargs)
 
         def CkipParser(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
         CkipParser(**kwargs)

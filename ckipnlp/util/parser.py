@@ -9,14 +9,14 @@ import collections as _collections
 import json as _json
 
 from typing import (
-    NamedTuple,
+    NamedTuple as _NamedTuple,
 )
 
 import treelib as _treelib
 
 ################################################################################################################################
 
-class ParserNodeData(NamedTuple):
+class ParserNodeData(_NamedTuple):
     """A parser node."""
 
     role: str = None #: *str* – the role.
@@ -134,7 +134,7 @@ class ParserNode(_treelib.Node):
         """
         return _json.dumps(self.to_dict(), **kwargs)
 
-class ParserRelation(NamedTuple):
+class ParserRelation(_NamedTuple):
     """A parser relation."""
 
     head: ParserNode #: :class:`ParserNode` – the head node.
