@@ -10,7 +10,7 @@ cimport cython
 from libcpp.vector cimport vector
 
 @cython.final
-cdef class CkipWsCore:
+cdef class CyCkipWs:
 
     cdef cckipws.wordseg_t __obj
 

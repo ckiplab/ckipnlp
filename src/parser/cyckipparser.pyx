@@ -10,7 +10,7 @@ cimport cython
 from libcpp.vector cimport vector
 
 @cython.final
-cdef class CkipParserCore:
+cdef class CyCkipParser:
 
     cdef cckipparser.corenlp_t __obj
 

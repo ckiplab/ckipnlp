@@ -13,8 +13,7 @@ import warnings as _warnings
 
 import ckipnlp as _about
 
-def create_ws_lex(*lex_list
-):
+def create_ws_lex(*lex_list):
     """Generate CKIP word segmentation lexicon file.
 
     Parameters

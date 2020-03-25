@@ -20,7 +20,7 @@ class ParserNodeData(_NamedTuple):
     """A parser node."""
 
     role: str = None #: *str* – the role.
-    pos: str = None  #: *str* – the post-tag.
+    pos: str = None  #: *str* – the POS-tag.
     term: str = None #: *str* – the text term.
 
     def __str__(self):
@@ -35,8 +35,8 @@ class ParserNodeData(_NamedTuple):
             data : str
                 text such as ``'Head:Na:中文字'``.
 
-        Notes
-        -----
+        Note
+        ----
             - ``'Head:Na:中文字'`` -> role = ``'Head'``, pos = ``'Na'``, term = ``'中文字'``
             - ``'Head:Na'``       -> role = ``'Head'``, pos = ``'Na'``, term = ``None``
             - ``'Na'``            -> role = ``None``,   pos = ``'Na'``, term = ``None``

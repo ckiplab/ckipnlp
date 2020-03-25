@@ -10,7 +10,7 @@ import warnings as _warnings
 
 try:
     if not _os.environ.get('_SPHINX'):
-        from ckipnlp._core.parser import CkipParserCore
+        from ckipnlp._cy.parser import CyCkipParser
 except ImportError as exc:
     raise ImportError(
         'Please reinstall ‘ckipnlp’ with ‘--install-option=\'--parser\'’.  --install-option=\'--parser-dir=<...>\''
@@ -19,22 +19,22 @@ except ImportError as exc:
 except Exception as exc:
     raise exc
 
-from ckipnlp.util.ini import (
+from .ini import (
     create_ws_lex as _create_ws_lex,
     create_ws_ini as _create_ws_ini,
     create_parser_ini as _create_parser_ini
 )
 
-class CkipParser:
-    """The CKIP sentence parsing driver.
+class CkipParserWrapper:
+    """The CKIP sentence parsing wrapper.
 
     Parameters
     ----------
         logger : bool
             enable logger.
         lex_list : Iterable
-            passed to :meth:`ckipnlp.util.ini.create_ws_lex`,
-            overridden **lex_file** for :meth:`ckipnlp.util.ini.create_ws_ini`.
+            passed to :meth:`ckipnlp.ext.ini.create_ws_lex`,
+            overridden **lex_file** for :meth:`ckipnlp.ext.ini.create_ws_ini`.
         ini_file : str
             the path to the INI file.
         ws_ini_file : str
@@ -43,9 +43,9 @@ class CkipParser:
     Other Parameters
     ----------------
         **
-            the configs for CKIPParser, passed to :meth:`ckipnlp.util.ini.create_parser_ini`, ignored if **ini_file** is set.
+            the configs for CKIPParser, passed to :meth:`ckipnlp.ext.ini.create_parser_ini`, ignored if **ini_file** is set.
         **
-            the configs for CKIPWS, passed to :meth:`ckipnlp.util.ini.create_ws_ini`, ignored if **ws_ini_file** is set.
+            the configs for CKIPWS, passed to :meth:`ckipnlp.ext.ini.create_ws_ini`, ignored if **ws_ini_file** is set.
 
     .. danger::
         Never instance more than one object of this class!
@@ -59,10 +59,10 @@ class CkipParser:
         **kwargs,
     ):
 
-        self.__core = CkipParserCore()
+        self.__cy = CyCkipParser()
 
         if logger:
-            # self.__core.enable_logger()
+            # self.__cy.enable_logger()
             _warnings.warn('Logger is not supported for CKIP Parser')
 
         if lex_list:
@@ -78,7 +78,7 @@ class CkipParser:
         def CkipParser(*, _=None): pass # pylint: disable=redefined-outer-name, invalid-name, multiple-statements
         CkipParser(**kwargs)
 
-        self.__core.init_data(ini_file)
+        self.__cy.init_data(ini_file)
 
         try:
             f_lex.close()
@@ -152,7 +152,7 @@ class CkipParser:
         """
         if normalize:
             ilist = list(map(self.normalize_text, ilist))
-        return self.__core.apply_list(ilist)
+        return self.__cy.apply_list(ilist)
 
     def apply_file(self, ifile, ofile):
         """Parse a file.
@@ -164,4 +164,4 @@ class CkipParser:
             ofile : str
                  the output file (will be overwritten).
         """
-        return self.__core.apply_file(ifile, ofile)
+        return self.__cy.apply_file(ifile, ofile)

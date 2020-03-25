@@ -74,13 +74,13 @@ def main():
         ],
         ext_modules=cythonize(
             [
-                Extension('ckipnlp._core.ws',
-                    sources=['src/ws/ckipws.pyx'],
+                Extension('ckipnlp._cy.ws',
+                    sources=['src/ws/cyckipws.pyx'],
                     libraries=['WordSeg'],
                     language='c++',
                 ),
-                Extension('ckipnlp._core.parser',
-                    sources=['src/parser/ckipparser.pyx'],
+                Extension('ckipnlp._cy.parser',
+                    sources=['src/parser/cyckipparser.pyx'],
                     libraries=['CKIPCoreNLP', 'CKIPParser', 'CKIPWS', 'CKIPSRL'],
                     language='c++',
                 ),
@@ -194,12 +194,12 @@ class CommandMixin(object):
             print('- Enable CKIPWS support')
             if self.ws_lib_dir:
                 print('- Use CKIPWS library from (%s)' % self.ws_lib_dir)
-                i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.ws'), None)
+                i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._cy.ws'), None)
                 self.distribution.ext_modules[i].library_dirs.append(self.ws_lib_dir)
                 self.distribution.ext_modules[i].runtime_library_dirs.append(self.ws_lib_dir)
         else:
             print('- Disable CKIPWS support')
-            i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.ws'), None)
+            i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._cy.ws'), None)
             if i is not None: del self.distribution.ext_modules[i]
 
         # CKIPParser
@@ -207,12 +207,12 @@ class CommandMixin(object):
             print('- Enable CKIPParser support')
             if self.parser_lib_dir:
                 print('- Use CKIPParser library from (%s)' % self.parser_lib_dir)
-                i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.parser'), None)
+                i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._cy.parser'), None)
                 self.distribution.ext_modules[i].library_dirs.append(self.parser_lib_dir)
                 self.distribution.ext_modules[i].runtime_library_dirs.append(self.parser_lib_dir)
         else:
             print('- Disable CKIPParser support')
-            i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._core.parser'), None)
+            i = next((i for i, em in enumerate(self.distribution.ext_modules) if em.name == 'ckipnlp._cy.parser'), None)
             if i is not None: del self.distribution.ext_modules[i]
 
         # Data

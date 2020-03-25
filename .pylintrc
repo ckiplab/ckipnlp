@@ -6,3 +6,4 @@ disable =
 	bad-continuation,
 	duplicate-code,
 	missing-docstring,
+	too-many-ancestors,

@@ -8,48 +8,8 @@ __license__ = 'CC BY-NC-SA 4.0'
 import json
 import unittest
 
-from ckipnlp.util.ws import *
-
-################################################################################################################################
-
-class _TestCaseBase:
-
-    @property
-    def obj_class(self):
-        raise NotImplementedError
-
-    @property
-    def text_in(self):
-        raise NotImplementedError
-
-    @property
-    def dict_in(self):
-        raise NotImplementedError
-
-    @property
-    def json_in(self):
-        return json.dumps(self.dict_in, ensure_ascii=False)
-
-    def _assertEqual(self, obj):
-        raise NotImplementedError
-
-    def test_from_to_text(self):
-        obj = self.obj_class.from_text(self.text_in)
-        self._assertEqual(obj)
-        text_out = obj.to_text()
-        self.assertEqual(text_out, self.text_in)
-
-    def test_from_to_dict(self):
-        obj = self.obj_class.from_dict(self.dict_in)
-        self._assertEqual(obj)
-        dict_out = obj.to_dict()
-        self.assertEqual(dict_out, self.dict_in)
-
-    def test_from_to_json(self):
-        obj = self.obj_class.from_json(self.json_in)
-        self._assertEqual(obj)
-        json_out = obj.to_json(ensure_ascii=False)
-        self.assertEqual(json_out, self.json_in)
+from .base import _TestCaseBase
+from ckipnlp.container.ws import *
 
 ################################################################################################################################
 
@@ -63,11 +23,6 @@ class TestWsWord(unittest.TestCase, _TestCaseBase):
     def _assertEqual(self, obj):
         self.assertEqual(obj.word, '中文字')
         self.assertEqual(obj.pos, 'Na')
-
-    def test_no_pos(self):
-        obj = self.obj_class.from_text('中文字')
-        self.assertEqual(obj.word, '中文字')
-        self.assertEqual(obj.pos, None)
 
 ################################################################################################################################
 

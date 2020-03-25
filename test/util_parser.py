@@ -14,17 +14,9 @@ from ckipnlp.util.parser import *
 
 class _TestCaseBase:
 
-    @property
-    def obj_class(self):
-        raise NotImplementedError
-
-    @property
-    def text_in(self):
-        raise NotImplementedError
-
-    @property
-    def dict_in(self):
-        raise NotImplementedError
+    obj_class = NotImplemented
+    text_in = NotImplemented
+    dict_in = NotImplemented
 
     @property
     def json_in(self):
