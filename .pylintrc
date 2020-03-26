@@ -5,5 +5,7 @@ max-line-length = 128
 disable =
 	bad-continuation,
 	duplicate-code,
+	invalid-name,
 	missing-docstring,
 	too-many-ancestors,
+	too-many-branches,

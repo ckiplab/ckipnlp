@@ -17,15 +17,29 @@ from .base import (
 
 ################################################################################################################################
 
-class CkipClassicalWs(_BaseDriver):
-    """The CKIP word segmentation driver with classical backend."""
+class CkipClassicWs(_BaseDriver):  # pylint: disable=too-few-public-methods
+    """The CKIP word segmentation driver with classic backend."""
+
+    def __init__(self):
+        super().__init__()
+        # self._core = CkipWsWrapper()
+        self._core = None
 
     def __call__(self, *, text):
         assert isinstance(text, _TextSentenceList)
-        return _WsSentenceList()
 
-class CkipClassicalParser(_BaseDriver):
-    """The CKIP sentence parsing driver with classical backend."""
+        ws_text = self._core.apply_list(text)
+        ws = _WsSentenceList.from_text(ws_text)
+
+        return ws
+
+class CkipClassicParser(_BaseDriver):  # pylint: disable=too-few-public-methods
+    """The CKIP sentence parsing driver with classic backend."""
+
+    def __init__(self):
+        super().__init__()
+        # self._core = CkipParserWrapper()
+        self._core = None
 
     def __call__(self, *, ws):
         assert isinstance(ws, _WsSentenceList)

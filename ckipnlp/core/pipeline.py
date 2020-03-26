@@ -10,22 +10,18 @@ from enum import (
     auto as _enum_auto,
 )
 
-from typing import (
-    NamedTuple as _NamedTuple,
-)
-
-import ckipnlp.container as _container
-import ckipnlp.driver as _driver
+import ckipnlp.driver.classic as _driver_classic
+import ckipnlp.driver.tagger as _driver_tagger
 
 ################################################################################################################################
 
 class DriverType(_IntEnum):
-    CLASSICAL = _enum_auto()
+    CLASSIC = _enum_auto()
     TAGGER = _enum_auto()
 
 ################################################################################################################################
 
-class Workspace:
+class Workspace:  # pylint: disable=too-few-public-methods
 
     def __init__(self, *, text=None, seg=None, ws=None, ner=None, parser=None):
         self.text = text
@@ -39,7 +35,7 @@ class Workspace:
 
 ################################################################################################################################
 
-class CkipPipeline:
+class CkipPipeline:  # pylint: disable=too-few-public-methods
 
     def __init__(self, *, seg=None, pos=None, ner=None, parser=None):
         self._ws_driver = None
@@ -51,10 +47,10 @@ class CkipPipeline:
         # WordSeg
         if seg is None:
             pass
-        elif seg == DriverType.CLASSICAL:
-            self._ws_driver = _driver.CkipClassicalWs()
+        elif seg == DriverType.CLASSIC:
+            self._ws_driver = _driver_classic.CkipClassicWs()
         elif seg == DriverType.TAGGER:
-            self._seg_driver = _driver.CkipTaggerSeg()
+            self._seg_driver = _driver_tagger.CkipTaggerSeg()
         else:
             raise KeyError(f'Word segmentation is not implemented for type {seg.name}')
 
@@ -62,15 +58,15 @@ class CkipPipeline:
         if pos is None:
             pass
         elif pos == DriverType.TAGGER:
-            self._pos_driver = _driver.CkipTaggerPos()
+            self._pos_driver = _driver_tagger.CkipTaggerPos()
         else:
             raise KeyError(f'Part-of-speech tagging is not implemented for type {pos.name}')
 
         # Parser
         if parser is None:
             pass
-        elif parser == DriverType.CLASSICAL:
-            self._parser_driver = _driver.CkipClassicalParser()
+        elif parser == DriverType.CLASSIC:
+            self._parser_driver = _driver_classic.CkipClassicParser()
         else:
             raise KeyError(f'Sentence parsing is not implemented for type {parser.name}')
 
@@ -78,7 +74,7 @@ class CkipPipeline:
         if ner is None:
             pass
         elif ner == DriverType.TAGGER:
-            self._ner_driver = _driver.CkipTaggerNer()
+            self._ner_driver = _driver_tagger.CkipTaggerNer()
         else:
             raise KeyError(f'Named entity recognition is not implemented for type {ner.name}')
 
@@ -92,10 +88,10 @@ class CkipPipeline:
                 feed[key] = value
 
         workspace = Workspace(**feed)
-        workspace._ws_tmp = None
+        setattr(workspace, '_ws_tmp', None)
         for key in query:
             getattr(self, f'_get_{key}')(workspace)
-        del workspace._ws_tmp
+        delattr(workspace, '_ws_tmp')
         return workspace
 
     ########################################################################################################################
@@ -109,17 +105,17 @@ class CkipPipeline:
     ########################################################################################################################
 
     def _get_ws_tmp(self, workspace):
-        if workspace._ws_tmp is None:
+        if workspace._ws_tmp is None:  # pylint: disable=protected-access
 
             if self._ws_driver is not None:
-                workspace._ws_tmp = self._ws_driver(
+                workspace._ws_tmp = self._ws_driver(  # pylint: disable=protected-access
                     text=self._get_text(workspace)
                 )
 
             else:
-                raise AttributeError('No classical word-segmentation driver!')
+                raise AttributeError('No classic word-segmentation driver!')
 
-        return workspace._ws_tmp
+        return workspace._ws_tmp  # pylint: disable=protected-access
 
     ########################################################################################################################
 

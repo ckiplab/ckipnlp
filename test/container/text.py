@@ -17,8 +17,8 @@ class TestTextSentenceList(unittest.TestCase, _TestCaseBase):
 
     obj_class = TextSentenceList
 
-    text_in = ['中文字喔', '啊哈哈哈']
-    dict_in = ['中文字喔', '啊哈哈哈']
+    text_in = [ '中文字喔', '啊哈哈哈', ]
+    dict_in = [ '中文字喔', '啊哈哈哈', ]
 
     def _assertEqual(self, obj):
         self.assertEqual(len(obj), 2)

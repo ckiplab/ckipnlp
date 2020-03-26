@@ -7,7 +7,7 @@ __copyright__ = '2018-2020 CKIP Lab'
 
 __title__ = 'CKIPNLP'
 __version__ = '0.7.2'
-__description__ = 'CKIP CoreNLP Wrappers'
+__description__ = 'CKIP CoreNLP'
 __license__ = 'CC BY-NC-SA 4.0'
 
 __url__ = 'https://ckipnlp.readthedocs.io'

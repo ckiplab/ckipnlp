@@ -352,7 +352,7 @@ class ParserTree(_treelib.Tree):
             if child.data.role == role:
                 yield child
 
-    def get_heads(self, root_id=0, *, semantic=True, deep=True): # pylint: disable=too-many-branches
+    def get_heads(self, root_id=0, *, semantic=True, deep=True):
         """Get all head nodes of a subtree.
 
         Parameters

@@ -10,28 +10,12 @@ __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 from .base import (
-    BaseList as _BaseList,
+    BaseList0 as _BaseList0
 )
 
 ################################################################################################################################
 
-class TextSentenceList(_BaseList):
+class TextSentenceList(_BaseList0):
     """A list of text sentence."""
 
     item_class = str
-
-    @classmethod
-    def _item_from_text(cls, data):
-        return data
-
-    @classmethod
-    def _item_to_text(cls, item):
-        return item
-
-    @classmethod
-    def _item_from_dict(cls, data):
-        return data
-
-    @classmethod
-    def _item_to_dict(cls, item):
-        return item

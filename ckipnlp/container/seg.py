@@ -11,31 +11,35 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from .base import (
     BaseList as _BaseList,
-    BaseSentence as _BaseSentence,
+    BaseSentence0 as _BaseSentence0,
 )
 
 ################################################################################################################################
 
-class SegSentence(_BaseSentence):
+class SegSentence(_BaseSentence0):
     """A word-segmented sentence."""
 
     item_class = str
 
     @classmethod
-    def _item_from_text(cls, data):
-        return data
+    def from_text(cls, data):
+        """Construct an instance from text format.
 
-    @classmethod
-    def _item_to_text(cls, item):
-        return item
+        Parameters
+        ----------
+            data : str
+                words segmented by ``'\\u3000'``.
+        """
+        return cls(map(cls._item_from_text, data.split('\u3000')))
 
-    @classmethod
-    def _item_from_dict(cls, data):
-        return data
+    def to_text(self):
+        """Transform to plain text.
 
-    @classmethod
-    def _item_to_dict(cls, item):
-        return item
+        Return
+        ------
+            str
+        """
+        return '\u3000'.join(map(self._item_to_text, self))
 
 class SegSentenceList(_BaseList):
     """A list of word-segmented sentences."""

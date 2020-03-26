@@ -11,13 +11,8 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 ################################################################################################################################
 
-class BaseDriver:
+class BaseDriver:  # pylint: disable=too-few-public-methods
     """The base CKIPNLP driver."""
 
     def __init__(self):
         print(f'Initializing {self.__class__.__name__} ...')
-
-    def __call__(self, **kwargs):
-        print(f'Calling {self.__class__.__name__} ...')
-        return f'<{self.__class__.__name__} {kwargs}>'
-        # raise NotImplementedError

@@ -1,5 +1,5 @@
-CKIP CoreNLP Wrappers
-=====================
+CKIP CoreNLP
+============
 
 .. toctree::
    :caption: Overview

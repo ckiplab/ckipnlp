@@ -14,9 +14,14 @@ from typing import (
 )
 
 from .base import (
-    Base as _Base,
+    BaseTuple as _BaseTuple,
     BaseList as _BaseList,
     BaseSentence as _BaseSentence,
+)
+
+from .seg import (
+    SegSentence as _SegSentence,
+    SegSentenceList as _SegSentenceList,
 )
 
 ################################################################################################################################
@@ -25,7 +30,7 @@ class _WsWord(_NamedTuple):
     word: str = None
     pos: str = None
 
-class WsWord(_Base, _WsWord):
+class WsWord(_BaseTuple, _WsWord):
     """A word with POS-tag.
 
     Attributes
@@ -35,6 +40,8 @@ class WsWord(_Base, _WsWord):
         pos : str
             the POS-tag.
     """
+
+    ########################################################################################################################
 
     @classmethod
     def from_text(cls, data):
@@ -61,26 +68,6 @@ class WsWord(_Base, _WsWord):
         """
         return '{}({})'.format(self.word, self.pos)
 
-    @classmethod
-    def from_dict(cls, data):
-        """Construct an instance from python built-in containers.
-
-        Parameters
-        ----------
-            data : dict
-                dictionary such as ``{ 'word': '中文字', 'pos': 'Na' }``
-        """
-        return cls(**data)
-
-    def to_dict(self):
-        """Transform to python built-in containers.
-
-        Return
-        ------
-            dict
-        """
-        return self._asdict() # pylint: disable=no-member
-
 ################################################################################################################################
 
 class WsSentence(_BaseSentence):
@@ -88,7 +75,75 @@ class WsSentence(_BaseSentence):
 
     item_class = WsWord
 
+    ########################################################################################################################
+
+    @classmethod
+    def from_word_pos(cls, word, pos):
+        """Construct an instance a from a word sequence and a POS-tag sequence.
+
+        Parameters
+        ----------
+            word : :class:`SegSentence`
+                the word sentence.
+            pos : :class:`SegSentence`
+                the POS-tag sentence.
+        """
+        return cls(WsWord(w, p) for w, p in zip(word, pos))
+
+    def to_word(self):
+        """Transform to word sentence.
+
+        Return
+        ------
+            :class:`SegSentence`
+        """
+        return _SegSentence.from_list((item.word for item in self))
+
+    def to_pos(self):
+        """Transform to POS-tag sentence.
+
+        Return
+        ------
+            :class:`SegSentence`
+        """
+        return _SegSentence.from_list((item.pos for item in self))
+
+################################################################################################################################
+
 class WsSentenceList(_BaseList):
     """A list of word-segmented sentences with POS-tags."""
 
     item_class = WsSentence
+
+    ########################################################################################################################
+
+    @classmethod
+    def from_word_pos(cls, word, pos):
+        """Construct an instance a from word sequences and POS-tag sequences.
+
+        Parameters
+        ----------
+            word : :class:`SegSentenceList`
+                the word sentence list.
+            pos : :class:`SegSentenceList`
+                the POS-tag sentence list.
+        """
+        return cls((cls.item_class.from_word_pos(w, p) for w, p in zip(word, pos)))
+
+    def to_word(self):
+        """Transform to word sentence list.
+
+        Return
+        ------
+            :class:`SegSentenceList`
+        """
+        return _SegSentenceList((item.to_word() for item in self))
+
+    def to_pos(self):
+        """Transform to POS-tag sentence list.
+
+        Return
+        ------
+            :class:`SegSentenceList`
+        """
+        return _SegSentenceList((item.to_pos() for item in self))
