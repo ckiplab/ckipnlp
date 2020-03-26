@@ -7,6 +7,7 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from enum import (
     IntEnum as _IntEnum,
+    auto as _enum_auto,
 )
 
 from typing import (
@@ -19,8 +20,8 @@ import ckipnlp.driver as _driver
 ################################################################################################################################
 
 class DriverType(_IntEnum):
-    CLASSICAL = 0
-    TAGGER = 1
+    CLASSICAL = _enum_auto()
+    TAGGER = _enum_auto()
 
 ################################################################################################################################
 
