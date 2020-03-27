@@ -8,7 +8,7 @@ __license__ = 'CC BY-NC-SA 4.0'
 from ckipnlp.container import (
     TextSentenceList as _TextSentenceList,
     WsSentenceList as _WsSentenceList,
-    ParseSentenceList as _ParseSentenceList,
+    ParsedSentenceList as _ParsedSentenceList,
 )
 
 from .base import (
@@ -22,13 +22,14 @@ class CkipClassicWs(_BaseDriver):  # pylint: disable=too-few-public-methods
 
     def __init__(self):
         super().__init__()
-        # self._core = CkipWsWrapper()
-        self._core = None
+
+        import ckip_classic.ws
+        self._core = ckip_classic.ws.CkipWs()
 
     def __call__(self, *, text):
         assert isinstance(text, _TextSentenceList)
 
-        ws_text = self._core.apply_list(text)
+        ws_text = self._core.apply_list(text.to_text())
         ws = _WsSentenceList.from_text(ws_text)
 
         return ws
@@ -38,9 +39,15 @@ class CkipClassicParser(_BaseDriver):  # pylint: disable=too-few-public-methods
 
     def __init__(self):
         super().__init__()
-        # self._core = CkipParserWrapper()
-        self._core = None
+
+        import ckip_classic.parser
+        self._core = ckip_classic.parser.CkipParser(do_ws=False)
 
     def __call__(self, *, ws):
         assert isinstance(ws, _WsSentenceList)
-        return _ParseSentenceList()
+
+        ws_text = ws.to_text()
+        parsed_text = self._core.apply_list(ws_text)
+        parsed = _ParsedSentenceList.from_text(parsed_text)
+
+        return parsed

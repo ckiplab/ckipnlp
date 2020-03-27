@@ -15,7 +15,7 @@ from .base import (
 
 ################################################################################################################################
 
-class ParseSentenceList(_BaseList0):
+class ParsedSentenceList(_BaseList0):
     """A list of parsed sentence."""
 
     item_class = str

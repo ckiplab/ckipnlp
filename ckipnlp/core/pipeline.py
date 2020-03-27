@@ -23,12 +23,12 @@ class DriverType(_IntEnum):
 
 class Workspace:  # pylint: disable=too-few-public-methods
 
-    def __init__(self, *, text=None, seg=None, ws=None, ner=None, parser=None):
+    def __init__(self, *, text=None, seg=None, ws=None, ner=None, parsed=None):
         self.text = text
         self.seg = seg
         self.ws = ws
         self.ner = ner
-        self.parser = parser
+        self.parsed = parsed
 
     def __repr__(self):
         return str(self.__dict__)
@@ -170,15 +170,15 @@ class CkipPipeline:  # pylint: disable=too-few-public-methods
 
     ########################################################################################################################
 
-    def _get_parser(self, workspace):
-        if workspace.parser is None:
+    def _get_parsed(self, workspace):
+        if workspace.parsed is None:
 
             if self._parser_driver is not None:
-                workspace.parser = self._parser_driver(
+                workspace.parsed = self._parser_driver(
                     ws=self._get_ws(workspace),
                 )
 
             else:
-                raise AttributeError('No named entity recognition driver!')
+                raise AttributeError('No sentence parcing driver!')
 
-        return workspace.parser
+        return workspace.parsed

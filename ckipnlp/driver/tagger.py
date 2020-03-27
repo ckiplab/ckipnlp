@@ -9,12 +9,6 @@ import os as _os
 import sys as _sys
 import warnings as _warnings
 
-from ckiptagger import (
-    WS as _TaggerWS,
-    POS as _TaggerPOS,
-    NER as _TaggerNER,
-)
-
 from ckipnlp.container import (
     TextSentenceList as _TextSentenceList,
     SegSentenceList as _SegSentenceList,
@@ -45,7 +39,9 @@ class CkipTaggerSeg(_BaseDriver):  # pylint: disable=too-few-public-methods
 
     def __init__(self):
         super().__init__()
-        self._core = _TaggerWS(_get_tagger_data())
+
+        import ckiptagger
+        self._core = ckiptagger.WS(_get_tagger_data())
 
     def __call__(self, *, text):
         assert isinstance(text, _TextSentenceList)
@@ -60,7 +56,9 @@ class CkipTaggerPos(_BaseDriver):  # pylint: disable=too-few-public-methods
 
     def __init__(self):
         super().__init__()
-        self._core = _TaggerPOS(_get_tagger_data())
+
+        import ckiptagger
+        self._core = ckiptagger.POS(_get_tagger_data())
 
     def __call__(self, *, seg):
         assert isinstance(seg, _SegSentenceList)
@@ -75,7 +73,9 @@ class CkipTaggerNer(_BaseDriver):  # pylint: disable=too-few-public-methods
 
     def __init__(self):
         super().__init__()
-        self._core = _TaggerNER(_get_tagger_data())
+
+        import ckiptagger
+        self._core = ckiptagger.NER(_get_tagger_data())
 
     def __call__(self, *, ws):
         assert isinstance(ws, _WsSentenceList)
