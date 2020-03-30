@@ -30,6 +30,7 @@ class _DataBase(metaclass=_ABCMeta):
     name = NotImplemented
     fullname = NotImplemented
     env = NotImplemented
+    extra_dirs = ()
 
     @classmethod
     def env_data_dir(cls):
@@ -49,6 +50,7 @@ class _DataBase(metaclass=_ABCMeta):
             cls.env_data_dir(),
             cls.user_data_dir(),
             cls.site_data_dir(),
+            *cls.extra_dirs,
         ):
             if data_dir and _os.path.isdir(data_dir):
                 break
@@ -98,6 +100,7 @@ class TaggerData(_DataBase):
     name = 'tagger'
     fullname = 'CkipTagger'
     env = 'CKIPTAGGER_DATA'
+    extra_dirs = ('./data',)
 
     @classmethod
     def user_data_dir(cls):

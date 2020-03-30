@@ -38,6 +38,9 @@ class CkipWorkspace:  # pylint: disable=too-few-public-methods
     def __repr__(self):
         return str(self.__dict__)
 
+    def items(self):
+        return self.__dict__.items()
+
 ################################################################################################################################
 
 class CkipPipeline:  # pylint: disable=too-few-public-methods

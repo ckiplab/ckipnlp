@@ -25,9 +25,6 @@ from collections import (
 class Base(metaclass=_ABCMeta):
     """The base CKIPNLP container."""
 
-    def __str__(self):
-        return self.to_text()
-
     ########################################################################################################################
 
     @classmethod

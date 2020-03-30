@@ -41,6 +41,9 @@ class WsWord(_BaseTuple, _WsWord):
             the POS-tag.
     """
 
+    def __str__(self):
+        return str(self.to_text())
+
     ########################################################################################################################
 
     @classmethod
