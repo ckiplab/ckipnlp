@@ -49,7 +49,6 @@ def main():
             'Environment :: Console',
             'Programming Language :: Python',
             'Programming Language :: Python :: 3',
-            'Programming Language :: Python :: 3.5',
             'Programming Language :: Python :: 3.6',
             'Programming Language :: Python :: 3.7',
             'Programming Language :: Python :: 3.8',
@@ -60,7 +59,7 @@ def main():
             'Operating System :: POSIX :: Linux',
             'Natural Language :: Chinese (Traditional)',
         ],
-        python_requires='>=3.5',
+        python_requires='>=3.6',
         packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*',]),
         install_requires=[
             'treelib>=1.5.5',
@@ -68,7 +67,7 @@ def main():
         extras_require={
             'classic': ['ckip-classic>=1.0'],
             'tagger': ['ckiptagger>=0.1'],
-        }
+        },
         data_files=[],
     )
 
