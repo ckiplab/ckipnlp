@@ -62,6 +62,7 @@ def main():
         python_requires='>=3.6',
         packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*',]),
         install_requires=[
+            'appdirs>=1.4.3',
             'treelib>=1.5.5',
         ],
         extras_require={

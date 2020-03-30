@@ -16,21 +16,13 @@ from ckipnlp.container import (
     NerSentenceList as _NerSentenceList,
 )
 
+from ckipnlp.util.data import (
+    get_tagger_data as _get_tagger_data,
+)
+
 from .base import (
     BaseDriver as _BaseDriver
 )
-
-################################################################################################################################
-
-def _get_tagger_data(data_dir=None):
-    if data_dir is None:
-        data_dir = _os.getenv('CKIPTAGGER_DATA')
-        if not data_dir:
-            data_dir = _os.path.join(_sys.prefix, 'share', 'ckipnlp', 'tagger')
-        if not _os.path.isdir(data_dir):
-            _warnings.warn('Invalid data_dir (%s)' % data_dir)
-            data_dir = 'data'
-    return data_dir
 
 ################################################################################################################################
 

@@ -8,3 +8,14 @@ This module implements specialized drivers for CKIPNLP.
 __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
+
+from .classic import (
+    CkipClassicWs,
+    CkipClassicParser,
+)
+
+from .tagger import (
+    CkipTaggerSeg,
+    CkipTaggerPos,
+    CkipTaggerNer,
+)
