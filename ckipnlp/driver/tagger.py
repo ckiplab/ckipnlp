@@ -5,10 +5,6 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-import os as _os
-import sys as _sys
-import warnings as _warnings
-
 from ckipnlp.container import (
     TextSentenceList as _TextSentenceList,
     SegSentenceList as _SegSentenceList,

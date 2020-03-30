@@ -66,7 +66,6 @@ class Base(metaclass=_ABCMeta):
 
     ########################################################################################################################
 
-
     @classmethod
     def from_json(cls, data, **kwargs):
         """Construct an instance from JSON format.

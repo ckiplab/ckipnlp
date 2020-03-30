@@ -136,7 +136,7 @@ class CkipPipeline:  # pylint: disable=too-few-public-methods
                 )
 
             elif self._ws_driver is not None:
-                workspace.seg = f'<-pos {self._get_ws_tmp(workspace)}>'
+                workspace.seg = self._get_ws_tmp(workspace).to_word()
 
             else:
                 raise AttributeError('No word segmentation driver!')

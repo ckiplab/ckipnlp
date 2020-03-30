@@ -16,7 +16,7 @@ import treelib as _treelib
 
 ################################################################################################################################
 
-class ParserNodeData(_NamedTuple):
+class ParsedNodeData(_NamedTuple):
     """A parser node."""
 
     role: str = None #: *str* – the role.
@@ -28,7 +28,7 @@ class ParserNodeData(_NamedTuple):
 
     @classmethod
     def from_text(cls, text):
-        """Construct an instance from :class:`ckipnlp.parser.CkipParser` output.
+        """Construct an instance from :class:`ckipnlp.parser.CkipParsed` output.
 
         Parameters
         ----------
@@ -95,19 +95,19 @@ class ParserNodeData(_NamedTuple):
         """
         return _json.dumps(self.to_dict(), **kwargs)
 
-class ParserNode(_treelib.Node):
+class ParsedNode(_treelib.Node):
     """A parser node for tree.
 
     Attributes
     ----------
-        data : :class:`ParserNodeData`
+        data : :class:`ParsedNodeData`
 
     See Also
     --------
         treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
     """
 
-    data_class = ParserNodeData
+    data_class = ParsedNodeData
 
     def __repr__(self):
         return '{name}(tag={tag}, identifier={identifier})'.format(
@@ -134,11 +134,11 @@ class ParserNode(_treelib.Node):
         """
         return _json.dumps(self.to_dict(), **kwargs)
 
-class ParserRelation(_NamedTuple):
+class ParsedRelation(_NamedTuple):
     """A parser relation."""
 
-    head: ParserNode #: :class:`ParserNode` – the head node.
-    tail: ParserNode #: :class:`ParserNode` – the tail node.
+    head: ParsedNode #: :class:`ParsedNode` – the head node.
+    tail: ParsedNode #: :class:`ParsedNode` – the tail node.
     relation: str #: *str* – the relation.
 
     def __repr__(self):
@@ -170,7 +170,7 @@ class ParserRelation(_NamedTuple):
 
 ################################################################################################################################
 
-class ParserTree(_treelib.Tree):
+class ParsedTree(_treelib.Tree):
     """A parsed tree.
 
     See Also
@@ -178,11 +178,11 @@ class ParserTree(_treelib.Tree):
     treereelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
     """
 
-    node_class = ParserNode
+    node_class = ParsedNode
 
     @staticmethod
     def normalize_text(tree_text):
-        """Text normalization for :class:`ckipnlp.parser.CkipParser` output.
+        """Text normalization for :class:`ckipnlp.parser.CkipParsed` output.
 
         Remove leading number and trailing ``#``.
         """
@@ -195,12 +195,12 @@ class ParserTree(_treelib.Tree):
 
     @classmethod
     def from_text(cls, tree_text, *, normalize=True):
-        """Create a :class:`ParserTree` object from :class:`ckipnlp.parser.CkipParser` output.
+        """Create a :class:`ParsedTree` object from :class:`ckipnlp.parser.CkipParsed` output.
 
         Parameters
         ----------
             text : str
-                A parsed tree from :class:`ckipnlp.parser.CkipParser` output.
+                A parsed tree from :class:`ckipnlp.parser.CkipParsed` output.
             normalize : bool
                 Do text normalization using :meth:`normalize_text`.
         """
@@ -271,7 +271,7 @@ class ParserTree(_treelib.Tree):
         ----------
             data : dict
                 dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
-                where ``'data'`` is a dictionary with the same format as :meth:`ParserNodeData.to_dict`,
+                where ``'data'`` is a dictionary with the same format as :meth:`ParsedNodeData.to_dict`,
                 and ``'children'`` is a list of dictionaries of subtrees with the same format as this tree.
         """
         tree = cls()
@@ -345,7 +345,7 @@ class ParserTree(_treelib.Tree):
 
         Yields
         ------
-            :class:`ParserNode`
+            :class:`ParsedNode`
                 the children nodes with given role.
         """
         for child in self.children(node_id):
@@ -366,7 +366,7 @@ class ParserTree(_treelib.Tree):
 
         Yields
         ------
-            :class:`ParserNode`
+            :class:`ParsedNode`
                 the head nodes.
         """
         head_nodes = []
@@ -419,7 +419,7 @@ class ParserTree(_treelib.Tree):
 
         Yields
         ------
-            :class:`ParserRelation`
+            :class:`ParsedRelation`
                 the relations.
         """
 
@@ -432,10 +432,10 @@ class ParserTree(_treelib.Tree):
             for tail in children:
                 if tail.data.role != 'Head' and tail not in head_children:
                     if tail.is_leaf():
-                        yield ParserRelation(head=head_node, tail=tail, relation=tail.data.role)
+                        yield ParsedRelation(head=head_node, tail=tail, relation=tail.data.role)
                     else:
                         for node in self.get_heads(tail.identifier, semantic=semantic):
-                            yield ParserRelation(head=head_node, tail=node, relation=tail.data.role)
+                            yield ParsedRelation(head=head_node, tail=node, relation=tail.data.role)
 
         # Recursion
         for child in children:
