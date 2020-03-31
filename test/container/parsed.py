@@ -9,18 +9,20 @@ import json
 import unittest
 
 from .base import _TestCaseBase
-from ckipnlp.container.text import *
+from ckipnlp.container.parsed import *
 
 ################################################################################################################################
 
-class TestTextSentenceList(unittest.TestCase, _TestCaseBase):
+class TestParsedSentenceList(unittest.TestCase, _TestCaseBase):
 
-    obj_class = TextSentenceList
+    obj_class = ParsedSentenceList
 
-    text_in = [ '中文字喔', '啊哈哈哈', ]
+    text_in = [
+        '#1:1.[0] S(Head:Nab:中文字|particle:Td:耶)#',
+        '#2:1.[0] %(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)#',
+    ]
 
     def _assertEqual(self, obj):
         self.assertEqual(len(obj), 2)
-
-        self.assertEqual(obj[0], '中文字喔')
-        self.assertEqual(obj[1], '啊哈哈哈')
+        self.assertEqual(obj[0], self.text_in[0])
+        self.assertEqual(obj[1], self.text_in[1])

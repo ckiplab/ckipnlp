@@ -14,6 +14,5 @@ CKIP CoreNLP
 .. toctree::
    :caption: Appendix
 
-   src/todo
    genindex
    py-modindex

@@ -18,6 +18,10 @@ class _TestCaseBase(metaclass=abc.ABCMeta):
     dict_in = NotImplemented
 
     @property
+    def dict_in(self):
+        return self.text_in
+
+    @property
     def list_in(self):
         return self.dict_in
 

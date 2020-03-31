@@ -17,10 +17,11 @@ class TestNerToken(unittest.TestCase, _TestCaseBase):
 
     obj_class = NerToken
 
-    dict_in = { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3) }
-    list_in = [ '中文字', 'LANGUAGE', (0, 3) ]
-
     test_io_text = NotImplemented
+
+    dict_in = { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), }
+    list_in = [ '中文字', 'LANGUAGE', (0, 3), ]
+    tagger_in = ( 0, 3, 'LANGUAGE', '中文字', )
 
     def _assertEqual(self, obj):
         self.assertEqual(obj.word, '中文字')
@@ -28,13 +29,12 @@ class TestNerToken(unittest.TestCase, _TestCaseBase):
         self.assertSequenceEqual(obj.idx, (0, 3))
 
     def test_io_tagger(self):
-        tagger_in = (0, 3, 'LANGUAGE', '中文字',)
 
-        obj = self.obj_class.from_tagger(tagger_in)
+        obj = self.obj_class.from_tagger(self.tagger_in)
         self._assertEqual(obj)
         tagger_out = obj.to_tagger()
 
-        self.assertEqual(tagger_out, tagger_in)
+        self.assertEqual(tagger_out, self.tagger_in)
 
 ################################################################################################################################
 
@@ -42,17 +42,22 @@ class TestNerSentence(unittest.TestCase, _TestCaseBase):
 
     obj_class = NerSentence
 
+    test_io_text = NotImplemented
+
     dict_in = [
-        { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2) },
-        { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5) },
+        { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },
+        { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), },
     ]
 
     list_in = [
-        [ '美國', 'GPE', (0, 2) ],
-        [ '參議院', 'ORG', (3, 5) ],
+        [ '美國', 'GPE', (0, 2), ],
+        [ '參議院', 'ORG', (3, 5), ],
     ]
 
-    test_io_text = NotImplemented
+    tagger_in = [
+        ( 0, 2, 'GPE', '美國', ),
+        ( 3, 5, 'ORG', '參議院', ),
+    ]
 
     def _assertEqual(self, obj):
         self.assertEqual(len(obj), 2)
@@ -66,16 +71,12 @@ class TestNerSentence(unittest.TestCase, _TestCaseBase):
         self.assertSequenceEqual(obj[1].idx, (3, 5))
 
     def test_io_tagger(self):
-        tagger_in = [
-            (0, 2, 'GPE', '美國',),
-            (3, 5, 'ORG', '參議院',),
-        ]
 
-        obj = self.obj_class.from_tagger(tagger_in)
+        obj = self.obj_class.from_tagger(self.tagger_in)
         self._assertEqual(obj)
         tagger_out = obj.to_tagger()
 
-        self.assertEqual(tagger_out, tagger_in)
+        self.assertEqual(tagger_out, self.tagger_in)
 
 ################################################################################################################################
 
@@ -83,44 +84,44 @@ class TestNerSentenceList(unittest.TestCase, _TestCaseBase):
 
     obj_class = NerSentenceList
 
+    test_io_text = NotImplemented
+
     dict_in = [
         [
-            { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3) },
+            { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), },
         ],
         [
-            { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2) },
-            { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5) },
+            { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },
+            { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), },
         ],
     ]
 
     list_in = [
         [
-            [ '中文字', 'LANGUAGE', (0, 3) ],
+            [ '中文字', 'LANGUAGE', (0, 3), ],
         ],
         [
-            [ '美國', 'GPE', (0, 2) ],
-            [ '參議院', 'ORG', (3, 5) ],
+            [ '美國', 'GPE', (0, 2), ],
+            [ '參議院', 'ORG', (3, 5), ],
         ],
     ]
 
-    test_io_text = NotImplemented
+    tagger_in = [
+        [
+            ( 0, 3, 'LANGUAGE', '中文字', ),
+        ],
+        [
+            ( 0, 2, 'GPE', '美國', ),
+            ( 3, 5, 'ORG', '參議院', ),
+        ],
+    ]
 
     def test_io_tagger(self):
-        tagger_in = [
-            [
-                (0, 3, 'LANGUAGE', '中文字',),
-            ],
-            [
-                (0, 2, 'GPE', '美國',),
-                (3, 5, 'ORG', '參議院',),
-            ],
-        ]
-
-        obj = self.obj_class.from_tagger(tagger_in)
+        obj = self.obj_class.from_tagger(self.tagger_in)
         self._assertEqual(obj)
         tagger_out = obj.to_tagger()
 
-        self.assertEqual(tagger_out, tagger_in)
+        self.assertEqual(tagger_out, self.tagger_in)
 
     def _assertEqual(self, obj):
         self.assertEqual(len(obj), 2)

@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides container for word-segmented sentences.
+This module provides containers for word-segmented sentences.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -17,31 +17,58 @@ from .base import (
 ################################################################################################################################
 
 class SegSentence(_BaseSentence0):
-    """A word-segmented sentence."""
+    """A word-segmented sentence.
+
+    .. admonition:: Data Structure Examples
+
+        Text format
+            Used for :meth:`from_text` and :meth:`to_text`.
+
+            .. code-block:: python
+
+                '中文字\\u3000喔' # Words segmented by \\u3000 (full-width space)
+
+        Dict/List format
+            Used for :meth:`from_dict`, :meth:`to_dict`, :meth:`from_list`, and :meth:`to_list`.
+
+            .. code-block:: python
+
+                [ '中文字', '喔', ]
+    """
 
     item_class = str
 
     @classmethod
     def from_text(cls, data):
-        """Construct an instance from text format.
-
-        Parameters
-        ----------
-            data : str
-                words segmented by ``'\\u3000'``.
-        """
         return cls(map(cls._item_from_text, data.split('\u3000')))
 
     def to_text(self):
-        """Transform to plain text.
-
-        Return
-        ------
-            str
-        """
         return '\u3000'.join(map(self._item_to_text, self))
 
 class SegSentenceList(_BaseList):
-    """A list of word-segmented sentences."""
+    """A list of word-segmented sentences.
+
+    .. admonition:: Data Structure Examples
+
+        Text format
+            Used for :meth:`from_text` and :meth:`to_text`.
+
+            .. code-block:: python
+
+                [
+                    '中文字\\u3000喔', # Sentence 1
+                    '啊哈\\u3000哈哈', # Sentence 2
+                ]
+
+        Dict/List format
+            Used for :meth:`from_dict`, :meth:`to_dict`,  :meth:`from_list`, and :meth:`to_list`.
+
+            .. code-block:: python
+
+                [
+                    [ '中文字', '喔', ], # Sentence 1
+                    [ '啊哈', '哈哈', ], # Sentence 2
+                ]
+    """
 
     item_class = SegSentence

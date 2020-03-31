@@ -14,7 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('..'))
-os.environ['_SPHINX'] = "1"
+os.environ['_SPHINX'] = '1'
 import ckipnlp as __about
 
 # -- Project information -----------------------------------------------------
@@ -40,7 +40,7 @@ extensions = [
     'sphinx.ext.autodoc',
     # 'sphinx.ext.autodoc.typehints',
     'sphinx.ext.napoleon',
-    'sphinx.ext.todo',
+    # 'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinx_rtd_theme',
 ]
@@ -72,11 +72,12 @@ html_css_files = ['./custom.css']
 
 autodoc_member_order = 'bysource'
 # autodoc_typehints = 'description'
+autodoc_inherit_docstrings = False
 
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_use_rtype = False
-todo_include_todos = True
+# todo_include_todos = True
 
 # -- Events ------------------------------------------------------------------
 

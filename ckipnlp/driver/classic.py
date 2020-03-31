@@ -18,7 +18,7 @@ from .base import (
 ################################################################################################################################
 
 class CkipClassicWs(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP word segmentation driver with classic backend."""
+    """The CKIP word segmentation driver with CkipClassic backend."""
 
     def __init__(self):
         super().__init__()
@@ -35,7 +35,7 @@ class CkipClassicWs(_BaseDriver):  # pylint: disable=too-few-public-methods
         return ws
 
 class CkipClassicParser(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP sentence parsing driver with classic backend."""
+    """The CKIP sentence parsing driver with CkipClassic backend."""
 
     def __init__(self):
         super().__init__()

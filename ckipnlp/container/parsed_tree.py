@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides container for parsed sentences.
+This module provides containers for parsed trees.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -10,120 +10,140 @@ __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 
-import collections as _collections
-import json as _json
+from collections import (
+    deque as _deque,
+    OrderedDict as _OrderedDict,
+)
 
 from typing import (
     NamedTuple as _NamedTuple,
 )
 
-import treelib as _treelib
+from treelib import (
+    Tree as _Tree,
+    Node as _Node,
+)
 
 from .base import (
-    BaseList0 as _BaseList0,
+    Base as _Base,
+    BaseTuple as _BaseTuple,
 )
 
 ################################################################################################################################
 
-class ParsedSentenceList(_BaseList0):
-    """A list of parsed sentence."""
+class _ParsedNodeData(_NamedTuple):
+    role: str = None
+    pos: str = None
+    word: str = None
 
-    item_class = str
+class ParsedNodeData(_BaseTuple, _ParsedNodeData):
+    """A parser node.
 
-################################################################################################################################
+    Attributes
+    ----------
+        role
+            *str* – the role.
+        pos
+            *str* – the POS-tag.
+        word
+            *str* – the text term.
 
-class ParsedNodeData(_NamedTuple):
-    """A parser node."""
+    Note
+    ----
+        This class is an subclass of :class:`tuple`. To change the attribute, please create a new instance instead.
 
-    role: str = None #: *str* – the role.
-    pos: str = None  #: *str* – the POS-tag.
-    term: str = None #: *str* – the text term.
+    .. admonition:: Data Structure Examples
 
-    def __str__(self):
-        return self.to_text()
+        Text format
+            Used for :meth:`from_text` and :meth:`to_text`.
+
+            .. code-block:: python
+
+                'Head:Na:中文字'  # role / POS-tag / text-term
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                {
+                    'role': 'Head',   # role
+                    'pos': 'Na',      # POS-tag
+                    'word': '中文字',  # text term
+                }
+
+        List format
+            Not implemented.
+    """
+
+    from_list = NotImplemented
+    to_list = NotImplemented
 
     @classmethod
-    def from_text(cls, text):
-        """Construct an instance from :class:`ckipnlp.parser.CkipParsed` output.
+    def from_text(cls, data):
+        """Construct an instance from text format.
 
         Parameters
         ----------
             data : str
                 text such as ``'Head:Na:中文字'``.
 
-        Note
-        ----
-            - ``'Head:Na:中文字'`` -> role = ``'Head'``, pos = ``'Na'``, term = ``'中文字'``
-            - ``'Head:Na'``       -> role = ``'Head'``, pos = ``'Na'``, term = ``None``
-            - ``'Na'``            -> role = ``None``,   pos = ``'Na'``, term = ``None``
+        .. note::
+
+            - ``'Head:Na:中文字'`` -> **role** = ``'Head'``, **pos** = ``'Na'``, **word** = ``'中文字'``
+            - ``'Head:Na'``       -> **role** = ``'Head'``, **pos** = ``'Na'``, **word** = ``None``
+            - ``'Na'``            -> **role** = ``None``,   **pos** = ``'Na'``, **word** = ``None``
         """
-        if ':' in text:
-            fields = text.split(':')
+        if ':' in data:
+            fields = data.split(':')
             return cls(*fields)
-        return cls(pos=text)  # pylint: disable=no-value-for-parameter
+        return cls(pos=data)  # pylint: disable=no-value-for-parameter
 
     def to_text(self):
-        """Transform to plain text.
-
-        Return
-        ------
-            str
-        """
         return ':'.join(filter(None, self))
 
-    @classmethod
-    def from_dict(cls, data):
-        """Construct an instance from python built-in containers.
+################################################################################################################################
 
-        Parameters
-        ----------
-            data : dict
-                dictionary such as ``{ 'role': 'Head', 'pos': 'Na', 'term': '中文字' }``
-        """
-        return cls(**data)
-
-    def to_dict(self):
-        """Transform to python built-in containers.
-
-        Return
-        ------
-            dict
-        """
-        return self._asdict() # pylint: disable=no-member
-
-    @classmethod
-    def from_json(cls, data, **kwargs):
-        """Construct an instance from JSON format.
-
-        Parameters
-        ----------
-            data : str
-                please refer :meth:`from_dict` for format details.
-        """
-        return cls.from_dict(_json.loads(data, **kwargs))
-
-    def to_json(self, **kwargs):
-        """Transform to JSON format.
-
-        Return
-        ------
-            str
-        """
-        return _json.dumps(self.to_dict(), **kwargs)
-
-class ParsedNode(_treelib.Node):
+class ParsedNode(_Base, _Node):
     """A parser node for tree.
 
     Attributes
     ----------
-        data : :class:`ParsedNodeData`
+        data
+            :class:`ParsedNodeData`
 
     See Also
     --------
         treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+
+    .. admonition:: Data Structure Examples
+
+        Text format
+            Not implemented.
+
+        Dict format
+            Used for :meth:`to_dict`.
+
+            .. code-block:: python
+
+                {
+                    'role': 'Head',   # role
+                    'pos': 'Na',      # POS-tag
+                    'word': '中文字',  # text term
+                }
+
+        List format
+            Not implemented.
     """
 
     data_class = ParsedNodeData
+
+    from_dict = NotImplemented
+
+    from_text = NotImplemented
+    to_text = NotImplemented
+    from_list = NotImplemented
+    to_list = NotImplemented
 
     def __repr__(self):
         return '{name}(tag={tag}, identifier={identifier})'.format(
@@ -133,29 +153,53 @@ class ParsedNode(_treelib.Node):
         )
 
     def to_dict(self):
-        """Transform to python built-in containers.
+        return _OrderedDict(id=self.identifier, data=self.data.to_dict())
 
-        Return
-        ------
-            dict
-        """
-        return _collections.OrderedDict(id=self.identifier, data=self.data.to_dict())
+################################################################################################################################
 
-    def to_json(self, **kwargs):
-        """Transform to JSON format.
+class _ParsedRelation(_NamedTuple):
+    head: ParsedNode
+    tail: ParsedNode
+    relation: str
 
-        Return
-        ------
-            str
-        """
-        return _json.dumps(self.to_dict(), **kwargs)
+class ParsedRelation(_Base, _ParsedRelation):
+    """A parser relation.
 
-class ParsedRelation(_NamedTuple):
-    """A parser relation."""
+    Attributes
+    ----------
+        head
+            :class:`ParsedNode` – the head node.
+        tail
+            :class:`ParsedNode` – the tail node.
+        relation
+            *str* – the relation.
 
-    head: ParsedNode #: :class:`ParsedNode` – the head node.
-    tail: ParsedNode #: :class:`ParsedNode` – the tail node.
-    relation: str #: *str* – the relation.
+    .. admonition:: Data Structure Examples
+
+        Text format
+            Not implemented.
+
+        Dict format
+            Used for :meth:`to_dict`.
+
+            .. code-block:: python
+
+                {
+                    'tail': { 'role': 'Head', 'pos': 'Nab', 'word': '中文字' }, # head node
+                    'tail': { 'role': 'particle', 'pos': 'Td', 'word': '耶' }, # tail node
+                    'relation': 'particle',  # relation
+                }
+
+        List format
+            Not implemented.
+    """
+
+    from_dict = NotImplemented
+
+    from_text = NotImplemented
+    to_text = NotImplemented
+    from_list = NotImplemented
+    to_list = NotImplemented
 
     def __repr__(self):
         ret = '{name}(head={head}, tail={tail}, relation={relation})' if self._head_first \
@@ -167,34 +211,70 @@ class ParsedRelation(_NamedTuple):
         return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):
-        """Transform to python built-in containers.
-
-        Return
-        ------
-            dict
-        """
-        return _collections.OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation)
-
-    def to_json(self, **kwargs):
-        """Transform to JSON format.
-
-        Return
-        ------
-            str
-        """
-        return _json.dumps(self.to_dict(), **kwargs)
+        return _OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation)
 
 ################################################################################################################################
 
-class ParsedTree(_treelib.Tree):
+class ParsedTree(_Base, _Tree):
     """A parsed tree.
 
     See Also
     --------
-    treereelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+        treereelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+
+    .. admonition:: Data Structure Examples
+
+        Text format
+            Used for :meth:`from_text` and :meth:`to_text`.
+
+            .. code-block:: python
+
+                'S(Head:Nab:中文字|particle:Td:耶)'
+
+        Dict format
+            Used for :meth:`to_dict`. A dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
+            where ``'data'`` is a dictionary with the same format as :meth:`ParsedNodeData.to_dict`,
+            and ``'children'`` is a list of dictionaries of subtrees with the same format as this tree.
+
+            .. code-block:: python
+
+                {
+                    'id': 0,
+                    'data': {
+                        'role': None,
+                        'pos': 'S',
+                        'word': None,
+                    },
+                    'children': [
+                        {
+                            'id': 1,
+                            'data': {
+                                'role': 'Head',
+                                'pos': 'Nab',
+                                'word': '中文字',
+                            },
+                            'children': [],
+                        },
+                        {
+                            'id': 2,
+                            'data': {
+                                'role': 'particle',
+                                'pos': 'Td',
+                                'word': '耶',
+                            },
+                            'children': [],
+                        },
+                    ],
+                }
+
+        List format
+            Not implemented.
     """
 
     node_class = ParsedNode
+
+    from_list = NotImplemented
+    to_list = NotImplemented
 
     @staticmethod
     def normalize_text(tree_text):
@@ -210,18 +290,18 @@ class ParsedTree(_treelib.Tree):
         self.to_text()
 
     @classmethod
-    def from_text(cls, tree_text, *, normalize=True):
-        """Create a :class:`ParsedTree` object from :class:`ckipnlp.parser.CkipParsed` output.
+    def from_text(cls, data, *, normalize=True):  # pylint: disable=arguments-differ
+        """Construct an instance from text format.
 
         Parameters
         ----------
-            text : str
-                A parsed tree from :class:`ckipnlp.parser.CkipParsed` output.
+            data : str
+                A parsed tree in text format.
             normalize : bool
                 Do text normalization using :meth:`normalize_text`.
         """
         if normalize:
-            tree_text = cls.normalize_text(tree_text)
+            data = cls.normalize_text(data)
 
         tree = cls()
         node_id = 0
@@ -229,7 +309,7 @@ class ParsedTree(_treelib.Tree):
         text = ''
         ending = True
 
-        for char in tree_text:
+        for char in data:
             if char == '(':
                 node_data = cls.node_class.data_class.from_text(text)
                 tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
@@ -263,8 +343,13 @@ class ParsedTree(_treelib.Tree):
 
         return tree
 
-    def to_text(self, node_id=0):
+    def to_text(self, node_id=0):  # pylint: disable=arguments-differ
         """Transform to plain text.
+
+        Parameters
+        ----------
+            node_id : int
+                Output the plain text format for the subtree under **node_id**.
 
         Return
         ------
@@ -281,18 +366,16 @@ class ParsedTree(_treelib.Tree):
 
     @classmethod
     def from_dict(cls, data):
-        """Construct an instance from python built-in containers.
+        """Construct an instance a from python built-in containers.
 
         Parameters
         ----------
-            data : dict
-                dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
-                where ``'data'`` is a dictionary with the same format as :meth:`ParsedNodeData.to_dict`,
-                and ``'children'`` is a list of dictionaries of subtrees with the same format as this tree.
+            data : str
+                A parsed tree in dictionary format.
         """
         tree = cls()
 
-        queue = _collections.deque()
+        queue = _deque()
         queue.append((data, None,))
 
         while queue:
@@ -306,12 +389,17 @@ class ParsedTree(_treelib.Tree):
 
         return tree
 
-    def to_dict(self, node_id=0): # pylint: disable=arguments-differ
-        """Transform to python built-in containers.
+    def to_dict(self, node_id=0):  # pylint: disable=arguments-differ
+        """Construct an instance a from python built-in containers.
+
+        Parameters
+        ----------
+            node_id : int
+                Output the plain text format for the subtree under **node_id**.
 
         Return
         ------
-            dict
+            str
         """
         tree_dict = self[node_id].to_dict()
         tree_dict['children'] = []
@@ -321,33 +409,13 @@ class ParsedTree(_treelib.Tree):
 
         return tree_dict
 
-    @classmethod
-    def from_json(cls, data, **kwargs):
-        """Construct an instance from JSON format.
-
-        Parameters
-        ----------
-            data : str
-                please refer :meth:`from_dict` for format details.
-        """
-        return cls.from_dict(_json.loads(data, **kwargs))
-
-    def to_json(self, node_id=0, **kwargs): # pylint: disable=arguments-differ
-        """Transform to JSON format.
-
-        Return
-        ------
-            str
-        """
-        return _json.dumps(self.to_dict(node_id=node_id), **kwargs)
-
-    def show(self, *, # pylint: disable=arguments-differ
+    def show(self, *,  # pylint: disable=arguments-differ
         key=lambda node: node.identifier,
         idhidden=False,
         **kwargs,
     ):
         """Show pretty tree."""
-        super().show(key=key, idhidden=idhidden, **kwargs)
+        _Tree.show(self, key=key, idhidden=idhidden, **kwargs)
 
     def get_children(self, node_id, *, role):
         """Get children of a node with given role.

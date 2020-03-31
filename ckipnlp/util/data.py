@@ -117,6 +117,6 @@ class TaggerData(_DataBase):
         _os.makedirs(data_dir, exist_ok=True)
         download_data_url(data_dir)
 
-get_tagger_data = TaggerData.get_data
-install_tagger_data = TaggerData.install_data
-download_tagger_data = TaggerData.download_data
+get_tagger_data = TaggerData.get_data            #: Get CkipTagger data directory.
+install_tagger_data = TaggerData.install_data    #: Link/Copy CkipTagger data directory.
+download_tagger_data = TaggerData.download_data  #: Download CkipTagger data directory.

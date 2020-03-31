@@ -77,186 +77,20 @@ External Links
 Requirements
 ------------
 
-* `Python <http://www.python.org>`_ 3.5+
-* `Cython <http://cython.org>`_ 0.29+
+* `Python <http://www.python.org>`_ 3.6+
 * `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
 
-.. attention::
-   For Python 2 users, please use `PyCkip 0.4.2 <https://pypi.org/project/pyckip/0.4.2/>`_ instead.
-
-CKIPWS (Optional)
-^^^^^^^^^^^^^^^^^
-
-* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version 20190524+
-
-CKIPParser (Optional)
-^^^^^^^^^^^^^^^^^^^^^
-
-* `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version 20190506+ (20190725+ recommended)
-
-Installation
-============
-
-Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version, and ``<ckipparser-linux-root>`` as the root path of CKIPParser Linux Version.
-
-Install Using Pip
------------------
-
-.. code-block:: bash
-
-   pip install --upgrade ckipnlp
-   pip install --no-deps --force-reinstall --upgrade ckipnlp \
-      --install-option='--ws' \
-      --install-option='--ws-dir=<ckipws-linux-root>' \
-      --install-option='--parser' \
-      --install-option='--parser-dir=<ckipparser-linux-root>'
-
-Ignore ws/parser options if one doesn't have CKIPWS/CKIPParser.
-
-Installation Options
---------------------
-
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| Option                                        | Detail                                | Default Value                 |
-+===============================================+=======================================+===============================+
-| ``--[no-]ws``                                 | Enable/disable CKIPWS.                | False                         |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--[no-]parser``                             | Enable/disable CKIPParser.            | False                         |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--ws-dir=<ws-dir>``                         | CKIPWS root directory.                |                               |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--ws-lib-dir=<ws-lib-dir>``                 | CKIPWS libraries directory            | ``<ws-dir>/lib``              |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--ws-share-dir=<ws-share-dir>``             | CKIPWS share directory                | ``<ws-dir>``                  |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-dir=<parser-dir>``                 | CKIPParser root directory.            |                               |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-lib-dir=<parser-lib-dir>``         | CKIPParser libraries directory        | ``<parser-dir>/lib``          |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-share-dir=<parser-share-dir>``     | CKIPParser share directory            | ``<parser-dir>``              |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--data2-dir=<data2-dir>``                   | "Data2" directory                     | ``<ws-share-dir>/Data2``      |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--rule-dir=<rule-dir>``                     | "Rule" directory                      | ``<parser-share-dir>/Rule``   |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--rdb-dir=<rdb-dir>``                       | "RDB" directory                       | ``<parser-share-dir>/RDB``    |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
+* `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
+* `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1+ [Optional]
 
 Usage
 =====
 
-See http://ckipnlp.readthedocs.io/ for API details.
-
-CKIPWS
-------
-
-.. code-block:: python
-
-   import ckipnlp.ws
-   print(ckipnlp.__name__, ckipnlp.__version__)
-
-   ws = ckipnlp.ws.CkipWs(logger=False)
-   print(ws('中文字喔'))
-   for l in ws.apply_list(['中文字喔', '啊哈哈哈']): print(l)
-
-   ws.apply_file(ifile='sample/sample.txt', ofile='output/sample.tag', uwfile='output/sample.uw')
-   with open('output/sample.tag') as fin:
-       print(fin.read())
-   with open('output/sample.uw') as fin:
-       print(fin.read())
-
-
-CKIPParser
------------
-
-.. code-block:: python
-
-   import ckipnlp.parser
-   print(ckipnlp.__name__, ckipnlp.__version__)
-
-   ps = ckipnlp.parser.CkipParser(logger=False)
-   print(ps('中文字喔'))
-   for l in ps.apply_list(['中文字喔', '啊哈哈哈']): print(l)
-
-   ps.apply_file(ifile='sample/sample.txt', ofile='output/sample.tree')
-   with open('output/sample.tree') as fin:
-       print(fin.read())
-
-
-Utilities
----------
-
-.. code-block:: python
-
-   import ckipnlp
-   print(ckipnlp.__name__, ckipnlp.__version__)
-
-   from ckipnlp.util.ws import *
-   from ckipnlp.util.parser import *
-
-   # Format CkipWs output
-   ws_text = ['中文字(Na)　喔(T)', '啊哈(I)　哈哈(D)']
-
-   # Show Sentence List
-   ws_sents = WsSentenceList.from_text(ws_text)
-   print(repr(ws_sents))
-   print(ws_sents.to_text())
-
-   # Show Each Sentence
-   for ws_sent in ws_sents: print(repr(ws_sent))
-   for ws_sent in ws_sents: print(ws_sent.to_text())
-
-   # Show CkipParser output as tree
-   tree_text = '#1:1.[0] S(theme:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|target:PP(Head:P30:往|DUMMY:NP(property:Ncb:天|Head:Ncda:上))|Head:VA11:飛|aspect:Di:了)#'
-   tree = ParserTree.from_text(tree_text)
-   tree.show()
-
-   # Get heads of tree
-   for node in tree.get_heads(): print(node)
-
-   # Get heads of node 1
-   for node in tree.get_heads(1): print(node)
-
-   # Get heads of node 2
-   for node in tree.get_heads(2): print(node)
-
-   # Get heads of node 13
-   for node in tree.get_heads(13): print(node)
-
-   # Get relations
-   for rel in tree.get_relations(): print(rel)
+See http://ckipnlp.readthedocs.io/en/latest/_api/ckipnlp.html for API details.
 
 
 FAQ
 ===
-
-.. danger::
-
-   Due to C code implementation, both ``CkipWs`` and ``CkipParser`` can only be instance once.
-
-------------
-
-.. tip::
-
-   **The CKIPWS throws "what():  locale::facet::_S_create_c_locale name not valid". What should I do?**
-
-   Install locale data.
-
-   .. code-block:: bash
-
-      apt-get install locales-all
-
-------------
-
-.. tip::
-
-   **The CKIPParser throws "ImportError: libCKIPParser.so: cannot open shared object file: No such file or directory". What should I do?**
-
-   Add below command to ``~/.bashrc``:
-
-   .. code-block:: bash
-
-      export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
 
 License
 =======

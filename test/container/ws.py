@@ -20,7 +20,6 @@ class TestWsWord(unittest.TestCase, _TestCaseBase):
 
     text_in = '中文字(Na)'
     dict_in = { 'word': '中文字', 'pos': 'Na', }
-
     list_in = [ '中文字', 'Na', ]
 
     def _assertEqual(self, obj):

@@ -8,70 +8,40 @@ __license__ = 'CC BY-NC-SA 4.0'
 import json
 import unittest
 
-from ckipnlp.util.parser import *
+from .base import _TestCaseBase
+from ckipnlp.container.parsed_tree import *
 
 ################################################################################################################################
 
-class _TestCaseBase:
+class TestParsedNodeData(unittest.TestCase, _TestCaseBase):
 
-    obj_class = NotImplemented
-    text_in = NotImplemented
-    dict_in = NotImplemented
+    obj_class = ParsedNodeData
 
-    @property
-    def json_in(self):
-        return json.dumps(self.dict_in, ensure_ascii=False)
-
-    def _assertEqual(self, obj):
-        raise NotImplementedError
-
-    def test_from_to_text(self):
-        obj = self.obj_class.from_text(self.text_in)
-        self._assertEqual(obj)
-        text_out = obj.to_text()
-        self.assertEqual(text_out, self.text_in)
-
-    def test_from_to_dict(self):
-        obj = self.obj_class.from_dict(self.dict_in)
-        self._assertEqual(obj)
-        dict_out = obj.to_dict()
-        self.assertEqual(dict_out, self.dict_in)
-
-    def test_from_to_json(self):
-        obj = self.obj_class.from_json(self.json_in)
-        self._assertEqual(obj)
-        json_out = obj.to_json(ensure_ascii=False)
-        self.assertEqual(json_out, self.json_in)
-
-################################################################################################################################
-
-class TestParserNodeData(unittest.TestCase, _TestCaseBase):
-
-    obj_class = ParserNodeData
+    test_io_list = NotImplemented
 
     text_in = 'Head:Na:中文字'
-    dict_in = { 'role': 'Head', 'pos': 'Na', 'term': '中文字' }
+    dict_in = { 'role': 'Head', 'pos': 'Na', 'word': '中文字', }
 
     def _assertEqual(self, obj):
         self.assertEqual(obj.role, 'Head')
         self.assertEqual(obj.pos, 'Na')
-        self.assertEqual(obj.term, '中文字')
+        self.assertEqual(obj.word, '中文字')
 
-    def test_no_term(self):
+    def test_no_word(self):
         obj = self.obj_class.from_text('Head:Na')
         self.assertEqual(obj.role, 'Head')
         self.assertEqual(obj.pos, 'Na')
-        self.assertEqual(obj.term, None)
+        self.assertEqual(obj.word, None)
 
     def test_no_role(self):
         obj = self.obj_class.from_text('Na')
         self.assertEqual(obj.role, None)
         self.assertEqual(obj.pos, 'Na')
-        self.assertEqual(obj.term, None)
+        self.assertEqual(obj.word, None)
 
 ################################################################################################################################
 
-class TestParserTree(unittest.TestCase, _TestCaseBase):
+class TestParsedTree(unittest.TestCase, _TestCaseBase):
     """
     我的早餐、午餐和晚餐都在比賽中被吃掉了
 
@@ -100,67 +70,69 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
     └── aspect:Di:了[22]
     """
 
-    obj_class = ParserTree
+    obj_class = ParsedTree
+
+    test_io_list = NotImplemented
 
     text_in = 'S(goal:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|condition:PP(Head:P21:在|DUMMY:GP(DUMMY:NP(Head:Nac:比賽)|Head:Ng:中))|agent:PP(Head:P02:被)|Head:VC31:吃掉|aspect:Di:了)'
 
     dict_in = {
         'id': 0,
-        'data': { 'role': None, 'pos': 'S', 'term': None, },
+        'data': { 'role': None, 'pos': 'S', 'word': None, },
         'children': [
             {
                 'id': 1,
-                'data': { 'role': 'goal', 'pos': 'NP', 'term': None, },
+                'data': { 'role': 'goal', 'pos': 'NP', 'word': None, },
                 'children': [
                     {
                         'id': 2,
-                        'data': { 'role': 'possessor', 'pos': 'N‧的', 'term': None, },
+                        'data': { 'role': 'possessor', 'pos': 'N‧的', 'word': None, },
                         'children': [
                             {
                                 'id': 3,
-                                'data': { 'role': 'head', 'pos': 'Nhaa', 'term': '我', },
+                                'data': { 'role': 'head', 'pos': 'Nhaa', 'word': '我', },
                                 'children': [],
                             },
                             {
                                 'id': 4,
-                                'data': { 'role': 'Head', 'pos': 'DE', 'term': '的', },
+                                'data': { 'role': 'Head', 'pos': 'DE', 'word': '的', },
                                 'children': [],
                             },
                         ],
                     },
                     {
                         'id': 5,
-                        'data': { 'role': 'Head', 'pos': 'Nab', 'term': None, },
+                        'data': { 'role': 'Head', 'pos': 'Nab', 'word': None, },
                         'children': [
                             {
                                 'id': 6,
-                                'data': { 'role': 'DUMMY1', 'pos': 'Nab', 'term': None, },
+                                'data': { 'role': 'DUMMY1', 'pos': 'Nab', 'word': None, },
                                 'children': [
                                     {
                                         'id': 7,
-                                        'data': { 'role': 'DUMMY1', 'pos': 'Nab', 'term': '早餐', },
+                                        'data': { 'role': 'DUMMY1', 'pos': 'Nab', 'word': '早餐', },
                                         'children': [],
                                     },
                                     {
                                         'id': 8,
-                                        'data': { 'role': 'Head', 'pos': 'Caa', 'term': '、', },
+                                        'data': { 'role': 'Head', 'pos': 'Caa', 'word': '、', },
                                         'children': [],
                                     },
                                     {
                                         'id': 9,
-                                        'data': { 'role': 'DUMMY2', 'pos': 'Naa', 'term': '午餐', },
+                                        'data': { 'role': 'DUMMY2', 'pos': 'Naa', 'word': '午餐', },
                                         'children': [],
                                     },
                                 ],
                             },
                             {
                                 'id': 10,
-                                'data': { 'role': 'Head', 'pos': 'Caa', 'term': '和', },
+                                'data': { 'role': 'Head', 'pos': 'Caa', 'word': '和', },
                                 'children': [],
                             },
                             {
                                 'id': 11,
-                                'data': { 'role': 'DUMMY2', 'pos': 'Nab', 'term': '晚餐', },
+                                'data': { 'role': 'DUMMY2', 'pos': 'Nab', 'word': '晚餐', },
                                 'children': [],
                             },
                         ],
@@ -169,36 +141,36 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
             },
             {
                 'id': 12,
-                'data': { 'role': 'quantity', 'pos': 'Dab', 'term': '都', },
+                'data': { 'role': 'quantity', 'pos': 'Dab', 'word': '都', },
                 'children': [],
             },
             {
                 'id': 13,
-                'data': { 'role': 'condition', 'pos': 'PP', 'term': None, },
+                'data': { 'role': 'condition', 'pos': 'PP', 'word': None, },
                 'children': [
                     {
                         'id': 14,
-                        'data': { 'role': 'Head', 'pos': 'P21', 'term': '在', },
+                        'data': { 'role': 'Head', 'pos': 'P21', 'word': '在', },
                         'children': [],
                     },
                     {
                         'id': 15,
-                        'data': { 'role': 'DUMMY', 'pos': 'GP', 'term': None, },
+                        'data': { 'role': 'DUMMY', 'pos': 'GP', 'word': None, },
                         'children': [
                             {
                                 'id': 16,
-                                'data': { 'role': 'DUMMY', 'pos': 'NP', 'term': None, },
+                                'data': { 'role': 'DUMMY', 'pos': 'NP', 'word': None, },
                                 'children': [
                                     {
                                         'id': 17,
-                                        'data': { 'role': 'Head', 'pos': 'Nac', 'term': '比賽', },
+                                        'data': { 'role': 'Head', 'pos': 'Nac', 'word': '比賽', },
                                         'children': [],
                                     },
                                 ],
                             },
                             {
                                 'id': 18,
-                                'data': { 'role': 'Head', 'pos': 'Ng', 'term': '中', },
+                                'data': { 'role': 'Head', 'pos': 'Ng', 'word': '中', },
                                 'children': [],
                             },
                         ],
@@ -207,23 +179,23 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
             },
             {
                 'id': 19,
-                'data': { 'role': 'agent', 'pos': 'PP', 'term': None, },
+                'data': { 'role': 'agent', 'pos': 'PP', 'word': None, },
                 'children': [
                     {
                         'id': 20,
-                        'data': { 'role': 'Head', 'pos': 'P02', 'term': '被', },
+                        'data': { 'role': 'Head', 'pos': 'P02', 'word': '被', },
                         'children': [],
                     },
                 ],
             },
             {
                 'id': 21,
-                'data': { 'role': 'Head', 'pos': 'VC31', 'term': '吃掉', },
+                'data': { 'role': 'Head', 'pos': 'VC31', 'word': '吃掉', },
                 'children': [],
             },
             {
                 'id': 22,
-                'data': { 'role': 'aspect', 'pos': 'Di', 'term': '了', },
+                'data': { 'role': 'aspect', 'pos': 'Di', 'word': '了', },
                 'children': [],
             },
         ],
@@ -255,7 +227,7 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
         self._assertEqualNode(obj, 21, 0, 'Head', 'VC31', '吃掉')
         self._assertEqualNode(obj, 22, 0, 'aspect', 'Di', '了')
 
-    def _assertEqualNode(self, obj, node_id, parent_id, role, pos, term):
+    def _assertEqualNode(self, obj, node_id, parent_id, role, pos, word):
         node = obj[node_id]
         node_data = node.data
         if parent_id is not None:
@@ -265,7 +237,7 @@ class TestParserTree(unittest.TestCase, _TestCaseBase):
         self.assertEqual(node.tag, node_data.to_text())
         self.assertEqual(node_data.role, role)
         self.assertEqual(node_data.pos, pos)
-        self.assertEqual(node_data.term, term)
+        self.assertEqual(node_data.word, word)
 
     def test_normalize_text(self):
         text_orig = '#1:1.[0] ' + self.text_in + '#'

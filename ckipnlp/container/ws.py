@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides container for word-segmented sentences with part-of-speech-tags.
+This module provides containers for word-segmented sentences with part-of-speech-tags.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -35,10 +35,43 @@ class WsWord(_BaseTuple, _WsWord):
 
     Attributes
     ----------
-        word : str
-            the word.
-        pos : str
-            the POS-tag.
+        word
+            *str* – the word.
+        pos
+            *str* – the POS-tag.
+
+    Note
+    ----
+        This class is an subclass of :class:`tuple`. To change the attribute, please create a new instance instead.
+
+    .. admonition:: Data Structure Examples
+
+        Text format
+            Used for :meth:`from_text` and :meth:`to_text`.
+
+            .. code-block:: python
+
+                '中文字(Na)'  # word / POS-tag
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                {
+                    'word': '中文字', # word
+                    'pos': 'Na',     # POS-tag
+                }
+
+        List format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    '中文字', # word
+                    'Na',    # POS-tag
+                ]
     """
 
     def __str__(self):
@@ -55,26 +88,49 @@ class WsWord(_BaseTuple, _WsWord):
             data : str
                 text such as ``'中文字(Na)'``.
 
-        Note
-        ----
+        .. note::
             - ``'中文字(Na)'`` -> word = ``'中文字'``, pos = ``'Na'``
             - ``'中文字'``     -> word = ``'中文字'``, pos = ``None``
         """
         return cls(*data.strip(')').rsplit('(', 1))
 
     def to_text(self):
-        """Transform to plain text.
-
-        Return
-        ------
-            str
-        """
         return '{}({})'.format(self.word, self.pos)
 
 ################################################################################################################################
 
 class WsSentence(_BaseSentence):
-    """A word-segmented sentence with POS-tags."""
+    """A word-segmented sentence with POS-tags.
+
+    .. admonition:: Data Structure Examples
+
+        Text format
+            Used for :meth:`from_text` and :meth:`to_text`.
+
+            .. code-block:: python
+
+                '中文字(Na)\\u3000喔(T)' # Words segmented by \\u3000 (full-width space)
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    { 'word': '中文字', 'pos': 'Na', }, # word 1
+                    { 'word': '喔', 'pos': 'T', },     # word 2
+                ]
+
+        List format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    [ '中文字', 'Na', ],
+                    [ '喔', 'T', ],
+                ]
+    """
 
     item_class = WsWord
 
@@ -114,7 +170,52 @@ class WsSentence(_BaseSentence):
 ################################################################################################################################
 
 class WsSentenceList(_BaseList):
-    """A list of word-segmented sentences with POS-tags."""
+    """A list of word-segmented sentences with POS-tags.
+
+    .. admonition:: Data Structure Examples
+
+        Text format
+            Used for :meth:`from_text` and :meth:`to_text`.
+
+            .. code-block:: python
+
+                [
+                    '中文字(Na)\\u3000喔(T)', # Sentence 1
+                    '啊哈(I)\\u3000哈哈(D)',  # Sentence 2
+                ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    [ # Sentence 1
+                        { 'word': '中文字', 'pos': 'Na', },
+                        { 'word': '喔', 'pos': 'T', },
+                    ],
+                    [ # Sentence 2
+                        { 'word': '啊哈', 'pos': 'I', },
+                        { 'word': '哈哈', 'pos': 'D', },
+                    ],
+                ]
+
+        List format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    [ # Sentence 1
+                        [ '中文字', 'Na', ],
+                        [ '喔', 'T', ],
+                    ],
+                    [ # Sentence 2
+                        [ '啊哈', 'I', ],
+                        [ '哈哈', 'D', ],
+                    ],
+                ]
+    """
 
     item_class = WsSentence
 

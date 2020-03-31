@@ -13,4 +13,6 @@ from .text import *
 from .seg import *
 from .ws import *
 from .ner import *
-from .parse import *
+from .parsed import *
+
+from .parsed_tree import *

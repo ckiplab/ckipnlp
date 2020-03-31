@@ -30,12 +30,22 @@ class Base(metaclass=_ABCMeta):
     @classmethod
     @_abstractmethod
     def from_text(cls, data):
-        """Construct an instance from text format."""
+        """Construct an instance from text format.
+
+        Parameters
+        ----------
+            data : str
+        """
         return NotImplemented
 
     @_abstractmethod
     def to_text(self):
-        """Transform to plain text."""
+        """Transform to plain text.
+
+        Return
+        ------
+            str
+        """
         return NotImplemented
 
     ########################################################################################################################
@@ -96,12 +106,10 @@ class BaseTuple(Base, metaclass=_ABCMeta):
     @classmethod
     @_abstractmethod
     def from_text(cls, data):
-        """Construct an instance from text format."""
         return NotImplemented
 
     @_abstractmethod
     def to_text(self):
-        """Transform to plain text."""
         return NotImplemented
 
     ########################################################################################################################
@@ -183,7 +191,7 @@ class _BaseList(Base, _UserList):
 
         Parameters
         ----------
-            data : Sequence[Sequence[Container]]
+            data : Sequence[Container]
                 list of objects as ``item_class.from_dict`` input.
         """
         return cls(map(cls._item_from_dict, data))  # pylint: disable=no-member
@@ -193,7 +201,7 @@ class _BaseList(Base, _UserList):
 
         Return
         ------
-            List[List[Container]]
+            List[Container]
         """
         return list(map(self._item_to_dict, self))  # pylint: disable=no-member
 
@@ -205,7 +213,7 @@ class _BaseList(Base, _UserList):
 
         Parameters
         ----------
-            data : Sequence[Sequence[Container]]
+            data : Sequence[Container]
                 list of objects as ``item_class.from_list`` input.
         """
         return cls(map(cls._item_from_list, data))  # pylint: disable=no-member
@@ -215,7 +223,7 @@ class _BaseList(Base, _UserList):
 
         Return
         ------
-            List[List[Container]]
+            List[Container]
         """
         return list(map(self._item_to_list, self))  # pylint: disable=no-member
 
@@ -236,12 +244,6 @@ class _BaseSentence(_BaseList):
         return cls(map(cls._item_from_text, data.split('\u3000')))  # pylint: disable=no-member
 
     def to_text(self):
-        """Transform to plain text.
-
-        Return
-        ------
-            str
-        """
         return '\u3000'.join(map(self._item_to_text, self))  # pylint: disable=no-member
 
 ################################################################################################################################
@@ -303,13 +305,37 @@ class _InterfaceBuiltInItem:  # pylint: disable=too-few-public-methods
 ################################################################################################################################
 
 class BaseList(_BaseList, _InterfaceItem):
-    """The base CKIPNLP list."""
+    """The base CKIPNLP list.
+
+    .. py:attribute:: item_class
+        :value: Not Implemented
+
+        Must be a CKIPNLP container class.
+    """
 
 class BaseList0(_BaseList, _InterfaceBuiltInItem):
-    """The base CKIPNLP list with built-in item class."""
+    """The base CKIPNLP list with built-in item class.
+
+    .. py:attribute:: item_class
+        :value: Not Implemented
+
+        Must be a built-in type.
+    """
 
 class BaseSentence(_BaseSentence, _InterfaceItem):
-    """The base CKIPNLP sentence."""
+    """The base CKIPNLP sentence.
+
+    .. py:attribute:: item_class
+        :value: Not Implemented
+
+        Must be a CKIPNLP container class.
+    """
 
 class BaseSentence0(_BaseSentence, _InterfaceBuiltInItem):
-    """The base CKIPNLP sentence with built-in item class."""
+    """The base CKIPNLP sentence with built-in item class.
+
+    .. py:attribute:: item_class
+        :value: Not Implemented
+
+        Must be a built-in type.
+    """

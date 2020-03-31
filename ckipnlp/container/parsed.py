@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides containers for text sentences.
+This module provides containers for parsed sentences.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -15,8 +15,8 @@ from .base import (
 
 ################################################################################################################################
 
-class TextSentenceList(_BaseList0):
-    """A list of text sentence.
+class ParsedSentenceList(_BaseList0):
+    """A list of parsed sentence.
 
     .. admonition:: Data Structure Examples
 
@@ -27,8 +27,8 @@ class TextSentenceList(_BaseList0):
             .. code-block:: python
 
                 [
-                    '中文字喔', # Sentence 1
-                    '啊哈哈哈', # Sentence 2
+                    '#1:1.[0] S(Head:Nab:中文字|particle:Td:耶)#',                     # Sentence 1
+                    '#2:1.[0] %(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)#', # Sentence 2
                 ]
     """
 

@@ -17,7 +17,7 @@ class TestSegSentence(unittest.TestCase, _TestCaseBase):
 
     obj_class = SegSentence
 
-    text_in = '中文字　喔'
+    text_in = '中文字\u3000喔'
     dict_in = [ '中文字', '喔', ]
 
     def _assertEqual(self, obj):
@@ -31,7 +31,7 @@ class TestSegSentenceList(unittest.TestCase, _TestCaseBase):
 
     obj_class = SegSentenceList
 
-    text_in = [ '中文字　喔', '啊哈　哈哈', ]
+    text_in = [ '中文字\u3000喔', '啊哈\u3000哈哈', ]
 
     dict_in = [
         [ '中文字', '喔', ],

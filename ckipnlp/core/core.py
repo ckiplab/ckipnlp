@@ -27,6 +27,7 @@ class DriverType(_IntEnum):
 ################################################################################################################################
 
 class CkipWorkspace:  # pylint: disable=too-few-public-methods
+    """The workspace"""
 
     def __init__(self, *, text=None, seg=None, ws=None, ner=None, parsed=None):
         self.text = text
@@ -44,6 +45,7 @@ class CkipWorkspace:  # pylint: disable=too-few-public-methods
 ################################################################################################################################
 
 class CkipPipeline:  # pylint: disable=too-few-public-methods
+    """The pipeline"""
 
     def __init__(self, *, seg=None, pos=None, ner=None, parser=None):
         self._ws_driver = None

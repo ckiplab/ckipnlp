@@ -10,4 +10,5 @@ import logging as _logging
 ################################################################################################################################
 
 def get_logger():
+    """Get the CKIPNLP logger."""
     return _logging.getLogger('ckipnlp')

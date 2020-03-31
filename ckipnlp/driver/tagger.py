@@ -23,7 +23,7 @@ from .base import (
 ################################################################################################################################
 
 class CkipTaggerSeg(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP word segmentation driver with tagger backend."""
+    """The CKIP word segmentation driver with CkipTagger backend."""
 
     def __init__(self):
         super().__init__()
@@ -40,7 +40,7 @@ class CkipTaggerSeg(_BaseDriver):  # pylint: disable=too-few-public-methods
         return seg
 
 class CkipTaggerPos(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP part-of-speech tagging driver with tagger backend."""
+    """The CKIP part-of-speech tagging driver with CkipTagger backend."""
 
     def __init__(self):
         super().__init__()
@@ -57,7 +57,7 @@ class CkipTaggerPos(_BaseDriver):  # pylint: disable=too-few-public-methods
         return ws
 
 class CkipTaggerNer(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP named entity recognition driver with tagger backend."""
+    """The CKIP named entity recognition driver with CkipTagger backend."""
 
     def __init__(self):
         super().__init__()
