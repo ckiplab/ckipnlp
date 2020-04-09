@@ -6,10 +6,9 @@ __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 from ckipnlp.container import (
-    TextSentenceList as _TextSentenceList,
-    SegSentenceList as _SegSentenceList,
-    WsSentenceList as _WsSentenceList,
-    NerSentenceList as _NerSentenceList,
+    TextParagraph as _TextParagraph,
+    SegParagraph as _SegParagraph,
+    NerParagraph as _NerParagraph,
 )
 
 from ckipnlp.util.data import (
@@ -22,8 +21,8 @@ from .base import (
 
 ################################################################################################################################
 
-class CkipTaggerSeg(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP word segmentation driver with CkipTagger backend."""
+class CkipTaggerWordSegmenter(_BaseDriver):  # pylint: disable=too-few-public-methods
+    """The CKIP word-segmentation driver with CkipTagger backend."""
 
     def __init__(self):
         super().__init__()
@@ -32,14 +31,14 @@ class CkipTaggerSeg(_BaseDriver):  # pylint: disable=too-few-public-methods
         self._core = ckiptagger.WS(_get_tagger_data())
 
     def __call__(self, *, text):
-        assert isinstance(text, _TextSentenceList)
+        assert isinstance(text, _TextParagraph)
 
-        seg_list = self._core(text)
-        seg = _SegSentenceList.from_list(seg_list)
+        ws_list = self._core(text)
+        ws = _SegParagraph.from_list(ws_list)
 
-        return seg
+        return ws
 
-class CkipTaggerPos(_BaseDriver):  # pylint: disable=too-few-public-methods
+class CkipTaggerPosTagger(_BaseDriver):  # pylint: disable=too-few-public-methods
     """The CKIP part-of-speech tagging driver with CkipTagger backend."""
 
     def __init__(self):
@@ -48,16 +47,16 @@ class CkipTaggerPos(_BaseDriver):  # pylint: disable=too-few-public-methods
         import ckiptagger
         self._core = ckiptagger.POS(_get_tagger_data())
 
-    def __call__(self, *, seg):
-        assert isinstance(seg, _SegSentenceList)
+    def __call__(self, *, ws):
+        assert isinstance(ws, _SegParagraph)
 
-        pos_list = self._core(seg)
-        ws = _WsSentenceList.from_word_pos(seg, pos_list)
+        pos_list = self._core(ws)
+        pos = _SegParagraph.from_list(pos_list)
 
-        return ws
+        return pos
 
-class CkipTaggerNer(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP named entity recognition driver with CkipTagger backend."""
+class CkipTaggerNerChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
+    """The CKIP named-entity recognition driver with CkipTagger backend."""
 
     def __init__(self):
         super().__init__()
@@ -65,13 +64,11 @@ class CkipTaggerNer(_BaseDriver):  # pylint: disable=too-few-public-methods
         import ckiptagger
         self._core = ckiptagger.NER(_get_tagger_data())
 
-    def __call__(self, *, ws):
-        assert isinstance(ws, _WsSentenceList)
+    def __call__(self, *, ws, pos):
+        assert isinstance(ws, _SegParagraph)
+        assert isinstance(pos, _SegParagraph)
 
-        seg = ws.to_word()
-        pos = ws.to_pos()
-        ner_list = self._core(seg, pos)
-
-        ner = _NerSentenceList.from_tagger(ner_list)
+        ner_list = self._core(ws, pos)
+        ner = _NerParagraph.from_tagger(ner_list)
 
         return ner

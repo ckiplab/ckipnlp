@@ -34,6 +34,11 @@ class SegSentence(_BaseSentence0):
             .. code-block:: python
 
                 [ '中文字', '喔', ]
+
+    .. note::
+
+        This class is also used for part-of-speech tagging.
+
     """
 
     item_class = str
@@ -45,7 +50,7 @@ class SegSentence(_BaseSentence0):
     def to_text(self):
         return '\u3000'.join(map(self._item_to_text, self))
 
-class SegSentenceList(_BaseList):
+class SegParagraph(_BaseList):
     """A list of word-segmented sentences.
 
     .. admonition:: Data Structure Examples
@@ -69,6 +74,11 @@ class SegSentenceList(_BaseList):
                     [ '中文字', '喔', ], # Sentence 1
                     [ '啊哈', '哈哈', ], # Sentence 2
                 ]
+
+    .. note::
+
+        This class is also used for part-of-speech tagging.
+
     """
 
     item_class = SegSentence

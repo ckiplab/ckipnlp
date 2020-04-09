@@ -42,8 +42,8 @@ class Base(metaclass=_ABCMeta):
     def to_text(self):
         """Transform to plain text.
 
-        Return
-        ------
+        Returns
+        -------
             str
         """
         return NotImplemented
@@ -90,8 +90,8 @@ class Base(metaclass=_ABCMeta):
     def to_json(self, **kwargs):
         """Transform to JSON format.
 
-        Return
-        ------
+        Returns
+        -------
             str
         """
         return _json.dumps(self.to_dict(), **kwargs)
@@ -127,8 +127,8 @@ class BaseTuple(Base, metaclass=_ABCMeta):
     def to_dict(self):
         """Transform to python built-in containers.
 
-        Return
-        ------
+        Returns
+        -------
             dict
         """
         return self._asdict() # pylint: disable=no-member
@@ -148,8 +148,8 @@ class BaseTuple(Base, metaclass=_ABCMeta):
     def to_list(self):
         """Transform to python built-in containers.
 
-        Return
-        ------
+        Returns
+        -------
             list
         """
         return list(self)
@@ -177,8 +177,8 @@ class _BaseList(Base, _UserList):
     def to_text(self):
         """Transform to plain text.
 
-        Return
-        ------
+        Returns
+        -------
             List[str]
         """
         return list(map(self._item_to_text, self))  # pylint: disable=no-member
@@ -199,8 +199,8 @@ class _BaseList(Base, _UserList):
     def to_dict(self):
         """Transform to python built-in containers.
 
-        Return
-        ------
+        Returns
+        -------
             List[Container]
         """
         return list(map(self._item_to_dict, self))  # pylint: disable=no-member
@@ -221,8 +221,8 @@ class _BaseList(Base, _UserList):
     def to_list(self):
         """Transform to python built-in containers.
 
-        Return
-        ------
+        Returns
+        -------
             List[Container]
         """
         return list(map(self._item_to_list, self))  # pylint: disable=no-member

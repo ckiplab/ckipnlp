@@ -21,7 +21,7 @@ from ckipnlp.util.logger import (
     get_logger as _get_logger
 )
 
-_rootdirs = _AppDirs(appname='ckipnlp', appauthor='ckip')
+_ROOTDIRS = _AppDirs(appname='ckipnlp', appauthor='ckip')
 
 ################################################################################################################################
 
@@ -34,15 +34,15 @@ class _DataBase(metaclass=_ABCMeta):
 
     @classmethod
     def env_data_dir(cls):
-        return _os.getenv(cls.env)
+        return _os.getenv(cls.env)  # pylint: disable=invalid-envvar-value
 
     @classmethod
     def user_data_dir(cls):
-        return _os.path.join(_rootdirs.user_data_dir, cls.name)
+        return _os.path.join(_ROOTDIRS.user_data_dir, cls.name)
 
     @classmethod
     def site_data_dir(cls):
-        return _os.path.join(_rootdirs.user_data_dir, cls.name)
+        return _os.path.join(_ROOTDIRS.user_data_dir, cls.name)
 
     @classmethod
     def get_data(cls):
@@ -65,17 +65,17 @@ class _DataBase(metaclass=_ABCMeta):
 
         if _os.path.isdir(data_dir):
             _get_logger().warning(f'{data_dir} already exists!')
-            return
 
-        _os.makedirs(_os.path.dirname(data_dir), exist_ok=True)
-        if not copy:
-            _get_logger().debug(f'Linking CkipTagger data from {src_dir} to {data_dir} ...')
-            _os.symlink(src_dir, data_dir)
-            _get_logger().debug(f'Linking CkipTagger data from {src_dir} to {data_dir} ... done')
         else:
-            _get_logger().debug(f'Copying CkipTagger data from {src_dir} to {data_dir} ...')
-            _shutil.copytree(src_dir, data_dir)
-            _get_logger().debug(f'Copying CkipTagger data from {src_dir} to {data_dir} ... done')
+            _os.makedirs(_os.path.dirname(data_dir), exist_ok=True)
+            if not copy:
+                _get_logger().debug(f'Linking CkipTagger data from {src_dir} to {data_dir} ...')
+                _os.symlink(src_dir, data_dir)
+                _get_logger().debug(f'Linking CkipTagger data from {src_dir} to {data_dir} ... done')
+            else:
+                _get_logger().debug(f'Copying CkipTagger data from {src_dir} to {data_dir} ...')
+                _shutil.copytree(src_dir, data_dir)
+                _get_logger().debug(f'Copying CkipTagger data from {src_dir} to {data_dir} ... done')
 
         return data_dir
 
@@ -117,6 +117,7 @@ class TaggerData(_DataBase):
         _os.makedirs(data_dir, exist_ok=True)
         download_data_url(data_dir)
 
+# pylint: disable=invalid-name
 get_tagger_data = TaggerData.get_data            #: Get CkipTagger data directory.
 install_tagger_data = TaggerData.install_data    #: Link/Copy CkipTagger data directory.
 download_tagger_data = TaggerData.download_data  #: Download CkipTagger data directory.

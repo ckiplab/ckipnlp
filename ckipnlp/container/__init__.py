@@ -11,8 +11,8 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from .text import *
 from .seg import *
-from .ws import *
 from .ner import *
 from .parsed import *
 
+from .wspos import *
 from .parsed_tree import *

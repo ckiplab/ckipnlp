@@ -9,9 +9,21 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
+from enum import (
+    IntEnum as _IntEnum,
+    auto as _enum_auto,
+)
+
 from ckipnlp.util.logger import (
     get_logger as _get_logger
 )
+
+################################################################################################################################
+
+class DriverType(_IntEnum):
+    CLASSIC = _enum_auto()  #: CkipClassic Backend
+    TAGGER = _enum_auto()   #: CkipTagger Backend
+    NAIVE = _enum_auto()    #: Naive Backend
 
 ################################################################################################################################
 

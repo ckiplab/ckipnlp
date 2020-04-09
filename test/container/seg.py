@@ -27,9 +27,9 @@ class TestSegSentence(unittest.TestCase, _TestCaseBase):
 
 ################################################################################################################################
 
-class TestSegSentenceList(unittest.TestCase, _TestCaseBase):
+class TestSegParagraph(unittest.TestCase, _TestCaseBase):
 
-    obj_class = SegSentenceList
+    obj_class = SegParagraph
 
     text_in = [ '中文字\u3000喔', '啊哈\u3000哈哈', ]
 

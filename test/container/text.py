@@ -13,9 +13,9 @@ from ckipnlp.container.text import *
 
 ################################################################################################################################
 
-class TestTextSentenceList(unittest.TestCase, _TestCaseBase):
+class TestTextParagraph(unittest.TestCase, _TestCaseBase):
 
-    obj_class = TextSentenceList
+    obj_class = TextParagraph
 
     text_in = [ '中文字喔', '啊哈哈哈', ]
 

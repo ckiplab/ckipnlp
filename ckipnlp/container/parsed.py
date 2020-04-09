@@ -15,7 +15,7 @@ from .base import (
 
 ################################################################################################################################
 
-class ParsedSentenceList(_BaseList0):
+class ParsedParagraph(_BaseList0):
     """A list of parsed sentence.
 
     .. admonition:: Data Structure Examples
@@ -27,8 +27,8 @@ class ParsedSentenceList(_BaseList0):
             .. code-block:: python
 
                 [
-                    '#1:1.[0] S(Head:Nab:中文字|particle:Td:耶)#',                     # Sentence 1
-                    '#2:1.[0] %(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)#', # Sentence 2
+                    'S(Head:Nab:中文字|particle:Td:耶)',                     # Sentence 1
+                    '%(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)', # Sentence 2
                 ]
     """
 

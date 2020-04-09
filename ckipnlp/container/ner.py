@@ -157,7 +157,7 @@ class NerSentence(_BaseSentence):
 
 ################################################################################################################################
 
-class NerSentenceList(_BaseList):
+class NerParagraph(_BaseList):
     """A list of NER sentence.
 
     .. admonition:: Data Structure Examples

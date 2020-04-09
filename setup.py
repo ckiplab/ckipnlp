@@ -5,24 +5,7 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-import os
-import sys
-import warnings
-
-from distutils.version import StrictVersion
-import setuptools
-
-assert StrictVersion(setuptools.__version__) >= StrictVersion('40.0'), \
-    'Please update setuptools to 40.0+ using `pip install -U setuptools`.'
-
-################################################################################
-
 from setuptools import setup, find_namespace_packages
-from setuptools.extension import Extension
-from setuptools.command.install import install
-from setuptools.command.develop import develop
-from Cython.Build import cythonize
-
 import ckipnlp as about
 
 ################################################################################
@@ -54,7 +37,6 @@ def main():
             'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9',
             'Programming Language :: Python :: 3 :: Only',
-            'Programming Language :: Cython',
             'License :: Free for non-commercial use',
             'Operating System :: POSIX :: Linux',
             'Natural Language :: Chinese (Traditional)',
@@ -67,7 +49,7 @@ def main():
         ],
         extras_require={
             'classic': ['ckip-classic>=1.0'],
-            'tagger': ['ckiptagger>=0.1'],
+            'tagger': ['ckiptagger>=0.1.1'],
         },
         data_files=[],
     )

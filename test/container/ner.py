@@ -80,9 +80,9 @@ class TestNerSentence(unittest.TestCase, _TestCaseBase):
 
 ################################################################################################################################
 
-class TestNerSentenceList(unittest.TestCase, _TestCaseBase):
+class TestNerParagraph(unittest.TestCase, _TestCaseBase):
 
-    obj_class = NerSentenceList
+    obj_class = NerParagraph
 
     test_io_text = NotImplemented
 

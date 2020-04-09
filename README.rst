@@ -81,7 +81,7 @@ Requirements
 * `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
 
 * `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
-* `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1+ [Optional]
+* `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional]
 
 Usage
 =====

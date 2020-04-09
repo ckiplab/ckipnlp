@@ -351,8 +351,8 @@ class ParsedTree(_Base, _Tree):
             node_id : int
                 Output the plain text format for the subtree under **node_id**.
 
-        Return
-        ------
+        Returns
+        --------
             str
         """
         node = self[node_id]
@@ -397,8 +397,8 @@ class ParsedTree(_Base, _Tree):
             node_id : int
                 Output the plain text format for the subtree under **node_id**.
 
-        Return
-        ------
+        Returns
+        -------
             str
         """
         tree_dict = self[node_id].to_dict()

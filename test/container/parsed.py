@@ -13,9 +13,9 @@ from ckipnlp.container.parsed import *
 
 ################################################################################################################################
 
-class TestParsedSentenceList(unittest.TestCase, _TestCaseBase):
+class TestParsedParagraph(unittest.TestCase, _TestCaseBase):
 
-    obj_class = ParsedSentenceList
+    obj_class = ParsedParagraph
 
     text_in = [
         '#1:1.[0] S(Head:Nab:中文字|particle:Td:耶)#',

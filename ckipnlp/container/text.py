@@ -15,7 +15,7 @@ from .base import (
 
 ################################################################################################################################
 
-class TextSentenceList(_BaseList0):
+class TextParagraph(_BaseList0):
     """A list of text sentence.
 
     .. admonition:: Data Structure Examples
