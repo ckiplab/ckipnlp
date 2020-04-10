@@ -14,21 +14,33 @@ from ckipnlp.container import (
 
 from .base import (
     BaseDriver as _BaseDriver,
+    DriverType as _DriverType,
+    DriverKind as _DriverKind,
 )
 
 ################################################################################################################################
 
-class CkipClassicWordSegmenter(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP word-segmentation driver with CkipClassic backend."""
+class CkipClassicWordSegmenter(_BaseDriver,  # pylint: disable=too-few-public-methods
+    driver_type=_DriverType.WORD_SEGMENTER,
+    driver_kind=_DriverKind.CLASSIC,
+):
+    """The CKIP word segmentation driver with CkipClassic backend."""
 
-    def __init__(self, *, do_pos=False):
-        super().__init__()
+    _count = 0
+
+    def __init__(self, *, do_pos=False, init=True):
+        super().__init__(init=init)
+        self._do_pos = do_pos
+
+    def _init(self):
+        if self.__class__._count >= 1:
+            raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
+        self.__class__._count += 1
 
         import ckip_classic.ws
         self._core = ckip_classic.ws.CkipWs()
-        self._do_pos = do_pos
 
-    def __call__(self, *, text):
+    def _call(self, *, text):
         assert isinstance(text, _TextParagraph)
 
         wspos_text = self._core.apply_list(text.to_text())
@@ -36,16 +48,25 @@ class CkipClassicWordSegmenter(_BaseDriver):  # pylint: disable=too-few-public-m
 
         return ws, pos if self._do_pos else ws
 
-class CkipClassicSentenceParser(_BaseDriver):  # pylint: disable=too-few-public-methods
+class CkipClassicSentenceParser(_BaseDriver,  # pylint: disable=too-few-public-methods
+    driver_type=_DriverType.SENTENCE_PARSER,
+    driver_kind=_DriverKind.CLASSIC,
+):
     """The CKIP sentence parsing driver with CkipClassic backend."""
 
-    def __init__(self):
-        super().__init__()
+    _count = 0
+
+    def _init(self):
+        super()._init()
+
+        if self.__class__._count >= 1:
+            raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
+        self.__class__._count += 1
 
         import ckip_classic.parser
         self._core = ckip_classic.parser.CkipParser(do_ws=False)
 
-    def __call__(self, *, ws, pos):
+    def _call(self, *, ws, pos):
         assert isinstance(ws, _SegParagraph)
         assert isinstance(pos, _SegParagraph)
 

@@ -9,26 +9,121 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
+from abc import (
+    ABCMeta as _ABCMeta,
+    abstractmethod as _abstractmethod,
+)
+
+from collections import (
+    UserDict as _UserDict,
+)
+
 from enum import (
     IntEnum as _IntEnum,
     auto as _enum_auto,
 )
 
 from ckipnlp.util.logger import (
-    get_logger as _get_logger
+    get_logger as _get_logger,
 )
 
 ################################################################################################################################
 
 class DriverType(_IntEnum):
+    SENTENCE_SEGMENTER = _enum_auto()  #: Sentence segmentation
+    WORD_SEGMENTER     = _enum_auto()  #: Word segmentation
+    POS_TAGGER         = _enum_auto()  #: Part-of-speech tagging
+    SENTENCE_PARSER    = _enum_auto()  #: Sentence parsing
+    NER_CHUNKER        = _enum_auto()  #: Named-entity recognition
+    COREF_CHUNKER      = _enum_auto()  #: Co-reference
+
+class DriverKind(_IntEnum):
+    BUILTIN = _enum_auto()  #: Built-in Implementation
     CLASSIC = _enum_auto()  #: CkipClassic Backend
     TAGGER = _enum_auto()   #: CkipTagger Backend
-    NAIVE = _enum_auto()    #: Naive Backend
 
 ################################################################################################################################
 
-class BaseDriver:  # pylint: disable=too-few-public-methods
+_DRIVERS = {}
+
+class BaseDriver(metaclass=_ABCMeta):  # pylint: disable=too-few-public-methods
     """The base CKIPNLP driver."""
 
-    def __init__(self):
+    is_dummy = False
+
+    def __init__(self, *, init=True):
+        self._core = None
+        self._inited = False
+
+        if init:
+            self.init()
+
+    def init(self):
+        if self._inited:
+            return
         _get_logger().info(f'Initializing {self.__class__.__name__} ...')
+        self._init()
+        self._inited = True
+
+    def __call__(self, *args, **kwargs):
+        self.init()
+        return self._call(*args, **kwargs)
+
+    @_abstractmethod
+    def _init(self):
+        return NotImplemented
+
+    @_abstractmethod
+    def _call(self):
+        return NotImplemented
+
+    ########################################################################################################################
+
+    def __init_subclass__(cls, *, driver_type, driver_kind, **kwargs):
+        super().__init_subclass__(**kwargs)
+
+        if driver_type:
+            assert isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
+
+        if driver_kind:
+            assert isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
+
+        key = (driver_type, driver_kind,)
+        assert key not in _DRIVERS, f'{key} already registered!'
+        _DRIVERS[key] = cls
+
+    @staticmethod
+    def get(driver_type, driver_kind):
+        if driver_kind is None:
+            return DummyDriver
+
+        if driver_type:
+            assert isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
+
+        if driver_kind:
+            assert isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
+
+        driver = _DRIVERS.get((driver_type, driver_kind,))
+        if not driver:
+            raise KeyError(f'{driver_type.name} is not implemented for type {driver_kind.name}')
+        if not driver.is_dummy:
+            _get_logger().debug(f'Using {driver.__name__} ...')
+
+        return driver
+
+################################################################################################################################
+
+class DummyDriver(BaseDriver, driver_type=None, driver_kind=None):  # pylint: disable=too-few-public-methods
+    """The dummy driver."""
+
+    is_dummy = True
+
+    def __init__(self, *, init=True):
+        super().__init__(init=init)
+        self._inited = True
+
+    def _init(self):
+        pass
+
+    def _call(self):
+        raise NotImplementedError

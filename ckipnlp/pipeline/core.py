@@ -5,19 +5,23 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-from ckipnlp.driver import (
-    DriverType as _DriverType,
-    CkipClassicWordSegmenter as _CkipClassicWordSegmenter,
-    CkipClassicSentenceParser as _CkipClassicSentenceParser,
-    CkipTaggerWordSegmenter as _CkipTaggerWordSegmenter,
-    CkipTaggerPosTagger as _CkipTaggerPosTagger,
-    CkipTaggerNerChunker as _CkipTaggerNerChunker,
-    CkipNaiveSentenceSegmenter as _CkipNaiveSentenceSegmenter,
+from collections.abc import (
+    Mapping as _Mapping,
 )
 
-################################################################################################################################
+from functools import (
+    partial as _partial,
+)
 
-class CkipCoreDocument:  # pylint: disable=too-few-public-methods
+from ckipnlp.driver.base import (
+    DriverType as _DriverType,
+    DriverKind as _DriverKind,
+    BaseDriver as _BaseDriver,
+)
+
+###############################################################################################################################)
+
+class CkipDocument(_Mapping):
     """The core document.
 
     Attributes
@@ -36,6 +40,8 @@ class CkipCoreDocument:  # pylint: disable=too-few-public-methods
             :class:`ParsedParagraph` – The parsed-sentences.
     """
 
+    __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'parsed',)
+
     def __init__(self, *, raw=None, text=None, ws=None, pos=None, ner=None, parsed=None):
         self.raw = raw
         self.text = text
@@ -46,90 +52,60 @@ class CkipCoreDocument:  # pylint: disable=too-few-public-methods
 
         self._wspos = None
 
+    def __len__(self):
+        return len(self.__keys)
+
+    def __iter__(self):
+        yield from self.__keys
+
+    def __getitem__(self, key):
+        return getattr(self, key)
+
 ################################################################################################################################
 
-class CkipCorePipeline:  # pylint: disable=too-few-public-methods
+class CkipPipeline:
     """The core pipeline.
 
     Arguments
     ---------
-        sentence_segmenter_type : :class:`DriverType`
-            The type of sentence-segmenter. (`DriverType.NAIVE`)
+        sentence_segmenter_kind : :class:`DriverKind`
+            The type of sentence segmenter.
 
-        word_segmenter_type : :class:`DriverType`
-            The type of word-segmenter. (`DriverType.TAGGER`, `DriverType.CLASSIC`)
+        word_segmenter_kind : :class:`DriverKind`
+            The type of word segmenter.
 
-        pos_tagger_type : :class:`DriverType`
-            The type of part-of-speech tagger. (`DriverType.TAGGER`, `DriverType.CLASSIC`)
+        pos_tagger_kind : :class:`DriverKind`
+            The type of part-of-speech tagger.
 
-        ner_chunker_type : :class:`DriverType`
-            The type of named-entity recognition chunker. (`DriverType.TAGGER`)
+        sentence_parser_kind : :class:`DriverKind`
+            The type of sentence parser.
 
-        sentence_parser_type : :class:`DriverType`
-            The type of named-entity recognition chunker. (`DriverType.CLASSIC`)
-
+        ner_chunker_kind : :class:`DriverKind`
+            The type of named-entity recognition chunker.
     """
 
     def __init__(self, *,
-            sentence_segmenter_type=None,
-            word_segmenter_type=None,
-            pos_tagger_type=None,
-            ner_chunker_type=None,
-            sentence_parser_type=None,
+            sentence_segmenter_kind=_DriverKind.BUILTIN,
+            word_segmenter_kind=_DriverKind.TAGGER,
+            pos_tagger_kind=_DriverKind.TAGGER,
+            sentence_parser_kind=_DriverKind.CLASSIC,
+            ner_chunker_kind=_DriverKind.TAGGER,
+            init=False,
         ):
 
-        self._sentence_segmenter = None
-        self._word_segmenter = None
-        self._pos_tagger = None
-        self._wspos_driver = None
-        self._ner_chunker = None
-        self._sentence_parser = None
-
-        # Punctuation
-        if sentence_segmenter_type is None:
-            pass
-        elif sentence_segmenter_type is _DriverType.NAIVE:
-            self._sentence_segmenter = _CkipNaiveSentenceSegmenter()
+        # WS & POS
+        if word_segmenter_kind == _DriverKind.CLASSIC and pos_tagger_kind == _DriverKind.CLASSIC:
+            self._wspos_driver = _BaseDriver.get(_DriverType.WORD_SEGMENTER, _DriverKind.CLASSIC)(do_pos=True, init=init)
+            word_segmenter_kind = None
+            pos_tagger_kind = None
         else:
-            raise KeyError(f'Sentence segmentation is not implemented for type {sentence_segmenter_type.name}')
+            self._wspos_driver = _BaseDriver.get(None, None)(init=init)
 
-        # WS
-        if word_segmenter_type is None:
-            pass
-        elif word_segmenter_type == _DriverType.TAGGER:
-            self._word_segmenter = _CkipTaggerWordSegmenter()
-        elif word_segmenter_type == _DriverType.CLASSIC:
-            if pos_tagger_type == _DriverType.CLASSIC:
-                self._wspos_driver = _CkipClassicWordSegmenter(do_pos=True)
-                pos_tagger_type = None
-            else:
-                self._word_segmenter = _CkipClassicWordSegmenter()
-        else:
-            raise KeyError(f'Word segmentation is not implemented for type {word_segmenter_type.name}')
-
-        # POS
-        if pos_tagger_type is None:
-            pass
-        elif pos_tagger_type == _DriverType.TAGGER:
-            self._pos_tagger = _CkipTaggerPosTagger()
-        else:
-            raise KeyError(f'Part-of-speech tagging is not implemented for type {pos_tagger_type.name}')
-
-        # NER
-        if ner_chunker_type is None:
-            pass
-        elif ner_chunker_type == _DriverType.TAGGER:
-            self._ner_chunker = _CkipTaggerNerChunker()
-        else:
-            raise KeyError(f'Named entity recognition is not implemented for type {ner_chunker_type.name}')
-
-        # Parser
-        if sentence_parser_type is None:
-            pass
-        elif sentence_parser_type == _DriverType.CLASSIC:
-            self._sentence_parser = _CkipClassicSentenceParser()
-        else:
-            raise KeyError(f'Sentence parsing is not implemented for type {sentence_parser_type.name}')
+        self._sentence_segmenter = _BaseDriver.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter_kind)(init=init)
+        self._word_segmenter = _BaseDriver.get(_DriverType.WORD_SEGMENTER, word_segmenter_kind)(init=init)
+        self._pos_tagger = _BaseDriver.get(_DriverType.POS_TAGGER, pos_tagger_kind)(init=init)
+        self._sentence_parser = _BaseDriver.get(_DriverType.SENTENCE_PARSER, sentence_parser_kind)(init=init)
+        self._ner_chunker = _BaseDriver.get(_DriverType.NER_CHUNKER, ner_chunker_kind)(init=init)
 
     ########################################################################################################################
 
@@ -152,12 +128,12 @@ class CkipCorePipeline:  # pylint: disable=too-few-public-methods
 
     ########################################################################################################################
 
-    def sentence_segment(self, doc):
+    def get_text(self, doc):
         """Apply sentence segmentation.
 
         Arguments
         ---------
-            doc : :class:`CkipCoreDocument`
+            doc : :class:`CkipDocument`
                 The input document.
 
         Returns
@@ -171,24 +147,24 @@ class CkipCorePipeline:  # pylint: disable=too-few-public-methods
         """
         if doc.text is None:
 
-            if self._sentence_segmenter is not None:
+            if not self._sentence_segmenter.is_dummy:
                 doc.text = self._sentence_segmenter(
                     raw=self._get_raw(doc)
                 )
 
             else:
-                raise AttributeError('No sentence-segmentation driver / No valid text input!')
+                raise AttributeError('No sentence segmentation driver / No valid text input!')
 
         return doc.text
 
     ########################################################################################################################
 
-    def word_segment(self, doc):
+    def get_ws(self, doc):
         """Apply word segmentation.
 
         Arguments
         ---------
-            doc : :class:`CkipCoreDocument`
+            doc : :class:`CkipDocument`
                 The input document.
 
         Returns
@@ -202,27 +178,27 @@ class CkipCorePipeline:  # pylint: disable=too-few-public-methods
         """
         if doc.ws is None:
 
-            if self._word_segmenter is not None:
+            if not self._word_segmenter.is_dummy:
                 doc.ws = self._word_segmenter(
-                    text=self.sentence_segment(doc)
+                    text=self.get_text(doc)
                 )
 
-            elif self._wspos_driver is not None:
+            elif not self._wspos_driver.is_dummy:
                 doc.ws, _ = self._get_wspos(doc)
 
             else:
-                raise AttributeError('No word-segmentation driver / No valid word-segmentation input!')
+                raise AttributeError('No word segmentation driver / No valid word segmentation input!')
 
         return doc.ws
 
     ########################################################################################################################
 
-    def pos_tag(self, doc):
+    def get_pos(self, doc):
         """Apply part-of-speech tagging.
 
         Arguments
         ---------
-            doc : :class:`CkipCoreDocument`
+            doc : :class:`CkipDocument`
                 The input document.
 
         Returns
@@ -236,12 +212,12 @@ class CkipCorePipeline:  # pylint: disable=too-few-public-methods
         """
         if doc.pos is None:
 
-            if self._pos_tagger is not None:
+            if not self._pos_tagger.is_dummy:
                 doc.pos = self._pos_tagger(
-                    ws=self.word_segment(doc)
+                    ws=self.get_ws(doc)
                 )
 
-            elif self._wspos_driver is not None:
+            elif not self._wspos_driver.is_dummy:
                 _, doc.pos = self._get_wspos(doc)
 
             else:
@@ -251,12 +227,12 @@ class CkipCorePipeline:  # pylint: disable=too-few-public-methods
 
     ########################################################################################################################
 
-    def ner_chunk(self, doc):
+    def get_ner(self, doc):
         """Apply named-entity recognition.
 
         Arguments
         ---------
-            doc : :class:`CkipCoreDocument`
+            doc : :class:`CkipDocument`
                 The input document.
 
         Returns
@@ -270,10 +246,10 @@ class CkipCorePipeline:  # pylint: disable=too-few-public-methods
         """
         if doc.ner is None:
 
-            if self._ner_chunker is not None:
+            if not self._ner_chunker.is_dummy:
                 doc.ner = self._ner_chunker(
-                    ws=self.word_segment(doc),
-                    pos=self.pos_tag(doc),
+                    ws=self.get_ws(doc),
+                    pos=self.get_pos(doc),
                 )
 
             else:
@@ -283,12 +259,12 @@ class CkipCorePipeline:  # pylint: disable=too-few-public-methods
 
     ########################################################################################################################
 
-    def sentence_parse(self, doc):
+    def get_parsed(self, doc):
         """Apply sentence parsing.
 
         Arguments
         ---------
-            doc : :class:`CkipCoreDocument`
+            doc : :class:`CkipDocument`
                 The input document.
 
         Returns
@@ -302,10 +278,10 @@ class CkipCorePipeline:  # pylint: disable=too-few-public-methods
         """
         if doc.parsed is None:
 
-            if self._sentence_parser is not None:
+            if not self._sentence_parser.is_dummy:
                 doc.parsed = self._sentence_parser(
-                    ws=self.word_segment(doc),
-                    pos=self.pos_tag(doc),
+                    ws=self.get_ws(doc),
+                    pos=self.get_pos(doc),
                 )
 
             else:

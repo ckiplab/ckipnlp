@@ -16,21 +16,26 @@ from ckipnlp.util.data import (
 )
 
 from .base import (
-    BaseDriver as _BaseDriver
+    BaseDriver as _BaseDriver,
+    DriverType as _DriverType,
+    DriverKind as _DriverKind,
 )
 
 ################################################################################################################################
 
-class CkipTaggerWordSegmenter(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP word-segmentation driver with CkipTagger backend."""
+class CkipTaggerWordSegmenter(_BaseDriver,  # pylint: disable=too-few-public-methods
+    driver_type=_DriverType.WORD_SEGMENTER,
+    driver_kind=_DriverKind.TAGGER,
+):
+    """The CKIP word segmentation driver with CkipTagger backend."""
 
-    def __init__(self):
-        super().__init__()
+    def _init(self):
+        super()._init()
 
         import ckiptagger
         self._core = ckiptagger.WS(_get_tagger_data())
 
-    def __call__(self, *, text):
+    def _call(self, *, text):
         assert isinstance(text, _TextParagraph)
 
         ws_list = self._core(text)
@@ -38,16 +43,19 @@ class CkipTaggerWordSegmenter(_BaseDriver):  # pylint: disable=too-few-public-me
 
         return ws
 
-class CkipTaggerPosTagger(_BaseDriver):  # pylint: disable=too-few-public-methods
+class CkipTaggerPosTagger(_BaseDriver,  # pylint: disable=too-few-public-methods
+    driver_type=_DriverType.POS_TAGGER,
+    driver_kind=_DriverKind.TAGGER,
+):
     """The CKIP part-of-speech tagging driver with CkipTagger backend."""
 
-    def __init__(self):
-        super().__init__()
+    def _init(self):
+        super()._init()
 
         import ckiptagger
         self._core = ckiptagger.POS(_get_tagger_data())
 
-    def __call__(self, *, ws):
+    def _call(self, *, ws):
         assert isinstance(ws, _SegParagraph)
 
         pos_list = self._core(ws)
@@ -55,16 +63,19 @@ class CkipTaggerPosTagger(_BaseDriver):  # pylint: disable=too-few-public-method
 
         return pos
 
-class CkipTaggerNerChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
+class CkipTaggerNerChunker(_BaseDriver,  # pylint: disable=too-few-public-methods
+    driver_type=_DriverType.NER_CHUNKER,
+    driver_kind=_DriverKind.TAGGER,
+):
     """The CKIP named-entity recognition driver with CkipTagger backend."""
 
-    def __init__(self):
-        super().__init__()
+    def _init(self):
+        super()._init()
 
         import ckiptagger
         self._core = ckiptagger.NER(_get_tagger_data())
 
-    def __call__(self, *, ws, pos):
+    def _call(self, *, ws, pos):
         assert isinstance(ws, _SegParagraph)
         assert isinstance(pos, _SegParagraph)
 

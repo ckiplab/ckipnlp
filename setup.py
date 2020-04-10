@@ -45,6 +45,7 @@ def main():
         packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*',]),
         install_requires=[
             'appdirs>=1.4.3',
+            'numpy>=1.18',
             'treelib>=1.5.5',
         ],
         extras_require={

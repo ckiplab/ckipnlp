@@ -11,6 +11,7 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from .base import (
     DriverType,
+    DriverKind,
 )
 
 from .classic import (
@@ -24,6 +25,10 @@ from .tagger import (
     CkipTaggerNerChunker,
 )
 
-from .naive import (
-    CkipNaiveSentenceSegmenter,
+from .ss import (
+    CkipSentenceSegmenter,
+)
+
+from .coref import (
+    CkipCorefChunker,
 )

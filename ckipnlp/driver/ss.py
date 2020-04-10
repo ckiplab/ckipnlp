@@ -12,28 +12,40 @@ from ckipnlp.container import (
 )
 
 from .base import (
-    BaseDriver as _BaseDriver
+    BaseDriver as _BaseDriver,
+    DriverType as _DriverType,
+    DriverKind as _DriverKind,
 )
 
 ################################################################################################################################
 
-class CkipNaiveSentenceSegmenter(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP sentence-segmentation driver.
+class CkipSentenceSegmenter(_BaseDriver,  # pylint: disable=too-few-public-methods
+    driver_type=_DriverType.SENTENCE_SEGMENTER,
+    driver_kind=_DriverKind.BUILTIN,
+):
+    """The CKIP sentence segmentation driver."""
 
-    Do sentence-segmentation based on punctuations.
-
-    """
-
-    def __init__(self, *, delims=',，。!！?？:：;；\n'):
-        super().__init__()
+    def __init__(self, *, delims=',，。!！?？:：;；\n', init=True):
+        super().__init__(init=init)
 
         self.delims = delims
 
-    def __call__(self, *, raw, keep_delim=False):
+    def _init(self):
+        pass
+
+    def _call(self, *, raw, keep_all=False):
         assert isinstance(raw, str)
 
-        if not keep_delim:
-            text = _re.split(rf'[{self.delims}]+', raw)
+        if not keep_all:
+            # Replace spaces
+            text = _re.sub(rf'[^\S{self.delims}]', '', raw)
+
+            # Segment
+            text = _re.split(rf'[{self.delims}]+', text)
+
+            # Remove empty lines
+            text = filter(None, text)
+
         else:
             text = _re.split(rf'([{self.delims}]+)', raw)
             if text[-1] == '':

@@ -7,11 +7,12 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from ..driver.base import (
     DriverType,
+    DriverKind,
 )
 
 from .core import (
-    CkipCorePipeline,
-    CkipCoreDocument,
+    CkipPipeline,
+    CkipDocument,
 )
 
 from .coref import (
