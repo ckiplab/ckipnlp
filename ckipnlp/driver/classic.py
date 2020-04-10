@@ -20,22 +20,22 @@ from .base import (
 
 ################################################################################################################################
 
-class CkipClassicWordSegmenter(_BaseDriver,  # pylint: disable=too-few-public-methods
-    driver_type=_DriverType.WORD_SEGMENTER,
-    driver_kind=_DriverKind.CLASSIC,
-):
+class CkipClassicWordSegmenter(_BaseDriver):
     """The CKIP word segmentation driver with CkipClassic backend."""
+
+    driver_type = _DriverType.WORD_SEGMENTER
+    driver_kind = _DriverKind.CLASSIC
 
     _count = 0
 
-    def __init__(self, *, do_pos=False, init=True):
-        super().__init__(init=init)
+    def __init__(self, *, do_pos=False, lazy=False):
+        super().__init__(lazy=lazy)
         self._do_pos = do_pos
 
     def _init(self):
-        if self.__class__._count >= 1:
+        self.__class__._count += 1  # pylint: disable=protected-access
+        if self.__class__._count > 1:  # pylint: disable=protected-access
             raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
-        self.__class__._count += 1
 
         import ckip_classic.ws
         self._core = ckip_classic.ws.CkipWs()
@@ -48,20 +48,18 @@ class CkipClassicWordSegmenter(_BaseDriver,  # pylint: disable=too-few-public-me
 
         return ws, pos if self._do_pos else ws
 
-class CkipClassicSentenceParser(_BaseDriver,  # pylint: disable=too-few-public-methods
-    driver_type=_DriverType.SENTENCE_PARSER,
-    driver_kind=_DriverKind.CLASSIC,
-):
+class CkipClassicSentenceParser(_BaseDriver):
     """The CKIP sentence parsing driver with CkipClassic backend."""
+
+    driver_type = _DriverType.SENTENCE_PARSER
+    driver_kind = _DriverKind.CLASSIC
 
     _count = 0
 
     def _init(self):
-        super()._init()
-
-        if self.__class__._count >= 1:
+        self.__class__._count += 1  # pylint: disable=protected-access
+        if self.__class__._count > 1:  # pylint: disable=protected-access
             raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
-        self.__class__._count += 1
 
         import ckip_classic.parser
         self._core = ckip_classic.parser.CkipParser(do_ws=False)
@@ -70,8 +68,8 @@ class CkipClassicSentenceParser(_BaseDriver,  # pylint: disable=too-few-public-m
         assert isinstance(ws, _SegParagraph)
         assert isinstance(pos, _SegParagraph)
 
-        ws_text = _WsPosParagraph.to_text(ws, pos)
-        parsed_text = self._core.apply_list(ws_text)
+        wspos_text = _WsPosParagraph.to_text(ws, pos)
+        parsed_text = self._core.apply_list(wspos_text)
         parsed = _ParsedParagraph.from_text(parsed_text)
 
         return parsed

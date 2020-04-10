@@ -14,10 +14,6 @@ from abc import (
     abstractmethod as _abstractmethod,
 )
 
-from collections import (
-    UserDict as _UserDict,
-)
-
 from enum import (
     IntEnum as _IntEnum,
     auto as _enum_auto,
@@ -31,11 +27,11 @@ from ckipnlp.util.logger import (
 
 class DriverType(_IntEnum):
     SENTENCE_SEGMENTER = _enum_auto()  #: Sentence segmentation
-    WORD_SEGMENTER     = _enum_auto()  #: Word segmentation
-    POS_TAGGER         = _enum_auto()  #: Part-of-speech tagging
-    SENTENCE_PARSER    = _enum_auto()  #: Sentence parsing
-    NER_CHUNKER        = _enum_auto()  #: Named-entity recognition
-    COREF_CHUNKER      = _enum_auto()  #: Co-reference
+    WORD_SEGMENTER = _enum_auto()      #: Word segmentation
+    POS_TAGGER = _enum_auto()          #: Part-of-speech tagging
+    SENTENCE_PARSER = _enum_auto()     #: Sentence parsing
+    NER_CHUNKER = _enum_auto()         #: Named-entity recognition
+    COREF_CHUNKER = _enum_auto()       #: Co-reference
 
 class DriverKind(_IntEnum):
     BUILTIN = _enum_auto()  #: Built-in Implementation
@@ -44,18 +40,38 @@ class DriverKind(_IntEnum):
 
 ################################################################################################################################
 
-_DRIVERS = {}
+class DriverRegester:
 
-class BaseDriver(metaclass=_ABCMeta):  # pylint: disable=too-few-public-methods
+    _DRIVERS = {}
+
+    @staticmethod
+    def get(driver_type, driver_kind):
+        if driver_kind is None:
+            return DummyDriver
+
+        assert driver_type is None or isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
+        assert driver_kind is None or isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
+
+        driver = DriverRegester._DRIVERS.get((driver_type, driver_kind,))
+        if not driver:
+            raise KeyError(f'{driver_type.name} is not implemented for type {driver_kind.name}')
+        if not driver.is_dummy:
+            _get_logger().debug(f'Using {driver.__name__} ...')
+
+        return driver
+
+################################################################################################################################
+
+class BaseDriver(metaclass=_ABCMeta):
     """The base CKIPNLP driver."""
 
     is_dummy = False
 
-    def __init__(self, *, init=True):
+    def __init__(self, *, lazy=False):
         self._core = None
         self._inited = False
 
-        if init:
+        if not lazy:
             self.init()
 
     def init(self):
@@ -69,6 +85,16 @@ class BaseDriver(metaclass=_ABCMeta):  # pylint: disable=too-few-public-methods
         self.init()
         return self._call(*args, **kwargs)
 
+    ########################################################################################################################
+
+    @_abstractmethod
+    def driver_type(self):
+        return NotImplemented
+
+    @_abstractmethod
+    def driver_kind(self):
+        return NotImplemented
+
     @_abstractmethod
     def _init(self):
         return NotImplemented
@@ -79,47 +105,30 @@ class BaseDriver(metaclass=_ABCMeta):  # pylint: disable=too-few-public-methods
 
     ########################################################################################################################
 
-    def __init_subclass__(cls, *, driver_type, driver_kind, **kwargs):
+    def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
 
-        if driver_type:
-            assert isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
+        driver_type = cls.driver_type
+        driver_kind = cls.driver_kind
 
-        if driver_kind:
-            assert isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
+        assert driver_type is None or isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
+        assert driver_kind is None or isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
 
         key = (driver_type, driver_kind,)
-        assert key not in _DRIVERS, f'{key} already registered!'
-        _DRIVERS[key] = cls
-
-    @staticmethod
-    def get(driver_type, driver_kind):
-        if driver_kind is None:
-            return DummyDriver
-
-        if driver_type:
-            assert isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
-
-        if driver_kind:
-            assert isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
-
-        driver = _DRIVERS.get((driver_type, driver_kind,))
-        if not driver:
-            raise KeyError(f'{driver_type.name} is not implemented for type {driver_kind.name}')
-        if not driver.is_dummy:
-            _get_logger().debug(f'Using {driver.__name__} ...')
-
-        return driver
+        assert key not in DriverRegester._DRIVERS, f'{key} already registered!'  # pylint: disable=protected-access
+        DriverRegester._DRIVERS[key] = cls  # pylint: disable=protected-access
 
 ################################################################################################################################
 
-class DummyDriver(BaseDriver, driver_type=None, driver_kind=None):  # pylint: disable=too-few-public-methods
+class DummyDriver(BaseDriver):
     """The dummy driver."""
 
+    driver_type = None
+    driver_kind = None
     is_dummy = True
 
-    def __init__(self, *, init=True):
-        super().__init__(init=init)
+    def __init__(self, *, lazy=False):
+        super().__init__(lazy=lazy)
         self._inited = True
 
     def _init(self):

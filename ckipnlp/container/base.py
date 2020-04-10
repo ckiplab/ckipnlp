@@ -248,7 +248,7 @@ class _BaseSentence(_BaseList):
 
 ################################################################################################################################
 
-class _InterfaceItem:  # pylint: disable=too-few-public-methods
+class _InterfaceItem:
     """Container has ckipnlp item class."""
 
     @classmethod
@@ -277,7 +277,7 @@ class _InterfaceItem:  # pylint: disable=too-few-public-methods
 
 ################################################################################################################################
 
-class _InterfaceBuiltInItem:  # pylint: disable=too-few-public-methods
+class _InterfaceBuiltInItem:
     @classmethod
     def _item_from_text(cls, data):
         return data

@@ -5,6 +5,8 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
+# pylint: disable=too-many-lines
+
 SUBJECT_ROLES = ['agent', 'causer', 'experiencer']
 OBJECT_ROLES = ['benefactor', 'companion', 'comparison', 'goal', 'range', 'source', 'target']
 NEUTRAL_ROLES = ['theme', 'topic']

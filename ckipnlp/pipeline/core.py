@@ -9,14 +9,10 @@ from collections.abc import (
     Mapping as _Mapping,
 )
 
-from functools import (
-    partial as _partial,
-)
-
 from ckipnlp.driver.base import (
     DriverType as _DriverType,
     DriverKind as _DriverKind,
-    BaseDriver as _BaseDriver,
+    DriverRegester as _DriverRegester,
 )
 
 ###############################################################################################################################)
@@ -29,15 +25,15 @@ class CkipDocument(_Mapping):
         raw
             *str* – The unsegmented text input.
         text
-            :class:`TextParagraph` – The sentences.
+            :class:`TextParagraph <ckipnlp.container.text.TextParagraph>` – The sentences.
         ws
-            :class:`SegParagraph` – The word-segmented sentences.
+            :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>` – The word-segmented sentences.
         pos
-            :class:`SegParagraph` – The part-of-speech sentences.
+            :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>` – The part-of-speech sentences.
         ner
-            :class:`NerParagraph` – The named-entity recognition results.
+            :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>` – The named-entity recognition results.
         parsed
-            :class:`ParsedParagraph` – The parsed-sentences.
+            :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>` – The parsed-sentences.
     """
 
     __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'parsed',)
@@ -68,19 +64,19 @@ class CkipPipeline:
 
     Arguments
     ---------
-        sentence_segmenter_kind : :class:`DriverKind`
+        sentence_segmenter_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of sentence segmenter.
 
-        word_segmenter_kind : :class:`DriverKind`
+        word_segmenter_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of word segmenter.
 
-        pos_tagger_kind : :class:`DriverKind`
+        pos_tagger_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of part-of-speech tagger.
 
-        sentence_parser_kind : :class:`DriverKind`
+        sentence_parser_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of sentence parser.
 
-        ner_chunker_kind : :class:`DriverKind`
+        ner_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of named-entity recognition chunker.
     """
 
@@ -90,22 +86,22 @@ class CkipPipeline:
             pos_tagger_kind=_DriverKind.TAGGER,
             sentence_parser_kind=_DriverKind.CLASSIC,
             ner_chunker_kind=_DriverKind.TAGGER,
-            init=False,
+            lazy=True,
         ):
 
         # WS & POS
         if word_segmenter_kind == _DriverKind.CLASSIC and pos_tagger_kind == _DriverKind.CLASSIC:
-            self._wspos_driver = _BaseDriver.get(_DriverType.WORD_SEGMENTER, _DriverKind.CLASSIC)(do_pos=True, init=init)
+            self._wspos_driver = _DriverRegester.get(_DriverType.WORD_SEGMENTER, _DriverKind.CLASSIC)(do_pos=True, lazy=lazy)
             word_segmenter_kind = None
             pos_tagger_kind = None
         else:
-            self._wspos_driver = _BaseDriver.get(None, None)(init=init)
+            self._wspos_driver = _DriverRegester.get(None, None)(lazy=lazy)
 
-        self._sentence_segmenter = _BaseDriver.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter_kind)(init=init)
-        self._word_segmenter = _BaseDriver.get(_DriverType.WORD_SEGMENTER, word_segmenter_kind)(init=init)
-        self._pos_tagger = _BaseDriver.get(_DriverType.POS_TAGGER, pos_tagger_kind)(init=init)
-        self._sentence_parser = _BaseDriver.get(_DriverType.SENTENCE_PARSER, sentence_parser_kind)(init=init)
-        self._ner_chunker = _BaseDriver.get(_DriverType.NER_CHUNKER, ner_chunker_kind)(init=init)
+        self._sentence_segmenter = _DriverRegester.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter_kind)(lazy=lazy)
+        self._word_segmenter = _DriverRegester.get(_DriverType.WORD_SEGMENTER, word_segmenter_kind)(lazy=lazy)
+        self._pos_tagger = _DriverRegester.get(_DriverType.POS_TAGGER, pos_tagger_kind)(lazy=lazy)
+        self._sentence_parser = _DriverRegester.get(_DriverType.SENTENCE_PARSER, sentence_parser_kind)(lazy=lazy)
+        self._ner_chunker = _DriverRegester.get(_DriverType.NER_CHUNKER, ner_chunker_kind)(lazy=lazy)
 
     ########################################################################################################################
 
@@ -121,7 +117,7 @@ class CkipPipeline:
         if doc._wspos is None:  # pylint: disable=protected-access
 
             doc._wspos = self._wspos_driver(  # pylint: disable=protected-access
-                text=self.sentence_segment(doc)
+                text=self.get_text(doc)
             )
 
         return doc._wspos  # pylint: disable=protected-access

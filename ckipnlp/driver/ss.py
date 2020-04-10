@@ -19,14 +19,14 @@ from .base import (
 
 ################################################################################################################################
 
-class CkipSentenceSegmenter(_BaseDriver,  # pylint: disable=too-few-public-methods
-    driver_type=_DriverType.SENTENCE_SEGMENTER,
-    driver_kind=_DriverKind.BUILTIN,
-):
+class CkipSentenceSegmenter(_BaseDriver): # pylint: disable=too-few-public-methods
     """The CKIP sentence segmentation driver."""
 
-    def __init__(self, *, delims=',，。!！?？:：;；\n', init=True):
-        super().__init__(init=init)
+    driver_type = _DriverType.SENTENCE_SEGMENTER
+    driver_kind = _DriverKind.BUILTIN
+
+    def __init__(self, *, delims=',，。!！?？:：;；\n', lazy=False):
+        super().__init__(lazy=lazy)
 
         self.delims = delims
 

@@ -1,13 +1,16 @@
 [MASTER]
 
 disable =
+	arguments-differ,
 	bad-continuation,
 	duplicate-code,
 	logging-fstring-interpolation,
 	missing-docstring,
+	too-few-public-methods,
 	too-many-ancestors,
 	too-many-branches,
 	too-many-instance-attributes,
+	too-many-nested-blocks,
 
 [FORMAT]
 

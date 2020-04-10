@@ -19,44 +19,46 @@ from ..base import (
     DriverKind as _DriverKind,
 )
 
-from .data import *
-
-from colored import *
-
-def print_spam(*args, **kwargs):
-    print(stylize(*args, fg('magenta') + attr('dim')), **kwargs)
-
-def print_debug(*args, **kwargs):
-    print(stylize(*args, fg('blue')), **kwargs)
-
-def print_verbose(*args, **kwargs):
-    print(stylize(*args, fg('magenta')), **kwargs)
-
-def print_info(*args, **kwargs):
-    print(stylize(*args, fg('cyan')), **kwargs)
-
-def print_notice(*args, **kwargs):
-    print(stylize(*args, fg('cyan') + attr('bold')), **kwargs)
-
-def print_warning(*args, **kwargs):
-    print(stylize(*args, fg('yellow') + attr('bold')), **kwargs)
-
-def print_success(*args, **kwargs):
-    print(stylize(*args, fg('green') + attr('bold')), **kwargs)
-
-def print_error(*args, **kwargs):
-    print(stylize(*args, fg('red') + attr('bold')), **kwargs)
-
-def print_fatal(*args, **kwargs):
-    print(stylize(*args, bg('red') + attr('bold')), **kwargs)
+from ._data import *
 
 ################################################################################################################################
 
-class CkipCorefChunker(_BaseDriver,  # pylint: disable=too-few-public-methods
-    driver_type=_DriverType.COREF_CHUNKER,
-    driver_kind=_DriverKind.BUILTIN,
-):
+from colored import *  # pylint: disable=wrong-import-order
+
+def print_spam(*args, **kwargs):
+    print(stylize(*args, fg('magenta') + attr('dim')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+def print_debug(*args, **kwargs):
+    print(stylize(*args, fg('blue')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+def print_verbose(*args, **kwargs):
+    print(stylize(*args, fg('magenta')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+def print_info(*args, **kwargs):
+    print(stylize(*args, fg('cyan')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+def print_notice(*args, **kwargs):
+    print(stylize(*args, fg('cyan') + attr('bold')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+def print_warning(*args, **kwargs):
+    print(stylize(*args, fg('yellow') + attr('bold')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+def print_success(*args, **kwargs):
+    print(stylize(*args, fg('green') + attr('bold')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+def print_error(*args, **kwargs):
+    print(stylize(*args, fg('red') + attr('bold')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+def print_fatal(*args, **kwargs):
+    print(stylize(*args, bg('red') + attr('bold')), **kwargs)  # pylint: disable=no-value-for-parameter
+
+################################################################################################################################
+
+class CkipCorefChunker(_BaseDriver): # pylint: disable=too-few-public-methods
     """The CKIP co-reference driver."""
+
+    driver_type = _DriverType.COREF_CHUNKER
+    driver_kind = _DriverKind.BUILTIN
 
     def _call(self, *, parsed):
         assert isinstance(parsed, _ParsedParagraph)
@@ -69,45 +71,46 @@ class CkipCorefChunker(_BaseDriver,  # pylint: disable=too-few-public-methods
             for sub in self.get_subject(tree):
                 print_verbose(sub)
 
-        return None
-
     def _init(self):
         pass
 
-    def transform_ws(self, text, ws, ner):
+    @staticmethod
+    def transform_ws(text, ws, ner):
         """Transform word-segmented sentence lists (create a new instance)."""
         ws_new = []
         for line, line_ws, line_ner in zip(text, ws, ner):
             line_bi = _np.zeros(len(line)+1, dtype=_np.bool)
             line_bi[0] = True
             line_bi[_np.cumsum(list(map(len, line_ws)))] = True
-            for _, _, (i0, i1,) in line_ner:
-                line_bi[[i0, i1]] = True
-                line_bi[i0+1:i1] = False
+            for _, _, (idx0, idx1,) in line_ner:
+                line_bi[[idx0, idx1]] = True
+                line_bi[idx0+1:idx1] = False
             idxs = _np.where(line_bi)[0]
-            ws_new.append([line[i0:i1] for i0, i1 in zip(idxs[:-1], idxs[1:])])
+            ws_new.append([line[idx0:idx1] for idx0, idx1 in zip(idxs[:-1], idxs[1:])])
         return _SegParagraph.from_list(ws_new)
 
-    def transform_pos(self, ws, pos, ner):
+    @staticmethod
+    def transform_pos(ws, pos, ner):
         """Transform pos-tag sentence lists (modify in-place)."""
         for line_ws, line_pos, line_ner in zip(ws, pos, ner):
             idxmap = {idx: i for i, idx in enumerate(_np.cumsum(list(map(len, line_ws))))}
-            for netype, _, (_, i1,) in line_ner:
+            for netype, _, (_, idx1,) in line_ner:
                 if netype == 'PERSON':
-                    line_pos[idxmap[i1]] = 'Nb'
+                    line_pos[idxmap[idx1]] = 'Nb'
 
-    def get_subject(self, tree):
+    @staticmethod
+    def get_subject(tree):
         """Get subjects of a tree
 
         Parameters
         ----------
-        tree : :class:`ckipnlp.util.parser.ParserTree`
-            the parser tree.
+            tree : :class:`ParsedTree <ckipnlp.container.parsed_tree.ParsedTree>`
+                the parser tree.
 
         Yields
         ------
-        :class:`ckipnlp.util.parser.ParserNode`
-            the subject nodes.
+        :class:`ParsedTree <ckipnlp.container.parsed_tree.ParsedNode>`
+                the subject nodes.
 
         Notes
         -----
@@ -126,7 +129,7 @@ class CkipCorefChunker(_BaseDriver,  # pylint: disable=too-few-public-methods
                         print_debug(subroot)
                         for subhead in tree.get_heads(subroot.identifier):
                             print_spam(subhead)
-                            foundSub = subroot.data.role in SUBJECT_ROLES or \
+                            found_sub = subroot.data.role in SUBJECT_ROLES or \
                                       (subhead.identifier < head.identifier and subroot.data.role in NEUTRAL_ROLES)
-                            if foundSub and (subhead.data.word in HUMAN_WORDS or subhead.data.pos.startswith('Nb')):
+                            if found_sub and (subhead.data.word in HUMAN_WORDS or subhead.data.pos.startswith('Nb')):
                                 yield subhead

@@ -71,7 +71,7 @@ class WsPosToken(_BaseTuple, _WsPosToken):
 
     Note
     ----
-        This class is an subclass of :class:`tuple`. To change the attribute, please create a new instance instead.
+        This class is an subclass of *tuple*. To change the attribute, please create a new instance instead.
 
     .. admonition:: Data Structure Examples
 
@@ -148,9 +148,9 @@ class WsPosSentence:
 
         Returns
         -------
-            :class:`SegSentence`:
+            :class:`SegSentence <.seg.SegSentence>`:
                 the word sentence
-            :class:`SegSentence`:
+            :class:`SegSentence <.seg.SegSentence>`:
                 the POS-tag sentence.
         """
         return tuple(map(_SegSentence.from_list, _sentence_from_text(data)))
@@ -161,9 +161,9 @@ class WsPosSentence:
 
         Parameters
         ----------
-            word : :class:`SegSentence`
+            word : :class:`SegSentence <.seg.SegSentence>`
                 the word sentence
-            pos  : :class:`SegSentence`
+            pos  : :class:`SegSentence <.seg.SegSentence>`
                 the POS-tag sentence.
 
         Returns
@@ -195,9 +195,9 @@ class WsPosParagraph(metaclass=_ABCMeta):
 
         Returns
         -------
-            :class:`SegParagraph`:
+            :class:`SegParagraph <.seg.SegParagraph>`:
                 the word sentence list
-            :class:`SegParagraph`:
+            :class:`SegParagraph <.seg.SegParagraph>`:
                 the POS-tag sentence list.
         """
         return tuple(map(_SegParagraph.from_list, _paragraph_from_text(data)))
@@ -208,9 +208,9 @@ class WsPosParagraph(metaclass=_ABCMeta):
 
         Parameters
         ----------
-            word : :class:`SegParagraph`
+            word : :class:`SegParagraph <.seg.SegParagraph>`
                 the word sentence list
-            pos  : :class:`SegParagraph`
+            pos  : :class:`SegParagraph <.seg.SegParagraph>`
                 the POS-tag sentence list.
 
         Returns

@@ -278,7 +278,7 @@ class ParsedTree(_Base, _Tree):
 
     @staticmethod
     def normalize_text(tree_text):
-        """Text normalization for :class:`ckipnlp.parser.CkipParsed` output.
+        """Text normalization.
 
         Remove leading number and trailing ``#``.
         """
@@ -290,7 +290,7 @@ class ParsedTree(_Base, _Tree):
         self.to_text()
 
     @classmethod
-    def from_text(cls, data, *, normalize=True):  # pylint: disable=arguments-differ
+    def from_text(cls, data, *, normalize=True):
         """Construct an instance from text format.
 
         Parameters
@@ -343,7 +343,7 @@ class ParsedTree(_Base, _Tree):
 
         return tree
 
-    def to_text(self, node_id=0):  # pylint: disable=arguments-differ
+    def to_text(self, node_id=0):
         """Transform to plain text.
 
         Parameters
@@ -389,7 +389,7 @@ class ParsedTree(_Base, _Tree):
 
         return tree
 
-    def to_dict(self, node_id=0):  # pylint: disable=arguments-differ
+    def to_dict(self, node_id=0):
         """Construct an instance a from python built-in containers.
 
         Parameters
@@ -409,7 +409,7 @@ class ParsedTree(_Base, _Tree):
 
         return tree_dict
 
-    def show(self, *,  # pylint: disable=arguments-differ
+    def show(self, *,
         key=lambda node: node.identifier,
         idhidden=False,
         **kwargs,
