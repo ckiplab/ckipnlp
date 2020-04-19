@@ -24,7 +24,7 @@ from treelib import (
     Node as _Node,
 )
 
-from .base import (
+from ..base import (
     Base as _Base,
     BaseTuple as _BaseTuple,
 )
@@ -41,12 +41,12 @@ class ParsedNodeData(_BaseTuple, _ParsedNodeData):
 
     Attributes
     ----------
-        role
-            *str* – the role.
-        pos
-            *str* – the POS-tag.
-        word
-            *str* – the text term.
+        role : str
+            the role.
+        pos : str
+            the POS-tag.
+        word : str
+            the text term.
 
     Note
     ----
@@ -109,8 +109,7 @@ class ParsedNode(_Base, _Node):
 
     Attributes
     ----------
-        data
-            :class:`ParsedNodeData`
+        data : :class:`ParsedNodeData`
 
     See Also
     --------
@@ -167,12 +166,12 @@ class ParsedRelation(_Base, _ParsedRelation):
 
     Attributes
     ----------
-        head
-            :class:`ParsedNode` – the head node.
-        tail
-            :class:`ParsedNode` – the tail node.
-        relation
-            *str* – the relation.
+        head : :class:`ParsedNode`
+            the head node.
+        tail : :class:`ParsedNode`
+            the tail node.
+        relation : str
+            the relation.
 
     .. admonition:: Data Structure Examples
 
@@ -343,7 +342,7 @@ class ParsedTree(_Base, _Tree):
 
         return tree
 
-    def to_text(self, node_id=0):
+    def to_text(self, node_id=None):
         """Transform to plain text.
 
         Parameters
@@ -355,6 +354,9 @@ class ParsedTree(_Base, _Tree):
         --------
             str
         """
+        if node_id is None:
+            node_id = self.root
+
         node = self[node_id]
         tree_text = node.data.to_text()
 
@@ -389,7 +391,7 @@ class ParsedTree(_Base, _Tree):
 
         return tree
 
-    def to_dict(self, node_id=0):
+    def to_dict(self, node_id=None):
         """Construct an instance a from python built-in containers.
 
         Parameters
@@ -401,6 +403,9 @@ class ParsedTree(_Base, _Tree):
         -------
             str
         """
+        if node_id is None:
+            node_id = self.root
+
         tree_dict = self[node_id].to_dict()
         tree_dict['children'] = []
 
@@ -436,7 +441,7 @@ class ParsedTree(_Base, _Tree):
             if child.data.role == role:
                 yield child
 
-    def get_heads(self, root_id=0, *, semantic=True, deep=True):
+    def get_heads(self, root_id=None, *, semantic=True, deep=True):
         """Get all head nodes of a subtree.
 
         Parameters
@@ -453,6 +458,9 @@ class ParsedTree(_Base, _Tree):
             :class:`ParsedNode`
                 the head nodes.
         """
+        if root_id is None:
+            root_id = self.root
+
         head_nodes = []
         children = list(self.children(root_id))
 
@@ -491,7 +499,7 @@ class ParsedTree(_Base, _Tree):
             else:
                 yield node
 
-    def get_relations(self, root_id=0, *, semantic=True):
+    def get_relations(self, root_id=None, *, semantic=True):
         """Get all relations of a subtree.
 
         Parameters
@@ -506,6 +514,8 @@ class ParsedTree(_Base, _Tree):
             :class:`ParsedRelation`
                 the relations.
         """
+        if root_id is None:
+            root_id = self.root
 
         children = list(self.children(root_id))
         head_children = list(self.get_heads(root_id, semantic=semantic, deep=False))

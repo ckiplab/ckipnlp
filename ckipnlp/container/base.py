@@ -131,7 +131,7 @@ class BaseTuple(Base, metaclass=_ABCMeta):
         -------
             dict
         """
-        return self._asdict() # pylint: disable=no-member
+        return self._asdict()  # pylint: disable=no-member
 
     ########################################################################################################################
 

@@ -11,4 +11,4 @@ from .container.ner import *
 from .container.parsed import *
 
 from .container.wspos import *
-from .container.parsed_tree import *
+from .container.tree_parsed import *

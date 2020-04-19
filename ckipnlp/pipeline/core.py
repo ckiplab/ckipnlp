@@ -22,18 +22,18 @@ class CkipDocument(_Mapping):
 
     Attributes
     ----------
-        raw
-            *str* – The unsegmented text input.
-        text
-            :class:`TextParagraph <ckipnlp.container.text.TextParagraph>` – The sentences.
-        ws
-            :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>` – The word-segmented sentences.
-        pos
-            :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>` – The part-of-speech sentences.
-        ner
-            :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>` – The named-entity recognition results.
-        parsed
-            :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>` – The parsed-sentences.
+        raw : str
+            The unsegmented text input.
+        text : :class:`TextParagraph <ckipnlp.container.text.TextParagraph>`
+            The sentences.
+        ws : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+            The word-segmented sentences.
+        pos : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+            The part-of-speech sentences.
+        ner : :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`
+            The named-entity recognition results.
+        parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
+            The parsed-sentences.
     """
 
     __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'parsed',)

@@ -32,12 +32,12 @@ class NerToken(_BaseTuple, _NerToken):
 
     Attributes
     ----------
-        word
-            *str* – the token word.
-        ner
-            *str* – the NER-tag.
-        idx
-            *Tuple[int, int]* – the starting / ending index.
+        word : str
+            the token word.
+        ner : str
+            the NER-tag.
+        idx : Tuple[int, int]
+            the starting / ending index.
 
     Note
     ----

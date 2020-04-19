@@ -26,14 +26,14 @@ class CkipCorefDocument(_Mapping):
 
     Attributes
     ----------
-        ws
-            :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>` – The word-segmented sentences.
-        pos
-            :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>` – The part-of-speech sentences.
-        parsed
-            :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>` – The parsed sentences.
-        coref
-            ??? – The co-reference sentences.
+        ws : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+            The word-segmented sentences.
+        pos : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+            The part-of-speech sentences.
+        parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
+            The parsed sentences.
+        coref : ???
+            The co-reference sentences.
     """
 
     __keys = ('ws', 'pos', 'parsed', 'coref',)
@@ -91,12 +91,20 @@ class CkipCorefPipeline(_CkipPipeline):
 
         # Update word segmentation
         if corefdoc.ws is None:
-            corefdoc.ws = self._coref_chunker.transform_ws(doc.text, doc.ws, doc.ner)
+            corefdoc.ws = self._coref_chunker.transform_ws(
+                text=doc.text,
+                ws=doc.ws,
+                ner=doc.ner,
+            )
 
         # Update POS-tagging
         if corefdoc.pos is None:
             corefdoc.pos = self.get_pos(corefdoc)
-            self._coref_chunker.transform_pos(doc.text, corefdoc.pos, doc.ner)
+            self._coref_chunker.transform_pos(
+                ws=corefdoc.ws,
+                pos=corefdoc.pos,
+                ner=doc.ner,
+            )
 
         # Do parsing
         if corefdoc.parsed is None:

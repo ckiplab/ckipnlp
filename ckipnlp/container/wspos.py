@@ -64,10 +64,10 @@ class WsPosToken(_BaseTuple, _WsPosToken):
 
     Attributes
     ----------
-        word
-            *str* – the word.
-        pos
-            *str* – the POS-tag.
+        word : str
+            the word.
+        pos : str
+            the POS-tag.
 
     Note
     ----

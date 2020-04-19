@@ -1,17 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding:utf-8 -*-
-
-__author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = '2018-2020 CKIP Lab'
-__license__ = 'CC BY-NC-SA 4.0'
-
-# pylint: disable=too-many-lines
-
-SUBJECT_ROLES = ['agent', 'causer', 'experiencer']
-OBJECT_ROLES = ['benefactor', 'companion', 'comparison', 'goal', 'range', 'source', 'target']
-NEUTRAL_ROLES = ['theme', 'topic']
-
-HUMAN_WORDS = [
+_HUMAN_WORDS = {
     '阿拉',
     '真主',
     '穹天',
@@ -7539,4 +7526,4 @@ HUMAN_WORDS = [
     '出版者',
     '發行人',
     '出版人',
-]
+}

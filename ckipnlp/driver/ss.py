@@ -19,7 +19,7 @@ from .base import (
 
 ################################################################################################################################
 
-class CkipSentenceSegmenter(_BaseDriver): # pylint: disable=too-few-public-methods
+class CkipSentenceSegmenter(_BaseDriver):  # pylint: disable=too-few-public-methods
     """The CKIP sentence segmentation driver."""
 
     driver_type = _DriverType.SENTENCE_SEGMENTER
