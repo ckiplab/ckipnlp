@@ -24,6 +24,11 @@ from treelib import (
     Node as _Node,
 )
 
+from ckipnlp.data.parsed import (
+    SUBJECT_ROLES as _SUBJECT_ROLES,
+    NEUTRAL_ROLES as _NEUTRAL_ROLES,
+)
+
 from ..base import (
     Base as _Base,
     BaseTuple as _BaseTuple,
@@ -159,7 +164,7 @@ class ParsedNode(_Base, _Node):
 class _ParsedRelation(_NamedTuple):
     head: ParsedNode
     tail: ParsedNode
-    relation: str
+    relation: ParsedNode
 
 class ParsedRelation(_Base, _ParsedRelation):
     """A parser relation.
@@ -170,8 +175,12 @@ class ParsedRelation(_Base, _ParsedRelation):
             the head node.
         tail : :class:`ParsedNode`
             the tail node.
-        relation : str
-            the relation.
+        relation : :class:`ParsedNode`
+            the relation node. (the role of this node is the relation.)
+
+    Notes
+    -----
+        The parent of the relation node is always the common ancestor of the head node and tail node.
 
     .. admonition:: Data Structure Examples
 
@@ -201,16 +210,21 @@ class ParsedRelation(_Base, _ParsedRelation):
     to_list = NotImplemented
 
     def __repr__(self):
-        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self._head_first \
+        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head_first \
          else '{name}(tail={tail}, head={head}, relation={relation})'
-        return ret.format(name=type(self).__name__, head=self.head, tail=self.tail, relation=self.relation)
+        return ret.format(
+            name=type(self).__name__,
+            head=(self.head.tag, self.head.identifier,),
+            tail=(self.tail.tag, self.tail.identifier,),
+            relation=(self.relation.data.role, self.relation.identifier,),
+        )
 
     @property
-    def _head_first(self):
+    def head_first(self):
         return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):
-        return _OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation)
+        return _OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation.data.role)
 
 ################################################################################################################################
 
@@ -526,11 +540,53 @@ class ParsedTree(_Base, _Tree):
             for tail in children:
                 if tail.data.role != 'Head' and tail not in head_children:
                     if tail.is_leaf():
-                        yield ParsedRelation(head=head_node, tail=tail, relation=tail.data.role)  # pylint: disable=no-value-for-parameter
+                        yield ParsedRelation(head=head_node, tail=tail, relation=tail)  # pylint: disable=no-value-for-parameter
                     else:
                         for node in self.get_heads(tail.identifier, semantic=semantic):
-                            yield ParsedRelation(head=head_node, tail=node, relation=tail.data.role)  # pylint: disable=no-value-for-parameter
+                            yield ParsedRelation(head=head_node, tail=node, relation=tail)  # pylint: disable=no-value-for-parameter
 
         # Recursion
         for child in children:
             yield from self.get_relations(child.identifier, semantic=semantic)
+
+    def get_subjects(self, root_id=None, *, semantic=True, deep=True):
+        """Get the subject node of a subtree.
+
+        Parameters
+        ----------
+            root_id : int
+                ID of the root node of target subtree.
+            semantic : bool
+                please refer :meth:`get_heads` for policy detail.
+            deep : bool
+                please refer :meth:`get_heads` for policy detail.
+
+        Yields
+        ------
+            :class:`ParsedNode`
+                the subject node.
+
+        Notes
+        -----
+            A node can be a subject if either:
+
+            1. is a head of `NP`
+            2. is a head of a subnode of `S` with subject role
+            3. is a head of a subnode of `S` with neutral role and precede the head of `S`
+        """
+        if root_id is None:
+            root_id = self.root
+        root = self[root_id]
+
+        if root.data.pos == 'NP':
+            yield from self.get_heads(root.identifier, semantic=semantic, deep=deep)
+
+        elif root.data.pos == 'S':
+            for head in self.get_heads(root.identifier, semantic=False, deep=False):
+                if head.data.pos.startswith('V'):
+                    for subroot in self.children(root.identifier):
+                        if subroot.data.pos.startswith('N') and ( \
+                            subroot.data.role in _SUBJECT_ROLES or \
+                           (subroot.data.role in _NEUTRAL_ROLES and subroot.identifier < head.identifier) \
+                        ):
+                            yield from self.get_heads(subroot.identifier, semantic=semantic, deep=deep)

@@ -26,7 +26,7 @@ class SegSentence(_BaseSentence0):
 
             .. code-block:: python
 
-                '中文字\\u3000喔' # Words segmented by \\u3000 (full-width space)
+                '中文字\u3000喔' # Words segmented by \\u3000 (full-width space)
 
         Dict/List format
             Used for :meth:`from_dict`, :meth:`to_dict`, :meth:`from_list`, and :meth:`to_list`.
@@ -61,8 +61,8 @@ class SegParagraph(_BaseList):
             .. code-block:: python
 
                 [
-                    '中文字\\u3000喔', # Sentence 1
-                    '啊哈\\u3000哈哈', # Sentence 2
+                    '中文字\u3000喔', # Sentence 1
+                    '啊哈\u3000哈哈', # Sentence 2
                 ]
 
         Dict/List format

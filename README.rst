@@ -80,8 +80,8 @@ Requirements
 * `Python <http://www.python.org>`_ 3.6+
 * `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
 
+* `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional, Recommended]
 * `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
-* `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional]
 
 Usage
 =====

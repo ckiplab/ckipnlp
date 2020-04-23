@@ -144,7 +144,7 @@ class WsPosSentence:
         Parameters
         ----------
             data : str
-                text such as ``'中文字(Na)\\u3000喔(T)'``.
+                text such as ``'中文字(Na)\u3000喔(T)'``.
 
         Returns
         -------
@@ -169,7 +169,7 @@ class WsPosSentence:
         Returns
         -------
             str
-                text such as ``'中文字(Na)\\u3000喔(T)'``.
+                text such as ``'中文字(Na)\u3000喔(T)'``.
         """
         return _sentence_to_text((word, pos,))
 
@@ -191,7 +191,7 @@ class WsPosParagraph(metaclass=_ABCMeta):
         Parameters
         ----------
             data : Sequence[str]
-                list of sentences such as ``'中文字(Na)\\u3000喔(T)'``.
+                list of sentences such as ``'中文字(Na)\u3000喔(T)'``.
 
         Returns
         -------
@@ -216,6 +216,6 @@ class WsPosParagraph(metaclass=_ABCMeta):
         Returns
         -------
             List[str]
-                list of sentences such as ``'中文字(Na)\\u3000喔(T)'``.
+                list of sentences such as ``'中文字(Na)\u3000喔(T)'``.
         """
         return list(_paragraph_to_text((word, pos,)))

@@ -1,0 +1,426 @@
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+
+__author__ = 'Mu Yang <http://muyang.pro>'
+__copyright__ = '2018-2020 CKIP Lab'
+__license__ = 'CC BY-NC-SA 4.0'
+
+import numpy as _np
+
+from treelib import (
+    Tree as _Tree,
+    Node as _Node,
+)
+
+from ckipnlp.container import (
+    TextParagraph as _TextParagraph,
+    SegParagraph as _SegParagraph,
+    ParsedParagraph as _ParsedParagraph,
+    ParsedTree as _ParsedTree,
+    NerParagraph as _NerParagraph,
+    CorefToken as _CorefToken,
+    CorefSentence as _CorefSentence,
+    CorefParagraph as _CorefParagraph,
+)
+
+from ckipnlp.data.parsed import (
+    APPOSITION_ROLES as _APPOSITION_ROLES,
+    HUMAN_ROLES as _HUMAN_ROLES,
+    NEUTRAL_ROLES as _NEUTRAL_ROLES,
+    OBJECT_ROLES as _OBJECT_ROLES,
+    SUBJECT_ROLES as _SUBJECT_ROLES,
+)
+
+from ckipnlp.data.coref import (
+    HUMAN_WORDS as _HUMAN_WORDS,
+    PRONOUN_3RD_WORDS as _PRONOUN_3RD_WORDS,
+    SELF_WORDS as _SELF_WORDS,
+)
+
+from .base import (
+    BaseDriver as _BaseDriver,
+    DriverType as _DriverType,
+    DriverKind as _DriverKind,
+)
+
+################################################################################################################################
+
+from colored import *  # pylint: disable=wrong-import-order
+
+def print_spam(*args, **kwargs):
+    print(stylize(' '.join(map(str, args)), fg('magenta') + attr('dim')))  # pylint: disable=no-value-for-parameter
+
+def print_debug(*args):
+    print(stylize(' '.join(map(str, args)), fg('blue')))  # pylint: disable=no-value-for-parameter
+
+def print_verbose(*args):
+    print(stylize(' '.join(map(str, args)), fg('magenta')))  # pylint: disable=no-value-for-parameter
+
+def print_info(*args):
+    print(stylize(' '.join(map(str, args)), fg('cyan')))  # pylint: disable=no-value-for-parameter
+
+def print_notice(*args):
+    print(stylize(' '.join(map(str, args)), fg('cyan') + attr('bold')))  # pylint: disable=no-value-for-parameter
+
+def print_warning(*args):
+    print(stylize(' '.join(map(str, args)), fg('yellow') + attr('bold')))  # pylint: disable=no-value-for-parameter
+
+def print_success(*args):
+    print(stylize(' '.join(map(str, args)), fg('green') + attr('bold')))  # pylint: disable=no-value-for-parameter
+
+def print_error(*args):
+    print(stylize(' '.join(map(str, args)), fg('red') + attr('bold')))  # pylint: disable=no-value-for-parameter
+
+def print_fatal(*args):
+    print(stylize(' '.join(map(str, args)), bg('red') + attr('bold')))  # pylint: disable=no-value-for-parameter
+
+################################################################################################################################
+
+class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
+    """The CKIP co-reference driver."""
+
+    driver_type = _DriverType.COREF_CHUNKER
+    driver_kind = _DriverKind.BUILTIN
+
+    def _call(self, *, parsed):
+        assert isinstance(parsed, _ParsedParagraph)
+
+        # Convert to tree structure
+        tree_list = list(map(_ParsedTree.from_text, parsed))
+
+        # Find co-reference
+        coref_tree = self._get_coref(tree_list)
+
+        # Get results
+        coref = self._get_result(tree_list, coref_tree=coref_tree)
+
+        for line in coref:
+            print_success(line.to_text())
+
+        return coref
+
+    def _init(self):
+        pass
+
+    @classmethod
+    def _get_coref(cls, tree_list):
+
+        node2coref_list = [{} for _ in tree_list]  # tree_id => {node_id => ref_id}
+        coref2node = {}  # ref_id => (tree_id, node_id)
+
+        coref_tree = _Tree()
+        coref_tree.create_node(tag='@', identifier=0)
+
+        name2node = {}  # name => (tree_id, node_id)
+
+        curr_source = None   # the current coref source
+        curr_subject = None  # the current coref subject
+        last_source = None   # the last coref source
+        last_subject = None  # the last coref subject
+
+        # Find coref
+        for tree_id, tree in enumerate(tree_list):
+            print_error()
+            print_error('='*8, tree_id, '='*8)
+
+            print_info('curr_source', curr_source)
+            print_info('curr_subject', curr_subject)
+            print_info('last_source', last_source)
+            print_info('last_subject', last_subject)
+
+            tree.show()
+
+            # Get relations
+            appositions = []
+            for rel in tree.get_relations():
+                print_notice(rel)
+                if rel.relation.data.role in _APPOSITION_ROLES:
+                    appositions.append((rel.head.identifier, rel.tail.identifier,))
+
+            # Get sources/targets
+            node_ids = {}
+            for nid in cls._get_sources(tree): # Source
+                node_ids[nid] = 'Src'
+                print_success('Src', tree[nid] if nid >= 0 else nid)
+            for nid in cls._get_subjects(tree): # Human
+                node_ids[nid] = 'Sub'
+                print_warning('Sub', tree[nid] if nid >= 0 else nid)
+            for nid in cls._get_targets(tree): # Target
+                node_ids[nid] = 'Tgt'
+                print_notice('Tgt', tree[nid] if nid >= 0 else nid)
+
+            source_ids = {nid: ntype for nid, ntype in node_ids.items() if ntype != 'Tgt'}
+            target_ids = {nid: ntype for nid, ntype in node_ids.items() if ntype == 'Tgt'}
+
+            # Assign ref_id to sources
+            for sid, stype in source_ids.items():
+                source = tree[sid]
+
+                curr_source = (tree_id, sid,)
+                if stype == 'Sub':
+                    curr_subject = curr_source
+
+                parent_id = name2node.get(source.data.word, None)
+                if parent_id:
+                    coref_tree.create_node(tag=source.tag, identifier=(tree_id, sid,), parent=parent_id, data=True)
+                else:
+                    name2node[source.data.word] = curr_source
+                    coref_tree.create_node(tag=source.tag, identifier=(tree_id, sid,), parent=coref_tree.root, data=True)
+
+            # Link targets to previous sources
+            for tid, ttype in target_ids.items():
+                if tid < 0 and last_subject:
+                    coref_tree.create_node(tag=str(tid), identifier=(tree_id, tid,), parent=last_subject, data=False)
+
+                if tid >= 0:
+                    target = tree[tid]
+                    if curr_source and tree[tid].data.word in _SELF_WORDS:
+                        coref_tree.create_node(tag=target.tag, identifier=(tree_id, tid,), parent=curr_source, data=False)
+                    elif last_source:
+                        coref_tree.create_node(tag=target.tag, identifier=(tree_id, tid,), parent=last_source, data=False)
+
+            coref_tree.show(key=lambda node: node.identifier, idhidden=False)
+            print()
+
+            for head_id, tail_id in appositions:
+                head_id = (tree_id, head_id,)
+                tail_id = (tree_id, tail_id,)
+
+                if coref_tree.contains(head_id) and coref_tree.contains(tail_id):
+                    if coref_tree.is_ancestor(head_id, tail_id) or \
+                       coref_tree.is_ancestor(tail_id, head_id):
+                        continue
+
+                    if coref_tree[head_id].data:  # Head is a source
+                        coref_tree.move_node(tail_id, head_id)
+                    elif coref_tree[tail_id].data:  # Tail is a source
+                        coref_tree.move_node(head_id, tail_id)
+                    else:
+                        coref_tree.move_node(tail_id, head_id)
+
+            # Update last coref
+            last_source = curr_source
+            last_subject = curr_subject
+
+            coref_tree.show(key=lambda node: node.identifier, idhidden=False)
+            print()
+
+        return coref_tree
+
+
+    @classmethod
+    def _get_result(cls, tree_list, *, coref_tree):
+
+        # Assign coref ID
+        node2coref = {}  # (tree_id, node_id) => ref_id
+        coref2node = {}  # ref_id => node
+
+        for ref_id, coref_source in enumerate(coref_tree.children(coref_tree.root)):
+            print_success(ref_id, coref_source)
+            tree_id, node_id = coref_source.identifier
+            coref2node[ref_id] = tree_list[tree_id][node_id]
+            for tree_id, node_id in coref_tree.expand_tree(coref_source.identifier):
+                node2coref[tree_id, node_id] = ref_id
+
+        for (k1, k2,), r in node2coref.items():
+            if k2 >= 0:
+                print_notice(tree_list[k1][k2], r)
+            else:
+                print_notice((k1, k2,), r)
+        print()
+
+        tokens_list = _CorefParagraph()
+
+        for tree_id, tree in enumerate(tree_list):
+            tokens = _CorefSentence()
+            tokens_list.append(tokens)
+
+            nodes = tree.leaves()
+
+            print_error()
+            print_error('='*8, tree_id, '='*8)
+            print_notice(node2coref)
+            print_verbose(nodes)
+
+            if (tree_id, -1) in node2coref:
+                ref_id = node2coref[tree_id, -1]
+                tokens.append(_CorefToken(
+                    word=None,
+                    idx=None,
+                    coref=(ref_id, 'zero'),
+                ))
+
+            elif (tree_id, -2) in node2coref:
+                # The pos of the first leaf node starts with 'Cb'. e.g. 而且、但是、然而
+                node = nodes.pop(0)
+                tokens.append(_CorefToken(
+                    word=node.data.word,
+                    idx=node.identifier,
+                    coref=None,
+                ))
+
+                ref_id = node2coref[tree_id, -2]
+                tokens.append(_CorefToken(
+                    word=None,
+                    idx=None,
+                    coref=(ref_id, 'zero'),
+                ))
+
+            for node in nodes:
+                ref_id = node2coref.get((tree_id, node.identifier,), -1)
+                if ref_id >=0:
+                    ref_node = coref2node[ref_id]
+                    tokens.append(_CorefToken(
+                        word=node.data.word,
+                        idx=node.identifier,
+                        coref=(ref_id, 'source' if node.identifier == ref_node.identifier else 'target',),
+                    ))
+                else:
+                    tokens.append(_CorefToken(
+                        word=node.data.word,
+                        idx=node.identifier,
+                        coref=None,
+                    ))
+
+        return tokens_list
+
+    ########################################################################################################################
+
+    @staticmethod
+    def transform_ws(*, text, ws, ner):
+        """Transform word-segmented sentence lists (create a new instance)."""
+        assert isinstance(text, _TextParagraph)
+        assert isinstance(ws, _SegParagraph)
+        assert isinstance(ner, _NerParagraph)
+
+        ws_new = []
+        for line, line_ws, line_ner in zip(text, ws, ner):
+            line_bi = _np.zeros(len(line)+1, dtype=_np.bool)
+            line_bi[0] = True
+            line_bi[_np.cumsum(list(map(len, line_ws)))] = True
+            for _, _, (idx0, idx1,) in line_ner:
+                line_bi[[idx0, idx1]] = True
+                line_bi[idx0+1:idx1] = False
+            idxs = _np.where(line_bi)[0]
+            ws_new.append([line[idx0:idx1] for idx0, idx1 in zip(idxs[:-1], idxs[1:])])
+        return _SegParagraph.from_list(ws_new)
+
+    @staticmethod
+    def transform_pos(*, ws, pos, ner):
+        """Transform pos-tag sentence lists (modify in-place)."""
+        assert isinstance(ws, _SegParagraph)
+        assert isinstance(pos, _SegParagraph)
+        assert isinstance(ner, _NerParagraph)
+
+        for line_ws, line_pos, line_ner in zip(ws, pos, ner):
+            idxmap = {idx: i for i, idx in enumerate(_np.cumsum(list(map(len, line_ws))))}
+            for ner in line_ner:
+                if ner.ner == 'PERSON':
+                    line_pos[idxmap[ner.idx[1]]] = 'Nb'
+
+    ########################################################################################################################
+
+    @classmethod
+    def _get_sources(cls, tree):
+        """Get sources of a tree
+
+        Parameters
+        ----------
+            tree : :class:`ParsedTree <ckipnlp.container.tree.parsed.ParsedTree>`
+                the parser tree.
+
+        Yields
+        ------
+            int
+                the identifier of source nodes.
+
+        Notes
+        -----
+            A node can be a co-reference source if either:
+
+            1. POS-tag is `Nb`
+            2. is one of the human words from E-HowNet
+
+        """
+        for node in tree.leaves():
+            if cls._is_human_word(node):
+                yield node.identifier
+
+    @classmethod
+    def _get_targets(cls, tree):
+        """Get targets of a tree
+
+        Parameters
+        ----------
+            tree : :class:`ParsedTree <ckipnlp.container.tree.parsed.ParsedTree>`
+                the parser tree.
+
+        Yields
+        ------
+            int
+                the identifier of target nodes.
+            -2
+                if the tree is not VP and pos of the first leaf node starts with 'Cb'
+            -1
+                if the tree is not VP
+
+        Notes
+        -----
+            A node can be a co-reference target if either:
+
+            1. POS-tag is `Nh`
+            2. is one of the pronoun words from E-HowNet
+
+        """
+        root = tree[tree.root]
+        leaves = tree.leaves()
+
+        if root.data.pos == 'VP':
+            if leaves[0].data.pos.startswith('Cb'):
+                yield -2 # coref will be inserted after this Cb node
+            else:
+                yield -1 # coref will be inserted in front of the whole sentence
+
+        for node in leaves:
+            if cls._is_pronoun_word(node):
+                yield node.identifier
+
+    ########################################################################################################################
+
+    @classmethod
+    def _get_subjects(cls, tree):
+        """Get subjects of a tree
+
+        Parameters
+        ----------
+            tree : :class:`ParsedTree <ckipnlp.container.tree.parsed.ParsedTree>`
+                the parser tree.
+
+        Yields
+        ------
+            int
+                the identifier of subject node.
+        """
+        for node in tree.get_subjects():
+            if cls._is_human_word(node):
+                yield node.identifier
+
+    ########################################################################################################################
+
+    @staticmethod
+    def _is_human_word(node):
+        return node.data.pos.startswith('Nb') or node.data.pos.startswith('N') and node.data.word in _HUMAN_WORDS
+
+    @staticmethod
+    def _is_pronoun_word(node):
+        return node.data.pos.startswith('Nh') or node.data.pos.startswith('N') and node.data.word in _PRONOUN_3RD_WORDS
+
+    @staticmethod
+    def _getitem_deep(obj, idx0, idx1):
+        return obj[idx0][idx1]
+
+    @staticmethod
+    def _setitem_deep(obj, idx0, idx1, value):
+        obj[idx0][idx1] = value
+
+    ########################################################################################################################

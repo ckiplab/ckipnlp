@@ -56,7 +56,7 @@ class DriverRegester:
         if not driver:
             raise KeyError(f'{driver_type.name} is not implemented for type {driver_kind.name}')
         if not driver.is_dummy:
-            _get_logger().debug(f'Using {driver.__name__} ...')
+            _get_logger().debug(f'Use {driver.__name__} ...')
 
         return driver
 
