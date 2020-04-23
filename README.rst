@@ -1,6 +1,18 @@
 Introduction
 ============
 
+Official CKIP CoreNLP Toolkits
+
+Features
+--------
+
+- Sentence Segmentation
+- Word Segmentation
+- Part-of-Speech Tagging
+- Sentence Parsing
+- Named-Entity Recognition
+- Co-Reference Delectation
+
 Git
 ---
 
@@ -74,6 +86,9 @@ External Links
 
 - `Online Demo <https://ckip.iis.sinica.edu.tw/service/corenlp>`_
 
+Installation
+============
+
 Requirements
 ------------
 
@@ -83,14 +98,109 @@ Requirements
 * `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional, Recommended]
 * `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
 
+Tool Requirements
+-----------------
+
+================================  ==========  ============  =============
+ Tool                              Built-in    CkipTagger    CkipClassic
+================================  ==========  ============  =============
+Sentence Segmentation              ✔
+Word Segmentation†                             ✔             ✔
+Part-of-Speech Tagging†                        ✔             ✔
+Sentence Parsing                                             ✔
+Named-Entity Recognition                       ✔
+Co-Reference Delectation‡          ✔           ✔             ✔
+================================  ==========  ============  =============
+
+- † These tools require only one of either backends.
+- ‡ Co-Reference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, sentence parsing, and named-entity recognition.
+
+Installation via Pip
+--------------------
+
+- No backend (not recommended): ``pip install ckipnlp``.
+- With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]``.
+- With CkipClassic backend: ``pip install ckipnlp[classic]``.
+- With both backend: ``pip install ckipnlp[tagger,classic]``.
+
+Please refer https://ckip-classic.readthedocs.io for CkipClassic installation guide.
+
 Usage
 =====
 
 See http://ckipnlp.readthedocs.io/en/latest/_api/ckipnlp.html for API details.
 
+Pipeline
+--------
 
-FAQ
-===
+.. image:: ../_static/image/pipeline.svg
+
+.. code-block:: python
+
+   import ckipnlp
+   print(ckipnlp.__name__, ckipnlp.__version__)
+
+   ################################################################
+
+   from ckipnlp.pipeline import CkipPipeline, CkipDocument
+
+   pipeline = CkipPipeline()
+   doc = CkipDocument(
+      raw='中文字喔，啊哈哈哈',
+   )
+
+   # Word Segmentation
+   pipeline.get_ws(doc)
+   print(doc.ws)
+   for line in doc.ws:
+       print(line.to_text())
+
+   # Part-of-Speech Tagging
+   pipeline.get_pos(doc)
+   print(doc.pos)
+   for line in doc.pos:
+       print(line.to_text())
+
+   # Sentence Parsing
+   pipeline.get_parsed(doc)
+   print(doc.parsed)
+
+   # Named-Entity Recognition
+   pipeline.get_ner(doc)
+   print(doc.ner)
+
+   ################################################################
+
+   from ckipnlp.container.wspos import WsPosParagraph
+
+   # Word Segmentation & Part-of-Speech Tagging
+   for line in WsPosParagraph.to_text(doc.ws, doc.pos):
+       print(line)
+
+Co-Reference Pipeline
+---------------------
+
+.. image:: ../_static/image/coref_pipeline.svg
+
+.. code-block:: python
+
+   import ckipnlp
+   print(ckipnlp.__name__, ckipnlp.__version__)
+
+   ################################################################
+
+   from ckipnlp.pipeline import CkipCorefPipeline, CkipDocument
+
+   pipeline = CkipCorefPipeline()
+   doc = CkipDocument(
+      raw='畢卡索他想，完蛋了',
+   )
+
+   # Co-Reference
+   corefdoc = pipeline(doc)
+   print(corefdoc.coref)
+   for line in corefdoc.coref:
+       print(line.to_text())
 
 License
 =======

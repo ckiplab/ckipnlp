@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 SELF_WORDS = {
     '一己',
     '小我',

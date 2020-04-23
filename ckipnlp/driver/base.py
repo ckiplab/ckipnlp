@@ -26,33 +26,36 @@ from ckipnlp.util.logger import (
 ################################################################################################################################
 
 class DriverType(_IntEnum):
+    """The enumeration of driver types."""
     SENTENCE_SEGMENTER = _enum_auto()  #: Sentence segmentation
     WORD_SEGMENTER = _enum_auto()      #: Word segmentation
     POS_TAGGER = _enum_auto()          #: Part-of-speech tagging
     SENTENCE_PARSER = _enum_auto()     #: Sentence parsing
     NER_CHUNKER = _enum_auto()         #: Named-entity recognition
-    COREF_CHUNKER = _enum_auto()       #: Co-reference
+    COREF_CHUNKER = _enum_auto()       #: Co-reference delectation
 
 class DriverKind(_IntEnum):
+    """The enumeration of driver backend kinds."""
     BUILTIN = _enum_auto()  #: Built-in Implementation
     CLASSIC = _enum_auto()  #: CkipClassic Backend
     TAGGER = _enum_auto()   #: CkipTagger Backend
 
 ################################################################################################################################
 
-class DriverRegester:
+class DriverRegister:
+    """The driver registering utility."""
 
     _DRIVERS = {}
 
     @staticmethod
-    def get(driver_type, driver_kind):
+    def get(driver_type, driver_kind):  # pylint: disable=missing-docstring
         if driver_kind is None:
             return DummyDriver
 
         assert driver_type is None or isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
         assert driver_kind is None or isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
 
-        driver = DriverRegester._DRIVERS.get((driver_type, driver_kind,))
+        driver = DriverRegister._DRIVERS.get((driver_type, driver_kind,))
         if not driver:
             raise KeyError(f'{driver_type.name} is not implemented for type {driver_kind.name}')
         if not driver.is_dummy:
@@ -74,7 +77,7 @@ class BaseDriver(metaclass=_ABCMeta):
         if not lazy:
             self.init()
 
-    def init(self):
+    def init(self):  # pylint: disable=missing-docstring
         if self._inited:
             return
         _get_logger().info(f'Initializing {self.__class__.__name__} ...')
@@ -88,11 +91,11 @@ class BaseDriver(metaclass=_ABCMeta):
     ########################################################################################################################
 
     @_abstractmethod
-    def driver_type(self):
+    def driver_type(self):  # pylint: disable=missing-docstring
         return NotImplemented
 
     @_abstractmethod
-    def driver_kind(self):
+    def driver_kind(self):  # pylint: disable=missing-docstring
         return NotImplemented
 
     @_abstractmethod
@@ -115,8 +118,8 @@ class BaseDriver(metaclass=_ABCMeta):
         assert driver_kind is None or isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
 
         key = (driver_type, driver_kind,)
-        assert key not in DriverRegester._DRIVERS, f'{key} already registered!'  # pylint: disable=protected-access
-        DriverRegester._DRIVERS[key] = cls  # pylint: disable=protected-access
+        assert key not in DriverRegister._DRIVERS, f'{key} already registered!'  # pylint: disable=protected-access
+        DriverRegister._DRIVERS[key] = cls  # pylint: disable=protected-access
 
 ################################################################################################################################
 

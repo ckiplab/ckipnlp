@@ -1,4 +1,4 @@
-# pylint: disable=too-many-lines
+# pylint: disable=missing-docstring, too-many-lines
 
 HUMAN_WORDS = {
     '一代紅顏',

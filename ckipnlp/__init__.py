@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""
+The Official CKIP CoreNLP Toolkits.
+"""
+
 __author_name__ = 'Mu Yang'
 __author_email__ = 'emfomy@gmail.com'
 __copyright__ = '2018-2020 CKIP Lab'

@@ -64,7 +64,7 @@ class CorefToken(_BaseTuple, _CorefToken):
             .. code-block:: python
 
                 {
-                    'word': '畢卡索',       # token word
+                    'word': '畢卡索',        # token word
                     'coref': (0, 'source'), # coref ID and type
                     'idx': 2,               # node index
                 }
@@ -106,9 +106,9 @@ class CorefSentence(_BaseSentence):
             .. code-block:: python
 
                 [
-                    { word: '畢卡索', coref: (0, 'source'), idx: 2, }, # coref-token 1
-                    { word: '他', coref: (0, 'target'), idx: 3, },    # coref-token 2
-                    { word: '想', coref: None, idx: 4, },             # coref-token 3
+                    { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, }, # coref-token 1
+                    { 'word': '他', 'coref': (0, 'target'), 'idx': 3, },    # coref-token 2
+                    { 'word': '想', 'coref': None, 'idx': 4, },             # coref-token 3
                 ]
 
         List format
@@ -154,14 +154,14 @@ class CorefParagraph(_BaseList):
 
                 [
                     [ # Sentence 1
-                        { word: '畢卡索', coref: (0, 'source'), idx: 2, },
-                        { word: '他', coref: (0, 'target'), idx: 3, },
-                        { word: '想', coref: None, idx: 4, },
+                        { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, },
+                        { 'word': '他', 'coref': (0, 'target'), 'idx': 3, },
+                        { 'word': '想', 'coref': None, 'idx': 4, },
                     ],
                     [ # Sentence 2
-                        { word: None, coref: (0, 'zero'), None, },
-                        { word: '完蛋', coref: None, idx: 1, },
-                        { word: '了', coref: None, idx: 2, },
+                        { 'word': None, 'coref': (0, 'zero'), None, },
+                        { 'word': '完蛋', 'coref': None, 'idx': 1, },
+                        { 'word': '了', 'coref': None, 'idx': 2, },
                     ],
                 ]
 

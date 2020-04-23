@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""
+This module provides core CKIPNLP pipeline.
+"""
+
 __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
@@ -12,7 +16,7 @@ from collections.abc import (
 from ckipnlp.driver.base import (
     DriverType as _DriverType,
     DriverKind as _DriverKind,
-    DriverRegester as _DriverRegester,
+    DriverRegister as _DriverRegister,
 )
 
 ###############################################################################################################################)
@@ -78,6 +82,12 @@ class CkipPipeline:
 
         ner_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of named-entity recognition chunker.
+
+    Other Parameters
+    ----------------
+        lazy : bool
+            Lazy initialize the drivers.
+
     """
 
     def __init__(self, *,
@@ -91,17 +101,17 @@ class CkipPipeline:
 
         # WS & POS
         if word_segmenter_kind == _DriverKind.CLASSIC and pos_tagger_kind == _DriverKind.CLASSIC:
-            self._wspos_driver = _DriverRegester.get(_DriverType.WORD_SEGMENTER, _DriverKind.CLASSIC)(do_pos=True, lazy=lazy)
+            self._wspos_driver = _DriverRegister.get(_DriverType.WORD_SEGMENTER, _DriverKind.CLASSIC)(do_pos=True, lazy=lazy)
             word_segmenter_kind = None
             pos_tagger_kind = None
         else:
-            self._wspos_driver = _DriverRegester.get(None, None)(lazy=lazy)
+            self._wspos_driver = _DriverRegister.get(None, None)(lazy=lazy)
 
-        self._sentence_segmenter = _DriverRegester.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter_kind)(lazy=lazy)
-        self._word_segmenter = _DriverRegester.get(_DriverType.WORD_SEGMENTER, word_segmenter_kind)(lazy=lazy)
-        self._pos_tagger = _DriverRegester.get(_DriverType.POS_TAGGER, pos_tagger_kind)(lazy=lazy)
-        self._sentence_parser = _DriverRegester.get(_DriverType.SENTENCE_PARSER, sentence_parser_kind)(lazy=lazy)
-        self._ner_chunker = _DriverRegester.get(_DriverType.NER_CHUNKER, ner_chunker_kind)(lazy=lazy)
+        self._sentence_segmenter = _DriverRegister.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter_kind)(lazy=lazy)
+        self._word_segmenter = _DriverRegister.get(_DriverType.WORD_SEGMENTER, word_segmenter_kind)(lazy=lazy)
+        self._pos_tagger = _DriverRegister.get(_DriverType.POS_TAGGER, pos_tagger_kind)(lazy=lazy)
+        self._sentence_parser = _DriverRegister.get(_DriverType.SENTENCE_PARSER, sentence_parser_kind)(lazy=lazy)
+        self._ner_chunker = _DriverRegister.get(_DriverType.NER_CHUNKER, ner_chunker_kind)(lazy=lazy)
 
     ########################################################################################################################
 
@@ -134,7 +144,7 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.text : :class:`TextParagraph`
+            doc.text : :class:`TextParagraph <ckipnlp.container.text.TextParagraph>`
                 The sentences.
 
         .. note::
@@ -165,7 +175,7 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.ws : :class:`SegParagraph`
+            doc.ws : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
                 The word-segmented sentences.
 
         .. note::
@@ -199,7 +209,7 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.pos : :class:`SegParagraph`
+            doc.pos : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
                 The part-of-speech sentences.
 
         .. note::
@@ -223,38 +233,6 @@ class CkipPipeline:
 
     ########################################################################################################################
 
-    def get_ner(self, doc):
-        """Apply named-entity recognition.
-
-        Arguments
-        ---------
-            doc : :class:`CkipDocument`
-                The input document.
-
-        Returns
-        -------
-            doc.ner : :class:`NerParagraph`
-                The named-entity recognition results.
-
-        .. note::
-
-            This routine modify **doc** inplace.
-        """
-        if doc.ner is None:
-
-            if not self._ner_chunker.is_dummy:
-                doc.ner = self._ner_chunker(
-                    ws=self.get_ws(doc),
-                    pos=self.get_pos(doc),
-                )
-
-            else:
-                raise AttributeError('No named-entity recognition driver / No valid named-entity recognition input!')
-
-        return doc.ner
-
-    ########################################################################################################################
-
     def get_parsed(self, doc):
         """Apply sentence parsing.
 
@@ -265,7 +243,7 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.parsed : :class:`ParsedParagraph`
+            doc.parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
                 The parsed sentences.
 
         .. note::
@@ -284,3 +262,35 @@ class CkipPipeline:
                 raise AttributeError('No sentence parsing driver / No valid sentence parsing input!')
 
         return doc.parsed
+
+    ########################################################################################################################
+
+    def get_ner(self, doc):
+        """Apply named-entity recognition.
+
+        Arguments
+        ---------
+            doc : :class:`CkipDocument`
+                The input document.
+
+        Returns
+        -------
+            doc.ner : :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`
+                The named-entity recognition results.
+
+        .. note::
+
+            This routine modify **doc** inplace.
+        """
+        if doc.ner is None:
+
+            if not self._ner_chunker.is_dummy:
+                doc.ner = self._ner_chunker(
+                    ws=self.get_ws(doc),
+                    pos=self.get_pos(doc),
+                )
+
+            else:
+                raise AttributeError('No named-entity recognition driver / No valid named-entity recognition input!')
+
+        return doc.ner

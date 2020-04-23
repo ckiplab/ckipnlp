@@ -68,6 +68,9 @@ html_static_path = ['_static']
 html_extra_path = ['../LICENSE']
 html_css_files = ['./custom.css']
 
+html_logo    = 'image/ckip_logo.svg'
+html_favicon = 'image/ckip_favicon.ico'
+
 # -- Settings of autodoc -----------------------------------------------------
 
 autodoc_member_order = 'bysource'

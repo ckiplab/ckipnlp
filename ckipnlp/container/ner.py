@@ -28,7 +28,7 @@ class _NerToken(_NamedTuple):
     idx: _Tuple[int, int]
 
 class NerToken(_BaseTuple, _NerToken):
-    """A NER token.
+    """A named-entity recognition token.
 
     Attributes
     ----------
@@ -101,7 +101,7 @@ class NerToken(_BaseTuple, _NerToken):
 ################################################################################################################################
 
 class NerSentence(_BaseSentence):
-    """A list of NER sentence.
+    """A named-entity recognition sentence.
 
     .. admonition:: Data Structure Examples
 
@@ -158,7 +158,7 @@ class NerSentence(_BaseSentence):
 ################################################################################################################################
 
 class NerParagraph(_BaseList):
-    """A list of NER sentence.
+    """A list of named-entity recognition sentence.
 
     .. admonition:: Data Structure Examples
 

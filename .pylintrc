@@ -5,7 +5,6 @@ disable =
 	bad-continuation,
 	duplicate-code,
 	logging-fstring-interpolation,
-	missing-docstring,
 	too-few-public-methods,
 	too-many-ancestors,
 	too-many-branches,

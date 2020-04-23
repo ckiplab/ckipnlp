@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides containers for parsed trees.
+This module provides tree containers for sentence parsing.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -220,7 +220,7 @@ class ParsedRelation(_Base, _ParsedRelation):
         )
 
     @property
-    def head_first(self):
+    def head_first(self):  # pylint: disable=missing-docstring
         return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):

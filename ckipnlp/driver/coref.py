@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+"""
+This module provides built-in co-reference detection driver.
+"""
+
 __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
@@ -41,7 +45,7 @@ from .base import (
 ################################################################################################################################
 
 class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP co-reference driver."""
+    """The CKIP co-reference detection driver."""
 
     driver_type = _DriverType.COREF_CHUNKER
     driver_kind = _DriverKind.BUILTIN
