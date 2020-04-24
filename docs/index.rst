@@ -10,10 +10,10 @@ CKIP CoreNLP
    :caption: Contents
 
    _api/ckipnlp
-   src/tag
 
 .. toctree::
    :caption: Appendix
 
+   src/tag
    genindex
    py-modindex

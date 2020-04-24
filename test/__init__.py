@@ -13,3 +13,6 @@ from .container.coref import *
 
 from .container.wspos import *
 from .container.tree_parsed import *
+
+from .pipeline.core import *
+from .pipeline.coref import *

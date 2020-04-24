@@ -50,7 +50,7 @@ class CkipClassicWordSegmenter(_BaseDriver):
         wspos_text = self._core.apply_list(text.to_text())
         ws, pos = _WsPosParagraph.from_text(wspos_text)
 
-        return ws, pos if self._do_pos else ws
+        return (ws, pos,) if self._do_pos else ws
 
 class CkipClassicSentenceParser(_BaseDriver):
     """The CKIP sentence parsing driver with CkipClassic backend."""

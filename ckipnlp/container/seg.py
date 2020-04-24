@@ -61,8 +61,8 @@ class SegParagraph(_BaseList):
             .. code-block:: python
 
                 [
-                    '中文字\u3000喔', # Sentence 1
-                    '啊哈\u3000哈哈', # Sentence 2
+                    '中文字\u3000喔',     # Sentence 1
+                    '啊\u3000哈\u3000哈\u3000哈', # Sentence 2
                 ]
 
         Dict/List format
@@ -71,8 +71,8 @@ class SegParagraph(_BaseList):
             .. code-block:: python
 
                 [
-                    [ '中文字', '喔', ], # Sentence 1
-                    [ '啊哈', '哈哈', ], # Sentence 2
+                    [ '中文字', '喔', ],         # Sentence 1
+                    [ '啊', '哈', '哈', '哈', ], # Sentence 2
                 ]
 
     .. note::

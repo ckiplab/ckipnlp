@@ -37,8 +37,8 @@ class DriverType(_IntEnum):
 class DriverKind(_IntEnum):
     """The enumeration of driver backend kinds."""
     BUILTIN = _enum_auto()  #: Built-in Implementation
-    CLASSIC = _enum_auto()  #: CkipClassic Backend
     TAGGER = _enum_auto()   #: CkipTagger Backend
+    CLASSIC = _enum_auto()  #: CkipClassic Backend
 
 ################################################################################################################################
 

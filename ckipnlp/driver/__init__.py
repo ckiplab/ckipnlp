@@ -14,15 +14,15 @@ from .base import (
     DriverKind,
 )
 
-from .classic import (
-    CkipClassicWordSegmenter,
-    CkipClassicSentenceParser,
-)
-
 from .tagger import (
     CkipTaggerWordSegmenter,
     CkipTaggerPosTagger,
     CkipTaggerNerChunker,
+)
+
+from .classic import (
+    CkipClassicWordSegmenter,
+    CkipClassicSentenceParser,
 )
 
 from .ss import (
