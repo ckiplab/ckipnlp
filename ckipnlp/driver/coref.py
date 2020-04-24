@@ -72,13 +72,15 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         coref_tree = _Tree()
         coref_tree.create_node(identifier=0)
+        dummy_id = (-1, -1)
+        coref_tree.create_node(identifier=dummy_id, parent=0, data=True)
 
         name2node = {}  # name => (tree_id, node_id)
 
-        curr_source = None   # the current coref source
-        curr_subject = None  # the current coref subject
-        last_source = None   # the last coref source
-        last_subject = None  # the last coref subject
+        curr_source = dummy_id   # the current coref source
+        curr_subject = dummy_id  # the current coref subject
+        last_source = dummy_id   # the last coref source
+        last_subject = dummy_id  # the last coref subject
 
         # Find coref
         for tree_id, tree in enumerate(tree_list):
@@ -92,29 +94,28 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
             # Get sources/targets
             node_ids = {}
             for nid in cls._get_sources(tree): # Source
-                node_ids[nid] = 'Src'
-            for nid in cls._get_subjects(tree): # Human
-                node_ids[nid] = 'Sub'
+                node_ids[nid] = True
             for nid in cls._get_targets(tree): # Target
-                node_ids[nid] = 'Tgt'
+                node_ids[nid] = False
+            subject_ids = set(cls._get_subjects(tree)) # Subject
 
-            source_ids = {nid: ntype for nid, ntype in node_ids.items() if ntype != 'Tgt'}
-            target_ids = {nid: ntype for nid, ntype in node_ids.items() if ntype == 'Tgt'}
+            source_ids = [nid for nid, ntype in sorted(node_ids.items()) if ntype]
+            target_ids = [nid for nid, ntype in sorted(node_ids.items()) if not ntype]
 
             # Assign ref_id to sources
-            for sid, stype in source_ids.items():
+            for sid in source_ids:
                 source = tree[sid]
 
                 curr_source = (tree_id, sid,)
-                if stype == 'Sub':
-                    curr_subject = curr_source
+                if sid in subject_ids:
+                    curr_subject = (tree_id, sid,)
 
                 parent_id = name2node.get(source.data.word, None)
                 if parent_id:
                     coref_tree.create_node(identifier=(tree_id, sid,), parent=parent_id, data=True)
                 else:
-                    name2node[source.data.word] = curr_source
-                    coref_tree.create_node(identifier=(tree_id, sid,), parent=coref_tree.root, data=True)
+                    name2node[source.data.word] = (tree_id, sid,)
+                    coref_tree.create_node(identifier=(tree_id, sid,), parent=0, data=True)
 
             # Link targets to previous sources
             for tid in target_ids:
@@ -122,9 +123,12 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
                     coref_tree.create_node(identifier=(tree_id, tid,), parent=last_subject, data=False)
 
                 if tid >= 0:
-                    if curr_source and tree[tid].data.word in _SELF_WORDS:
+                    if tid in subject_ids and (tree_id, tid) > curr_subject:
+                        curr_subject = (tree_id, tid,)
+
+                    if tree[tid].data.word in _SELF_WORDS:
                         coref_tree.create_node(identifier=(tree_id, tid,), parent=curr_source, data=False)
-                    elif last_source:
+                    else:
                         coref_tree.create_node(identifier=(tree_id, tid,), parent=last_source, data=False)
 
             for head_id, tail_id in appositions:
@@ -146,6 +150,9 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
             # Update last coref
             last_source = curr_source
             last_subject = curr_subject
+
+        # Remove dummy node
+        coref_tree.remove_node(dummy_id)
 
         return coref_tree
 
@@ -331,8 +338,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
                 the identifier of subject node.
         """
         for node in tree.get_subjects():
-            if cls._is_human_word(node):
-                yield node.identifier
+            yield node.identifier
 
     ########################################################################################################################
 
