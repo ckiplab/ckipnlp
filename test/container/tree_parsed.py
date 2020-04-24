@@ -287,7 +287,7 @@ class TestParsedTree(unittest.TestCase, _TestCaseBase):
             (21, 22, 'aspect',),
         }
         rels_id_out = {
-            (rel.head.identifier, rel.tail.identifier, rel.relation)
+            (rel.head.identifier, rel.tail.identifier, rel.relation.data.role)
                 for rel in obj.get_relations(semantic=True)
         }
         self.assertEqual(rels_id_out, rels_id)
@@ -310,7 +310,7 @@ class TestParsedTree(unittest.TestCase, _TestCaseBase):
             (21, 22, 'aspect',),
         }
         rels_id_out = {
-            (rel.head.identifier, rel.tail.identifier, rel.relation)
+            (rel.head.identifier, rel.tail.identifier, rel.relation.data.role)
                 for rel in obj.get_relations(semantic=False)
         }
         self.assertEqual(rels_id_out, rels_id)
