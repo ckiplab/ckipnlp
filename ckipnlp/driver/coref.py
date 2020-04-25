@@ -77,10 +77,9 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         name2node = {}  # name => (tree_id, node_id)
 
-        curr_source = dummy_id   # the current coref source
-        curr_subject = dummy_id  # the current coref subject
-        last_source = dummy_id   # the last coref source
-        last_subject = dummy_id  # the last coref subject
+        curr_source = None   # the current coref source
+        last_source = None   # the last coref source
+        last_subject = None  # the last coref subject
 
         # Find coref
         for tree_id, tree in enumerate(tree_list):
@@ -99,38 +98,30 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
                 node_ids[nid] = False
             subject_ids = set(cls._get_subjects(tree)) # Subject
 
-            source_ids = [nid for nid, ntype in sorted(node_ids.items()) if ntype]
-            target_ids = [nid for nid, ntype in sorted(node_ids.items()) if not ntype]
+            for nid, ntype in sorted(node_ids.items()):
+                if ntype: # Assign ref_id to sources
+                    source = tree[nid]
+                    curr_source = (tree_id, nid,)
 
-            # Assign ref_id to sources
-            for sid in source_ids:
-                source = tree[sid]
-
-                curr_source = (tree_id, sid,)
-                if sid in subject_ids:
-                    curr_subject = (tree_id, sid,)
-
-                parent_id = name2node.get(source.data.word, None)
-                if parent_id:
-                    coref_tree.create_node(identifier=(tree_id, sid,), parent=parent_id, data=True)
-                else:
-                    name2node[source.data.word] = (tree_id, sid,)
-                    coref_tree.create_node(identifier=(tree_id, sid,), parent=0, data=True)
-
-            # Link targets to previous sources
-            for tid in target_ids:
-                if tid < 0 and last_subject:
-                    coref_tree.create_node(identifier=(tree_id, tid,), parent=last_subject, data=False)
-
-                if tid >= 0:
-                    if tid in subject_ids and (tree_id, tid) > curr_subject:
-                        curr_subject = (tree_id, tid,)
-
-                    if tree[tid].data.word in _SELF_WORDS:
-                        coref_tree.create_node(identifier=(tree_id, tid,), parent=curr_source, data=False)
+                    parent_id = name2node.get(source.data.word, None)
+                    if parent_id:
+                        coref_tree.create_node(identifier=(tree_id, nid,), parent=parent_id, data=True)
                     else:
-                        coref_tree.create_node(identifier=(tree_id, tid,), parent=last_source, data=False)
+                        name2node[source.data.word] = (tree_id, nid,)
+                        coref_tree.create_node(identifier=(tree_id, nid,), parent=0, data=True)
 
+                else: # Link targets to previous sources
+                    if nid < 0 and last_subject:
+                        coref_tree.create_node(identifier=(tree_id, nid,), parent=last_subject, data=False)
+                    if nid >= 0:
+                        if curr_source and tree[nid].data.word in _SELF_WORDS:
+                            coref_tree.create_node(identifier=(tree_id, nid,), parent=curr_source, data=False)
+                        elif last_source:
+                            coref_tree.create_node(identifier=(tree_id, nid,), parent=last_source, data=False)
+                        else:
+                            coref_tree.create_node(identifier=(tree_id, nid,), parent=dummy_id, data=False)
+
+            # Merge apposition
             for head_id, tail_id in appositions:
                 head_id = (tree_id, head_id,)
                 tail_id = (tree_id, tail_id,)
@@ -147,9 +138,14 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
                     else:
                         coref_tree.move_node(tail_id, head_id)
 
-            # Update last coref
+            # Update subject
+            for nid, ntype in sorted(node_ids.items(), key=lambda x: x[::-1]):
+                if nid in subject_ids:
+                    last_subject = (tree_id, nid,)
+                    break
+
+            # Update source
             last_source = curr_source
-            last_subject = curr_subject
 
         # Remove dummy node
         coref_tree.remove_node(dummy_id)
