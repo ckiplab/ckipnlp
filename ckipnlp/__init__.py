@@ -10,7 +10,7 @@ __author_email__ = 'emfomy@gmail.com'
 __copyright__ = '2018-2020 CKIP Lab'
 
 __title__ = 'CKIPNLP'
-__version__ = '0.8.0dev'
+__version__ = '0.8.0'
 __description__ = 'CKIP CoreNLP'
 __license__ = 'CC BY-NC-SA 4.0'
 
