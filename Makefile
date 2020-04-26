@@ -7,9 +7,9 @@ TWINE = twine
 
 all: dist check test
 
-dist: sdist
+dist: sdist bdist_wheel
 
-sdist:
+sdist bdist_wheel:
 	$(PY) setup.py $@
 
 check:
@@ -29,7 +29,7 @@ doc:
 
 upload: dist check
 	ls dist/*.tar.gz
-	$(TWINE) upload --repository-url https://test.pypi.org/legacy/ dist/*.tar.gz --verbose
+	$(TWINE) upload --repository-url https://test.pypi.org/legacy/ dist/* --verbose
 
 clean:
 	( cd docs ; make clean )
