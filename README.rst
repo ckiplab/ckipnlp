@@ -133,7 +133,7 @@ See http://ckipnlp.readthedocs.io/en/latest/_api/ckipnlp.html for API details.
 Pipeline
 --------
 
-.. image:: ../_static/image/pipeline.svg
+.. image:: _static/image/pipeline.svg
 
 .. code-block:: python
 
@@ -180,7 +180,7 @@ Pipeline
 Co-Reference Pipeline
 ---------------------
 
-.. image:: ../_static/image/coref_pipeline.svg
+.. image:: _static/image/coref_pipeline.svg
 
 .. code-block:: python
 

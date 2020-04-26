@@ -4,7 +4,7 @@ CKIP CoreNLP
 .. toctree::
    :caption: Overview
 
-   src/readme
+   readme
 
 .. toctree::
    :caption: Contents
