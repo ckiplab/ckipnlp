@@ -128,7 +128,7 @@ Please refer https://ckip-classic.readthedocs.io for CkipClassic installation gu
 Usage
 =====
 
-See http://ckipnlp.readthedocs.io/en/latest/_api/ckipnlp.html for API details.
+See https://ckipnlp.readthedocs.io/en/latest/_api/ckipnlp.html for API details.
 
 Pipelines
 ---------
@@ -198,32 +198,12 @@ Co-Reference Pipeline
 Containers
 ----------
 
-.. |TextParagraph| replace:: :class:`TextParagraph <ckipnlp.container.text.TextParagraph>`
-.. |SegSentence| replace:: :class:`SegSentence <ckipnlp.container.seg.SegSentence>`
-.. |SegParagraph| replace:: :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
-.. |NerToken| replace:: :class:`NerToken <ckipnlp.container.ner.NerToken>`
-.. |NerSentence| replace:: :class:`NerSentence <ckipnlp.container.ner.NerSentence>`
-.. |NerParagraph| replace:: :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`
-.. |ParsedParagraph| replace:: :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
-.. |CorefToken| replace:: :class:`CorefToken <ckipnlp.container.coref.CorefToken>`
-.. |CorefSentence| replace:: :class:`CorefSentence <ckipnlp.container.coref.CorefSentence>`
-.. |CorefParagraph| replace:: :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
+The container objects provides following methods:
 
-.. |WsPosToken| replace:: :class:`WsPosToken <ckipnlp.container.util.wspos.WsPosToken>`
-.. |WsPosSentence| replace:: :class:`WsPosSentence <ckipnlp.container.util.wspos.WsPosSentence>`
-.. |WsPosParagraph| replace:: :class:`WsPosParagraph <ckipnlp.container.util.wspos.WsPosParagraph>`
-
-.. |ParsedNodeData| replace:: :class:`ParsedNodeData <ckipnlp.container.util.parsed_tree.ParsedNodeData>`
-.. |ParsedNode| replace:: :class:`ParsedNode <ckipnlp.container.util.parsed_tree.ParsedNode>`
-.. |ParsedRelation| replace:: :class:`ParsedRelation <ckipnlp.container.util.parsed_tree.ParsedRelation>`
-.. |ParsedTree| replace:: :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
-
-The container objects provides
-
--  :meth:`from_text()`, :meth:`to_text()` for plain-text format conversions;
--  :meth:`from_dict()`, :meth:`to_dict()` for dictionary-like format conversions;
--  :meth:`from_list()`, :meth:`to_list()` for list-like format conversions;
--  :meth:`from_json()`, :meth:`to_json()` for JSON format conversions (based-on dictionary-like format conversions).
+-  |from_text|, |to_text| for plain-text format conversions;
+-  |from_dict|, |to_dict| for dictionary-like format conversions;
+-  |from_list|, |to_list| for list-like format conversions;
+-  |from_json|, |to_json| for JSON format conversions (based-on dictionary-like format conversions).
 
 The following are the interfaces, where ``CONTAINER_CLASS`` refers to the container class.
 
@@ -243,25 +223,25 @@ The following are the interfaces, where ``CONTAINER_CLASS`` refers to the contai
 
 Note that not all container provide all above methods. Here is the table of implemented methods. Please refer the documentation of each container for detail formats.
 
-========================  ========================  ============  ======================
-Container                 Item                      from/to text  from/to dict/list/json
-========================  ========================  ============  ======================
-|TextParagraph|           :class:`str`              ✔             ✔
-|SegSentence|             :class:`str`              ✔             ✔
+========================  ========================  ============  ========================
+Container                 Item                      from/to text  from/to dict, list, json
+========================  ========================  ============  ========================
+|TextParagraph|           |str|                     ✔             ✔
+|SegSentence|             |str|                     ✔             ✔
 |SegParagraph|            |SegSentence|             ✔             ✔
 |NerToken|                ✘                                       ✔
 |NerSentence|             |NerToken|                              ✔
 |NerParagraph|            |NerSentence|                           ✔
-|ParsedParagraph|         :class:`str`              ✔             ✔
+|ParsedParagraph|         |str|                     ✔             ✔
 |CorefToken|              ✘                         only to       ✔
 |CorefSentence|           |CorefToken|              only to       ✔
 |CorefParagraph|          |CorefSentence|           only to       ✔
-========================  ========================  ============  ======================
+========================  ========================  ============  ========================
 
 WS with POS
 ^^^^^^^^^^^
 
-There are also conversion routines for word-segmentation and POS containers jointly. For example, |WsPosToken| provides routines for a word (:class:`str`) with POS-tag (:class:`str`):
+There are also conversion routines for word-segmentation and POS containers jointly. For example, |WsPosToken| provides routines for a word (|str|) with POS-tag (|str|):
 
 .. code-block:: python
 
@@ -291,3 +271,36 @@ Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`_ under the `
 
 .. |CC BY-NC-SA 4.0| image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
    :target: http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+
+
+.. |from_text| replace:: ``from_text()``
+.. |to_text| replace:: ``to_text()``
+.. |from_dict| replace:: ``from_dict()``
+.. |to_dict| replace:: ``to_dict()``
+.. |from_list| replace:: ``from_list()``
+.. |to_list| replace:: ``to_list()``
+.. |from_json| replace:: ``from_json()``
+.. |to_json| replace:: ``to_json()``
+
+.. |str| replace:: ``str``
+
+.. |TextParagraph| replace:: ``TextParagraph``
+.. |SegSentence| replace:: ``SegSentence``
+.. |SegParagraph| replace:: ``SegParagraph``
+.. |NerToken| replace:: ``NerToken``
+.. |NerSentence| replace:: ``NerSentence``
+.. |NerParagraph| replace:: ``NerParagraph``
+.. |ParsedParagraph| replace:: ``ParsedParagraph``
+.. |CorefToken| replace:: ``CorefToken``
+.. |CorefSentence| replace:: ``CorefSentence``
+.. |CorefParagraph| replace:: ``CorefParagraph``
+
+.. |WsPosToken| replace:: ``WsPosToken``
+.. |WsPosSentence| replace:: ``WsPosSentence``
+.. |WsPosParagraph| replace:: ``WsPosParagraph``
+
+.. |ParsedNodeData| replace:: ``ParsedNodeData``
+.. |ParsedNode| replace:: ``ParsedNode``
+.. |ParsedRelation| replace:: ``ParsedRelation``
+.. |ParsedTree| replace:: ``ParsedTree``
