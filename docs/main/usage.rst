@@ -7,6 +7,12 @@ Pipelines
 Core Pipeline
 ^^^^^^^^^^^^^
 
+The |CkipPipeline| connect drivers of sentence segmentation, word segmentation, part-of-speech tagging, named-entity recognition, and sentence parsing.
+
+The |CkipDocument| is the workspace of |CkipPipeline| with input/output data. Note that |CkipPipeline| will store the result into |CkipDocument| in-place.
+
+The |CkipPipeline| will compute all necessary dependencies. For example, if one calls :meth:`get_ner()` with only raw-text input, the pipeline will automatically calls :meth:`get_text()`, :meth:`get_ws()`, :meth:`get_pos()`.
+
 .. image:: ../image/pipeline.svg
 
 .. code-block:: python
@@ -46,6 +52,10 @@ Core Pipeline
 
 Co-Reference Pipeline
 ^^^^^^^^^^^^^^^^^^^^^
+
+The |CkipCorefPipeline| is a extension of |CkipPipeline| by providing co-reference detection. The pipeline first do named-entity recognition as |CkipPipeline| do, followed by alignment algorithms to fix the word-segmentation and part-of-speech tagging outputs, and then do co-reference detection based sentence parsing result.
+
+The |CkipCorefDocument| is the workspace of |CkipCorefPipeline| with input/output data. Note that |CkipCorefDocument| will store the result into |CkipCorefPipeline|.
 
 .. image:: ../image/coref_pipeline.svg
 
@@ -177,6 +187,11 @@ The |ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`_ tree with |Par
    print('-- Syntactic --')
    for subject in tree.get_subjects(0, semantic=False): print(repr(subject))
    print()
+
+.. |CkipPipeline| replace:: :class:`CkipPipeline <ckipnlp.pipeline.core.CkipPipeline>`
+.. |CkipDocument| replace:: :class:`CkipDocument <ckipnlp.pipeline.core.CkipDocument>`
+.. |CkipCorefPipeline| replace:: :class:`CkipCorefPipeline <ckipnlp.pipeline.coref.CkipCorefPipeline>`
+.. |CkipCorefDocument| replace:: :class:`CkipCorefDocument <ckipnlp.pipeline.coref.CkipCorefDocument>`
 
 .. |str| replace:: :class:`str`
 
