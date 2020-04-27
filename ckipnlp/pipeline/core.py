@@ -87,7 +87,6 @@ class CkipPipeline:
     ----------------
         lazy : bool
             Lazy initialize the drivers.
-
     """
 
     def __init__(self, *,

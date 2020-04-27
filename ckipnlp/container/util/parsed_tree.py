@@ -245,7 +245,8 @@ class ParsedTree(_Base, _Tree):
                 'S(Head:Nab:中文字|particle:Td:耶)'
 
         Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`. A dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+            A dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
             where ``'data'`` is a dictionary with the same format as :meth:`ParsedNodeData.to_dict`,
             and ``'children'`` is a list of dictionaries of subtrees with the same format as this tree.
 
