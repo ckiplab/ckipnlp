@@ -70,12 +70,12 @@ https://ckipnlp.readthedocs.io/
 |ReadTheDocs Home|
 
 .. |ReadTheDocs Home| image:: https://img.shields.io/website/https/ckipnlp.readthedocs.io.svg?maxAge=3600&up_message=online&down_message=offline
-   :target: http://ckipnlp.readthedocs.io
+   :target: https://ckipnlp.readthedocs.io
 
 Contributers
 ^^^^^^^^^^^^
 
-* `Mu Yang <http://muyang.pro>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Author & Maintainer)
+* `Mu Yang <https://muyang.pro>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Author & Maintainer)
 * `Wei-Yun Ma <https://www.iis.sinica.edu.tw/pages/ma/>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Maintainer)
 * `DouglasWu <dgrey1116@gmail.com>`_
 
@@ -90,7 +90,7 @@ Installation
 Requirements
 ^^^^^^^^^^^^
 
-* `Python <http://www.python.org>`_ 3.6+
+* `Python <https://www.python.org>`_ 3.6+
 * `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
 
 * `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional, Recommended]
@@ -118,7 +118,7 @@ Installation via Pip
 
 - No backend (not recommended): ``pip install ckipnlp``.
 - With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]``
-- With CkipClassic backend: Please refer https://ckip-classic.readthedocs.io/en/latest/src/readme.html#installation for CkipClassic installation guide.
+- With CkipClassic backend: Please refer https://ckip-classic.readthedocs.io/en/latest/main/readme.html#installation for CkipClassic installation guide.
 
 Usage
 -----
