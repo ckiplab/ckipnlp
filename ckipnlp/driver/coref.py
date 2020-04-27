@@ -258,7 +258,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.tree.parsed.ParsedTree>`
+            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
                 the parser tree.
 
         Yields
@@ -284,7 +284,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.tree.parsed.ParsedTree>`
+            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
                 the parser tree.
 
         Yields
@@ -325,7 +325,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.tree.parsed.ParsedTree>`
+            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
                 the parser tree.
 
         Yields

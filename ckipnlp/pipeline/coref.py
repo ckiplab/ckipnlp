@@ -73,11 +73,11 @@ class CkipCorefPipeline(_CkipPipeline):
         pos_tagger_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of part-of-speech tagger.
 
-        sentence_parser_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
-            The type of sentence parser.
-
         ner_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of named-entity recognition chunker.
+
+        sentence_parser_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+            The type of sentence parser.
 
         coref_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of co-reference detection chunker.

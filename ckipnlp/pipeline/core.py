@@ -77,17 +77,16 @@ class CkipPipeline:
         pos_tagger_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of part-of-speech tagger.
 
-        sentence_parser_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
-            The type of sentence parser.
-
         ner_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
             The type of named-entity recognition chunker.
+
+        sentence_parser_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+            The type of sentence parser.
 
     Other Parameters
     ----------------
         lazy : bool
             Lazy initialize the drivers.
-
     """
 
     def __init__(self, *,
@@ -233,38 +232,6 @@ class CkipPipeline:
 
     ########################################################################################################################
 
-    def get_parsed(self, doc):
-        """Apply sentence parsing.
-
-        Arguments
-        ---------
-            doc : :class:`CkipDocument`
-                The input document.
-
-        Returns
-        -------
-            doc.parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
-                The parsed sentences.
-
-        .. note::
-
-            This routine modify **doc** inplace.
-        """
-        if doc.parsed is None:
-
-            if not self._sentence_parser.is_dummy:
-                doc.parsed = self._sentence_parser(
-                    ws=self.get_ws(doc),
-                    pos=self.get_pos(doc),
-                )
-
-            else:
-                raise AttributeError('No sentence parsing driver / No valid sentence parsing input!')
-
-        return doc.parsed
-
-    ########################################################################################################################
-
     def get_ner(self, doc):
         """Apply named-entity recognition.
 
@@ -294,3 +261,35 @@ class CkipPipeline:
                 raise AttributeError('No named-entity recognition driver / No valid named-entity recognition input!')
 
         return doc.ner
+
+    ########################################################################################################################
+
+    def get_parsed(self, doc):
+        """Apply sentence parsing.
+
+        Arguments
+        ---------
+            doc : :class:`CkipDocument`
+                The input document.
+
+        Returns
+        -------
+            doc.parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
+                The parsed sentences.
+
+        .. note::
+
+            This routine modify **doc** inplace.
+        """
+        if doc.parsed is None:
+
+            if not self._sentence_parser.is_dummy:
+                doc.parsed = self._sentence_parser(
+                    ws=self.get_ws(doc),
+                    pos=self.get_pos(doc),
+                )
+
+            else:
+                raise AttributeError('No sentence parsing driver / No valid sentence parsing input!')
+
+        return doc.parsed

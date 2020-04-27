@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module implements specialized tree containers for CKIPNLP.
+This module implements specialized utilities for CKIPNLP containers.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'

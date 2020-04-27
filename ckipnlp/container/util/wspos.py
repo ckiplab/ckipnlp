@@ -18,11 +18,11 @@ from typing import (
     NamedTuple as _NamedTuple,
 )
 
-from .base import (
+from ..base import (
     BaseTuple as _BaseTuple,
 )
 
-from .seg import (
+from ..seg import (
     SegSentence as _SegSentence,
     SegParagraph as _SegParagraph,
 )

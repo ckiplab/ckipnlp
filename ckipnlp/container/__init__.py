@@ -11,9 +11,9 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from .text import *
 from .seg import *
-from .parsed import *
 from .ner import *
+from .parsed import *
 from .coref import *
 
-from .wspos import *
-from .tree.parsed import *
+from .util.wspos import *
+from .util.parsed_tree import *
