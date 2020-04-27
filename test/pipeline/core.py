@@ -29,13 +29,13 @@ pos = [
     [ 'Na', 'T', ],
     [ 'I', 'D', 'D', 'D', ],
 ]
-parsed = [
-    '#1:1.[0] S(Head:Nab:中文字|particle:Tc:喔)#',
-    '#2:1.[0] %(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)#',
-]
 ner = [
     [ [ '中文字', 'LANGUAGE', (0, 3), ], ],
     [],
+]
+parsed = [
+    '#1:1.[0] S(Head:Nab:中文字|particle:Tc:喔)#',
+    '#2:1.[0] %(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)#',
 ]
 
 ################################################################################################################################
@@ -96,6 +96,16 @@ class TestClassicWordSegmenterPosTagger(unittest.TestCase):
 
 ################################################################################################################################
 
+class TestTaggerNerChunker(unittest.TestCase):
+
+    def test(self):
+        obj = CkipPipeline(ner_chunker_kind=DriverKind.TAGGER)
+        doc = CkipDocument(ws=SegParagraph.from_list(ws), pos=SegParagraph.from_list(pos))
+        obj.get_ner(doc)
+        self.assertSequenceEqual(doc.ner.to_list(), ner)
+
+################################################################################################################################
+
 # class TestClassicSentenceParser(unittest.TestCase):
 
 #     def test(self):
@@ -103,23 +113,3 @@ class TestClassicWordSegmenterPosTagger(unittest.TestCase):
 #         doc = CkipDocument(ws=SegParagraph.from_list(ws), pos=SegParagraph.from_list(pos))
 #         obj.get_parsed(doc)
 #         self.assertSequenceEqual(doc.parsed.to_list(), parsed)
-
-################################################################################################################################
-
-class TestTaggerNerChunker(unittest.TestCase):
-
-    def test(self):
-        obj = CkipPipeline(ner_chunker_kind=DriverKind.TAGGER)
-        doc = CkipDocument(ws=SegParagraph.from_list(ws), pos=SegParagraph.from_list(pos))
-        obj.get_ner(doc)
-        self.assertSequenceEqual(doc.ner.to_list(), ner)
-
-################################################################################################################################
-
-class TestTaggerNerChunker(unittest.TestCase):
-
-    def test(self):
-        obj = CkipPipeline(ner_chunker_kind=DriverKind.TAGGER)
-        doc = CkipDocument(ws=SegParagraph.from_list(ws), pos=SegParagraph.from_list(pos))
-        obj.get_ner(doc)
-        self.assertSequenceEqual(doc.ner.to_list(), ner)

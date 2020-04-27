@@ -9,7 +9,7 @@ import json
 import unittest
 
 from .base import _TestCaseBase
-from ckipnlp.container.wspos import *
+from ckipnlp.container.util.wspos import *
 from ckipnlp.container.seg import *
 
 ################################################################################################################################

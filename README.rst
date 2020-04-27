@@ -101,16 +101,16 @@ Requirements
 Tool Requirements
 -----------------
 
-================================  ==========  ============  =============
- Tool                              Built-in    CkipTagger    CkipClassic
-================================  ==========  ============  =============
-Sentence Segmentation              ✔
-Word Segmentation†                             ✔             ✔
-Part-of-Speech Tagging†                        ✔             ✔
-Sentence Parsing                                             ✔
-Named-Entity Recognition                       ✔
-Co-Reference Delectation‡          ✔           ✔             ✔
-================================  ==========  ============  =============
+================================  ========  ==========  ===========
+Tool                              Built-in  CkipTagger  CkipClassic
+================================  ========  ==========  ===========
+Sentence Segmentation             ✔
+Word Segmentation†                          ✔           ✔
+Part-of-Speech Tagging†                     ✔           ✔
+Sentence Parsing                                        ✔
+Named-Entity Recognition                    ✔
+Co-Reference Delectation‡         ✔         ✔           ✔
+================================  ========  ==========  ===========
 
 - † These tools require only one of either backends.
 - ‡ Co-Reference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, sentence parsing, and named-entity recognition.
@@ -130,17 +130,15 @@ Usage
 
 See http://ckipnlp.readthedocs.io/en/latest/_api/ckipnlp.html for API details.
 
-Pipeline
---------
+Pipelines
+---------
+
+Core Pipeline
+^^^^^^^^^^^^^
 
 .. image:: _static/image/pipeline.svg
 
 .. code-block:: python
-
-   import ckipnlp
-   print(ckipnlp.__name__, ckipnlp.__version__)
-
-   ################################################################
 
    from ckipnlp.pipeline import CkipPipeline, CkipDocument
 
@@ -161,33 +159,28 @@ Pipeline
    for line in doc.pos:
        print(line.to_text())
 
-   # Sentence Parsing
-   pipeline.get_parsed(doc)
-   print(doc.parsed)
-
    # Named-Entity Recognition
    pipeline.get_ner(doc)
    print(doc.ner)
 
+   # Sentence Parsing
+   pipeline.get_parsed(doc)
+   print(doc.parsed)
+
    ################################################################
 
-   from ckipnlp.container.wspos import WsPosParagraph
+   from ckipnlp.container.util.wspos import WsPosParagraph
 
    # Word Segmentation & Part-of-Speech Tagging
    for line in WsPosParagraph.to_text(doc.ws, doc.pos):
        print(line)
 
 Co-Reference Pipeline
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: _static/image/coref_pipeline.svg
 
 .. code-block:: python
-
-   import ckipnlp
-   print(ckipnlp.__name__, ckipnlp.__version__)
-
-   ################################################################
 
    from ckipnlp.pipeline import CkipCorefPipeline, CkipDocument
 
@@ -201,6 +194,93 @@ Co-Reference Pipeline
    print(corefdoc.coref)
    for line in corefdoc.coref:
        print(line.to_text())
+
+Containers
+----------
+
+.. |TextParagraph| replace:: :class:`TextParagraph <ckipnlp.container.text.TextParagraph>`
+.. |SegSentence| replace:: :class:`SegSentence <ckipnlp.container.seg.SegSentence>`
+.. |SegParagraph| replace:: :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+.. |NerToken| replace:: :class:`NerToken <ckipnlp.container.ner.NerToken>`
+.. |NerSentence| replace:: :class:`NerSentence <ckipnlp.container.ner.NerSentence>`
+.. |NerParagraph| replace:: :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`
+.. |ParsedParagraph| replace:: :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
+.. |CorefToken| replace:: :class:`CorefToken <ckipnlp.container.coref.CorefToken>`
+.. |CorefSentence| replace:: :class:`CorefSentence <ckipnlp.container.coref.CorefSentence>`
+.. |CorefParagraph| replace:: :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
+
+.. |WsPosToken| replace:: :class:`WsPosToken <ckipnlp.container.util.wspos.WsPosToken>`
+.. |WsPosSentence| replace:: :class:`WsPosSentence <ckipnlp.container.util.wspos.WsPosSentence>`
+.. |WsPosParagraph| replace:: :class:`WsPosParagraph <ckipnlp.container.util.wspos.WsPosParagraph>`
+
+.. |ParsedNodeData| replace:: :class:`ParsedNodeData <ckipnlp.container.util.parsed_tree.ParsedNodeData>`
+.. |ParsedNode| replace:: :class:`ParsedNode <ckipnlp.container.util.parsed_tree.ParsedNode>`
+.. |ParsedRelation| replace:: :class:`ParsedRelation <ckipnlp.container.util.parsed_tree.ParsedRelation>`
+.. |ParsedTree| replace:: :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
+
+The container objects provides
+
+-  :meth:`from_text()`, :meth:`to_text()` for plain-text format conversions;
+-  :meth:`from_dict()`, :meth:`to_dict()` for dictionary-like format conversions;
+-  :meth:`from_list()`, :meth:`to_list()` for list-like format conversions;
+-  :meth:`from_json()`, :meth:`to_json()` for JSON format conversions (based-on dictionary-like format conversions).
+
+The following are the interfaces, where ``CONTAINER_CLASS`` refers to the container class.
+
+.. code-block:: python
+
+   obj = CONTAINER_CLASS.from_text(plain_text)
+   plain_text = obj.to_text()
+
+   obj = CONTAINER_CLASS.from_dict({ key: value })
+   dict_obj = obj.to_dict()
+
+   obj = CONTAINER_CLASS.from_list([ value1, value2 ])
+   list_obj = obj.to_list()
+
+   obj = CONTAINER_CLASS.from_json(json_str)
+   json_str = obj.to_json()
+
+Note that not all container provide all above methods. Here is the table of implemented methods. Please refer the documentation of each container for detail formats.
+
+========================  ========================  ============  ======================
+Container                 Item                      from/to text  from/to dict/list/json
+========================  ========================  ============  ======================
+|TextParagraph|           :class:`str`              ✔             ✔
+|SegSentence|             :class:`str`              ✔             ✔
+|SegParagraph|            |SegSentence|             ✔             ✔
+|NerToken|                ✘                                       ✔
+|NerSentence|             |NerToken|                              ✔
+|NerParagraph|            |NerSentence|                           ✔
+|ParsedParagraph|         :class:`str`              ✔             ✔
+|CorefToken|              ✘                         only to       ✔
+|CorefSentence|           |CorefToken|              only to       ✔
+|CorefParagraph|          |CorefSentence|           only to       ✔
+========================  ========================  ============  ======================
+
+WS with POS
+^^^^^^^^^^^
+
+There are also conversion routines for word-segmentation and POS containers jointly. For example, |WsPosToken| provides routines for a word (:class:`str`) with POS-tag (:class:`str`):
+
+.. code-block:: python
+
+   ws_obj, pos_obj = WsPosToken.from_text('中文字(Na)')
+   plain_text = WsPosToken.to_text(ws_obj, pos_obj)
+
+   ws_obj, pos_obj = WsPosToken.from_dict({ 'word': '中文字', 'pos': 'Na', })
+   dict_obj = WsPosToken.to_dict(ws_obj, pos_obj)
+
+   ws_obj, pos_obj = WsPosToken.from_list([ '中文字', 'Na' ])
+   list_obj = WsPosToken.to_list(ws_obj, pos_obj)
+
+   ws_obj, pos_obj = WsPosToken.from_json(json_str)
+   json_str = WsPosToken.to_json(ws_obj, pos_obj)
+
+Similarly, |WsPosSentence|/|WsPosParagraph| provides routines for word-segmented and POS sentence/paragraph (|SegSentence|/|SegParagraph|) respectively.
+
+Parsed Tree
+^^^^^^^^^^^
 
 License
 =======

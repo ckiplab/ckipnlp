@@ -9,7 +9,7 @@ import json
 import unittest
 
 from .base import _TestCaseBase
-from ckipnlp.container.tree.parsed import *
+from ckipnlp.container.util.parsed_tree import *
 
 ################################################################################################################################
 

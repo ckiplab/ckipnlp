@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module implements drivers for CKIPNLP.
+This module implements CKIPNLP drivers.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'

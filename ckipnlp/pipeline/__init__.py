@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module implements pipelines for CKIPNLP.
+This module implements CKIPNLP pipelines.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
