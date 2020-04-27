@@ -1,8 +1,19 @@
 [MASTER]
 
-max-line-length = 128
-
 disable =
+	arguments-differ,
 	bad-continuation,
 	duplicate-code,
-	missing-docstring,
+	logging-fstring-interpolation,
+	too-few-public-methods,
+	too-many-ancestors,
+	too-many-branches,
+	too-many-instance-attributes,
+	too-many-locals,
+	too-many-nested-blocks,
+	too-many-statements,
+
+[FORMAT]
+
+max-line-length = 128
+good-names = ws

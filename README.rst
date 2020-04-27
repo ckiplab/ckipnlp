@@ -1,6 +1,18 @@
 Introduction
 ============
 
+Official CKIP CoreNLP Toolkits
+
+Features
+--------
+
+- Sentence Segmentation
+- Word Segmentation
+- Part-of-Speech Tagging
+- Sentence Parsing
+- Named-Entity Recognition
+- Co-Reference Delectation
+
 Git
 ---
 
@@ -74,189 +86,223 @@ External Links
 
 - `Online Demo <https://ckip.iis.sinica.edu.tw/service/corenlp>`_
 
-Requirements
-------------
-
-* `Python <http://www.python.org>`_ 3.5+
-* `Cython <http://cython.org>`_ 0.29+
-* `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
-
-.. attention::
-   For Python 2 users, please use `PyCkip 0.4.2 <https://pypi.org/project/pyckip/0.4.2/>`_ instead.
-
-CKIPWS (Optional)
-^^^^^^^^^^^^^^^^^
-
-* `CKIP Word Segmentation <http://ckip.iis.sinica.edu.tw/project/wordsegment/>`_ Linux version 20190524+
-
-CKIPParser (Optional)
-^^^^^^^^^^^^^^^^^^^^^
-
-* `CKIP Parser <http://ckip.iis.sinica.edu.tw/project/parser/>`_ Linux version 20190506+ (20190725+ recommended)
-
 Installation
 ============
 
-Denote ``<ckipws-linux-root>`` as the root path of CKIPWS Linux Version, and ``<ckipparser-linux-root>`` as the root path of CKIPParser Linux Version.
+Requirements
+------------
 
-Install Using Pip
+* `Python <http://www.python.org>`_ 3.6+
+* `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
+
+* `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional, Recommended]
+* `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
+
+Tool Requirements
 -----------------
 
-.. code-block:: bash
+================================  ========  ==========  ===========
+Tool                              Built-in  CkipTagger  CkipClassic
+================================  ========  ==========  ===========
+Sentence Segmentation             ✔
+Word Segmentation†                          ✔           ✔
+Part-of-Speech Tagging†                     ✔           ✔
+Sentence Parsing                                        ✔
+Named-Entity Recognition                    ✔
+Co-Reference Delectation‡         ✔         ✔           ✔
+================================  ========  ==========  ===========
 
-   pip install --upgrade ckipnlp
-   pip install --no-deps --force-reinstall --upgrade ckipnlp \
-      --install-option='--ws' \
-      --install-option='--ws-dir=<ckipws-linux-root>' \
-      --install-option='--parser' \
-      --install-option='--parser-dir=<ckipparser-linux-root>'
+- † These tools require only one of either backends.
+- ‡ Co-Reference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, sentence parsing, and named-entity recognition.
 
-Ignore ws/parser options if one doesn't have CKIPWS/CKIPParser.
-
-Installation Options
+Installation via Pip
 --------------------
 
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| Option                                        | Detail                                | Default Value                 |
-+===============================================+=======================================+===============================+
-| ``--[no-]ws``                                 | Enable/disable CKIPWS.                | False                         |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--[no-]parser``                             | Enable/disable CKIPParser.            | False                         |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--ws-dir=<ws-dir>``                         | CKIPWS root directory.                |                               |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--ws-lib-dir=<ws-lib-dir>``                 | CKIPWS libraries directory            | ``<ws-dir>/lib``              |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--ws-share-dir=<ws-share-dir>``             | CKIPWS share directory                | ``<ws-dir>``                  |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-dir=<parser-dir>``                 | CKIPParser root directory.            |                               |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-lib-dir=<parser-lib-dir>``         | CKIPParser libraries directory        | ``<parser-dir>/lib``          |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--parser-share-dir=<parser-share-dir>``     | CKIPParser share directory            | ``<parser-dir>``              |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--data2-dir=<data2-dir>``                   | "Data2" directory                     | ``<ws-share-dir>/Data2``      |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--rule-dir=<rule-dir>``                     | "Rule" directory                      | ``<parser-share-dir>/Rule``   |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
-| ``--rdb-dir=<rdb-dir>``                       | "RDB" directory                       | ``<parser-share-dir>/RDB``    |
-+-----------------------------------------------+---------------------------------------+-------------------------------+
+- No backend (not recommended): ``pip install ckipnlp``.
+- With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]``
+- With CkipClassic backend: Please refer https://ckip-classic.readthedocs.io/en/latest/src/readme.html#installation for CkipClassic installation guide.
 
 Usage
 =====
 
-See http://ckipnlp.readthedocs.io/ for API details.
+See https://ckipnlp.readthedocs.io/en/latest/_api/ckipnlp.html for API details.
 
-CKIPWS
-------
-
-.. code-block:: python
-
-   import ckipnlp.ws
-   print(ckipnlp.__name__, ckipnlp.__version__)
-
-   ws = ckipnlp.ws.CkipWs(logger=False)
-   print(ws('中文字喔'))
-   for l in ws.apply_list(['中文字喔', '啊哈哈哈']): print(l)
-
-   ws.apply_file(ifile='sample/sample.txt', ofile='output/sample.tag', uwfile='output/sample.uw')
-   with open('output/sample.tag') as fin:
-       print(fin.read())
-   with open('output/sample.uw') as fin:
-       print(fin.read())
-
-
-CKIPParser
------------
-
-.. code-block:: python
-
-   import ckipnlp.parser
-   print(ckipnlp.__name__, ckipnlp.__version__)
-
-   ps = ckipnlp.parser.CkipParser(logger=False)
-   print(ps('中文字喔'))
-   for l in ps.apply_list(['中文字喔', '啊哈哈哈']): print(l)
-
-   ps.apply_file(ifile='sample/sample.txt', ofile='output/sample.tree')
-   with open('output/sample.tree') as fin:
-       print(fin.read())
-
-
-Utilities
+Pipelines
 ---------
 
+Core Pipeline
+^^^^^^^^^^^^^
+
+.. image:: _static/image/pipeline.svg
+
 .. code-block:: python
 
-   import ckipnlp
-   print(ckipnlp.__name__, ckipnlp.__version__)
+   from ckipnlp.pipeline import CkipPipeline, CkipDocument
 
-   from ckipnlp.util.ws import *
-   from ckipnlp.util.parser import *
+   pipeline = CkipPipeline()
+   doc = CkipDocument(raw='中文字喔，啊哈哈哈')
 
-   # Format CkipWs output
-   ws_text = ['中文字(Na)　喔(T)', '啊哈(I)　哈哈(D)']
+   # Word Segmentation
+   pipeline.get_ws(doc)
+   print(doc.ws)
+   for line in doc.ws:
+       print(line.to_text())
 
-   # Show Sentence List
-   ws_sents = WsSentenceList.from_text(ws_text)
-   print(repr(ws_sents))
-   print(ws_sents.to_text())
+   # Part-of-Speech Tagging
+   pipeline.get_pos(doc)
+   print(doc.pos)
+   for line in doc.pos:
+       print(line.to_text())
 
-   # Show Each Sentence
-   for ws_sent in ws_sents: print(repr(ws_sent))
-   for ws_sent in ws_sents: print(ws_sent.to_text())
+   # Named-Entity Recognition
+   pipeline.get_ner(doc)
+   print(doc.ner)
 
-   # Show CkipParser output as tree
-   tree_text = '#1:1.[0] S(theme:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|target:PP(Head:P30:往|DUMMY:NP(property:Ncb:天|Head:Ncda:上))|Head:VA11:飛|aspect:Di:了)#'
-   tree = ParserTree.from_text(tree_text)
+   # Sentence Parsing
+   pipeline.get_parsed(doc)
+   print(doc.parsed)
+
+   ################################################################
+
+   from ckipnlp.container.util.wspos import WsPosParagraph
+
+   # Word Segmentation & Part-of-Speech Tagging
+   for line in WsPosParagraph.to_text(doc.ws, doc.pos):
+       print(line)
+
+Co-Reference Pipeline
+^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: _static/image/coref_pipeline.svg
+
+.. code-block:: python
+
+   from ckipnlp.pipeline import CkipCorefPipeline, CkipDocument
+
+   pipeline = CkipCorefPipeline()
+   doc = CkipDocument(raw='畢卡索他想，完蛋了')
+
+   # Co-Reference
+   corefdoc = pipeline(doc)
+   print(corefdoc.coref)
+   for line in corefdoc.coref:
+       print(line.to_text())
+
+Containers
+----------
+
+The container objects provides following methods:
+
+-  |from_text|, |to_text| for plain-text format conversions;
+-  |from_dict|, |to_dict| for dictionary-like format conversions;
+-  |from_list|, |to_list| for list-like format conversions;
+-  |from_json|, |to_json| for JSON format conversions (based-on dictionary-like format conversions).
+
+The following are the interfaces, where ``CONTAINER_CLASS`` refers to the container class.
+
+.. code-block:: python
+
+   obj = CONTAINER_CLASS.from_text(plain_text)
+   plain_text = obj.to_text()
+
+   obj = CONTAINER_CLASS.from_dict({ key: value })
+   dict_obj = obj.to_dict()
+
+   obj = CONTAINER_CLASS.from_list([ value1, value2 ])
+   list_obj = obj.to_list()
+
+   obj = CONTAINER_CLASS.from_json(json_str)
+   json_str = obj.to_json()
+
+Note that not all container provide all above methods. Here is the table of implemented methods. Please refer the documentation of each container for detail formats.
+
+========================  ========================  ============  ========================
+Container                 Item                      from/to text  from/to dict, list, json
+========================  ========================  ============  ========================
+|TextParagraph|           |str|                     ✔             ✔
+|SegSentence|             |str|                     ✔             ✔
+|SegParagraph|            |SegSentence|             ✔             ✔
+|NerToken|                ✘                                       ✔
+|NerSentence|             |NerToken|                              ✔
+|NerParagraph|            |NerSentence|                           ✔
+|ParsedParagraph|         |str|                     ✔             ✔
+|CorefToken|              ✘                         only to       ✔
+|CorefSentence|           |CorefToken|              only to       ✔
+|CorefParagraph|          |CorefSentence|           only to       ✔
+========================  ========================  ============  ========================
+
+WS with POS
+^^^^^^^^^^^
+
+There are also conversion routines for word-segmentation and POS containers jointly. For example, |WsPosToken| provides routines for a word (|str|) with POS-tag (|str|):
+
+.. code-block:: python
+
+   ws_obj, pos_obj = WsPosToken.from_text('中文字(Na)')
+   plain_text = WsPosToken.to_text(ws_obj, pos_obj)
+
+   ws_obj, pos_obj = WsPosToken.from_dict({ 'word': '中文字', 'pos': 'Na', })
+   dict_obj = WsPosToken.to_dict(ws_obj, pos_obj)
+
+   ws_obj, pos_obj = WsPosToken.from_list([ '中文字', 'Na' ])
+   list_obj = WsPosToken.to_list(ws_obj, pos_obj)
+
+   ws_obj, pos_obj = WsPosToken.from_json(json_str)
+   json_str = WsPosToken.to_json(ws_obj, pos_obj)
+
+Similarly, |WsPosSentence|/|WsPosParagraph| provides routines for word-segmented and POS sentence/paragraph (|SegSentence|/|SegParagraph|) respectively.
+
+Parsed Tree
+^^^^^^^^^^^
+
+In addition to |ParsedParagraph|, we have implemented tree utilities base on `TreeLib <https://treelib.readthedocs.io>`_.
+
+|ParsedTree| is the tree structure of a parsed sentence. One may use |from_text| and |to_text| for plain-text conversion; |from_dict|, |to_dict| for dictionary-like object conversion; and also |from_json|, |to_json| for JSON string conversion.
+
+The |ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`_ tree with |ParsedNode| as its nodes. The data of these nodes is stored in a |ParsedNodeData| (accessed by ``node.data``), which is a tuple of ``role`` (semantic role), ``pos`` (part-of-speech tagging), ``word``.
+
+|ParsedTree| provides useful methods: |get_heads| finds the head words of the sentence; |get_relations| extracts all relations in the sentence; |get_subjects| returns the subjects of the sentence.
+
+.. code-block:: python
+
+   from ckipnlp.container import ParsedTree
+
+   # 我的早餐、午餐和晚餐都在那場比賽中被吃掉了
+   tree_text = 'S(goal:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|condition:PP(Head:P21:在|DUMMY:GP(DUMMY:NP(Head:Nac:比賽)|Head:Ng:中))|agent:PP(Head:P02:被)|Head:VC31:吃掉|aspect:Di:了)'
+
+   tree = ParsedTree.from_text(tree_text, normalize=False)
+
+   print('Show Tree')
    tree.show()
 
-   # Get heads of tree
-   for node in tree.get_heads(): print(node)
+   print('Get Heads of {}'.format(tree[5]))
+   print('-- Semantic --')
+   for head in tree.get_heads(5, semantic=True): print(repr(head))
+   print('-- Syntactic --')
+   for head in tree.get_heads(5, semantic=False): print(repr(head))
+   print()
 
-   # Get heads of node 1
-   for node in tree.get_heads(1): print(node)
+   print('Get Relations of {}'.format(tree[0]))
+   print('-- Semantic --')
+   for rel in tree.get_relations(0, semantic=True): print(repr(rel))
+   print('-- Syntactic --')
+   for rel in tree.get_relations(0, semantic=False): print(repr(rel))
+   print()
 
-   # Get heads of node 2
-   for node in tree.get_heads(2): print(node)
+   # 我和食物真的都很不開心
+   tree_text = 'S(theme:NP(DUMMY1:NP(Head:Nhaa:我)|Head:Caa:和|DUMMY2:NP(Head:Naa:食物))|evaluation:Dbb:真的|quantity:Dab:都|degree:Dfa:很|negation:Dc:不|Head:VH21:開心)'
 
-   # Get heads of node 13
-   for node in tree.get_heads(13): print(node)
+   tree = ParsedTree.from_text(tree_text, normalize=False)
 
-   # Get relations
-   for rel in tree.get_relations(): print(rel)
+   print('Show Tree')
+   tree.show()
 
-
-FAQ
-===
-
-.. danger::
-
-   Due to C code implementation, both ``CkipWs`` and ``CkipParser`` can only be instance once.
-
-------------
-
-.. tip::
-
-   **The CKIPWS throws "what():  locale::facet::_S_create_c_locale name not valid". What should I do?**
-
-   Install locale data.
-
-   .. code-block:: bash
-
-      apt-get install locales-all
-
-------------
-
-.. tip::
-
-   **The CKIPParser throws "ImportError: libCKIPParser.so: cannot open shared object file: No such file or directory". What should I do?**
-
-   Add below command to ``~/.bashrc``:
-
-   .. code-block:: bash
-
-      export LD_LIBRARY_PATH=<ckipparser-linux-root>/lib:$LD_LIBRARY_PATH
+   print('Get get_subjects of {}'.format(tree[0]))
+   print('-- Semantic --')
+   for subject in tree.get_subjects(0, semantic=True): print(repr(subject))
+   print('-- Syntactic --')
+   for subject in tree.get_subjects(0, semantic=False): print(repr(subject))
+   print()
 
 License
 =======
@@ -267,3 +313,40 @@ Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`_ under the `
 
 .. |CC BY-NC-SA 4.0| image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
    :target: http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+
+
+.. |from_text| replace:: ``from_text()``
+.. |to_text| replace:: ``to_text()``
+.. |from_dict| replace:: ``from_dict()``
+.. |to_dict| replace:: ``to_dict()``
+.. |from_list| replace:: ``from_list()``
+.. |to_list| replace:: ``to_list()``
+.. |from_json| replace:: ``from_json()``
+.. |to_json| replace:: ``to_json()``
+
+.. |get_heads| replace:: ``get_heads()``
+.. |get_relations| replace:: ``get_relations()``
+.. |get_subjects| replace:: ``get_subjects()``
+
+.. |str| replace:: ``str``
+
+.. |TextParagraph| replace:: ``TextParagraph``
+.. |SegSentence| replace:: ``SegSentence``
+.. |SegParagraph| replace:: ``SegParagraph``
+.. |NerToken| replace:: ``NerToken``
+.. |NerSentence| replace:: ``NerSentence``
+.. |NerParagraph| replace:: ``NerParagraph``
+.. |ParsedParagraph| replace:: ``ParsedParagraph``
+.. |CorefToken| replace:: ``CorefToken``
+.. |CorefSentence| replace:: ``CorefSentence``
+.. |CorefParagraph| replace:: ``CorefParagraph``
+
+.. |WsPosToken| replace:: ``WsPosToken``
+.. |WsPosSentence| replace:: ``WsPosSentence``
+.. |WsPosParagraph| replace:: ``WsPosParagraph``
+
+.. |ParsedNodeData| replace:: ``ParsedNodeData``
+.. |ParsedNode| replace:: ``ParsedNode``
+.. |ParsedRelation| replace:: ``ParsedRelation``
+.. |ParsedTree| replace:: ``ParsedTree``

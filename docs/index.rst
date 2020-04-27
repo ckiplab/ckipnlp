@@ -1,10 +1,10 @@
-CKIP CoreNLP Wrappers
-=====================
+CKIP CoreNLP
+============
 
 .. toctree::
    :caption: Overview
 
-   src/readme
+   readme
 
 .. toctree::
    :caption: Contents
@@ -14,6 +14,6 @@ CKIP CoreNLP Wrappers
 .. toctree::
    :caption: Appendix
 
-   src/todo
+   src/tag
    genindex
    py-modindex
