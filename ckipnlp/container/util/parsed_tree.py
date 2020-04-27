@@ -47,7 +47,7 @@ class ParsedNodeData(_BaseTuple, _ParsedNodeData):
     Attributes
     ----------
         role : str
-            the role.
+            the semantic role.
         pos : str
             the POS-tag.
         word : str
@@ -176,7 +176,7 @@ class ParsedRelation(_Base, _ParsedRelation):
         tail : :class:`ParsedNode`
             the tail node.
         relation : :class:`ParsedNode`
-            the relation node. (the role of this node is the relation.)
+            the relation node. (the semantic role of this node is the relation.)
 
     Notes
     -----
@@ -245,7 +245,7 @@ class ParsedTree(_Base, _Tree):
                 'S(Head:Nab:中文字|particle:Td:耶)'
 
         Dict format
-            Used for :meth:`to_dict`. A dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
+            Used for :meth:`from_dict` and :meth:`to_dict`. A dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
             where ``'data'`` is a dictionary with the same format as :meth:`ParsedNodeData.to_dict`,
             and ``'children'`` is a list of dictionaries of subtrees with the same format as this tree.
 

@@ -119,11 +119,8 @@ Installation via Pip
 --------------------
 
 - No backend (not recommended): ``pip install ckipnlp``.
-- With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]``.
-- With CkipClassic backend: ``pip install ckipnlp[classic]``.
-- With both backend: ``pip install ckipnlp[tagger,classic]``.
-
-Please refer https://ckip-classic.readthedocs.io for CkipClassic installation guide.
+- With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]``
+- With CkipClassic backend: Please refer https://ckip-classic.readthedocs.io/en/latest/src/readme.html#installation for CkipClassic installation guide.
 
 Usage
 =====
@@ -262,6 +259,55 @@ Similarly, |WsPosSentence|/|WsPosParagraph| provides routines for word-segmented
 Parsed Tree
 ^^^^^^^^^^^
 
+In addition to |ParsedParagraph|, we have implemented tree utilities base on `TreeLib <https://treelib.readthedocs.io>`_.
+
+|ParsedTree| is the tree structure of a parsed sentence. One may use |from_text| and |to_text| for plain-text conversion; |from_dict|, |to_dict| for dictionary-like object conversion; and also |from_json|, |to_json| for JSON string conversion.
+
+The |ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`_ tree with |ParsedNode| as its nodes. The data of these nodes is stored in a |ParsedNodeData| (accessed by ``node.data``), which is a tuple of ``role`` (semantic role), ``pos`` (part-of-speech tagging), ``word``.
+
+|ParsedTree| provides useful methods: |get_heads| finds the head words of the sentence; |get_relations| extracts all relations in the sentence; |get_subjects| returns the subjects of the sentence.
+
+.. code-block:: python
+
+   from ckipnlp.container import ParsedTree
+
+   # 我的早餐、午餐和晚餐都在那場比賽中被吃掉了
+   tree_text = 'S(goal:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|condition:PP(Head:P21:在|DUMMY:GP(DUMMY:NP(Head:Nac:比賽)|Head:Ng:中))|agent:PP(Head:P02:被)|Head:VC31:吃掉|aspect:Di:了)'
+
+   tree = ParsedTree.from_text(tree_text, normalize=False)
+
+   print('Show Tree')
+   tree.show()
+
+   print('Get Heads of {}'.format(tree[5]))
+   print('-- Semantic --')
+   for head in tree.get_heads(5, semantic=True): print(repr(head))
+   print('-- Syntactic --')
+   for head in tree.get_heads(5, semantic=False): print(repr(head))
+   print()
+
+   print('Get Relations of {}'.format(tree[0]))
+   print('-- Semantic --')
+   for rel in tree.get_relations(0, semantic=True): print(repr(rel))
+   print('-- Syntactic --')
+   for rel in tree.get_relations(0, semantic=False): print(repr(rel))
+   print()
+
+   # 我和食物真的都很不開心
+   tree_text = 'S(theme:NP(DUMMY1:NP(Head:Nhaa:我)|Head:Caa:和|DUMMY2:NP(Head:Naa:食物))|evaluation:Dbb:真的|quantity:Dab:都|degree:Dfa:很|negation:Dc:不|Head:VH21:開心)'
+
+   tree = ParsedTree.from_text(tree_text, normalize=False)
+
+   print('Show Tree')
+   tree.show()
+
+   print('Get get_subjects of {}'.format(tree[0]))
+   print('-- Semantic --')
+   for subject in tree.get_subjects(0, semantic=True): print(repr(subject))
+   print('-- Syntactic --')
+   for subject in tree.get_subjects(0, semantic=False): print(repr(subject))
+   print()
+
 License
 =======
 
@@ -282,6 +328,10 @@ Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`_ under the `
 .. |to_list| replace:: ``to_list()``
 .. |from_json| replace:: ``from_json()``
 .. |to_json| replace:: ``to_json()``
+
+.. |get_heads| replace:: ``get_heads()``
+.. |get_relations| replace:: ``get_relations()``
+.. |get_subjects| replace:: ``get_subjects()``
 
 .. |str| replace:: ``str``
 

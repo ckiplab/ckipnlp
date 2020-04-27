@@ -9,6 +9,10 @@
 .. |from_json| replace:: :meth:`from_json()`
 .. |to_json| replace:: :meth:`to_json()`
 
+.. |get_heads| replace:: :meth:`get_heads()`
+.. |get_relations| replace:: :meth:`get_relations()`
+.. |get_subjects| replace:: :meth:`get_subjects()`
+
 .. |str| replace:: :class:`str`
 
 .. |TextParagraph| replace:: :class:`TextParagraph <ckipnlp.container.text.TextParagraph>`

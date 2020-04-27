@@ -49,7 +49,7 @@ def main():
             'treelib>=1.5.5',
         ],
         extras_require={
-            'classic': ['ckip-classic>=1.0'],
+            # 'classic': ['ckip-classic>=1.0'],
             'tagger': ['ckiptagger>=0.1.1'],
         },
         data_files=[],
