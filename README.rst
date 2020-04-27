@@ -140,9 +140,7 @@ Core Pipeline
    from ckipnlp.pipeline import CkipPipeline, CkipDocument
 
    pipeline = CkipPipeline()
-   doc = CkipDocument(
-      raw='中文字喔，啊哈哈哈',
-   )
+   doc = CkipDocument(raw='中文字喔，啊哈哈哈')
 
    # Word Segmentation
    pipeline.get_ws(doc)
@@ -182,9 +180,7 @@ Co-Reference Pipeline
    from ckipnlp.pipeline import CkipCorefPipeline, CkipDocument
 
    pipeline = CkipCorefPipeline()
-   doc = CkipDocument(
-      raw='畢卡索他想，完蛋了',
-   )
+   doc = CkipDocument(raw='畢卡索他想，完蛋了')
 
    # Co-Reference
    corefdoc = pipeline(doc)
