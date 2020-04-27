@@ -4,7 +4,9 @@ CKIP CoreNLP
 .. toctree::
    :caption: Overview
 
-   readme
+   main/readme
+   main/usage
+   main/tag
 
 .. toctree::
    :caption: Contents
@@ -14,6 +16,5 @@ CKIP CoreNLP
 .. toctree::
    :caption: Appendix
 
-   src/tag
    genindex
    py-modindex
