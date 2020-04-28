@@ -158,11 +158,11 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         # Assign coref ID
         node2coref = {}  # (tree_id, node_id) => ref_id
-        coref2node = {}  # ref_id => node
+        sources = set()  # (tree_id, node_id)
 
         for ref_id, coref_source in enumerate(coref_tree.children(coref_tree.root)):
             tree_id, node_id = coref_source.identifier
-            coref2node[ref_id] = tree_list[tree_id][node_id]
+            sources.add((tree_id, node_id,))
             for tree_id, node_id in coref_tree.expand_tree(coref_source.identifier):
                 node2coref[tree_id, node_id] = ref_id
 
@@ -201,11 +201,10 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
             for node in nodes:
                 ref_id = node2coref.get((tree_id, node.identifier,), -1)
                 if ref_id >= 0:
-                    ref_node = coref2node[ref_id]
                     tokens.append(_CorefToken(  # pylint: disable=no-value-for-parameter
                         word=node.data.word,
                         idx=node.identifier,
-                        coref=(ref_id, 'source' if node.identifier == ref_node.identifier else 'target',),
+                        coref=(ref_id, 'source' if (tree_id, node.identifier,) in sources else 'target',),
                     ))
                 else:
                     tokens.append(_CorefToken(  # pylint: disable=no-value-for-parameter
