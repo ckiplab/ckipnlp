@@ -1,5 +1,3 @@
-# pylint: disable=missing-docstring
-
 PRONOUN_1ST_SINGLE_WORDS = { # speaker|說話者 \ 我們|we
     '余',
     '吾',
