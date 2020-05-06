@@ -72,6 +72,7 @@ class CkipClassicSentenceParser(_BaseDriver):
         assert isinstance(ws, _SegParagraph)
         assert isinstance(pos, _SegParagraph)
 
+        ws = _SegParagraph.from_list([map(self._half2full, line) for line in ws])
         wspos_text = _WsPosParagraph.to_text(ws, pos)
         parsed_text = self._core.apply_list(wspos_text)
         parsed = _ParsedParagraph.from_text(parsed_text)
