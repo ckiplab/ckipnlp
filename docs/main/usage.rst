@@ -53,7 +53,7 @@ The |CkipPipeline| will compute all necessary dependencies. For example, if one 
 Co-Reference Pipeline
 ^^^^^^^^^^^^^^^^^^^^^
 
-The |CkipCorefPipeline| is a extension of |CkipPipeline| by providing coreference detection. The pipeline first do named-entity recognition as |CkipPipeline| do, followed by alignment algorithms to fix the word-segmentation and part-of-speech tagging outputs, and then do coreference detection based sentence parsing result.
+The |CkipCorefPipeline| is a extension of |CkipPipeline| by providing coreference resolution. The pipeline first do named-entity recognition as |CkipPipeline| do, followed by alignment algorithms to fix the word-segmentation and part-of-speech tagging outputs, and then do coreference resolution based sentence parsing result.
 
 The |CkipCorefDocument| is the workspace of |CkipCorefPipeline| with input/output data. Note that |CkipCorefDocument| will store the result into |CkipCorefPipeline|.
 
