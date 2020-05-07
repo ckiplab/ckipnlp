@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides built-in co-reference detection driver.
+This module provides built-in coreference resolution driver.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -39,16 +39,32 @@ from ckipnlp.data.coref import (
 from .base import (
     BaseDriver as _BaseDriver,
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
 
 class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP co-reference detection driver."""
+    """The CKIP coreference resolution driver.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, parsed)
+
+        Apply coreference delectation.
+
+        Parameters
+            **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
+
+        Returns
+            **coref** (:class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`) — The coreference results.
+    """
 
     driver_type = _DriverType.COREF_CHUNKER
-    driver_kind = _DriverKind.BUILTIN
+    driver_family = _DriverFamily.BUILTIN
 
     def _call(self, *, parsed):
         assert isinstance(parsed, _ParsedParagraph)
@@ -56,7 +72,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
         # Convert to tree structure
         tree_list = list(map(_ParsedTree.from_text, parsed))
 
-        # Find co-reference
+        # Find coreference
         coref_tree = self._get_coref(tree_list)
 
         # Get results
@@ -77,12 +93,16 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         name2node = {}  # name => (tree_id, node_id)
 
-        curr_source = None   # the current coref source
-        last_source = None   # the last coref source
-        last_subject = None  # the last coref subject
+        curr_source = None    # the current coref source
+        last_source = None    # the last coref source
+        last_subject = None   # the last coref subject
+
+        last_sent_pos = None  # the POS-tag of last sentence
 
         # Find coref
         for tree_id, tree in enumerate(tree_list):
+
+            curr_sent_pos = tree[tree.root].data.pos
 
             # Get relations
             appositions = []
@@ -121,7 +141,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
                         else:
                             coref_tree.create_node(identifier=(tree_id, nid,), parent=dummy_id, data=False)
 
-            # Merge apposition
+            # Merge apposition (apposition role)
             for head_id, tail_id in appositions:
                 head_id = (tree_id, head_id,)
                 tail_id = (tree_id, tail_id,)
@@ -138,14 +158,25 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
                     else:
                         coref_tree.move_node(tail_id, head_id)
 
-            # Update subject
-            for nid, ntype in sorted(node_ids.items(), key=lambda x: x[::-1]):
-                if nid in subject_ids:
-                    last_subject = (tree_id, nid,)
-                    break
+            # Merge apposition (NP sentences)
+            if curr_sent_pos == 'NP' and last_sent_pos == 'NP' and last_subject:
+                for nid, ntype in node_ids.items():
+                    if ntype: # Merge sources only
+                        source_id = (tree_id, nid,)
+                        if coref_tree.contains(source_id):
+                            coref_tree.move_node(source_id, last_subject)
 
-            # Update source
+            # Update subject
+            if curr_sent_pos in ('NP', 'S'):
+                last_subject = None
+                for nid, ntype in sorted(node_ids.items(), key=lambda x: x[::-1]):
+                    if nid in subject_ids:
+                        last_subject = (tree_id, nid,)
+                        break
+
+            # Update last
             last_source = curr_source
+            last_sent_pos = curr_sent_pos
 
         # Remove dummy node
         coref_tree.remove_node(dummy_id)
@@ -267,7 +298,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Notes
         -----
-            A node can be a co-reference source if either:
+            A node can be a coreference source if either:
 
             1. POS-tag is `Nb`
             2. is one of the human words from E-HowNet
@@ -297,7 +328,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Notes
         -----
-            A node can be a co-reference target if either:
+            A node can be a coreference target if either:
 
             1. POS-tag is `Nh`
             2. is one of the pronoun words from E-HowNet

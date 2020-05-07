@@ -53,7 +53,7 @@ The |CkipPipeline| will compute all necessary dependencies. For example, if one 
 Co-Reference Pipeline
 ^^^^^^^^^^^^^^^^^^^^^
 
-The |CkipCorefPipeline| is a extension of |CkipPipeline| by providing co-reference detection. The pipeline first do named-entity recognition as |CkipPipeline| do, followed by alignment algorithms to fix the word-segmentation and part-of-speech tagging outputs, and then do co-reference detection based sentence parsing result.
+The |CkipCorefPipeline| is a extension of |CkipPipeline| by providing coreference resolution. The pipeline first do named-entity recognition as |CkipPipeline| do, followed by alignment algorithms to fix the word-segmentation and part-of-speech tagging outputs, and then do coreference resolution based sentence parsing result.
 
 The |CkipCorefDocument| is the workspace of |CkipCorefPipeline| with input/output data. Note that |CkipCorefDocument| will store the result into |CkipCorefPipeline|.
 
@@ -71,6 +71,24 @@ The |CkipCorefDocument| is the workspace of |CkipCorefPipeline| with input/outpu
    print(corefdoc.coref)
    for line in corefdoc.coref:
        print(line.to_text())
+
+Drivers
+^^^^^^^
+
+CkipNLP provides several alternative drivers for above two pipelines. Here are the list of the drivers:
+
+================================  ================================  ================================  ================================
+|DriverType|                      |DriverBUILTIN|                   |DriverTAGGER|                    |DriverCLASSIC|
+================================  ================================  ================================  ================================
+SENTENCE_SEGMENTER                |CkipSentenceSegmenter|
+WORD_SEGMENTER                                                      |CkipTaggerWordSegmenter|         |CkipClassicWordSegmenter|†
+POS_TAGGER                                                          |CkipTaggerPosTagger|             |CkipClassicWordSegmenter|†
+NER_CHUNKER                                                         |CkipTaggerNerChunker|
+SENTENCE_PARSER                                                                                       |CkipClassicSentenceParser|
+COREF_CHUNKER                     |CkipCorefChunker|
+================================  ================================  ================================  ================================
+
+† Not compatible with |CkipCorefPipeline|.
 
 Containers
 ----------
@@ -188,12 +206,36 @@ The |ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`_ tree with |Par
    for subject in tree.get_subjects(0, semantic=False): print(repr(subject))
    print()
 
+.. Built-in
+
+.. |str| replace:: :class:`str`
+
+.. Pipeline
+
 .. |CkipPipeline| replace:: :class:`CkipPipeline <ckipnlp.pipeline.core.CkipPipeline>`
 .. |CkipDocument| replace:: :class:`CkipDocument <ckipnlp.pipeline.core.CkipDocument>`
 .. |CkipCorefPipeline| replace:: :class:`CkipCorefPipeline <ckipnlp.pipeline.coref.CkipCorefPipeline>`
 .. |CkipCorefDocument| replace:: :class:`CkipCorefDocument <ckipnlp.pipeline.coref.CkipCorefDocument>`
 
-.. |str| replace:: :class:`str`
+.. Driver
+
+.. |DriverType| replace:: :class:`DriverType <ckipnlp.drier.base.DriverType>`
+.. |DriverFamily| replace:: :class:`DriverFamily <ckipnlp.drier.base.DriverFamily>`
+.. |DriverBUILTIN| replace:: :class:`DriverFamily.BUILTIN <ckipnlp.drier.base.DriverFamily.BUILTIN>`
+.. |DriverTAGGER| replace:: :class:`DriverFamily.TAGGER <ckipnlp.drier.base.DriverFamily.TAGGER>`
+.. |DriverCLASSIC| replace:: :class:`DriverFamily.CLASSIC <ckipnlp.drier.base.DriverFamily.CLASSIC>`
+
+.. |CkipClassicWordSegmenter| replace:: :class:`CkipClassicWordSegmenter <ckipnlp.driver.classic.CkipClassicWordSegmenter>`
+.. |CkipClassicSentenceParser| replace:: :class:`CkipClassicSentenceParser <ckipnlp.driver.classic.CkipClassicSentenceParser>`
+
+.. |CkipTaggerWordSegmenter| replace:: :class:`CkipTaggerWordSegmenter <ckipnlp.driver.tagger.CkipTaggerWordSegmenter>`
+.. |CkipTaggerPosTagger| replace:: :class:`CkipTaggerPosTagger <ckipnlp.driver.tagger.CkipTaggerPosTagger>`
+.. |CkipTaggerNerChunker| replace:: :class:`CkipTaggerNerChunker <ckipnlp.driver.tagger.CkipTaggerNerChunker>`
+
+.. |CkipSentenceSegmenter| replace:: :class:`CkipSentenceSegmenter <ckipnlp.driver.ss.CkipSentenceSegmenter>`
+.. |CkipCorefChunker| replace:: :class:`CkipCorefChunker <ckipnlp.driver.coref.CkipCorefChunker>`
+
+.. Container
 
 .. |TextParagraph| replace:: :class:`TextParagraph <ckipnlp.container.text.TextParagraph>`
 .. |SegSentence| replace:: :class:`SegSentence <ckipnlp.container.seg.SegSentence>`
@@ -205,6 +247,8 @@ The |ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`_ tree with |Par
 .. |CorefToken| replace:: :class:`CorefToken <ckipnlp.container.coref.CorefToken>`
 .. |CorefSentence| replace:: :class:`CorefSentence <ckipnlp.container.coref.CorefSentence>`
 .. |CorefParagraph| replace:: :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
+
+.. Container Utilities
 
 .. |WsPosToken| replace:: :class:`WsPosToken <ckipnlp.container.util.wspos.WsPosToken>`
 .. |WsPosSentence| replace:: :class:`WsPosSentence <ckipnlp.container.util.wspos.WsPosSentence>`

@@ -572,8 +572,8 @@ class ParsedTree(_Base, _Tree):
             A node can be a subject if either:
 
             1. is a head of `NP`
-            2. is a head of a subnode of `S` with subject role
-            3. is a head of a subnode of `S` with neutral role and precede the head of `S`
+            2. is a head of a subnode (`N`) of `S` with subject role
+            3. is a head of a subnode (`N`) of `S` with neutral role and before the head (`V`) of `S`
         """
         if root_id is None:
             root_id = self.root

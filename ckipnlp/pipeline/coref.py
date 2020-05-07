@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides co-reference detection pipeline.
+This module provides coreference resolution pipeline.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -15,7 +15,7 @@ from collections.abc import (
 
 from ckipnlp.driver.base import (
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
     DriverRegister as _DriverRegister,
 )
 
@@ -26,7 +26,7 @@ from .core import (
 ################################################################################################################################
 
 class CkipCorefDocument(_Mapping):
-    """The co-reference document.
+    """The coreference document.
 
     Attributes
     ----------
@@ -37,7 +37,7 @@ class CkipCorefDocument(_Mapping):
         parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
             The parsed sentences.
         coref : :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
-            The co-reference sentences.
+            The coreference resolution results.
     """
 
     __keys = ('ws', 'pos', 'parsed', 'coref',)
@@ -60,70 +60,95 @@ class CkipCorefDocument(_Mapping):
 ################################################################################################################################
 
 class CkipCorefPipeline(_CkipPipeline):
-    """The co-reference detection pipeline.
+    """The coreference resolution pipeline.
 
     Arguments
     ---------
-        sentence_segmenter_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        sentence_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of sentence segmenter.
 
-        word_segmenter_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        word_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of word segmenter.
 
-        pos_tagger_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        pos_tagger : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of part-of-speech tagger.
 
-        ner_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        ner_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of named-entity recognition chunker.
 
-        sentence_parser_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        sentence_parser : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of sentence parser.
 
-        coref_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
-            The type of co-reference detection chunker.
+        coref_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+            The type of coreference resolution chunker.
 
     Other Parameters
     ----------------
         lazy : bool
             Lazy initialize the drivers.
+
+        opts : Dict[str, Dict]
+            The driver options. Key: driver name (e.g. `'sentence_segmenter'`); Value: a dictionary of options.
     """
 
     def __init__(self, *,
-        coref_chunker_kind=_DriverKind.BUILTIN,
+        coref_chunker=_DriverFamily.BUILTIN,
         lazy=True,
+        opts={},
         **kwargs,
     ):
-        super().__init__(lazy=lazy, **kwargs)
+        super().__init__(lazy=lazy, opts=opts, **kwargs)
 
         # CoRef
-        if coref_chunker_kind:
-            assert self._wspos_driver.is_dummy, 'Co-reference pipeline is not compatible with CkipClassic word segmenter!'
+        if coref_chunker:
+            assert self._wspos_driver.is_dummy, 'Coreference pipeline is not compatible with CkipClassic word segmenter!'
 
-        self._coref_chunker = _DriverRegister.get(_DriverType.COREF_CHUNKER, coref_chunker_kind)(lazy=lazy)
+        self._coref_chunker = _DriverRegister.get(_DriverType.COREF_CHUNKER, coref_chunker)(
+            lazy=lazy, **opts.get('coref_chunker', {}),
+        )
 
     def __call__(self, doc):
+        """Apply coreference delectation.
+
+        Arguments
+        ---------
+            doc : :class:`CkipDocument <.core.CkipDocument>`
+                The input document.
+
+        Returns
+        -------
+            corefdoc : :class:`CkipCorefDocument`
+                The coreference document.
+
+        .. note::
+
+            **doc** is also modified if necessary dependencies (**ws**, **pos**, **ner**) is not computed yet.
+        """
+
         corefdoc = CkipCorefDocument()
         self.get_coref(doc, corefdoc)
         return corefdoc
 
     def get_coref(self, doc, corefdoc):
-        """Apply co-reference delectation.
+        """Apply coreference delectation.
 
         Arguments
         ---------
             doc : :class:`CkipDocument <.core.CkipDocument>`
                 The input document.
             corefdoc : :class:`CkipCorefDocument`
-                The input document for co-reference.
+                The input document for coreference.
 
         Returns
         -------
             corefdoc.coref : :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
-                The co-reference results.
+                The coreference results.
 
         .. note::
 
             This routine modify **corefdoc** inplace.
+
+            **doc** is also modified if necessary dependencies (**ws**, **pos**, **ner**) is not computed yet.
         """
         self.get_text(doc)
         self.get_ws(doc)
@@ -151,7 +176,7 @@ class CkipCorefPipeline(_CkipPipeline):
         if corefdoc.parsed is None:
             corefdoc.parsed = self.get_parsed(corefdoc)
 
-        # Do co-reference detection
+        # Do coreference resolution
         corefdoc.coref = self._coref_chunker(parsed=corefdoc.parsed)
 
         return corefdoc.coref

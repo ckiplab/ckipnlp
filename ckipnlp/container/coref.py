@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides containers for co-reference sentences.
+This module provides containers for coreference sentences.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -28,19 +28,19 @@ class _CorefToken(_NamedTuple):
     idx: int
 
 class CorefToken(_BaseTuple, _CorefToken):
-    """A co-reference token.
+    """A coreference token.
 
     Attributes
     ----------
         word : str
             the token word.
         coref : Tuple[int, str]
-            the co-reference ID and type. `None` if not a co-reference source or target.
+            the coreference ID and type. `None` if not a coreference source or target.
 
             * **type**:
-                * `'source'`: co-reference source.
-                * `'target'`: co-reference target.
-                * `'zero'`: null element co-reference target.
+                * `'source'`: coreference source.
+                * `'target'`: coreference target.
+                * `'zero'`: null element coreference target.
 
         idx : int
             the node index in parsed tree.
@@ -89,7 +89,7 @@ class CorefToken(_BaseTuple, _CorefToken):
 ################################################################################################################################
 
 class CorefSentence(_BaseSentence):
-    """A list of co-reference sentence.
+    """A list of coreference sentence.
 
     .. admonition:: Data Structure Examples
 
@@ -133,7 +133,7 @@ class CorefSentence(_BaseSentence):
 ################################################################################################################################
 
 class CorefParagraph(_BaseList):
-    """A list of co-reference sentence.
+    """A list of coreference sentence.
 
     .. admonition:: Data Structure Examples
 
