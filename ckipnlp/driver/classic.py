@@ -25,7 +25,27 @@ from .base import (
 ################################################################################################################################
 
 class CkipClassicWordSegmenter(_BaseDriver):
-    """The CKIP word segmentation driver with CkipClassic backend."""
+    """The CKIP word segmentation driver with CkipClassic backend.
+
+    Arguments
+    ---------
+        do_pos : bool
+            Returns POS-tag or not
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, text)
+
+        Apply word segmentation.
+
+        Parameters
+            **text** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The sentences.
+
+        Returns
+            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
+            - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
+              (returns if **do_pos** is set.)
+    """
 
     driver_type = _DriverType.WORD_SEGMENTER
     driver_kind = _DriverKind.CLASSIC
@@ -53,7 +73,24 @@ class CkipClassicWordSegmenter(_BaseDriver):
         return (ws, pos,) if self._do_pos else ws
 
 class CkipClassicSentenceParser(_BaseDriver):
-    """The CKIP sentence parsing driver with CkipClassic backend."""
+    """The CKIP sentence parsing driver with CkipClassic backend.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, ws, pos)
+
+        Apply sentence parsing.
+
+        Parameters
+            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
+            - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
+
+        Returns
+            - **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
+    """
 
     driver_type = _DriverType.SENTENCE_PARSER
     driver_kind = _DriverKind.CLASSIC

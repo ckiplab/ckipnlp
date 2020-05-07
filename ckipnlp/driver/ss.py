@@ -24,7 +24,26 @@ from .base import (
 ################################################################################################################################
 
 class CkipSentenceSegmenter(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP sentence segmentation driver."""
+    """The CKIP sentence segmentation driver.
+
+    Arguments
+    ---------
+        delims : str
+            The delimiters.
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, raw, keep_all=True)
+
+        Apply sentence segmentation.
+
+        Parameters
+            - **raw** (*str*) — The raw text.
+            - **keep_all** (*bool*) — Keep delimiters.
+
+        Returns
+            - **text** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The sentences.
+    """
 
     driver_type = _DriverType.SENTENCE_SEGMENTER
     driver_kind = _DriverKind.BUILTIN

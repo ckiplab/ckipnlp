@@ -37,7 +37,7 @@ class CkipCorefDocument(_Mapping):
         parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
             The parsed sentences.
         coref : :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
-            The co-reference sentences.
+            The co-reference detection results.
     """
 
     __keys = ('ws', 'pos', 'parsed', 'coref',)
@@ -102,6 +102,23 @@ class CkipCorefPipeline(_CkipPipeline):
         self._coref_chunker = _DriverRegister.get(_DriverType.COREF_CHUNKER, coref_chunker_kind)(lazy=lazy)
 
     def __call__(self, doc):
+        """Apply co-reference delectation.
+
+        Arguments
+        ---------
+            doc : :class:`CkipDocument <.core.CkipDocument>`
+                The input document.
+
+        Returns
+        -------
+            corefdoc : :class:`CkipCorefDocument`
+                The co-reference document.
+
+        .. note::
+
+            **doc** is also modified if necessary dependencies (**ws**, **pos**, **ner**) is not computed yet.
+        """
+
         corefdoc = CkipCorefDocument()
         self.get_coref(doc, corefdoc)
         return corefdoc
@@ -124,6 +141,8 @@ class CkipCorefPipeline(_CkipPipeline):
         .. note::
 
             This routine modify **corefdoc** inplace.
+
+            **doc** is also modified if necessary dependencies (**ws**, **pos**, **ner**) is not computed yet.
         """
         self.get_text(doc)
         self.get_ws(doc)

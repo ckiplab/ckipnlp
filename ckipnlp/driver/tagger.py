@@ -28,7 +28,23 @@ from .base import (
 ################################################################################################################################
 
 class CkipTaggerWordSegmenter(_BaseDriver):
-    """The CKIP word segmentation driver with CkipTagger backend."""
+    """The CKIP word segmentation driver with CkipTagger backend.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, text)
+
+        Apply word segmentation.
+
+        Parameters
+            **text** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The sentences.
+
+        Returns
+            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
+    """
 
     driver_type = _DriverType.WORD_SEGMENTER
     driver_kind = _DriverKind.TAGGER
@@ -46,7 +62,23 @@ class CkipTaggerWordSegmenter(_BaseDriver):
         return ws
 
 class CkipTaggerPosTagger(_BaseDriver):
-    """The CKIP part-of-speech tagging driver with CkipTagger backend."""
+    """The CKIP part-of-speech tagging driver with CkipTagger backend.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, text)
+
+        Apply part-of-speech tagging.
+
+        Parameters
+            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
+
+        Returns
+            - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
+    """
 
     driver_type = _DriverType.POS_TAGGER
     driver_kind = _DriverKind.TAGGER
@@ -64,7 +96,24 @@ class CkipTaggerPosTagger(_BaseDriver):
         return pos
 
 class CkipTaggerNerChunker(_BaseDriver):
-    """The CKIP named-entity recognition driver with CkipTagger backend."""
+    """The CKIP named-entity recognition driver with CkipTagger backend.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, text)
+
+        Apply named-entity recognition.
+
+        Parameters
+            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
+            - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
+
+        Returns
+            - **ner** (:class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`) — The named-entity recognition results.
+    """
 
     driver_type = _DriverType.NER_CHUNKER
     driver_kind = _DriverKind.TAGGER

@@ -45,7 +45,23 @@ from .base import (
 ################################################################################################################################
 
 class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP co-reference detection driver."""
+    """The CKIP co-reference detection driver.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, parsed)
+
+        Apply co-reference delectation.
+
+        Parameters
+            - **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
+
+        Returns
+            - **coref** (:class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`) — The co-reference detection results.
+    """
 
     driver_type = _DriverType.COREF_CHUNKER
     driver_kind = _DriverKind.BUILTIN
