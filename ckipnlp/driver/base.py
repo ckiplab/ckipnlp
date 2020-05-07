@@ -34,7 +34,7 @@ class DriverType(_IntEnum):
     SENTENCE_PARSER = _enum_auto()     #: Sentence parsing
     COREF_CHUNKER = _enum_auto()       #: Co-reference delectation
 
-class DriverKind(_IntEnum):
+class DriverFamily(_IntEnum):
     """The enumeration of driver backend kinds."""
     BUILTIN = _enum_auto()  #: Built-in Implementation
     TAGGER = _enum_auto()   #: CkipTagger Backend
@@ -48,16 +48,16 @@ class DriverRegister:
     _DRIVERS = {}
 
     @staticmethod
-    def get(driver_type, driver_kind):  # pylint: disable=missing-docstring
-        if driver_kind is None:
+    def get(driver_type, driver_family):  # pylint: disable=missing-docstring
+        if driver_family is None:
             return DummyDriver
 
         assert driver_type is None or isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
-        assert driver_kind is None or isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
+        assert driver_family is None or isinstance(driver_family, DriverFamily), f'{driver_family} is not a DriverFamily'
 
-        driver = DriverRegister._DRIVERS.get((driver_type, driver_kind,))
+        driver = DriverRegister._DRIVERS.get((driver_type, driver_family,))
         if not driver:
-            raise KeyError(f'{driver_type.name} is not implemented for type {driver_kind.name}')
+            raise KeyError(f'{driver_type.name} is not implemented for type {driver_family.name}')
         if not driver.is_dummy:
             _get_logger().debug(f'Use {driver.__name__} ...')
 
@@ -95,7 +95,7 @@ class BaseDriver(metaclass=_ABCMeta):
         return NotImplemented
 
     @_abstractmethod
-    def driver_kind(self):  # pylint: disable=missing-docstring
+    def driver_family(self):  # pylint: disable=missing-docstring
         return NotImplemented
 
     @_abstractmethod
@@ -112,12 +112,12 @@ class BaseDriver(metaclass=_ABCMeta):
         super().__init_subclass__(**kwargs)
 
         driver_type = cls.driver_type
-        driver_kind = cls.driver_kind
+        driver_family = cls.driver_family
 
         assert driver_type is None or isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
-        assert driver_kind is None or isinstance(driver_kind, DriverKind), f'{driver_kind} is not a DriverKind'
+        assert driver_family is None or isinstance(driver_family, DriverFamily), f'{driver_family} is not a DriverFamily'
 
-        key = (driver_type, driver_kind,)
+        key = (driver_type, driver_family,)
         assert key not in DriverRegister._DRIVERS, f'{key} already registered!'  # pylint: disable=protected-access
         DriverRegister._DRIVERS[key] = cls  # pylint: disable=protected-access
 
@@ -127,7 +127,7 @@ class DummyDriver(BaseDriver):
     """The dummy driver."""
 
     driver_type = None
-    driver_kind = None
+    driver_family = None
     is_dummy = True
 
     def __init__(self, *, lazy=False):

@@ -15,7 +15,7 @@ from collections.abc import (
 
 from ckipnlp.driver.base import (
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
     DriverRegister as _DriverRegister,
 )
 
@@ -68,19 +68,19 @@ class CkipPipeline:
 
     Arguments
     ---------
-        sentence_segmenter_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        sentence_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of sentence segmenter.
 
-        word_segmenter_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        word_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of word segmenter.
 
-        pos_tagger_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        pos_tagger : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of part-of-speech tagger.
 
-        ner_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        ner_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of named-entity recognition chunker.
 
-        sentence_parser_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        sentence_parser : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of sentence parser.
 
     Other Parameters
@@ -90,27 +90,27 @@ class CkipPipeline:
     """
 
     def __init__(self, *,
-            sentence_segmenter_kind=_DriverKind.BUILTIN,
-            word_segmenter_kind=_DriverKind.TAGGER,
-            pos_tagger_kind=_DriverKind.TAGGER,
-            sentence_parser_kind=_DriverKind.CLASSIC,
-            ner_chunker_kind=_DriverKind.TAGGER,
+            sentence_segmenter=_DriverFamily.BUILTIN,
+            word_segmenter=_DriverFamily.TAGGER,
+            pos_tagger=_DriverFamily.TAGGER,
+            sentence_parser=_DriverFamily.CLASSIC,
+            ner_chunker=_DriverFamily.TAGGER,
             lazy=True,
         ):
 
         # WS & POS
-        if word_segmenter_kind == _DriverKind.CLASSIC and pos_tagger_kind == _DriverKind.CLASSIC:
-            self._wspos_driver = _DriverRegister.get(_DriverType.WORD_SEGMENTER, _DriverKind.CLASSIC)(do_pos=True, lazy=lazy)
-            word_segmenter_kind = None
-            pos_tagger_kind = None
+        if word_segmenter == _DriverFamily.CLASSIC and pos_tagger == _DriverFamily.CLASSIC:
+            self._wspos_driver = _DriverRegister.get(_DriverType.WORD_SEGMENTER, _DriverFamily.CLASSIC)(do_pos=True, lazy=lazy)
+            word_segmenter = None
+            pos_tagger = None
         else:
             self._wspos_driver = _DriverRegister.get(None, None)(lazy=lazy)
 
-        self._sentence_segmenter = _DriverRegister.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter_kind)(lazy=lazy)
-        self._word_segmenter = _DriverRegister.get(_DriverType.WORD_SEGMENTER, word_segmenter_kind)(lazy=lazy)
-        self._pos_tagger = _DriverRegister.get(_DriverType.POS_TAGGER, pos_tagger_kind)(lazy=lazy)
-        self._sentence_parser = _DriverRegister.get(_DriverType.SENTENCE_PARSER, sentence_parser_kind)(lazy=lazy)
-        self._ner_chunker = _DriverRegister.get(_DriverType.NER_CHUNKER, ner_chunker_kind)(lazy=lazy)
+        self._sentence_segmenter = _DriverRegister.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter)(lazy=lazy)
+        self._word_segmenter = _DriverRegister.get(_DriverType.WORD_SEGMENTER, word_segmenter)(lazy=lazy)
+        self._pos_tagger = _DriverRegister.get(_DriverType.POS_TAGGER, pos_tagger)(lazy=lazy)
+        self._sentence_parser = _DriverRegister.get(_DriverType.SENTENCE_PARSER, sentence_parser)(lazy=lazy)
+        self._ner_chunker = _DriverRegister.get(_DriverType.NER_CHUNKER, ner_chunker)(lazy=lazy)
 
     ########################################################################################################################
 

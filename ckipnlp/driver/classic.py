@@ -19,7 +19,7 @@ from ckipnlp.container import (
 from .base import (
     BaseDriver as _BaseDriver,
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -48,7 +48,7 @@ class CkipClassicWordSegmenter(_BaseDriver):
     """
 
     driver_type = _DriverType.WORD_SEGMENTER
-    driver_kind = _DriverKind.CLASSIC
+    driver_family = _DriverFamily.CLASSIC
 
     _count = 0
 
@@ -93,7 +93,7 @@ class CkipClassicSentenceParser(_BaseDriver):
     """
 
     driver_type = _DriverType.SENTENCE_PARSER
-    driver_kind = _DriverKind.CLASSIC
+    driver_family = _DriverFamily.CLASSIC
 
     _count = 0
 

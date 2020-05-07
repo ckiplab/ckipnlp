@@ -15,7 +15,7 @@ from collections.abc import (
 
 from ckipnlp.driver.base import (
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
     DriverRegister as _DriverRegister,
 )
 
@@ -64,22 +64,22 @@ class CkipCorefPipeline(_CkipPipeline):
 
     Arguments
     ---------
-        sentence_segmenter_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        sentence_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of sentence segmenter.
 
-        word_segmenter_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        word_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of word segmenter.
 
-        pos_tagger_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        pos_tagger : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of part-of-speech tagger.
 
-        ner_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        ner_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of named-entity recognition chunker.
 
-        sentence_parser_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        sentence_parser : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of sentence parser.
 
-        coref_chunker_kind : :class:`DriverKind <ckipnlp.driver.base.DriverKind>`
+        coref_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
             The type of co-reference detection chunker.
 
     Other Parameters
@@ -89,17 +89,17 @@ class CkipCorefPipeline(_CkipPipeline):
     """
 
     def __init__(self, *,
-        coref_chunker_kind=_DriverKind.BUILTIN,
+        coref_chunker=_DriverFamily.BUILTIN,
         lazy=True,
         **kwargs,
     ):
         super().__init__(lazy=lazy, **kwargs)
 
         # CoRef
-        if coref_chunker_kind:
+        if coref_chunker:
             assert self._wspos_driver.is_dummy, 'Co-reference pipeline is not compatible with CkipClassic word segmenter!'
 
-        self._coref_chunker = _DriverRegister.get(_DriverType.COREF_CHUNKER, coref_chunker_kind)(lazy=lazy)
+        self._coref_chunker = _DriverRegister.get(_DriverType.COREF_CHUNKER, coref_chunker)(lazy=lazy)
 
     def __call__(self, doc):
         """Apply co-reference delectation.

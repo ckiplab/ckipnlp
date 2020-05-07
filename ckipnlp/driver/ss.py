@@ -18,7 +18,7 @@ from ckipnlp.container import (
 from .base import (
     BaseDriver as _BaseDriver,
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -46,7 +46,7 @@ class CkipSentenceSegmenter(_BaseDriver):  # pylint: disable=too-few-public-meth
     """
 
     driver_type = _DriverType.SENTENCE_SEGMENTER
-    driver_kind = _DriverKind.BUILTIN
+    driver_family = _DriverFamily.BUILTIN
 
     def __init__(self, *, delims=',，。!！?？:：;；\n', lazy=False):
         super().__init__(lazy=lazy)

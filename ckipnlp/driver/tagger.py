@@ -22,7 +22,7 @@ from ckipnlp.util.data import (
 from .base import (
     BaseDriver as _BaseDriver,
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -47,7 +47,7 @@ class CkipTaggerWordSegmenter(_BaseDriver):
     """
 
     driver_type = _DriverType.WORD_SEGMENTER
-    driver_kind = _DriverKind.TAGGER
+    driver_family = _DriverFamily.TAGGER
 
     def _init(self):
         import ckiptagger
@@ -81,7 +81,7 @@ class CkipTaggerPosTagger(_BaseDriver):
     """
 
     driver_type = _DriverType.POS_TAGGER
-    driver_kind = _DriverKind.TAGGER
+    driver_family = _DriverFamily.TAGGER
 
     def _init(self):
         import ckiptagger
@@ -116,7 +116,7 @@ class CkipTaggerNerChunker(_BaseDriver):
     """
 
     driver_type = _DriverType.NER_CHUNKER
-    driver_kind = _DriverKind.TAGGER
+    driver_family = _DriverFamily.TAGGER
 
     def _init(self):
         import ckiptagger

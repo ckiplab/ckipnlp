@@ -39,7 +39,7 @@ from ckipnlp.data.coref import (
 from .base import (
     BaseDriver as _BaseDriver,
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -64,7 +64,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
     """
 
     driver_type = _DriverType.COREF_CHUNKER
-    driver_kind = _DriverKind.BUILTIN
+    driver_family = _DriverFamily.BUILTIN
 
     def _call(self, *, parsed):
         assert isinstance(parsed, _ParsedParagraph)
