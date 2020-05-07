@@ -19,22 +19,45 @@ from ckipnlp.container import (
 from .base import (
     BaseDriver as _BaseDriver,
     DriverType as _DriverType,
-    DriverKind as _DriverKind,
+    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
 
 class CkipClassicWordSegmenter(_BaseDriver):
-    """The CKIP word segmentation driver with CkipClassic backend."""
+    """The CKIP word segmentation driver with CkipClassic backend.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize underlay object.
+        do_pos : bool
+            Returns POS-tag or not
+        lexicons: Iterable[Tuple[str, str]]
+            A list of the lexicon words and their POS-tags.
+
+    .. py:method:: __call__(*, text)
+
+        Apply word segmentation.
+
+        Parameters
+            **text** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The sentences.
+
+        Returns
+            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
+            - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
+              (returns if **do_pos** is set.)
+    """
 
     driver_type = _DriverType.WORD_SEGMENTER
-    driver_kind = _DriverKind.CLASSIC
+    driver_family = _DriverFamily.CLASSIC
 
     _count = 0
 
-    def __init__(self, *, do_pos=False, lazy=False):
+    def __init__(self, *, lazy=False, do_pos=False, lexicons=None):
         super().__init__(lazy=lazy)
         self._do_pos = do_pos
+        self._lexicons = lexicons
 
     def _init(self):
         self.__class__._count += 1  # pylint: disable=protected-access
@@ -42,7 +65,7 @@ class CkipClassicWordSegmenter(_BaseDriver):
             raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
 
         import ckip_classic.ws
-        self._core = ckip_classic.ws.CkipWs()
+        self._core = ckip_classic.ws.CkipWs(lex_list=self._lexicons)
 
     def _call(self, *, text):
         assert isinstance(text, _TextParagraph)
@@ -53,10 +76,27 @@ class CkipClassicWordSegmenter(_BaseDriver):
         return (ws, pos,) if self._do_pos else ws
 
 class CkipClassicSentenceParser(_BaseDriver):
-    """The CKIP sentence parsing driver with CkipClassic backend."""
+    """The CKIP sentence parsing driver with CkipClassic backend.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize underlay object.
+
+    .. py:method:: __call__(*, ws, pos)
+
+        Apply sentence parsing.
+
+        Parameters
+            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
+            - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
+
+        Returns
+            **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
+    """
 
     driver_type = _DriverType.SENTENCE_PARSER
-    driver_kind = _DriverKind.CLASSIC
+    driver_family = _DriverFamily.CLASSIC
 
     _count = 0
 
