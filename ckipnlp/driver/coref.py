@@ -77,12 +77,16 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         name2node = {}  # name => (tree_id, node_id)
 
-        curr_source = None   # the current coref source
-        last_source = None   # the last coref source
-        last_subject = None  # the last coref subject
+        curr_source = None    # the current coref source
+        last_source = None    # the last coref source
+        last_subject = None   # the last coref subject
+
+        last_sent_pos = None  # the POS-tag of last sentence
 
         # Find coref
         for tree_id, tree in enumerate(tree_list):
+
+            curr_sent_pos = tree[tree.root].data.pos
 
             # Get relations
             appositions = []
@@ -121,7 +125,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
                         else:
                             coref_tree.create_node(identifier=(tree_id, nid,), parent=dummy_id, data=False)
 
-            # Merge apposition
+            # Merge apposition (apposition role)
             for head_id, tail_id in appositions:
                 head_id = (tree_id, head_id,)
                 tail_id = (tree_id, tail_id,)
@@ -138,14 +142,25 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
                     else:
                         coref_tree.move_node(tail_id, head_id)
 
-            # Update subject
-            for nid, ntype in sorted(node_ids.items(), key=lambda x: x[::-1]):
-                if nid in subject_ids:
-                    last_subject = (tree_id, nid,)
-                    break
+            # Merge apposition (NP sentences)
+            if curr_sent_pos == 'NP' and last_sent_pos == 'NP' and last_subject:
+                for nid, ntype in node_ids.items():
+                    if ntype: # Merge sources only
+                        source_id = (tree_id, nid,)
+                        if coref_tree.contains(source_id):
+                            coref_tree.move_node(source_id, last_subject)
 
-            # Update source
+            # Update subject
+            if curr_sent_pos in ('NP', 'S'):
+                last_subject = None
+                for nid, ntype in sorted(node_ids.items(), key=lambda x: x[::-1]):
+                    if nid in subject_ids:
+                        last_subject = (tree_id, nid,)
+                        break
+
+            # Update last
             last_source = curr_source
+            last_sent_pos = curr_sent_pos
 
         # Remove dummy node
         coref_tree.remove_node(dummy_id)
