@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides built-in co-reference detection driver.
+This module provides built-in coreference resolution driver.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -45,7 +45,7 @@ from .base import (
 ################################################################################################################################
 
 class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
-    """The CKIP co-reference detection driver.
+    """The CKIP coreference resolution driver.
 
     Arguments
     ---------
@@ -54,13 +54,13 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
     .. py:method:: __call__(*, parsed)
 
-        Apply co-reference delectation.
+        Apply coreference delectation.
 
         Parameters
-            - **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
+            **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
 
         Returns
-            - **coref** (:class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`) — The co-reference detection results.
+            **coref** (:class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`) — The coreference results.
     """
 
     driver_type = _DriverType.COREF_CHUNKER
@@ -72,7 +72,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
         # Convert to tree structure
         tree_list = list(map(_ParsedTree.from_text, parsed))
 
-        # Find co-reference
+        # Find coreference
         coref_tree = self._get_coref(tree_list)
 
         # Get results
@@ -298,7 +298,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Notes
         -----
-            A node can be a co-reference source if either:
+            A node can be a coreference source if either:
 
             1. POS-tag is `Nb`
             2. is one of the human words from E-HowNet
@@ -328,7 +328,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Notes
         -----
-            A node can be a co-reference target if either:
+            A node can be a coreference target if either:
 
             1. POS-tag is `Nh`
             2. is one of the pronoun words from E-HowNet

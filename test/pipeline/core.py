@@ -43,7 +43,7 @@ parsed = [
 class TestSentenceSegmenter(unittest.TestCase):
 
     def test(self):
-        obj = CkipPipeline(sentence_segmenter_kind=DriverFamily.BUILTIN)
+        obj = CkipPipeline(sentence_segmenter=DriverFamily.BUILTIN)
         doc = CkipDocument(raw=raw)
         obj.get_text(doc)
         self.assertSequenceEqual(doc.text.to_list(), text)
@@ -53,7 +53,7 @@ class TestSentenceSegmenter(unittest.TestCase):
 class TestTaggerWordSegmenter(unittest.TestCase):
 
     def test(self):
-        obj = CkipPipeline(word_segmenter_kind=DriverFamily.TAGGER)
+        obj = CkipPipeline(word_segmenter=DriverFamily.TAGGER)
         doc = CkipDocument(text=TextParagraph.from_list(text))
         obj.get_ws(doc)
         self.assertSequenceEqual(doc.ws.to_list(), ws)
@@ -63,7 +63,7 @@ class TestTaggerWordSegmenter(unittest.TestCase):
 # class TestClassicWordSegmenter(unittest.TestCase):
 
 #     def test(self):
-#         obj = CkipPipeline(word_segmenter_kind=DriverFamily.CLASSIC)
+#         obj = CkipPipeline(word_segmenter=DriverFamily.CLASSIC)
 #         doc = CkipDocument(text=TextParagraph.from_list(text))
 #         obj.get_ws(doc)
 #         self.assertSequenceEqual(doc.ws.to_list(), [
@@ -76,7 +76,7 @@ class TestTaggerWordSegmenter(unittest.TestCase):
 class TestTaggerPosTagger(unittest.TestCase):
 
     def test(self):
-        obj = CkipPipeline(pos_tagger_kind=DriverFamily.TAGGER)
+        obj = CkipPipeline(pos_tagger=DriverFamily.TAGGER)
         doc = CkipDocument(ws=SegParagraph.from_list(ws))
         obj.get_pos(doc)
         self.assertSequenceEqual(doc.pos.to_list(), pos)
@@ -86,7 +86,7 @@ class TestTaggerPosTagger(unittest.TestCase):
 class TestClassicWordSegmenterPosTagger(unittest.TestCase):
 
     def test(self):
-        obj = CkipPipeline(word_segmenter_kind=DriverFamily.CLASSIC, pos_tagger_kind=DriverFamily.CLASSIC)
+        obj = CkipPipeline(word_segmenter=DriverFamily.CLASSIC, pos_tagger=DriverFamily.CLASSIC)
         doc = CkipDocument(text=TextParagraph.from_list(text))
         obj.get_pos(doc)
         self.assertSequenceEqual(doc.pos.to_list(), [
@@ -99,7 +99,7 @@ class TestClassicWordSegmenterPosTagger(unittest.TestCase):
 class TestTaggerNerChunker(unittest.TestCase):
 
     def test(self):
-        obj = CkipPipeline(ner_chunker_kind=DriverFamily.TAGGER)
+        obj = CkipPipeline(ner_chunker=DriverFamily.TAGGER)
         doc = CkipDocument(ws=SegParagraph.from_list(ws), pos=SegParagraph.from_list(pos))
         obj.get_ner(doc)
         self.assertSequenceEqual(doc.ner.to_list(), ner)
@@ -109,7 +109,7 @@ class TestTaggerNerChunker(unittest.TestCase):
 # class TestClassicSentenceParser(unittest.TestCase):
 
 #     def test(self):
-#         obj = CkipPipeline(sentence_parser_kind=DriverFamily.CLASSIC)
+#         obj = CkipPipeline(sentence_parser=DriverFamily.CLASSIC)
 #         doc = CkipDocument(ws=SegParagraph.from_list(ws), pos=SegParagraph.from_list(pos))
 #         obj.get_parsed(doc)
 #         self.assertSequenceEqual(doc.parsed.to_list(), parsed)

@@ -28,38 +28,40 @@ class CkipSentenceSegmenter(_BaseDriver):  # pylint: disable=too-few-public-meth
 
     Arguments
     ---------
-        delims : str
-            The delimiters.
         lazy : bool
             Lazy initialize underlay object.
+        delims : str
+            The delimiters.
+        keep_delims : bool
+            Keep delimiters.
 
     .. py:method:: __call__(*, raw, keep_all=True)
 
         Apply sentence segmentation.
 
         Parameters
-            - **raw** (*str*) — The raw text.
-            - **keep_all** (*bool*) — Keep delimiters.
+            **raw** (*str*) — The raw text.
 
         Returns
-            - **text** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The sentences.
+            **text** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The sentences.
     """
 
     driver_type = _DriverType.SENTENCE_SEGMENTER
     driver_family = _DriverFamily.BUILTIN
 
-    def __init__(self, *, delims=',，。!！?？:：;；\n', lazy=False):
+    def __init__(self, *, lazy=False, delims=',，。!！?？:：;；\n', keep_delims=False):
         super().__init__(lazy=lazy)
 
         self.delims = delims
+        self._keep_delims = keep_delims
 
     def _init(self):
         pass
 
-    def _call(self, *, raw, keep_all=False):
+    def _call(self, *, raw):
         assert isinstance(raw, str)
 
-        if not keep_all:
+        if not self._keep_delims:
             # Replace spaces
             text = _re.sub(rf'[^\S{self.delims}]', '', raw)
 

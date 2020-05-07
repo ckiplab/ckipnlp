@@ -87,6 +87,9 @@ class CkipPipeline:
     ----------------
         lazy : bool
             Lazy initialize the drivers.
+
+        opts : Dict[str, Dict]
+            The driver options. Key: driver name (e.g. `'sentence_segmenter'`); Value: a dictionary of options.
     """
 
     def __init__(self, *,
@@ -96,21 +99,36 @@ class CkipPipeline:
             sentence_parser=_DriverFamily.CLASSIC,
             ner_chunker=_DriverFamily.TAGGER,
             lazy=True,
+            opts={},
         ):
 
         # WS & POS
         if word_segmenter == _DriverFamily.CLASSIC and pos_tagger == _DriverFamily.CLASSIC:
-            self._wspos_driver = _DriverRegister.get(_DriverType.WORD_SEGMENTER, _DriverFamily.CLASSIC)(do_pos=True, lazy=lazy)
+            self._wspos_driver = _DriverRegister.get(_DriverType.WORD_SEGMENTER, _DriverFamily.CLASSIC)(
+                do_pos=True, lazy=lazy, **opts.get('word_segmenter', {}), **opts.get('pos_tagger', {}),
+            )
             word_segmenter = None
             pos_tagger = None
         else:
-            self._wspos_driver = _DriverRegister.get(None, None)(lazy=lazy)
+            self._wspos_driver = _DriverRegister.get(None, None)(
+                lazy=lazy, **opts.get('word_segmenter', {}),
+            )
 
-        self._sentence_segmenter = _DriverRegister.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter)(lazy=lazy)
-        self._word_segmenter = _DriverRegister.get(_DriverType.WORD_SEGMENTER, word_segmenter)(lazy=lazy)
-        self._pos_tagger = _DriverRegister.get(_DriverType.POS_TAGGER, pos_tagger)(lazy=lazy)
-        self._sentence_parser = _DriverRegister.get(_DriverType.SENTENCE_PARSER, sentence_parser)(lazy=lazy)
-        self._ner_chunker = _DriverRegister.get(_DriverType.NER_CHUNKER, ner_chunker)(lazy=lazy)
+        self._sentence_segmenter = _DriverRegister.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter)(
+            lazy=lazy, **opts.get('sentence_segmenter', {}),
+        )
+        self._word_segmenter = _DriverRegister.get(_DriverType.WORD_SEGMENTER, word_segmenter)(
+            lazy=lazy, **opts.get('word_segmenter', {}),
+        )
+        self._pos_tagger = _DriverRegister.get(_DriverType.POS_TAGGER, pos_tagger)(
+            lazy=lazy, **opts.get('pos_tagger', {}),
+        )
+        self._sentence_parser = _DriverRegister.get(_DriverType.SENTENCE_PARSER, sentence_parser)(
+            lazy=lazy, **opts.get('sentence_parser', {}),
+        )
+        self._ner_chunker = _DriverRegister.get(_DriverType.NER_CHUNKER, ner_chunker)(
+            lazy=lazy, **opts.get('ner_chunker', {}),
+        )
 
     ########################################################################################################################
 

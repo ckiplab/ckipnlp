@@ -7,9 +7,9 @@ Features
 - Sentence Segmentation
 - Word Segmentation
 - Part-of-Speech Tagging
-- Sentence Parsing
 - Named-Entity Recognition
-- Co-Reference Delectation
+- Sentence Parsing
+- Co-Reference Resolution
 
 Git
 ^^^
@@ -107,7 +107,7 @@ Word Segmentation†                          ✔           ✔
 Part-of-Speech Tagging†                     ✔           ✔
 Sentence Parsing                                        ✔
 Named-Entity Recognition                    ✔
-Co-Reference Delectation‡         ✔         ✔           ✔
+Co-Reference Resolution‡          ✔         ✔           ✔
 ================================  ========  ==========  ===========
 
 - † These drivers require only one of either backends.

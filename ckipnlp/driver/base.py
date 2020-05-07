@@ -32,7 +32,7 @@ class DriverType(_IntEnum):
     POS_TAGGER = _enum_auto()          #: Part-of-speech tagging
     NER_CHUNKER = _enum_auto()         #: Named-entity recognition
     SENTENCE_PARSER = _enum_auto()     #: Sentence parsing
-    COREF_CHUNKER = _enum_auto()       #: Co-reference delectation
+    COREF_CHUNKER = _enum_auto()       #: Coreference delectation
 
 class DriverFamily(_IntEnum):
     """The enumeration of driver backend kinds."""
