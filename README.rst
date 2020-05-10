@@ -92,7 +92,7 @@ Requirements
 
 * `Python <https://www.python.org>`_ 3.6+
 * `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
-* `Tensorflow <https://www.tensorflow.org/>`_ <2
+* `Tensorflow <https://www.tensorflow.org/>`_ 1.15
 * `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional, Recommended]
 * `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
 
