@@ -72,17 +72,17 @@ https://ckipnlp.readthedocs.io/
 .. |ReadTheDocs Home| image:: https://img.shields.io/website/https/ckipnlp.readthedocs.io.svg?maxAge=3600&up_message=online&down_message=offline
    :target: https://ckipnlp.readthedocs.io
 
+Online Demo
+^^^^^^^^^^^^^^
+
+https://ckip.iis.sinica.edu.tw/service/corenlp
+
 Contributers
 ^^^^^^^^^^^^
 
 * `Mu Yang <https://muyang.pro>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Author & Maintainer)
 * `Wei-Yun Ma <https://www.iis.sinica.edu.tw/pages/ma/>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Maintainer)
 * `DouglasWu <dgrey1116@gmail.com>`_
-
-External Links
-^^^^^^^^^^^^^^
-
-- `Online Demo <https://ckip.iis.sinica.edu.tw/service/corenlp>`_
 
 Installation
 ------------
