@@ -47,6 +47,7 @@ def main():
             'appdirs>=1.4.3',
             'numpy>=1.18',
             'treelib>=1.5.5',
+            'tensorflow==1.15'
         ],
         extras_require={
             # 'classic': ['ckip-classic>=1.0'],
