@@ -92,9 +92,9 @@ Requirements
 
 * `Python <https://www.python.org>`_ 3.6+
 * `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
-* `Tensorflow <https://www.tensorflow.org/>`_ 1.15
 * `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional, Recommended]
 * `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
+* `TensorFlow / TensorFlow-GPU <https://www.tensorflow.org/>`_ 1.13.1+, <2 [Required by CkipTagger]
 
 Driver Requirements
 ^^^^^^^^^^^^^^^^^^^
@@ -117,7 +117,7 @@ Installation via Pip
 ^^^^^^^^^^^^^^^^^^^^
 
 - No backend (not recommended): ``pip install ckipnlp``.
-- With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]``
+- With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]`` or ``pip install ckipnlp[tagger-gpu]``.
 - With CkipClassic backend: Please refer https://ckip-classic.readthedocs.io/en/latest/main/readme.html#installation for CkipClassic installation guide.
 
 Usage

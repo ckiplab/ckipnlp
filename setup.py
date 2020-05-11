@@ -47,11 +47,11 @@ def main():
             'appdirs>=1.4.3',
             'numpy>=1.18',
             'treelib>=1.5.5',
-            'tensorflow==1.15'
         ],
         extras_require={
             # 'classic': ['ckip-classic>=1.0'],
-            'tagger': ['ckiptagger>=0.1.1'],
+            'tagger': ['ckiptagger[tf]>=0.1.1'],
+            'tagger-gpu': ['ckiptagger[tfgpu]>=0.1.1'],
         },
         data_files=[],
     )
