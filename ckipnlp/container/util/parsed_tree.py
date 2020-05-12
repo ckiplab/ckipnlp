@@ -283,6 +283,17 @@ class ParsedTree(_Base, _Tree):
 
         List format
             Not implemented.
+
+        Penn Treebank format
+            Used for :meth:`from_penn` and :meth:`to_penn`.
+
+            .. code-block:: python
+
+                [
+                    'S',
+                    [ 'Head:Nab', '中文字', ],
+                    [ 'particle:Td', '耶', ],
+                ]
     """
 
     node_class = ParsedNode
@@ -303,6 +314,8 @@ class ParsedTree(_Base, _Tree):
     def __str__(self):
         self.to_text()
 
+    ########################################################################################################################
+
     @classmethod
     def from_text(cls, data, *, normalize=True):
         """Construct an instance from text format.
@@ -319,33 +332,33 @@ class ParsedTree(_Base, _Tree):
 
         tree = cls()
         node_id = 0
-        node_queue = [None]
+        node_stack = [None]
         text = ''
         ending = True
 
         for char in data:
             if char == '(':
                 node_data = cls.node_class.data_class.from_text(text)
-                tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
+                tree.create_node(tag=text, identifier=node_id, parent=node_stack[-1], data=node_data)
 
-                node_queue.append(node_id)
+                node_stack.append(node_id)
                 node_id += 1
                 text = ''
 
             elif char == ')':
                 if not ending:
                     node_data = cls.node_class.data_class.from_text(text)
-                    tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
+                    tree.create_node(tag=text, identifier=node_id, parent=node_stack[-1], data=node_data)
                     node_id += 1
 
-                node_queue.pop()
+                node_stack.pop()
                 text = ''
                 ending = True
 
             elif char == '|':
                 if not ending:
                     node_data = cls.node_class.data_class.from_text(text)
-                    tree.create_node(tag=text, identifier=node_id, parent=node_queue[-1], data=node_data)
+                    tree.create_node(tag=text, identifier=node_id, parent=node_stack[-1], data=node_data)
                     node_id += 1
 
                 text = ''
@@ -383,7 +396,7 @@ class ParsedTree(_Base, _Tree):
 
     @classmethod
     def from_dict(cls, data):
-        """Construct an instance a from python built-in containers.
+        """Construct an instance from python built-in containers.
 
         Parameters
         ----------
@@ -392,22 +405,22 @@ class ParsedTree(_Base, _Tree):
         """
         tree = cls()
 
-        queue = _deque()
-        queue.append((data, None,))
+        node_queue = _deque()
+        node_queue.append((data, None,))
 
-        while queue:
-            node_dict, parent_id = queue.popleft()
+        while node_queue:
+            node_dict, parent_id = node_queue.popleft()
             node_id = node_dict['id']
             node_data = cls.node_class.data_class.from_dict(node_dict['data'])
             tree.create_node(tag=node_data.to_text(), identifier=node_id, parent=parent_id, data=node_data)
 
             for child in node_dict['children']:
-                queue.append((child, node_id,))
+                node_queue.append((child, node_id,))
 
         return tree
 
     def to_dict(self, node_id=None):
-        """Construct an instance a from python built-in containers.
+        """Transform to python built-in containers.
 
         Parameters
         ----------
@@ -428,6 +441,68 @@ class ParsedTree(_Base, _Tree):
             tree_dict['children'].append(self.to_dict(child.identifier))
 
         return tree_dict
+
+    @classmethod
+    def from_penn(cls, data):
+        """Construct an instance from Penn Treebank format."""
+        tree = cls()
+
+        node_stack = _deque()
+        node_stack.append((data, None,))
+
+        node_id = 0
+
+        while node_stack:
+            penn_data, parent_id = node_stack.pop()
+
+            if not penn_data:
+                raise SyntaxError(f'Empty node #{node_id}')
+
+            if not isinstance(penn_data[0], str):
+                raise SyntaxError(f'First element of a node must be string, got {type(penn_data[0])}')
+
+            if len(penn_data) == 2 and isinstance(penn_data[-1], str):
+                penn_data = (':'.join(penn_data),)
+
+            node_data = cls.node_class.data_class.from_text(penn_data[0])
+            tree.create_node(tag=node_data.to_text(), identifier=node_id, parent=parent_id, data=node_data)
+
+            for child in penn_data[-1:0:-1]:
+                node_stack.append((child, node_id,))
+            node_id += 1
+
+        return tree
+
+    def to_penn(self, node_id=None, with_role=True):
+        """Transform to Penn Treebank format.
+
+        Parameters
+        ----------
+            node_id : int
+                Output the plain text format for the subtree under **node_id**.
+            with_role : bool
+                Contains role-tag or not.
+
+        Returns
+        -------
+            list
+        """
+        if node_id is None:
+            node_id = self.root
+
+        node = self[node_id]
+
+        penn_data = [f'{node.data.role}:{node.data.pos}' if with_role and node.data.role else node.data.pos,]
+
+        if node.data.word:
+            penn_data.append(node.data.word)
+
+        for child in self.children(node_id):
+            penn_data.append(self.to_penn(child.identifier))
+
+        return penn_data
+
+    ########################################################################################################################
 
     def show(self, *,
         key=lambda node: node.identifier,
@@ -541,10 +616,14 @@ class ParsedTree(_Base, _Tree):
             for tail in children:
                 if tail.data.role != 'Head' and tail not in head_children:
                     if tail.is_leaf():
-                        yield ParsedRelation(head=head_node, tail=tail, relation=tail)  # pylint: disable=no-value-for-parameter
+                        yield ParsedRelation(  # pylint: disable=no-value-for-parameter
+                            head=head_node, tail=tail, relation=tail,
+                        )
                     else:
                         for node in self.get_heads(tail.identifier, semantic=semantic):
-                            yield ParsedRelation(head=head_node, tail=node, relation=tail)  # pylint: disable=no-value-for-parameter
+                            yield ParsedRelation(  # pylint: disable=no-value-for-parameter
+                                head=head_node, tail=node, relation=tail,
+                            )
 
         # Recursion
         for child in children:

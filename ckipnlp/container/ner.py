@@ -90,7 +90,7 @@ class NerToken(_BaseTuple, _NerToken):
 
     @classmethod
     def from_tagger(cls, data):
-        """Construct an instance a from CkipTagger format."""
+        """Construct an instance from CkipTagger format."""
         idx0, idx1, ner, word = data
         return cls(word=word, ner=ner, idx=(idx0, idx1,))  # pylint: disable=no-value-for-parameter
 
@@ -148,7 +148,7 @@ class NerSentence(_BaseSentence):
 
     @classmethod
     def from_tagger(cls, data):
-        """Construct an instance a from CkipTagger format."""
+        """Construct an instance from CkipTagger format."""
         return cls(map(cls.item_class.from_tagger, data))
 
     def to_tagger(self):
@@ -220,7 +220,7 @@ class NerParagraph(_BaseList):
 
     @classmethod
     def from_tagger(cls, data):
-        """Construct an instance a from CkipTagger format."""
+        """Construct an instance from CkipTagger format."""
         return cls(map(cls.item_class.from_tagger, data))
 
     def to_tagger(self):

@@ -53,7 +53,7 @@ class Base(metaclass=_ABCMeta):
     @classmethod
     @_abstractmethod
     def from_dict(cls, data):
-        """Construct an instance a from python built-in containers."""
+        """Construct an instance from python built-in containers."""
         return NotImplemented
 
     @_abstractmethod
@@ -66,7 +66,7 @@ class Base(metaclass=_ABCMeta):
     @classmethod
     @_abstractmethod
     def from_list(cls, data):
-        """Construct an instance a from python built-in containers."""
+        """Construct an instance from python built-in containers."""
         return NotImplemented
 
     @_abstractmethod
@@ -187,7 +187,7 @@ class _BaseList(Base, _UserList):
 
     @classmethod
     def from_dict(cls, data):
-        """Construct an instance a from python built-in containers.
+        """Construct an instance from python built-in containers.
 
         Parameters
         ----------
@@ -209,7 +209,7 @@ class _BaseList(Base, _UserList):
 
     @classmethod
     def from_list(cls, data):
-        """Construct an instance a from python built-in containers.
+        """Construct an instance from python built-in containers.
 
         Parameters
         ----------
