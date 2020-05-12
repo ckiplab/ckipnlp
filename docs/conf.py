@@ -79,47 +79,6 @@ html_logo    = 'image/ckip_logo.svg'
 html_favicon = 'image/ckip_favicon.ico'
 
 
-# -- Options for LaTeX output ------------------------------------------------
-
-
-# -- Options for LaTeX output:------------------------------------------
-
-latex_engine = 'pdflatex'
-
-latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    'papersize': 'a4paper',
-
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    'pointsize': '10pt',
-
-    # Additional stuff for the LaTeX preamble.
-    #
-    'preamble': r'''
-        \hypersetup{unicode=true}
-        \usepackage{CJKutf8}
-        \begin{CJK}{UTF8}{bsmi}
-        \AtEndDocument{\end{CJK}}
-    ''',
-
-    # Latex figure (float) alignment
-    #
-    'figure_align': 'htbp',
-}
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
-latex_documents = [
-    (master_doc, 'ckipnlp.tex', __about.__description__,
-     author, 'manual'),
-]
-
-latex_logo = 'image/ckip_logo.svg'
-
-
 # -- Settings of autodoc -----------------------------------------------------
 
 autodoc_member_order = 'bysource'
