@@ -72,17 +72,17 @@ https://ckipnlp.readthedocs.io/
 .. |ReadTheDocs Home| image:: https://img.shields.io/website/https/ckipnlp.readthedocs.io.svg?maxAge=3600&up_message=online&down_message=offline
    :target: https://ckipnlp.readthedocs.io
 
+Online Demo
+^^^^^^^^^^^^^^
+
+https://ckip.iis.sinica.edu.tw/service/corenlp
+
 Contributers
 ^^^^^^^^^^^^
 
 * `Mu Yang <https://muyang.pro>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Author & Maintainer)
 * `Wei-Yun Ma <https://www.iis.sinica.edu.tw/pages/ma/>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Maintainer)
 * `DouglasWu <dgrey1116@gmail.com>`_
-
-External Links
-^^^^^^^^^^^^^^
-
-- `Online Demo <https://ckip.iis.sinica.edu.tw/service/corenlp>`_
 
 Installation
 ------------
@@ -92,9 +92,9 @@ Requirements
 
 * `Python <https://www.python.org>`_ 3.6+
 * `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
-
 * `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional, Recommended]
 * `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
+* `TensorFlow / TensorFlow-GPU <https://www.tensorflow.org/>`_ 1.13.1+, <2 [Required by CkipTagger]
 
 Driver Requirements
 ^^^^^^^^^^^^^^^^^^^
@@ -117,7 +117,7 @@ Installation via Pip
 ^^^^^^^^^^^^^^^^^^^^
 
 - No backend (not recommended): ``pip install ckipnlp``.
-- With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]``
+- With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]`` or ``pip install ckipnlp[tagger-gpu]``.
 - With CkipClassic backend: Please refer https://ckip-classic.readthedocs.io/en/latest/main/readme.html#installation for CkipClassic installation guide.
 
 Usage

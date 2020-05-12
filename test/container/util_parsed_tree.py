@@ -201,6 +201,48 @@ class TestParsedTree(unittest.TestCase, _TestCaseBase):
         ],
     }
 
+    penn_in = [
+        'S',
+        [
+            'goal:NP',
+            [
+                'possessor:N‧的',
+                [ 'head:Nhaa', '我', ],
+                [ 'Head:DE', '的', ],
+            ],
+            [
+                'Head:Nab',
+                [
+                    'DUMMY1:Nab',
+                    [ 'DUMMY1:Nab', '早餐', ],
+                    [ 'Head:Caa', '、', ],
+                    [ 'DUMMY2:Naa', '午餐', ],
+                ],
+                [ 'Head:Caa', '和' ],
+                [ 'DUMMY2:Nab', '晚餐' ],
+            ],
+        ],
+        [ 'quantity:Dab', '都', ],
+        [
+            'condition:PP',
+            [ 'Head:P21', '在', ],
+            [
+                'DUMMY:GP',
+                [
+                    'DUMMY:NP',
+                    [ 'Head:Nac', '比賽' ],
+                ],
+                [ 'Head:Ng', '中', ],
+            ],
+        ],
+        [
+            'agent:PP',
+            [ 'Head:P02', '被', ],
+        ],
+        [ 'Head:VC31', '吃掉', ],
+        [ 'aspect:Di', '了', ],
+    ]
+
     def _assertEqual(self, obj):
         self.assertEqual(len(obj), 23)
         self._assertEqualNode(obj, 0, None, None, 'S', None)
@@ -238,6 +280,14 @@ class TestParsedTree(unittest.TestCase, _TestCaseBase):
         self.assertEqual(node_data.role, role)
         self.assertEqual(node_data.pos, pos)
         self.assertEqual(node_data.word, word)
+
+    def test_io_penn(self):
+
+        obj = self.obj_class.from_penn(self.penn_in)
+        self._assertEqual(obj)
+        penn_out = obj.to_penn()
+
+        self.assertSequenceEqual(penn_out, self.penn_in)
 
     def test_normalize_text(self):
         text_orig = '#1:1.[0] ' + self.text_in + '#'
