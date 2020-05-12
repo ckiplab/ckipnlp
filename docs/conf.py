@@ -84,7 +84,7 @@ html_favicon = 'image/ckip_favicon.ico'
 
 # -- Options for LaTeX output:------------------------------------------
 
-latex_engine = 'xelatex'
+latex_engine = 'pdflatex'
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -97,7 +97,12 @@ latex_elements = {
 
     # Additional stuff for the LaTeX preamble.
     #
-    'preamble': '\\usepackage{ckipnlp}',
+    'preamble': r'''
+        \hypersetup{unicode=true}
+        \usepackage{CJKutf8}
+        \begin{CJK}{UTF8}{bsmi}
+        \AtEndDocument{\end{CJK}}
+    ''',
 
     # Latex figure (float) alignment
     #
@@ -110,10 +115,6 @@ latex_elements = {
 latex_documents = [
     (master_doc, 'ckipnlp.tex', __about.__description__,
      author, 'manual'),
-]
-
-latex_additional_files = [
-    '_latex/cosmel.sty',
 ]
 
 latex_logo = 'image/ckip_logo.svg'
