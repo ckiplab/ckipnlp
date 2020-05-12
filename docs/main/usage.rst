@@ -11,7 +11,7 @@ The |CkipPipeline| connect drivers of sentence segmentation, word segmentation, 
 
 The |CkipDocument| is the workspace of |CkipPipeline| with input/output data. Note that |CkipPipeline| will store the result into |CkipDocument| in-place.
 
-The |CkipPipeline| will compute all necessary dependencies. For example, if one calls :meth:`get_ner()` with only raw-text input, the pipeline will automatically calls :meth:`get_text()`, :meth:`get_ws()`, :meth:`get_pos()`.
+The |CkipPipeline| will compute all necessary dependencies. For example, if one calls :meth:`get_ner` with only raw-text input, the pipeline will automatically calls :meth:`get_text`, :meth:`get_ws`, :meth:`get_pos`.
 
 .. image:: ../image/pipeline.svg
 
@@ -95,10 +95,10 @@ Containers
 
 The container objects provides following methods:
 
--  :meth:`from_text()`, :meth:`to_text()` for plain-text format conversions;
--  :meth:`from_dict()`, :meth:`to_dict()` for dictionary-like format conversions;
--  :meth:`from_list()`, :meth:`to_list()` for list-like format conversions;
--  :meth:`from_json()`, :meth:`to_json()` for JSON format conversions (based-on dictionary-like format conversions).
+-  :meth:`from_text`, :meth:`to_text` for plain-text format conversions;
+-  :meth:`from_dict`, :meth:`to_dict` for dictionary-like format conversions;
+-  :meth:`from_list`, :meth:`to_list` for list-like format conversions;
+-  :meth:`from_json`, :meth:`to_json` for JSON format conversions (based-on dictionary-like format conversions).
 
 The following are the interfaces, where ``CONTAINER_CLASS`` refers to the container class.
 
@@ -159,11 +159,13 @@ Parsed Tree
 
 In addition to |ParsedParagraph|, we have implemented tree utilities base on `TreeLib <https://treelib.readthedocs.io>`_.
 
-|ParsedTree| is the tree structure of a parsed sentence. One may use :meth:`from_text()` and :meth:`to_text()` for plain-text conversion; :meth:`from_dict()`, :meth:`to_dict()` for dictionary-like object conversion; and also :meth:`from_json()`, :meth:`to_json()` for JSON string conversion.
+|ParsedTree| is the tree structure of a parsed sentence. One may use :meth:`from_text` and :meth:`to_text` for plain-text conversion; :meth:`from_dict`, :meth:`to_dict` for dictionary-like object conversion; and also :meth:`from_json`, :meth:`to_json` for JSON string conversion.
 
-The |ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`_ tree with |ParsedNode| as its nodes. The data of these nodes is stored in a |ParsedNodeData| (accessed by ``node.data``), which is a tuple of ``role`` (semantic role), ``pos`` (part-of-speech tagging), ``word``.
+|ParsedTree| also provide :meth:`from_penn` and :meth:`to_penn` methods for Penn Treebank conversion. One may use :meth:`to_penn` together with `SvgLing <https://pypi.org/project/svgling/>`_ to generate SVG tree graphs.
 
-|ParsedTree| provides useful methods: :meth:`get_heads()` finds the head words of the sentence; :meth:`get_relations()` extracts all relations in the sentence; :meth:`get_subjects()` returns the subjects of the sentence.
+|ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`_ tree with |ParsedNode| as its nodes. The data of these nodes is stored in a |ParsedNodeData| (accessed by ``node.data``), which is a tuple of ``role`` (semantic role), ``pos`` (part-of-speech tagging), ``word``.
+
+|ParsedTree| provides useful methods: :meth:`get_heads` finds the head words of the sentence; :meth:`get_relations` extracts all relations in the sentence; :meth:`get_subjects` returns the subjects of the sentence.
 
 .. code-block:: python
 
