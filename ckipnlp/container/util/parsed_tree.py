@@ -473,7 +473,7 @@ class ParsedTree(_Base, _Tree):
 
         return tree
 
-    def to_penn(self, node_id=None, with_role=True):
+    def to_penn(self, node_id=None, *, with_role=True, with_word=True, sep=':'):
         """Transform to Penn Treebank format.
 
         Parameters
@@ -482,6 +482,10 @@ class ParsedTree(_Base, _Tree):
                 Output the plain text format for the subtree under **node_id**.
             with_role : bool
                 Contains role-tag or not.
+            with_word : bool
+                Contains word or not.
+            sep : str
+                The seperator between role and POS-tag.
 
         Returns
         -------
@@ -489,16 +493,14 @@ class ParsedTree(_Base, _Tree):
         """
         if node_id is None:
             node_id = self.root
-
         node = self[node_id]
 
-        penn_data = [f'{node.data.role}:{node.data.pos}' if with_role and node.data.role else node.data.pos,]
-
-        if node.data.word:
+        penn_data = [f'{node.data.role}{sep}{node.data.pos}' if with_role and node.data.role else node.data.pos,]
+        if with_word and node.data.word:
             penn_data.append(node.data.word)
 
         for child in self.children(node_id):
-            penn_data.append(self.to_penn(child.identifier))
+            penn_data.append(self.to_penn(child.identifier, with_role=with_role, with_word=with_word, sep=sep))
 
         return penn_data
 
