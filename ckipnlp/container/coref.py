@@ -52,7 +52,7 @@ class CorefToken(_BaseTuple, _CorefToken):
     .. admonition:: Data Structure Examples
 
         Text format
-            Used for :meth:`to_list`.
+            Used for :meth:`to_text`.
 
             .. code-block:: python
 
@@ -94,7 +94,7 @@ class CorefSentence(_BaseSentence):
     .. admonition:: Data Structure Examples
 
         Text format
-            Used for :meth:`to_list`.
+            Used for :meth:`to_text`.
 
             .. code-block:: python
 
@@ -138,7 +138,7 @@ class CorefParagraph(_BaseList):
     .. admonition:: Data Structure Examples
 
         Text format
-            Used for :meth:`to_list`.
+            Used for :meth:`to_text`.
 
             .. code-block:: python
 
