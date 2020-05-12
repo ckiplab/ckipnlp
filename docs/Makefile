@@ -3,20 +3,20 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINX     = sphinx-build
-SPHINXOPTS =
-
+SPHINX     ?= sphinx-build
+SPHINXOPTS ?=
 DOCDIR     = .
 BUILDDIR   = _build
 APIDIR     = _api
 
+# Remember add the environment variable to readthedocs.org!!!
 ENV = SPHINX_APIDOC_OPTIONS=members,show-inheritance
 
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINX) -M help "$(DOCDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-.PHONY: help Makefile api clean serve
+.PHONY: help Makefile clean serve
 
 clean: Makefile
 	@$(SPHINX) -M $@ "$(DOCDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
