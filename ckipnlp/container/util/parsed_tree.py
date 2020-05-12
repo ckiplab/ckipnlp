@@ -294,6 +294,11 @@ class ParsedTree(_Base, _Tree):
                     [ 'Head:Nab', '中文字', ],
                     [ 'particle:Td', '耶', ],
                 ]
+
+    .. note::
+
+        One may use :meth:`to_penn` together with `SvgLing <https://pypi.org/project/svgling/>`_ to generate SVG tree graphs.
+
     """
 
     node_class = ParsedNode
