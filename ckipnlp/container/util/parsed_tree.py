@@ -118,7 +118,7 @@ class ParsedNode(_Base, _Node):
 
     See Also
     --------
-        treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+        treelib.tree.Node: Please refer `<https://treelib.readthedocs.io/>`__ for built-in usages.
 
     .. admonition:: Data Structure Examples
 
@@ -233,7 +233,7 @@ class ParsedTree(_Base, _Tree):
 
     See Also
     --------
-        treereelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`_ for built-in usages.
+        treereelib.tree.Tree: Please refer `<https://treelib.readthedocs.io/>`__ for built-in usages.
 
     .. admonition:: Data Structure Examples
 
@@ -297,7 +297,7 @@ class ParsedTree(_Base, _Tree):
 
     .. note::
 
-        One may use :meth:`to_penn` together with `SvgLing <https://pypi.org/project/svgling/>`_ to generate SVG tree graphs.
+        One may use :meth:`to_penn` together with `SvgLing <https://pypi.org/project/svgling/>`__ to generate SVG tree graphs.
 
     """
 

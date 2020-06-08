@@ -9,7 +9,7 @@ Features
 - Part-of-Speech Tagging
 - Named-Entity Recognition
 - Sentence Parsing
-- Co-Reference Resolution
+- Coreference Resolution
 
 Git
 ^^^
@@ -80,9 +80,9 @@ https://ckip.iis.sinica.edu.tw/service/corenlp
 Contributers
 ^^^^^^^^^^^^
 
-* `Mu Yang <https://muyang.pro>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Author & Maintainer)
-* `Wei-Yun Ma <https://www.iis.sinica.edu.tw/pages/ma/>`_ at `CKIP <https://ckip.iis.sinica.edu.tw>`_ (Maintainer)
-* `DouglasWu <dgrey1116@gmail.com>`_
+* `Mu Yang <https://muyang.pro>`__ at `CKIP <https://ckip.iis.sinica.edu.tw>`__ (Author & Maintainer)
+* `Wei-Yun Ma <https://www.iis.sinica.edu.tw/pages/ma/>`__ at `CKIP <https://ckip.iis.sinica.edu.tw>`__ (Maintainer)
+* `DouglasWu <dgrey1116@gmail.com>`__
 
 Installation
 ------------
@@ -90,11 +90,11 @@ Installation
 Requirements
 ^^^^^^^^^^^^
 
-* `Python <https://www.python.org>`_ 3.6+
-* `TreeLib <https://treelib.readthedocs.io>`_ 1.5+
-* `CkipTagger <https://pypi.org/project/ckiptagger>`_ 0.1.1+ [Optional, Recommended]
-* `CkipClassic <https://ckip-classic.readthedocs.io>`_ 1.0+ [Optional]
-* `TensorFlow / TensorFlow-GPU <https://www.tensorflow.org/>`_ 1.13.1+, <2 [Required by CkipTagger]
+* `Python <https://www.python.org>`__ 3.6+
+* `TreeLib <https://treelib.readthedocs.io>`__ 1.5+
+* `CkipTagger <https://pypi.org/project/ckiptagger>`__ 0.1.1+ [Optional, Recommended]
+* `CkipClassic <https://ckip-classic.readthedocs.io>`__ 1.0+ [Optional]
+* `TensorFlow / TensorFlow-GPU <https://www.tensorflow.org/>`__ 1.13.1+, <2 [Required by CkipTagger]
 
 Driver Requirements
 ^^^^^^^^^^^^^^^^^^^
@@ -107,11 +107,11 @@ Word Segmentation†                          ✔           ✔
 Part-of-Speech Tagging†                     ✔           ✔
 Sentence Parsing                                        ✔
 Named-Entity Recognition                    ✔
-Co-Reference Resolution‡          ✔         ✔           ✔
+Coreference Resolution‡           ✔         ✔           ✔
 ================================  ========  ==========  ===========
 
 - † These drivers require only one of either backends.
-- ‡ Co-Reference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, sentence parsing, and named-entity recognition.
+- ‡ Coreference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, sentence parsing, and named-entity recognition.
 
 Installation via Pip
 ^^^^^^^^^^^^^^^^^^^^
@@ -131,7 +131,7 @@ License
 
 |CC BY-NC-SA 4.0|
 
-Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`_ under the `CC BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`_.
+Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`__ under the `CC BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`__.
 
 .. |CC BY-NC-SA 4.0| image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
    :target: http://creativecommons.org/licenses/by-nc-sa/4.0/

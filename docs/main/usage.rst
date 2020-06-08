@@ -157,13 +157,13 @@ Similarly, |WsPosSentence|/|WsPosParagraph| provides routines for word-segmented
 Parsed Tree
 ^^^^^^^^^^^
 
-In addition to |ParsedParagraph|, we have implemented tree utilities base on `TreeLib <https://treelib.readthedocs.io>`_.
+In addition to |ParsedParagraph|, we have implemented tree utilities base on `TreeLib <https://treelib.readthedocs.io>`__.
 
 |ParsedTree| is the tree structure of a parsed sentence. One may use :meth:`from_text` and :meth:`to_text` for plain-text conversion; :meth:`from_dict`, :meth:`to_dict` for dictionary-like object conversion; and also :meth:`from_json`, :meth:`to_json` for JSON string conversion.
 
-|ParsedTree| also provide :meth:`from_penn` and :meth:`to_penn` methods for Penn Treebank conversion. One may use :meth:`to_penn` together with `SvgLing <https://pypi.org/project/svgling/>`_ to generate SVG tree graphs.
+|ParsedTree| also provide :meth:`from_penn` and :meth:`to_penn` methods for Penn Treebank conversion. One may use :meth:`to_penn` together with `SvgLing <https://pypi.org/project/svgling/>`__ to generate SVG tree graphs.
 
-|ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`_ tree with |ParsedNode| as its nodes. The data of these nodes is stored in a |ParsedNodeData| (accessed by ``node.data``), which is a tuple of ``role`` (semantic role), ``pos`` (part-of-speech tagging), ``word``.
+|ParsedTree| is a `TreeLib <https://treelib.readthedocs.io>`__ tree with |ParsedNode| as its nodes. The data of these nodes is stored in a |ParsedNodeData| (accessed by ``node.data``), which is a tuple of ``role`` (semantic role), ``pos`` (part-of-speech tagging), ``word``.
 
 |ParsedTree| provides useful methods: :meth:`get_heads` finds the head words of the sentence; :meth:`get_relations` extracts all relations in the sentence; :meth:`get_subjects` returns the subjects of the sentence.
 
