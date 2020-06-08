@@ -19,7 +19,6 @@ lint:
 
 check:
 	$(TWINE) check dist/*
-	# $(PY) setup.py check -r -s
 
 doc:
 	( cd docs ; make clean ; make html )
