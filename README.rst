@@ -1,5 +1,5 @@
-Official CKIP CoreNLP Toolkits
-------------------------------
+CKIP CoreNLP Toolkits
+---------------------
 
 Features
 ^^^^^^^^

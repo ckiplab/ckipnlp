@@ -50,9 +50,9 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize underlying objects.
 
-    .. py:method:: __call__(*, parsed)
+    .. method:: __call__(*, parsed)
 
         Apply coreference delectation.
 

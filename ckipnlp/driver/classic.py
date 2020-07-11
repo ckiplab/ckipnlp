@@ -30,13 +30,13 @@ class CkipClassicWordSegmenter(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize underlying objects.
         do_pos : bool
             Returns POS-tag or not
         lexicons: Iterable[Tuple[str, str]]
             A list of the lexicon words and their POS-tags.
 
-    .. py:method:: __call__(*, text)
+    .. method:: __call__(*, text)
 
         Apply word segmentation.
 
@@ -81,9 +81,9 @@ class CkipClassicSentenceParser(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize underlying objects.
 
-    .. py:method:: __call__(*, ws, pos)
+    .. method:: __call__(*, ws, pos)
 
         Apply sentence parsing.
 

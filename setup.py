@@ -16,7 +16,7 @@ def main():
         readme = fin.read()
 
     setup(
-        name=about.__name__,
+        name='ckipnlp',
         version=about.__version__,
         author=about.__author_name__,
         author_email=about.__author_email__,

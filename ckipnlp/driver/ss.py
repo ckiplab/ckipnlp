@@ -29,13 +29,13 @@ class CkipSentenceSegmenter(_BaseDriver):  # pylint: disable=too-few-public-meth
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize underlying objects.
         delims : str
             The delimiters.
         keep_delims : bool
-            Keep delimiters.
+            Keep the delimiters.
 
-    .. py:method:: __call__(*, raw, keep_all=True)
+    .. method:: __call__(*, raw, keep_all=True)
 
         Apply sentence segmentation.
 

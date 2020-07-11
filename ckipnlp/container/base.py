@@ -307,7 +307,7 @@ class _InterfaceBuiltInItem:
 class BaseList(_BaseList, _InterfaceItem):
     """The base CKIPNLP list.
 
-    .. py:attribute:: item_class
+    .. attribute:: item_class
         :value: Not Implemented
 
         Must be a CKIPNLP container class.
@@ -316,7 +316,7 @@ class BaseList(_BaseList, _InterfaceItem):
 class BaseList0(_BaseList, _InterfaceBuiltInItem):
     """The base CKIPNLP list with built-in item class.
 
-    .. py:attribute:: item_class
+    .. attribute:: item_class
         :value: Not Implemented
 
         Must be a built-in type.
@@ -325,7 +325,7 @@ class BaseList0(_BaseList, _InterfaceBuiltInItem):
 class BaseSentence(_BaseSentence, _InterfaceItem):
     """The base CKIPNLP sentence.
 
-    .. py:attribute:: item_class
+    .. attribute:: item_class
         :value: Not Implemented
 
         Must be a CKIPNLP container class.
@@ -334,7 +334,7 @@ class BaseSentence(_BaseSentence, _InterfaceItem):
 class BaseSentence0(_BaseSentence, _InterfaceBuiltInItem):
     """The base CKIPNLP sentence with built-in item class.
 
-    .. py:attribute:: item_class
+    .. attribute:: item_class
         :value: Not Implemented
 
         Must be a built-in type.

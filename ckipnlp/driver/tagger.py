@@ -33,7 +33,7 @@ class CkipTaggerWordSegmenter(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize underlying objects.
         disable_cuda : bool
             Disable GPU usage.
         recommend_lexicons: Mapping[str, float]
@@ -48,7 +48,7 @@ class CkipTaggerWordSegmenter(_BaseDriver):
             (Please refer https://github.com/ckiplab/ckiptagger#4-run-the-ws-pos-ner-pipeline for details.)
 
 
-    .. py:method:: __call__(*, text)
+    .. method:: __call__(*, text)
 
         Apply word segmentation.
 
@@ -93,7 +93,7 @@ class CkipTaggerPosTagger(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize underlying objects.
         disable_cuda : bool
             Disable GPU usage.
 
@@ -103,7 +103,7 @@ class CkipTaggerPosTagger(_BaseDriver):
             Extra options for :meth:`ckiptagger.POS.__call__`.
             (Please refer https://github.com/ckiplab/ckiptagger#4-run-the-ws-pos-ner-pipeline for details.)
 
-    .. py:method:: __call__(*, text)
+    .. method:: __call__(*, text)
 
         Apply part-of-speech tagging.
 
@@ -140,7 +140,7 @@ class CkipTaggerNerChunker(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize underlying objects.
         disable_cuda : bool
             Disable GPU usage.
 
@@ -150,7 +150,7 @@ class CkipTaggerNerChunker(_BaseDriver):
             Extra options for :meth:`ckiptagger.NER.__call__`.
             (Please refer https://github.com/ckiplab/ckiptagger#4-run-the-ws-pos-ner-pipeline for details.)
 
-    .. py:method:: __call__(*, text)
+    .. method:: __call__(*, text)
 
         Apply named-entity recognition.
 
