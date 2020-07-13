@@ -52,12 +52,12 @@ class Base(metaclass=_ABCMeta):
 
     @classmethod
     @_abstractmethod
-    def from_dict(cls, data):
+    def from_list(cls, data):
         """Construct an instance from python built-in containers."""
         return NotImplemented
 
     @_abstractmethod
-    def to_dict(self):
+    def to_list(self):
         """Transform to python built-in containers."""
         return NotImplemented
 
@@ -65,12 +65,12 @@ class Base(metaclass=_ABCMeta):
 
     @classmethod
     @_abstractmethod
-    def from_list(cls, data):
+    def from_dict(cls, data):
         """Construct an instance from python built-in containers."""
         return NotImplemented
 
     @_abstractmethod
-    def to_list(self):
+    def to_dict(self):
         """Transform to python built-in containers."""
         return NotImplemented
 
@@ -115,27 +115,6 @@ class BaseTuple(Base, metaclass=_ABCMeta):
     ########################################################################################################################
 
     @classmethod
-    def from_dict(cls, data):
-        """Construct an instance from python built-in containers.
-
-        Parameters
-        ----------
-            data : dict
-        """
-        return cls(**data)
-
-    def to_dict(self):
-        """Transform to python built-in containers.
-
-        Returns
-        -------
-            dict
-        """
-        return self._asdict()  # pylint: disable=no-member
-
-    ########################################################################################################################
-
-    @classmethod
     def from_list(cls, data):
         """Construct an instance from python built-in containers.
 
@@ -153,6 +132,27 @@ class BaseTuple(Base, metaclass=_ABCMeta):
             list
         """
         return list(self)
+
+    ########################################################################################################################
+
+    @classmethod
+    def from_dict(cls, data):
+        """Construct an instance from python built-in containers.
+
+        Parameters
+        ----------
+            data : dict
+        """
+        return cls(**data)
+
+    def to_dict(self):
+        """Transform to python built-in containers.
+
+        Returns
+        -------
+            dict
+        """
+        return self._asdict()  # pylint: disable=no-member
 
 ################################################################################################################################
 
@@ -186,28 +186,6 @@ class _BaseList(Base, _UserList):
     ########################################################################################################################
 
     @classmethod
-    def from_dict(cls, data):
-        """Construct an instance from python built-in containers.
-
-        Parameters
-        ----------
-            data : Sequence[Container]
-                list of objects as ``item_class.from_dict`` input.
-        """
-        return cls(map(cls._item_from_dict, data))  # pylint: disable=no-member
-
-    def to_dict(self):
-        """Transform to python built-in containers.
-
-        Returns
-        -------
-            List[Container]
-        """
-        return list(map(self._item_to_dict, self))  # pylint: disable=no-member
-
-    ########################################################################################################################
-
-    @classmethod
     def from_list(cls, data):
         """Construct an instance from python built-in containers.
 
@@ -226,6 +204,28 @@ class _BaseList(Base, _UserList):
             List[Container]
         """
         return list(map(self._item_to_list, self))  # pylint: disable=no-member
+
+    ########################################################################################################################
+
+    @classmethod
+    def from_dict(cls, data):
+        """Construct an instance from python built-in containers.
+
+        Parameters
+        ----------
+            data : Sequence[Container]
+                list of objects as ``item_class.from_dict`` input.
+        """
+        return cls(map(cls._item_from_dict, data))  # pylint: disable=no-member
+
+    def to_dict(self):
+        """Transform to python built-in containers.
+
+        Returns
+        -------
+            List[Container]
+        """
+        return list(map(self._item_to_dict, self))  # pylint: disable=no-member
 
 ################################################################################################################################
 
@@ -260,14 +260,6 @@ class _InterfaceItem:
         return cls.item_class.to_text(item)  # pylint: disable=no-member
 
     @classmethod
-    def _item_from_dict(cls, data):
-        return cls.item_class.from_dict(data)  # pylint: disable=no-member
-
-    @classmethod
-    def _item_to_dict(cls, item):
-        return cls.item_class.to_dict(item)  # pylint: disable=no-member
-
-    @classmethod
     def _item_from_list(cls, data):
         return cls.item_class.from_list(data)  # pylint: disable=no-member
 
@@ -275,32 +267,40 @@ class _InterfaceItem:
     def _item_to_list(cls, item):
         return cls.item_class.to_list(item)  # pylint: disable=no-member
 
+    @classmethod
+    def _item_from_dict(cls, data):
+        return cls.item_class.from_dict(data)  # pylint: disable=no-member
+
+    @classmethod
+    def _item_to_dict(cls, item):
+        return cls.item_class.to_dict(item)  # pylint: disable=no-member
+
 ################################################################################################################################
 
 class _InterfaceBuiltInItem:
     @classmethod
     def _item_from_text(cls, data):
-        return data
+        return cls.item_class(data)  # pylint: disable=no-member
 
     @classmethod
     def _item_to_text(cls, item):
-        return item
-
-    @classmethod
-    def _item_from_dict(cls, data):
-        return data
-
-    @classmethod
-    def _item_to_dict(cls, item):
-        return item
+        return cls.item_class(item)  # pylint: disable=no-member
 
     @classmethod
     def _item_from_list(cls, data):
-        return data
+        return cls.item_class(data)  # pylint: disable=no-member
 
     @classmethod
     def _item_to_list(cls, item):
-        return item
+        return cls.item_class(item)  # pylint: disable=no-member
+
+    @classmethod
+    def _item_from_dict(cls, data):
+        return cls.item_class(data)  # pylint: disable=no-member
+
+    @classmethod
+    def _item_to_dict(cls, item):
+        return cls.item_class(item)  # pylint: disable=no-member
 
 ################################################################################################################################
 

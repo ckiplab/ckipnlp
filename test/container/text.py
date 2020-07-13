@@ -17,10 +17,13 @@ class TestTextParagraph(unittest.TestCase, _TestCaseBase):
 
     obj_class = TextParagraph
 
-    text_in = [ '中文字喔', '啊哈哈哈', ]
+    text_in = [
+        '中文字耶，啊哈哈哈。',
+        '「完蛋了！」，畢卡索他想',
+    ]
 
     def _assertEqual(self, obj):
         self.assertEqual(len(obj), 2)
 
-        self.assertEqual(obj[0], '中文字喔')
-        self.assertEqual(obj[1], '啊哈哈哈')
+        self.assertEqual(obj[0], '中文字耶，啊哈哈哈。')
+        self.assertEqual(obj[1], '「完蛋了！」，畢卡索他想')

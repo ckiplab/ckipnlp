@@ -82,16 +82,6 @@ class WsPosToken(_BaseTuple, _WsPosToken):
 
                 '中文字(Na)'  # word / POS-tag
 
-        Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`.
-
-            .. code-block:: python
-
-                {
-                    'word': '中文字', # word
-                    'pos': 'Na',     # POS-tag
-                }
-
         List format
             Used for :meth:`from_list` and :meth:`to_list`.
 
@@ -101,6 +91,16 @@ class WsPosToken(_BaseTuple, _WsPosToken):
                     '中文字', # word
                     'Na',    # POS-tag
                 ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                {
+                    'word': '中文字', # word
+                    'pos': 'Na',     # POS-tag
+                }
     """
 
     def __str__(self):
@@ -144,7 +144,7 @@ class WsPosSentence:
         Parameters
         ----------
             data : str
-                text such as ``'中文字(Na)\\u3000喔(T)'``.
+                text such as ``'中文字(Na)\\u3000耶(T)'``.
 
         Returns
         -------
@@ -169,7 +169,7 @@ class WsPosSentence:
         Returns
         -------
             str
-                text such as ``'中文字(Na)\\u3000喔(T)'``.
+                text such as ``'中文字(Na)\\u3000耶(T)'``.
         """
         return _sentence_to_text((word, pos,))
 
@@ -191,7 +191,7 @@ class WsPosParagraph(metaclass=_ABCMeta):
         Parameters
         ----------
             data : Sequence[str]
-                list of sentences such as ``'中文字(Na)\\u3000喔(T)'``.
+                list of sentences such as ``'中文字(Na)\\u3000耶(T)'``.
 
         Returns
         -------
@@ -216,6 +216,6 @@ class WsPosParagraph(metaclass=_ABCMeta):
         Returns
         -------
             List[str]
-                list of sentences such as ``'中文字(Na)\\u3000喔(T)'``.
+                list of sentences such as ``'中文字(Na)\\u3000耶(T)'``.
         """
         return list(_paragraph_to_text((word, pos,)))

@@ -289,11 +289,6 @@ class TestParsedTree(unittest.TestCase, _TestCaseBase):
 
         self.assertSequenceEqual(penn_out, self.penn_in)
 
-    def test_normalize_text(self):
-        text_orig = '#1:1.[0] ' + self.text_in + '#'
-        text_out = self.obj_class.normalize_text(text_orig)
-        self.assertEqual(text_out, self.text_in)
-
     def test_get_heads_semantic(self):
         obj = self.obj_class.from_text(self.text_in)
         self._assertGetHeads(obj, 0, [21], semantic=True)

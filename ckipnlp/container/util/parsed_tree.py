@@ -66,6 +66,9 @@ class ParsedNodeData(_BaseTuple, _ParsedNodeData):
 
                 'Head:Na:中文字'  # role / POS-tag / text-term
 
+        List format
+            Not implemented.
+
         Dict format
             Used for :meth:`from_dict` and :meth:`to_dict`.
 
@@ -76,9 +79,6 @@ class ParsedNodeData(_BaseTuple, _ParsedNodeData):
                     'pos': 'Na',      # POS-tag
                     'word': '中文字',  # text term
                 }
-
-        List format
-            Not implemented.
     """
 
     from_list = NotImplemented
@@ -125,6 +125,9 @@ class ParsedNode(_Base, _Node):
         Text format
             Not implemented.
 
+        List format
+            Not implemented.
+
         Dict format
             Used for :meth:`to_dict`.
 
@@ -135,9 +138,6 @@ class ParsedNode(_Base, _Node):
                     'pos': 'Na',      # POS-tag
                     'word': '中文字',  # text term
                 }
-
-        List format
-            Not implemented.
     """
 
     data_class = ParsedNodeData
@@ -187,6 +187,9 @@ class ParsedRelation(_Base, _ParsedRelation):
         Text format
             Not implemented.
 
+        List format
+            Not implemented.
+
         Dict format
             Used for :meth:`to_dict`.
 
@@ -197,9 +200,6 @@ class ParsedRelation(_Base, _ParsedRelation):
                     'tail': { 'role': 'particle', 'pos': 'Td', 'word': '耶' }, # tail node
                     'relation': 'particle',  # relation
                 }
-
-        List format
-            Not implemented.
     """
 
     from_dict = NotImplemented
@@ -244,6 +244,9 @@ class ParsedTree(_Base, _Tree):
 
                 'S(Head:Nab:中文字|particle:Td:耶)'
 
+        List format
+            Not implemented.
+
         Dict format
             Used for :meth:`from_dict` and :meth:`to_dict`.
             A dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
@@ -281,9 +284,6 @@ class ParsedTree(_Base, _Tree):
                     ],
                 }
 
-        List format
-            Not implemented.
-
         Penn Treebank format
             Used for :meth:`from_penn` and :meth:`to_penn`.
 
@@ -306,34 +306,20 @@ class ParsedTree(_Base, _Tree):
     from_list = NotImplemented
     to_list = NotImplemented
 
-    @staticmethod
-    def normalize_text(tree_text):
-        """Text normalization.
-
-        Remove leading number and trailing ``#``.
-        """
-        if '#' in tree_text:
-            tree_text = tree_text.split('] ', 2)[-1].rstrip('#')
-        return tree_text
-
     def __str__(self):
         self.to_text()
 
     ########################################################################################################################
 
     @classmethod
-    def from_text(cls, data, *, normalize=True):
+    def from_text(cls, data):
         """Construct an instance from text format.
 
         Parameters
         ----------
             data : str
-                A parsed tree in text format.
-            normalize : bool
-                Do text normalization using :meth:`normalize_text`.
+                A parsed tree in text format (:class:`~ckipnlp.container.parsed.ParsedClause.clause`).
         """
-        if normalize:
-            data = cls.normalize_text(data)
 
         tree = cls()
         node_id = 0

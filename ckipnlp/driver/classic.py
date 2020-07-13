@@ -9,9 +9,14 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
+from itertools import (
+    chain as _chain,
+)
+
 from ckipnlp.container import (
     TextParagraph as _TextParagraph,
     SegParagraph as _SegParagraph,
+    WsPosSentence as _WsPosSentence,
     WsPosParagraph as _WsPosParagraph,
     ParsedParagraph as _ParsedParagraph,
 )
@@ -92,7 +97,7 @@ class CkipClassicSentenceParser(_BaseDriver):
             - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
 
         Returns
-            **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
+            **parsed** (:class:`ParsedSentence <ckipnlp.container.parsed.ParsedSentence>`) — The parsed-sentences.
     """
 
     driver_type = _DriverType.SENTENCE_PARSER
@@ -113,9 +118,28 @@ class CkipClassicSentenceParser(_BaseDriver):
         assert isinstance(pos, _SegParagraph)
 
         ws = _SegParagraph.from_list([map(self._half2full, line) for line in ws])
-        wspos_text = _WsPosParagraph.to_text(ws, pos)
-        parsed_text = self._core.apply_list(wspos_text)
-        parsed = _ParsedParagraph.from_text(parsed_text)
+
+        parsed_text = []
+        for ws_sent, pos_sent in zip(ws, pos):
+            idx0 = 0
+            parsed_sent_text = []
+            for idx1, (ws_token, pos_token,) in enumerate(_chain(zip(ws_sent, pos_sent), [(None, None),])):
+                if pos_token is None or pos_token.endswith('CATEGORY') or pos_token == 'WHITESPACE':
+
+                    if idx0 != idx1:
+                        wspos_clause_text = _WsPosSentence.to_text(ws_sent[idx0:idx1], pos_sent[idx0:idx1])
+                        for parsed_clause_text in self._core.apply_list([wspos_clause_text]):
+                            parsed_sent_text.append([self._normalize(parsed_clause_text), '',])
+
+                    if ws_token:
+                        if not parsed_sent_text:
+                            parsed_sent_text.append([None, '',])
+                        parsed_sent_text[-1][1] += ws_token
+
+                    idx0 = idx1+1
+
+            parsed_text.append(parsed_sent_text)
+        parsed = _ParsedParagraph.from_list(parsed_text)
 
         return parsed
 
@@ -130,3 +154,7 @@ class CkipClassicSentenceParser(_BaseDriver):
            .replace('|', '｜') \
            .replace('&', '＆') \
            .replace('#', '＃')
+
+    @staticmethod
+    def _normalize(text):
+        return text.split('] ', 2)[-1].rstrip('#')

@@ -19,8 +19,8 @@ class TestWsPosToken(unittest.TestCase, _TestCaseBase):
     obj_class = WsPosToken
 
     text_in = '中文字(Na)'
-    dict_in = { 'word': '中文字', 'pos': 'Na', }
     list_in = [ '中文字', 'Na', ]
+    dict_in = { 'word': '中文字', 'pos': 'Na', }
 
     def _assertEqual(self, obj):
         self.assertEqual(obj.word, '中文字')
@@ -32,21 +32,21 @@ class TestWsPosSentence(unittest.TestCase, _TestCaseBase):
 
     obj_class = WsPosSentence
 
-    test_io_dict = NotImplemented
     test_io_list = NotImplemented
+    test_io_dict = NotImplemented
     test_io_json = NotImplemented
 
-    text_in = '中文字(Na)　喔(T)'
-
-    dict_in = {
-        'word': [ '中文字', '喔', ],
-        'pos': [ 'Na', 'T', ],
-    }
+    text_in = '中文字(Na)　耶(T)'
 
     list_in = [
-        [ '中文字', '喔', ],
+        [ '中文字', '耶', ],
         [ 'Na', 'T', ],
     ]
+
+    dict_in = {
+        'word': [ '中文字', '耶', ],
+        'pos': [ 'Na', 'T', ],
+    }
 
     def test_io_text(self):
         word_obj, pos_obj = self.obj_class.from_text(self.text_in)
@@ -58,7 +58,7 @@ class TestWsPosSentence(unittest.TestCase, _TestCaseBase):
         self.assertIsInstance(word_obj, SegSentence)
         self.assertEqual(len(word_obj), 2)
         self.assertEqual(word_obj[0], '中文字')
-        self.assertEqual(word_obj[1], '喔')
+        self.assertEqual(word_obj[1], '耶')
 
         self.assertIsInstance(pos_obj, SegSentence)
         self.assertEqual(len(pos_obj), 2)
@@ -71,26 +71,15 @@ class TestWsPosParagraph(unittest.TestCase, _TestCaseBase):
 
     obj_class = WsPosParagraph
 
-    test_io_dict = NotImplemented
     test_io_list = NotImplemented
+    test_io_dict = NotImplemented
     test_io_json = NotImplemented
 
-    text_in = [ '中文字(Na)　喔(T)', '啊(I)　哈(D)　哈(D)　哈(D)', ]
-
-    dict_in = {
-        'word': [
-            '中文字', '喔',
-            '啊', '哈', '哈', '哈',
-        ],
-        'pos': [
-            'Na', 'T',
-            'I', 'D', 'D', 'D',
-        ],
-    }
+    text_in = [ '中文字(Na)　耶(T)', '啊(I)　哈(D)　哈(D)　哈(D)', ]
 
     list_in = [
         [
-            '中文字', '喔',
+            '中文字', '耶',
             '啊', '哈', '哈', '哈',
         ],
         [
@@ -98,6 +87,17 @@ class TestWsPosParagraph(unittest.TestCase, _TestCaseBase):
             'I', 'D', 'D', 'D',
         ],
     ]
+
+    dict_in = {
+        'word': [
+            '中文字', '耶',
+            '啊', '哈', '哈', '哈',
+        ],
+        'pos': [
+            'Na', 'T',
+            'I', 'D', 'D', 'D',
+        ],
+    }
 
     def test_io_text(self):
         word_obj, pos_obj = self.obj_class.from_text(self.text_in)
@@ -111,7 +111,7 @@ class TestWsPosParagraph(unittest.TestCase, _TestCaseBase):
 
         self.assertEqual(len(word_obj[0]), 2)
         self.assertEqual(word_obj[0][0], '中文字')
-        self.assertEqual(word_obj[0][1], '喔')
+        self.assertEqual(word_obj[0][1], '耶')
 
         self.assertEqual(len(word_obj[1]), 4)
         self.assertEqual(word_obj[1][0], '啊')

@@ -26,14 +26,14 @@ class SegSentence(_BaseSentence0):
 
             .. code-block:: python
 
-                '中文字\u3000喔' # Words segmented by \\u3000 (full-width space)
+                '中文字\u3000耶\u3000，\u3000啊\u3000哈\u3000哈哈\u3000。' # Words segmented by \\u3000 (full-width space)
 
-        Dict/List format
-            Used for :meth:`from_dict`, :meth:`to_dict`, :meth:`from_list`, and :meth:`to_list`.
+        List/Dict format
+            Used for :meth:`from_list`, :meth:`to_list`, :meth:`from_dict`, and :meth:`to_dict`.
 
             .. code-block:: python
 
-                [ '中文字', '喔', ]
+                [ '中文字', '耶', '，', '啊', '哈', '哈哈', '。', ]
 
     .. note::
 
@@ -61,18 +61,18 @@ class SegParagraph(_BaseList):
             .. code-block:: python
 
                 [
-                    '中文字\u3000喔',     # Sentence 1
-                    '啊\u3000哈\u3000哈\u3000哈', # Sentence 2
+                    '中文字\u3000耶\u3000，\u3000啊\u3000哈\u3000哈\u3000。',        # Sentence 1
+                    '「\u3000完蛋\u3000了\u3000！\u3000」\u3000，\u3000畢卡索\u3000他\u3000想', # Sentence 2
                 ]
 
-        Dict/List format
-            Used for :meth:`from_dict`, :meth:`to_dict`,  :meth:`from_list`, and :meth:`to_list`.
+        List/Dict format
+            Used for :meth:`from_list`, :meth:`to_list`, :meth:`from_dict`, and :meth:`to_dict`.
 
             .. code-block:: python
 
                 [
-                    [ '中文字', '喔', ],         # Sentence 1
-                    [ '啊', '哈', '哈', '哈', ], # Sentence 2
+                    [ '中文字', '耶', '，', '啊', '哈', '哈哈', '。', ],            # Sentence 1
+                    [ '「', '完蛋', '了', '！', '」', '，', '畢卡索', '他', '想', ], # Sentence 2
                 ]
 
     .. note::

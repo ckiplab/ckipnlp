@@ -19,8 +19,8 @@ class TestNerToken(unittest.TestCase, _TestCaseBase):
 
     test_io_text = NotImplemented
 
-    dict_in = { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), }
     list_in = [ '中文字', 'LANGUAGE', (0, 3), ]
+    dict_in = { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), }
     tagger_in = ( 0, 3, 'LANGUAGE', '中文字', )
 
     def _assertEqual(self, obj):
@@ -44,14 +44,14 @@ class TestNerSentence(unittest.TestCase, _TestCaseBase):
 
     test_io_text = NotImplemented
 
-    dict_in = [
-        { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },
-        { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), },
-    ]
-
     list_in = [
         [ '美國', 'GPE', (0, 2), ],
         [ '參議院', 'ORG', (3, 5), ],
+    ]
+
+    dict_in = [
+        { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },
+        { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), },
     ]
 
     tagger_in = [
@@ -86,16 +86,6 @@ class TestNerParagraph(unittest.TestCase, _TestCaseBase):
 
     test_io_text = NotImplemented
 
-    dict_in = [
-        [
-            { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), },
-        ],
-        [
-            { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },
-            { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), },
-        ],
-    ]
-
     list_in = [
         [
             [ '中文字', 'LANGUAGE', (0, 3), ],
@@ -103,6 +93,16 @@ class TestNerParagraph(unittest.TestCase, _TestCaseBase):
         [
             [ '美國', 'GPE', (0, 2), ],
             [ '參議院', 'ORG', (3, 5), ],
+        ],
+    ]
+
+    dict_in = [
+        [
+            { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), },
+        ],
+        [
+            { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },
+            { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), },
         ],
     ]
 

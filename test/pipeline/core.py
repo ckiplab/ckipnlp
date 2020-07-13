@@ -19,23 +19,33 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 ################################################################################################################################
 
-raw = '中文字喔，啊哈哈哈'
-text = ['中文字喔', '啊哈哈哈']
+raw = '中文字耶，啊哈哈哈。\n「完蛋了！」畢卡索他想'
+text = [
+    '中文字耶，啊哈哈哈。',
+    '「完蛋了！」畢卡索他想',
+]
 ws = [
-    [ '中文字', '喔', ],
-    [ '啊', '哈', '哈', '哈', ],
+    [ '中文字', '耶', '，', '啊', '哈', '哈哈', '。', ],
+    [ '「', '完蛋', '了', '！', '」', '畢卡索', '他', '想', ],
 ]
 pos = [
-    [ 'Na', 'T', ],
-    [ 'I', 'D', 'D', 'D', ],
+    [ 'Na', 'T', 'COMMACATEGORY', 'I', 'D', 'D', 'PERIODCATEGORY', ],
+    [ 'PARENTHESISCATEGORY', 'VH', 'T', 'EXCLAMATIONCATEGORY', 'PARENTHESISCATEGORY', 'Nb', 'Nh', 'VE', ],
 ]
 ner = [
     [ [ '中文字', 'LANGUAGE', (0, 3), ], ],
-    [],
+    [ [ '畢卡索', 'PERSON', (6, 9), ], ],
 ]
 parsed = [
-    '#1:1.[0] S(Head:Nab:中文字|particle:Tc:喔)#',
-    '#2:1.[0] %(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)#',
+    [
+        [ 'S(Head:Nab:中文字|particle:Td:耶)', '，', ],
+        [ '%(particle:I:啊|manner:Dh:哈|manner:D:哈哈)', '。', ],
+    ],
+    [
+        [ None, '「', ],
+        [ 'VP(Head:VH11:完蛋|particle:Ta:了)', '！」', ],
+        [ 'S(agent:NP(apposition:Nba:畢卡索|Head:Nhaa:他)|Head:VE2:想)', '', ],
+    ],
 ]
 
 ################################################################################################################################
@@ -67,8 +77,8 @@ class TestTaggerWordSegmenter(unittest.TestCase):
 #         doc = CkipDocument(text=TextParagraph.from_list(text))
 #         obj.get_ws(doc)
 #         self.assertSequenceEqual(doc.ws.to_list(), [
-#             [ '中文字', '喔', ],
-#             [ '啊哈', '哈哈', ],
+#             [ '中文字', '耶', '，', '啊哈', '哈哈', '。', ],
+#             [ '「', '完蛋', '了', '！', '」', '畢卡索', '他', '想', ],
 #         ])
 
 ################################################################################################################################
@@ -90,8 +100,8 @@ class TestClassicWordSegmenterPosTagger(unittest.TestCase):
         doc = CkipDocument(text=TextParagraph.from_list(text))
         obj.get_pos(doc)
         self.assertSequenceEqual(doc.pos.to_list(), [
-            [ 'Na', 'T', ],
-            [ 'I', 'D', ],
+            [ 'Na', 'T', 'COMMACATEGORY', 'I', 'D', 'PERIODCATEGORY', ],
+            [ 'PARENTHESISCATEGORY', 'VH', 'T', 'EXCLAMATIONCATEGORY', 'PARENTHESISCATEGORY', 'Nb', 'Nh', 'VE', ],
         ])
 
 ################################################################################################################################

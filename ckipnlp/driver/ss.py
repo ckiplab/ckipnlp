@@ -49,7 +49,7 @@ class CkipSentenceSegmenter(_BaseDriver):  # pylint: disable=too-few-public-meth
     driver_type = _DriverType.SENTENCE_SEGMENTER
     driver_family = _DriverFamily.BUILTIN
 
-    def __init__(self, *, lazy=False, delims=',，。!！?？:：;；\n', keep_delims=False):
+    def __init__(self, *, lazy=False, delims='\n', keep_delims=False):
         super().__init__(lazy=lazy)
 
         self.delims = delims

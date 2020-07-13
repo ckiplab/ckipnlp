@@ -19,7 +19,7 @@ The |CkipPipeline| will compute all necessary dependencies. For example, if one 
    from ckipnlp.pipeline import CkipPipeline, CkipDocument
 
    pipeline = CkipPipeline()
-   doc = CkipDocument(raw='中文字喔，啊哈哈哈')
+   doc = CkipDocument(raw='中文字耶，啊哈哈哈')
 
    # Word Segmentation
    pipeline.get_ws(doc)

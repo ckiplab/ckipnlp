@@ -19,8 +19,8 @@ class TestCorefToken(unittest.TestCase, _TestCaseBase):
 
     test_io_text = NotImplemented
 
-    dict_in = { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, }
     list_in = [ '畢卡索', (0, 'source'), 2, ]
+    dict_in = { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, }
 
     def _assertEqual(self, obj):
         self.assertEqual(obj.word, '畢卡索')
@@ -35,16 +35,16 @@ class TestCorefSentence(unittest.TestCase, _TestCaseBase):
 
     test_io_text = NotImplemented
 
-    dict_in = [
-        { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, },
-        { 'word': '他', 'coref': (0, 'target'), 'idx': 3, },
-        { 'word': '想', 'coref': None, 'idx': 4, },
-    ]
-
     list_in = [
         [ '畢卡索', (0, 'source'), 2, ],
         [ '他', (0, 'target'), 3, ],
         [ '想', None, 4, ],
+    ]
+
+    dict_in = [
+        { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, },
+        { 'word': '他', 'coref': (0, 'target'), 'idx': 3, },
+        { 'word': '想', 'coref': None, 'idx': 4, },
     ]
 
     def _assertEqual(self, obj):
@@ -70,19 +70,6 @@ class TestCorefParagraph(unittest.TestCase, _TestCaseBase):
 
     test_io_text = NotImplemented
 
-    dict_in = [
-        [
-            { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, },
-            { 'word': '他', 'coref': (0, 'target'), 'idx': 3, },
-            { 'word': '想', 'coref': None, 'idx': 4, },
-        ],
-        [
-            { 'word': None, 'coref': (0, 'zero'), 'idx': None, },
-            { 'word': '完蛋', 'coref': None, 'idx': 1, },
-            { 'word': '了', 'coref': None, 'idx': 2, },
-        ],
-    ]
-
     list_in = [
         [
             [ '畢卡索', (0, 'source'), 2, ],
@@ -93,6 +80,19 @@ class TestCorefParagraph(unittest.TestCase, _TestCaseBase):
             [ None, (0, 'zero'), None, ],
             [ '完蛋', None, 1, ],
             [ '了', None, 2, ],
+        ],
+    ]
+
+    dict_in = [
+        [
+            { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, },
+            { 'word': '他', 'coref': (0, 'target'), 'idx': 3, },
+            { 'word': '想', 'coref': None, 'idx': 4, },
+        ],
+        [
+            { 'word': None, 'coref': (0, 'zero'), 'idx': None, },
+            { 'word': '完蛋', 'coref': None, 'idx': 1, },
+            { 'word': '了', 'coref': None, 'idx': 2, },
         ],
     ]
 

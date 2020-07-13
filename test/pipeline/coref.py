@@ -18,17 +18,23 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 ################################################################################################################################
 
-raw = '畢卡索他想，完蛋了'
+raw = '「完蛋了！」畢卡索他想\n但是也沒有辦法'
 coref = [
     [
-        [ '畢卡索', (0, 'source'), 2, ],
-        [ '他', (0, 'target'), 3, ],
-        [ '想', None, 4, ],
+        [ '「', None, (0, None), ],
+        [ '完蛋', None, (1, 1), ],
+        [ '了', None, (1, 2), ],
+        [ '！」', None, (1, None), ],
+        [ '畢卡索', (0, 'source'), (2, 2), ],
+        [ '他', (0, 'target'), (2, 3), ],
+        [ '想', None, (2, 4), ],
     ],
     [
-        [ None, (0, 'zero'), None, ],
-        [ '完蛋', None, 1, ],
-        [ '了', None, 2, ],
+        [ '但是', None, (0, 1), ],
+        [ None, (0, 'zero'), (0, None), ],
+        [ '也', None, (0, 2), ],
+        [ '沒有', None, (0, 3), ],
+        [ '辦法', None, (0, 5), ],
     ],
 ]
 
@@ -40,4 +46,8 @@ class TestCorefChunker(unittest.TestCase):
         obj = CkipCorefPipeline()
         doc = CkipDocument(raw=raw)
         corefdoc = obj(doc)
-        self.assertSequenceEqual(corefdoc.coref.to_list(), coref)
+        list_out = corefdoc.coref.to_list()
+
+        self.assertEqual(len(list_out), len(coref))
+        for i in range(len(coref)):
+            self.assertSequenceEqual(list_out[i], coref[i])
