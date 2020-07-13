@@ -5,16 +5,13 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-import json
-import unittest
-
-from .base import _TestCaseBase
+from base import _TestBase
 from ckipnlp.container.util.wspos import *
 from ckipnlp.container.seg import *
 
 ################################################################################################################################
 
-class TestWsPosToken(unittest.TestCase, _TestCaseBase):
+class TestWsPosToken(_TestBase):
 
     obj_class = WsPosToken
 
@@ -22,13 +19,13 @@ class TestWsPosToken(unittest.TestCase, _TestCaseBase):
     list_in = [ '中文字', 'Na', ]
     dict_in = { 'word': '中文字', 'pos': 'Na', }
 
-    def _assertEqual(self, obj):
-        self.assertEqual(obj.word, '中文字')
-        self.assertEqual(obj.pos, 'Na')
+    def _assert_body(self, obj):
+        assert obj.word == '中文字'
+        assert obj.pos == 'Na'
 
 ################################################################################################################################
 
-class TestWsPosSentence(unittest.TestCase, _TestCaseBase):
+class TestWsPosSentence(_TestBase):
 
     obj_class = WsPosSentence
 
@@ -50,24 +47,24 @@ class TestWsPosSentence(unittest.TestCase, _TestCaseBase):
 
     def test_io_text(self):
         word_obj, pos_obj = self.obj_class.from_text(self.text_in)
-        self._assertEqual(word_obj, pos_obj)
+        self._assert_body(word_obj, pos_obj)
         text_out = self.obj_class.to_text(word_obj, pos_obj)
-        self.assertEqual(text_out, self.text_in)
+        assert text_out, self.text_in
 
-    def _assertEqual(self, word_obj, pos_obj):
-        self.assertIsInstance(word_obj, SegSentence)
-        self.assertEqual(len(word_obj), 2)
-        self.assertEqual(word_obj[0], '中文字')
-        self.assertEqual(word_obj[1], '耶')
+    def _assert_body(self, word_obj, pos_obj):
+        assert isinstance(word_obj, SegSentence)
+        assert len(word_obj) == 2
+        assert word_obj[0] == '中文字'
+        assert word_obj[1] == '耶'
 
-        self.assertIsInstance(pos_obj, SegSentence)
-        self.assertEqual(len(pos_obj), 2)
-        self.assertEqual(pos_obj[0], 'Na')
-        self.assertEqual(pos_obj[1], 'T')
+        assert isinstance(pos_obj, SegSentence)
+        assert len(pos_obj) == 2
+        assert pos_obj[0] == 'Na'
+        assert pos_obj[1] == 'T'
 
 ################################################################################################################################
 
-class TestWsPosParagraph(unittest.TestCase, _TestCaseBase):
+class TestWsPosParagraph(_TestBase):
 
     obj_class = WsPosParagraph
 
@@ -101,34 +98,34 @@ class TestWsPosParagraph(unittest.TestCase, _TestCaseBase):
 
     def test_io_text(self):
         word_obj, pos_obj = self.obj_class.from_text(self.text_in)
-        self._assertEqual(word_obj, pos_obj)
+        self._assert_body(word_obj, pos_obj)
         text_out = self.obj_class.to_text(word_obj, pos_obj)
-        self.assertEqual(text_out, self.text_in)
+        assert text_out, self.text_in
 
-    def _assertEqual(self, word_obj, pos_obj):
-        self.assertIsInstance(word_obj, SegParagraph)
-        self.assertEqual(len(word_obj), 2)
+    def _assert_body(self, word_obj, pos_obj):
+        assert isinstance(word_obj, SegParagraph)
+        assert len(word_obj) == 2
 
-        self.assertEqual(len(word_obj[0]), 2)
-        self.assertEqual(word_obj[0][0], '中文字')
-        self.assertEqual(word_obj[0][1], '耶')
+        assert len(word_obj[0]) == 2
+        assert word_obj[0][0] == '中文字'
+        assert word_obj[0][1] == '耶'
 
-        self.assertEqual(len(word_obj[1]), 4)
-        self.assertEqual(word_obj[1][0], '啊')
-        self.assertEqual(word_obj[1][1], '哈')
-        self.assertEqual(word_obj[1][2], '哈')
-        self.assertEqual(word_obj[1][3], '哈')
+        assert len(word_obj[1]) == 4
+        assert word_obj[1][0] == '啊'
+        assert word_obj[1][1] == '哈'
+        assert word_obj[1][2] == '哈'
+        assert word_obj[1][3] == '哈'
 
 
-        self.assertIsInstance(pos_obj, SegParagraph)
-        self.assertEqual(len(pos_obj), 2)
+        assert isinstance(pos_obj, SegParagraph)
+        assert len(pos_obj) == 2
 
-        self.assertEqual(len(pos_obj[0]), 2)
-        self.assertEqual(pos_obj[0][0], 'Na')
-        self.assertEqual(pos_obj[0][1], 'T')
+        assert len(pos_obj[0]) == 2
+        assert pos_obj[0][0] == 'Na'
+        assert pos_obj[0][1] == 'T'
 
-        self.assertEqual(len(pos_obj[1]), 4)
-        self.assertEqual(pos_obj[1][0], 'I')
-        self.assertEqual(pos_obj[1][1], 'D')
-        self.assertEqual(pos_obj[1][2], 'D')
-        self.assertEqual(pos_obj[1][3], 'D')
+        assert len(pos_obj[1]) == 4
+        assert pos_obj[1][0] == 'I'
+        assert pos_obj[1][1] == 'D'
+        assert pos_obj[1][2] == 'D'
+        assert pos_obj[1][3] == 'D'

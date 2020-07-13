@@ -1,18 +1,22 @@
 PY = python3
 RM = rm -rf
-LINT = pylint --rcfile=./.pylintrc
 TWINE = twine
+TOX = tox
+LINT = pylint --rcfile=./.pylintrc
 
-.PHONY: all check dist sdist testall test lint doc upload clean
+.PHONY: all check dist sdist test tox lint doc upload clean
 
 all: dist check testall
 
 dist: sdist bdist_wheel
 
-testall: test lint
+test: tox lint
 
-sdist bdist_wheel test:
+sdist bdist_wheel:
 	$(PY) setup.py $@
+
+tox:
+	$(TOX)
 
 lint:
 	$(LINT) ckipnlp

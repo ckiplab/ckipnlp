@@ -5,15 +5,12 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-import json
-import unittest
-
-from .base import _TestCaseBase
+from base import _TestBase
 from ckipnlp.container.parsed import *
 
 ################################################################################################################################
 
-class TestParsedClause(unittest.TestCase, _TestCaseBase):
+class TestParsedClause(_TestBase):
 
     obj_class = ParsedClause
 
@@ -24,14 +21,14 @@ class TestParsedClause(unittest.TestCase, _TestCaseBase):
         'delim': '，',
     }
 
-    def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 2)
-        self.assertEqual(obj.clause, self.text_in[0])
-        self.assertEqual(obj.delim, self.text_in[1])
+    def _assert_body(self, obj):
+        assert len(obj) == 2
+        assert obj.clause == self.text_in[0]
+        assert obj.delim == self.text_in[1]
 
 ################################################################################################################################
 
-class TestParsedSentence(unittest.TestCase, _TestCaseBase):
+class TestParsedSentence(_TestBase):
 
     obj_class = ParsedSentence
 
@@ -51,20 +48,20 @@ class TestParsedSentence(unittest.TestCase, _TestCaseBase):
         },
     ]
 
-    def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 2)
+    def _assert_body(self, obj):
+        assert len(obj) == 2
 
-        self.assertEqual(len(obj[0]), 2)
-        self.assertEqual(obj[0].clause, self.text_in[0][0])
-        self.assertEqual(obj[0].delim, self.text_in[0][1])
+        assert len(obj[0]) == 2
+        assert obj[0].clause == self.text_in[0][0]
+        assert obj[0].delim == self.text_in[0][1]
 
-        self.assertEqual(len(obj[1]), 2)
-        self.assertEqual(obj[1].clause, self.text_in[1][0])
-        self.assertEqual(obj[1].delim, self.text_in[1][1])
+        assert len(obj[1]) == 2
+        assert obj[1].clause == self.text_in[1][0]
+        assert obj[1].delim == self.text_in[1][1]
 
 ################################################################################################################################
 
-class TestParsedParagraph(unittest.TestCase, _TestCaseBase):
+class TestParsedParagraph(_TestBase):
 
     obj_class = ParsedParagraph
 
@@ -107,24 +104,24 @@ class TestParsedParagraph(unittest.TestCase, _TestCaseBase):
         ],
     ]
 
-    def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 2)
+    def _assert_body(self, obj):
+        assert len(obj) == 2
 
-        self.assertEqual(len(obj[0]), 2)
-        self.assertEqual(len(obj[0][0]), 2)
-        self.assertEqual(obj[0][0].clause, self.text_in[0][0][0])
-        self.assertEqual(obj[0][0].delim, self.text_in[0][0][1])
-        self.assertEqual(len(obj[0][1]), 2)
-        self.assertEqual(obj[0][1].clause, self.text_in[0][1][0])
-        self.assertEqual(obj[0][1].delim, self.text_in[0][1][1])
+        assert len(obj[0]) == 2
+        assert len(obj[0][0]) == 2
+        assert obj[0][0].clause == self.text_in[0][0][0]
+        assert obj[0][0].delim == self.text_in[0][0][1]
+        assert len(obj[0][1]) == 2
+        assert obj[0][1].clause == self.text_in[0][1][0]
+        assert obj[0][1].delim == self.text_in[0][1][1]
 
-        self.assertEqual(len(obj[1]), 3)
-        self.assertEqual(len(obj[1][0]), 2)
-        self.assertEqual(obj[1][0].clause, self.text_in[1][0][0])
-        self.assertEqual(obj[1][0].delim, self.text_in[1][0][1])
-        self.assertEqual(len(obj[1][1]), 2)
-        self.assertEqual(obj[1][1].clause, self.text_in[1][1][0])
-        self.assertEqual(obj[1][1].delim, self.text_in[1][1][1])
-        self.assertEqual(len(obj[1][2]), 2)
-        self.assertEqual(obj[1][2].clause, self.text_in[1][2][0])
-        self.assertEqual(obj[1][2].delim, self.text_in[1][2][1])
+        assert len(obj[1]) == 3
+        assert len(obj[1][0]) == 2
+        assert obj[1][0].clause == self.text_in[1][0][0]
+        assert obj[1][0].delim == self.text_in[1][0][1]
+        assert len(obj[1][1]) == 2
+        assert obj[1][1].clause == self.text_in[1][1][0]
+        assert obj[1][1].delim == self.text_in[1][1][1]
+        assert len(obj[1][2]) == 2
+        assert obj[1][2].clause == self.text_in[1][2][0]
+        assert obj[1][2].delim == self.text_in[1][2][1]

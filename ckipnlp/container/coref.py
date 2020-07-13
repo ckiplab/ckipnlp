@@ -67,7 +67,7 @@ class CorefToken(_BaseTuple, _CorefToken):
                 [
                     '畢卡索',       # token word
                     (0, 'source'), # coref ID and type
-                    (2, 0),        # node index
+                    (2, 2),        # node index
                 ]
 
         Dict format
@@ -78,9 +78,12 @@ class CorefToken(_BaseTuple, _CorefToken):
                 {
                     'word': '畢卡索',        # token word
                     'coref': (0, 'source'), # coref ID and type
-                    'idx': (2, 0),          # node index
+                    'idx': (2, 2),          # node index
                 }
     """
+
+    def __new__(cls, word, coref, idx, **kwargs):  # pylint: disable=signature-differs
+        return super().__new__(cls, word, tuple(coref) if coref else None, tuple(idx), **kwargs)
 
     from_text = NotImplemented
 
@@ -108,13 +111,13 @@ class CorefSentence(_BaseSentence):
             .. code-block:: python
 
                 [
-                    [ '「', None, (0, 0,) ],
-                    [ '完蛋', None, (1, 0,) ],
-                    [ '了', None, (1, 1,) ],
-                    [ '！」', None, (1, 2,) ],
-                    [ '畢卡索', (0, 'source'), (2, 0,), ],
-                    [ '他', (0, 'target'), (2, 1,), ],
-                    [ '想', None, (2, 2,), ],
+                    [ '「', None, (0, None,), ],
+                    [ '完蛋', None, (1, 0,), ],
+                    [ '了', None, (1, 1,), ],
+                    [ '！」', None, (1, None,), ],
+                    [ '畢卡索', (0, 'source'), (2, 2,), ],
+                    [ '他', (0, 'target'), (2, 3,), ],
+                    [ '想', None, (2, 4,), ],
                 ]
 
         Dict format
@@ -123,13 +126,13 @@ class CorefSentence(_BaseSentence):
             .. code-block:: python
 
                 [
-                    { 'word': '「', 'coref': None, 'idx': (0, 0,) ],
-                    { 'word': '完蛋', 'coref': None, 'idx': (1, 0,) ],
-                    { 'word': '了', 'coref': None, 'idx': (1, 1,) ],
-                    { 'word': '！」', 'coref': None, 'idx': (1, 2,) ],
-                    { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': (2, 0,), ],
-                    { 'word': '他', 'coref': (0, 'target'), 'idx': (2, 1,), ],
-                    { 'word': '想', 'coref': None, 'idx': (2, 2,), ],
+                    { 'word': '「', 'coref': None, 'idx': (0, None,), },
+                    { 'word': '完蛋', 'coref': None, 'idx': (1, 0,), },
+                    { 'word': '了', 'coref': None, 'idx': (1, 1,), },
+                    { 'word': '！」', 'coref': None, 'idx': (1, None,), },
+                    { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': (2, 2,), },
+                    { 'word': '他', 'coref': (0, 'target'), 'idx': (2, 3,), },
+                    { 'word': '想', 'coref': None, 'idx': (2, 4,), },
                 ]
     """
 
@@ -154,7 +157,7 @@ class CorefParagraph(_BaseList):
 
                 [
                     '「\u3000完蛋\u3000了\u3000！」\u3000，\u3000畢卡索_0\u3000他_0\u3000想', # Sentence 1
-                    '然後\u3000None_0\u3000就\u3000跑\u3000了', # Sentence 1
+                    '但是\u3000None_0\u3000也\u3000沒有\u3000辦法', # Sentence 1
                 ]
 
         List format
@@ -164,20 +167,20 @@ class CorefParagraph(_BaseList):
 
                 [
                     [ # Sentence 1
-                        [ '「', None, (0, 0,) ],
-                        [ '完蛋', None, (1, 0,) ],
-                        [ '了', None, (1, 1,) ],
-                        [ '！」', None, (1, 2,) ],
-                        [ '畢卡索', (0, 'source'), (2, 0,), ],
-                        [ '他', (0, 'target'), (2, 1,), ],
-                        [ '想', None, (2, 2,), ],
+                        [ '「', None, (0, None,), ],
+                        [ '完蛋', None, (1, 0,), ],
+                        [ '了', None, (1, 1,), ],
+                        [ '！」', None, (1, None,), ],
+                        [ '畢卡索', (0, 'source'), (2, 2,), ],
+                        [ '他', (0, 'target'), (2, 3,), ],
+                        [ '想', None, (2, 4,), ],
                     ],
                     [ # Sentence 2
-                        [ '然後', None, (0, 0,) ],
-                        [ None, (0, 'zero'), (0, 1,) ],
-                        [ '就', None, (0, 2,) ],
-                        [ '跑', None, (0, 3,) ],
-                        [ '了', None, (0, 4,) ],
+                        [ '但是', None, (0, 1,), ],
+                        [ None, (0, 'zero'), (0, None,), ],
+                        [ '也', None, (0, 2,), ],
+                        [ '沒有', None, (0, 3,), ],
+                        [ '辦法', None, (0, 5,), ],
                     ],
                 ]
 
@@ -188,20 +191,20 @@ class CorefParagraph(_BaseList):
 
                 [
                     [ # Sentence 1
-                        { 'word': '「', 'coref': None, 'idx': (0, 0,) ],
-                        { 'word': '完蛋', 'coref': None, 'idx': (1, 0,) ],
-                        { 'word': '了', 'coref': None, 'idx': (1, 1,) ],
-                        { 'word': '！」', 'coref': None, 'idx': (1, 2,) ],
-                        { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': (2, 0,), ],
-                        { 'word': '他', 'coref': (0, 'target'), 'idx': (2, 1,), ],
-                        { 'word': '想', 'coref': None, 'idx': (2, 2,), ],
+                        { 'word': '「', 'coref': None, 'idx': (0, None,), },
+                        { 'word': '完蛋', 'coref': None, 'idx': (1, 0,), },
+                        { 'word': '了', 'coref': None, 'idx': (1, 1,), },
+                        { 'word': '！」', 'coref': None, 'idx': (1, None,), },
+                        { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': (2, 2,), },
+                        { 'word': '他', 'coref': (0, 'target'), 'idx': (2, 3,), },
+                        { 'word': '想', 'coref': None, 'idx': (2, 4,), },
                     ],
                     [ # Sentence 2
-                        { 'word': '然後', 'coref': None, 'idx': (0, 0,) ],
-                        { 'word': None, 'coref': (0, 'zero'), 'idx': (1, 0,) ],
-                        { 'word': '就', 'coref': None, 'idx': (2, 0,) ],
-                        { 'word': '跑', 'coref': None, 'idx': (3, 0,) ],
-                        { 'word': '了', 'coref': None, 'idx': (4, 0,) ],
+                        { 'word': '但是', 'coref': None, 'idx': (0, 1,), },
+                        { 'word': None, 'coref': (0, 'zero'), 'idx': (0, None,), },
+                        { 'word': '也', 'coref': None, 'idx': (0, 2,), },
+                        { 'word': '沒有', 'coref': None, 'idx': (0, 3,), },
+                        { 'word': '辦法', 'coref': None, 'idx': (0, 5,), },
                     ],
                 ]
     """

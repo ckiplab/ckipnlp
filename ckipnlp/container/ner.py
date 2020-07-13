@@ -83,6 +83,9 @@ class NerToken(_BaseTuple, _NerToken):
                 )
     """
 
+    def __new__(cls, word, ner, idx, **kwargs):  # pylint: disable=signature-differs
+        return super().__new__(cls, word, ner, tuple(idx), **kwargs)
+
     to_text = NotImplemented
     from_text = NotImplemented
 

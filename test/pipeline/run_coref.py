@@ -6,15 +6,12 @@ __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 import os
-import unittest
+import tensorflow as tf
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+tf.logging.set_verbosity(tf.logging.ERROR)
 
 from ckipnlp.pipeline import *
 from ckipnlp.container import *
-
-################################################################################################################################
-
-import tensorflow
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 ################################################################################################################################
 
@@ -40,14 +37,8 @@ coref = [
 
 ################################################################################################################################
 
-class TestCorefChunker(unittest.TestCase):
-
-    def test(self):
-        obj = CkipCorefPipeline()
-        doc = CkipDocument(raw=raw)
-        corefdoc = obj(doc)
-        list_out = corefdoc.coref.to_list()
-
-        self.assertEqual(len(list_out), len(coref))
-        for i in range(len(coref)):
-            self.assertSequenceEqual(list_out[i], coref[i])
+def test_coref_chunker():
+    obj = CkipCorefPipeline()
+    doc = CkipDocument(raw=raw)
+    corefdoc = obj(doc)
+    assert corefdoc.coref.to_list() == coref
