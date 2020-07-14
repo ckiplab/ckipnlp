@@ -19,7 +19,6 @@ from ckipnlp.container import (
     TextParagraph as _TextParagraph,
     SegParagraph as _SegParagraph,
     ParsedParagraph as _ParsedParagraph,
-    ParsedTree as _ParsedTree,
     NerParagraph as _NerParagraph,
     CorefToken as _CorefToken,
     CorefSentence as _CorefSentence,
@@ -72,7 +71,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
         # Convert to tree structure
         tree_list = [
             [
-                (_ParsedTree.from_text(clause.clause) if clause.clause else None, clause.delim,)
+                (clause.to_tree(), clause.delim,)
                 for clause in sent
             ] for sent in parsed
         ]
@@ -293,7 +292,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
+            tree : :class:`~ckipnlp.container.util.parsed_tree.ParsedTree`
                 the parser tree.
 
         Yields
@@ -321,7 +320,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
+            tree : :class:`~ckipnlp.container.util.parsed_tree.ParsedTree`
                 the parser tree.
 
         Yields
@@ -360,7 +359,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
+            tree : :class:`~ckipnlp.container.util.parsed_tree.ParsedTree`
                 the parser tree.
 
         Yields

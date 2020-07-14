@@ -14,7 +14,9 @@ class TestParsedClause(_TestBase):
 
     obj_class = ParsedClause
 
-    text_in = [ 'S(Head:Nab:中文字|particle:Td:耶)', '，', ]
+    test_io_text = NotImplemented
+
+    list_in = [ 'S(Head:Nab:中文字|particle:Td:耶)', '，', ]
 
     dict_in = {
         'clause': 'S(Head:Nab:中文字|particle:Td:耶)',
@@ -23,8 +25,8 @@ class TestParsedClause(_TestBase):
 
     def _assert_body(self, obj):
         assert len(obj) == 2
-        assert obj.clause == self.text_in[0]
-        assert obj.delim == self.text_in[1]
+        assert obj.clause == self.list_in[0]
+        assert obj.delim == self.list_in[1]
 
 ################################################################################################################################
 
@@ -32,7 +34,9 @@ class TestParsedSentence(_TestBase):
 
     obj_class = ParsedSentence
 
-    text_in = [
+    test_io_text = NotImplemented
+
+    list_in = [
         [ 'S(Head:Nab:中文字|particle:Td:耶)', '，', ],
         [ '%(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)', '。', ],
     ]
@@ -52,12 +56,12 @@ class TestParsedSentence(_TestBase):
         assert len(obj) == 2
 
         assert len(obj[0]) == 2
-        assert obj[0].clause == self.text_in[0][0]
-        assert obj[0].delim == self.text_in[0][1]
+        assert obj[0].clause == self.list_in[0][0]
+        assert obj[0].delim == self.list_in[0][1]
 
         assert len(obj[1]) == 2
-        assert obj[1].clause == self.text_in[1][0]
-        assert obj[1].delim == self.text_in[1][1]
+        assert obj[1].clause == self.list_in[1][0]
+        assert obj[1].delim == self.list_in[1][1]
 
 ################################################################################################################################
 
@@ -65,7 +69,9 @@ class TestParsedParagraph(_TestBase):
 
     obj_class = ParsedParagraph
 
-    text_in = [
+    test_io_text = NotImplemented
+
+    list_in = [
         [
             [ 'S(Head:Nab:中文字|particle:Td:耶)', '，', ],
             [ '%(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈)', '。', ],
@@ -109,19 +115,19 @@ class TestParsedParagraph(_TestBase):
 
         assert len(obj[0]) == 2
         assert len(obj[0][0]) == 2
-        assert obj[0][0].clause == self.text_in[0][0][0]
-        assert obj[0][0].delim == self.text_in[0][0][1]
+        assert obj[0][0].clause == self.list_in[0][0][0]
+        assert obj[0][0].delim == self.list_in[0][0][1]
         assert len(obj[0][1]) == 2
-        assert obj[0][1].clause == self.text_in[0][1][0]
-        assert obj[0][1].delim == self.text_in[0][1][1]
+        assert obj[0][1].clause == self.list_in[0][1][0]
+        assert obj[0][1].delim == self.list_in[0][1][1]
 
         assert len(obj[1]) == 3
         assert len(obj[1][0]) == 2
-        assert obj[1][0].clause == self.text_in[1][0][0]
-        assert obj[1][0].delim == self.text_in[1][0][1]
+        assert obj[1][0].clause == self.list_in[1][0][0]
+        assert obj[1][0].delim == self.list_in[1][0][1]
         assert len(obj[1][1]) == 2
-        assert obj[1][1].clause == self.text_in[1][1][0]
-        assert obj[1][1].delim == self.text_in[1][1][1]
+        assert obj[1][1].clause == self.list_in[1][1][0]
+        assert obj[1][1].delim == self.list_in[1][1][1]
         assert len(obj[1][2]) == 2
-        assert obj[1][2].clause == self.text_in[1][2][0]
-        assert obj[1][2].delim == self.text_in[1][2][1]
+        assert obj[1][2].clause == self.list_in[1][2][0]
+        assert obj[1][2].delim == self.list_in[1][2][1]

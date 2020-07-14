@@ -148,9 +148,9 @@ class WsPosSentence:
 
         Returns
         -------
-            :class:`SegSentence <.seg.SegSentence>`:
+            :class:`~ckipnlp.container.seg.SegSentence`
                 the word sentence
-            :class:`SegSentence <.seg.SegSentence>`:
+            :class:`~ckipnlp.container.seg.SegSentence`
                 the POS-tag sentence.
         """
         return tuple(map(_SegSentence.from_list, _sentence_from_text(data)))
@@ -161,9 +161,9 @@ class WsPosSentence:
 
         Parameters
         ----------
-            word : :class:`SegSentence <.seg.SegSentence>`
+            word : :class:`~ckipnlp.container.seg.SegSentence`
                 the word sentence
-            pos  : :class:`SegSentence <.seg.SegSentence>`
+            pos  : :class:`~ckipnlp.container.seg.SegSentence`
                 the POS-tag sentence.
 
         Returns

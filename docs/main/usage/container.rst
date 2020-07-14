@@ -72,7 +72,7 @@ Similarly, |WsPosSentence|/|WsPosParagraph| provides routines for word-segmented
 Parsed Tree
 ^^^^^^^^^^^
 
-In addition to |ParsedClause|, we have implemented tree utilities base on `TreeLib <https://treelib.readthedocs.io>`__.
+In addition to |ParsedClause|, there are also tree utilities base on `TreeLib <https://treelib.readthedocs.io>`__.
 
 |ParsedTree| is the tree structure of a parsed clause. One may use :meth:`from_text` and :meth:`to_text` for plain-text conversion; :meth:`from_dict`, :meth:`to_dict` for dictionary-like object conversion; and also :meth:`from_json`, :meth:`to_json` for JSON string conversion.
 
@@ -84,12 +84,12 @@ In addition to |ParsedClause|, we have implemented tree utilities base on `TreeL
 
 .. code-block:: python
 
-   from ckipnlp.container import ParsedTree
+   from ckipnlp.container import ParsedClause, ParsedTree
 
    # 我的早餐、午餐和晚餐都在那場比賽中被吃掉了
-   tree_text = 'S(goal:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|condition:PP(Head:P21:在|DUMMY:GP(DUMMY:NP(Head:Nac:比賽)|Head:Ng:中))|agent:PP(Head:P02:被)|Head:VC31:吃掉|aspect:Di:了)'
+   clause = ParsedClause('S(goal:NP(possessor:N‧的(head:Nhaa:我|Head:DE:的)|Head:Nab(DUMMY1:Nab(DUMMY1:Nab:早餐|Head:Caa:、|DUMMY2:Naa:午餐)|Head:Caa:和|DUMMY2:Nab:晚餐))|quantity:Dab:都|condition:PP(Head:P21:在|DUMMY:GP(DUMMY:NP(Head:Nac:比賽)|Head:Ng:中))|agent:PP(Head:P02:被)|Head:VC31:吃掉|aspect:Di:了)')
 
-   tree = ParsedTree.from_text(tree_text)
+   tree = clause.to_tree()
 
    print('Show Tree')
    tree.show()

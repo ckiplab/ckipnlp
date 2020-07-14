@@ -318,7 +318,10 @@ class ParsedTree(_Base, _Tree):
         Parameters
         ----------
             data : str
-                A parsed tree in text format (:class:`~ckipnlp.container.parsed.ParsedClause.clause`).
+                A parsed tree in text format (:class:`ParsedClause.clause <.parsed.ParsedClause>`).
+
+        .. seealso::
+            :meth:`ParsedClause.to_tree() <.parsed.ParsedClause.to_tree>`.
         """
 
         tree = cls()
