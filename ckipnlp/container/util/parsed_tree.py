@@ -12,7 +12,6 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from collections import (
     deque as _deque,
-    OrderedDict as _OrderedDict,
 )
 
 from typing import (
@@ -157,7 +156,7 @@ class ParsedNode(_Base, _Node):
         )
 
     def to_dict(self):
-        return _OrderedDict(id=self.identifier, data=self.data.to_dict())
+        return dict(id=self.identifier, data=self.data.to_dict())
 
 ################################################################################################################################
 
@@ -210,13 +209,16 @@ class ParsedRelation(_Base, _ParsedRelation):
     to_list = NotImplemented
 
     def __repr__(self):
-        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head_first \
-         else '{name}(tail={tail}, head={head}, relation={relation})'
+        ret = '{name}(head=({head}, {head_id}), tail=({tail}, {tail_id}), relation=({rel}, {rel_id}))' if self.head_first \
+         else '{name}(tail=({tail}, {tail_id}), head=({head}, {head_id}), relation=({rel}, {rel_id}))'
         return ret.format(
             name=type(self).__name__,
-            head=(self.head.tag, self.head.identifier,),
-            tail=(self.tail.tag, self.tail.identifier,),
-            relation=(self.relation.data.role, self.relation.identifier,),
+            head=self.head.tag,
+            head_id=self.head.identifier,
+            tail=self.tail.tag,
+            tail_id=self.tail.identifier,
+            rel=self.relation.data.role,
+            rel_id=self.relation.identifier,
         )
 
     @property
@@ -224,7 +226,7 @@ class ParsedRelation(_Base, _ParsedRelation):
         return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):
-        return _OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation.data.role)
+        return dict(head=self.head.to_dict(), tail=self.tail.to_dict(), relation=self.relation.data.role)
 
 ################################################################################################################################
 
@@ -307,7 +309,7 @@ class ParsedTree(_Base, _Tree):
     to_list = NotImplemented
 
     def __str__(self):
-        self.to_text()
+        return self.to_text()
 
     ########################################################################################################################
 

@@ -4,7 +4,7 @@ TWINE = twine
 TOX = tox
 LINT = pylint --rcfile=./.pylintrc
 
-.PHONY: all check dist sdist test tox lint doc upload clean
+.PHONY: all check dist sdist test tox tox-cov lint doc upload clean
 
 all: dist check testall
 
@@ -17,6 +17,10 @@ sdist bdist_wheel:
 
 tox:
 	$(TOX)
+
+tox-cov:
+	$(TOX) -e py36 -- --cov-report=html
+	python3.7 -m http.server --directory htmlcov/ 8080
 
 lint:
 	$(LINT) ckipnlp

@@ -279,12 +279,15 @@ class TestParsedTree(_TestBase):
         assert node_data.word == word
 
     def test_io_penn(self):
-
         obj = self.obj_class.from_penn(self.penn_in)
         self._assert_body(obj)
         penn_out = obj.to_penn()
 
         assert penn_out == self.penn_in
+
+    def test_str(self):
+        obj = self.obj_class.from_text(self.text_in)
+        assert str(obj) == self.text_in
 
     def test_get_heads_semantic(self):
         obj = self.obj_class.from_text(self.text_in)
@@ -356,3 +359,32 @@ class TestParsedTree(_TestBase):
                 for rel in obj.get_relations(semantic=False)
         }
         assert rels_id_out == rels_id
+
+    ########################################################################################################################
+
+    def test_node_repr(self):
+        obj = self.obj_class.from_text(self.text_in)
+        assert isinstance(obj[3], ParsedNode)
+        assert repr(obj[3]) == 'ParsedNode(tag=head:Nhaa:我, identifier=3)'
+
+    def test_relation_repr(self):
+        obj = self.obj_class.from_text(self.text_in)
+        relations = sorted(obj.get_relations(semantic=True), key=lambda rel: (rel.head.identifier, rel.tail.identifier,))
+        assert repr(relations[0]) == 'ParsedRelation(tail=(head:Nhaa:我, 3), head=(DUMMY1:Nab:早餐, 7), relation=(possessor, 2))'
+        assert repr(relations[-1]) == 'ParsedRelation(head=(Head:VC31:吃掉, 21), tail=(aspect:Di:了, 22), relation=(aspect, 22))'
+
+    def test_relation_to_dict(self):
+        obj = self.obj_class.from_text(self.text_in)
+        relations = sorted(obj.get_relations(semantic=True), key=lambda rel: (rel.head.identifier, rel.tail.identifier,))
+        dict_out = relations[0].to_dict()
+        assert dict_out == {
+            'head': {
+                'id': 7,
+                'data': { 'role': 'DUMMY1', 'pos': 'Nab', 'word': '早餐', },
+            },
+            'tail': {
+                'id': 3,
+                'data': { 'role': 'head', 'pos': 'Nhaa', 'word': '我', },
+            },
+            'relation': 'possessor',
+        }

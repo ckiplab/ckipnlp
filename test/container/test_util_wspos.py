@@ -5,6 +5,8 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
+import pytest
+
 from base import _TestBase
 from ckipnlp.container.util.wspos import *
 from ckipnlp.container.seg import *
@@ -23,6 +25,10 @@ class TestWsPosToken(_TestBase):
         assert obj.word == '中文字'
         assert obj.pos == 'Na'
 
+    def test_str(self):
+        obj = self.obj_class.from_text(self.text_in)
+        assert str(obj) == self.text_in
+
 ################################################################################################################################
 
 class TestWsPosSentence(_TestBase):
@@ -33,17 +39,7 @@ class TestWsPosSentence(_TestBase):
     test_io_dict = NotImplemented
     test_io_json = NotImplemented
 
-    text_in = '中文字(Na)　耶(T)'
-
-    list_in = [
-        [ '中文字', '耶', ],
-        [ 'Na', 'T', ],
-    ]
-
-    dict_in = {
-        'word': [ '中文字', '耶', ],
-        'pos': [ 'Na', 'T', ],
-    }
+    text_in = '中文字(Na)　耶(T)　，(COMMACATEGORY)　啊(I)　哈(D)　哈哈(D)　。(PERIODCATEGORY)'
 
     def test_io_text(self):
         word_obj, pos_obj = self.obj_class.from_text(self.text_in)
@@ -51,16 +47,18 @@ class TestWsPosSentence(_TestBase):
         text_out = self.obj_class.to_text(word_obj, pos_obj)
         assert text_out, self.text_in
 
+    def test_init(self):
+        with pytest.raises(TypeError):
+            obj = self.obj_class()
+
     def _assert_body(self, word_obj, pos_obj):
         assert isinstance(word_obj, SegSentence)
-        assert len(word_obj) == 2
-        assert word_obj[0] == '中文字'
-        assert word_obj[1] == '耶'
+        assert len(word_obj) == 7
+        assert word_obj == [ '中文字', '耶', '，', '啊', '哈', '哈哈', '。', ]
 
         assert isinstance(pos_obj, SegSentence)
-        assert len(pos_obj) == 2
-        assert pos_obj[0] == 'Na'
-        assert pos_obj[1] == 'T'
+        assert len(pos_obj) == 7
+        assert pos_obj == [ 'Na', 'T', 'COMMACATEGORY', 'I', 'D', 'D', 'PERIODCATEGORY', ]
 
 ################################################################################################################################
 
@@ -72,29 +70,10 @@ class TestWsPosParagraph(_TestBase):
     test_io_dict = NotImplemented
     test_io_json = NotImplemented
 
-    text_in = [ '中文字(Na)　耶(T)', '啊(I)　哈(D)　哈(D)　哈(D)', ]
-
-    list_in = [
-        [
-            '中文字', '耶',
-            '啊', '哈', '哈', '哈',
-        ],
-        [
-            'Na', 'T',
-            'I', 'D', 'D', 'D',
-        ],
+    text_in = [
+        '中文字(Na)　耶(T)　，(COMMACATEGORY)　啊(I)　哈(D)　哈哈(D)　。(PERIODCATEGORY)',
+        '「(PARENTHESISCATEGORY)　完蛋(VH)　了(T)　！(EXCLAMATIONCATEGORY)　」(PARENTHESISCATEGORY)　，(COMMACATEGORY)　畢卡索(Nb)　他(Nh)　想(VE)',
     ]
-
-    dict_in = {
-        'word': [
-            '中文字', '耶',
-            '啊', '哈', '哈', '哈',
-        ],
-        'pos': [
-            'Na', 'T',
-            'I', 'D', 'D', 'D',
-        ],
-    }
 
     def test_io_text(self):
         word_obj, pos_obj = self.obj_class.from_text(self.text_in)
@@ -102,30 +81,26 @@ class TestWsPosParagraph(_TestBase):
         text_out = self.obj_class.to_text(word_obj, pos_obj)
         assert text_out, self.text_in
 
+    def test_init(self):
+        with pytest.raises(TypeError):
+            obj = self.obj_class()
+
     def _assert_body(self, word_obj, pos_obj):
         assert isinstance(word_obj, SegParagraph)
         assert len(word_obj) == 2
 
-        assert len(word_obj[0]) == 2
-        assert word_obj[0][0] == '中文字'
-        assert word_obj[0][1] == '耶'
+        assert len(word_obj[0]) == 7
+        assert word_obj[0] == [ '中文字', '耶', '，', '啊', '哈', '哈哈', '。', ]
 
-        assert len(word_obj[1]) == 4
-        assert word_obj[1][0] == '啊'
-        assert word_obj[1][1] == '哈'
-        assert word_obj[1][2] == '哈'
-        assert word_obj[1][3] == '哈'
+        assert len(word_obj[1]) == 9
+        assert word_obj[1] == [ '「', '完蛋', '了', '！', '」', '，', '畢卡索', '他', '想', ]
 
 
         assert isinstance(pos_obj, SegParagraph)
         assert len(pos_obj) == 2
 
-        assert len(pos_obj[0]) == 2
-        assert pos_obj[0][0] == 'Na'
-        assert pos_obj[0][1] == 'T'
+        assert len(pos_obj[0]) == 7
+        assert pos_obj[0] == [ 'Na', 'T', 'COMMACATEGORY', 'I', 'D', 'D', 'PERIODCATEGORY', ]
 
-        assert len(pos_obj[1]) == 4
-        assert pos_obj[1][0] == 'I'
-        assert pos_obj[1][1] == 'D'
-        assert pos_obj[1][2] == 'D'
-        assert pos_obj[1][3] == 'D'
+        assert len(pos_obj[1]) == 9
+        assert pos_obj[1] == [ 'PARENTHESISCATEGORY', 'VH', 'T', 'EXCLAMATIONCATEGORY', 'PARENTHESISCATEGORY', 'COMMACATEGORY', 'Nb', 'Nh', 'VE', ]

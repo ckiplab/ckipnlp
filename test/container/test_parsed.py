@@ -7,6 +7,7 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from base import _TestBase
 from ckipnlp.container.parsed import *
+from ckipnlp.container.util.parsed_tree import ParsedTree
 
 ################################################################################################################################
 
@@ -27,6 +28,21 @@ class TestParsedClause(_TestBase):
         assert len(obj) == 2
         assert obj.clause == self.list_in[0]
         assert obj.delim == self.list_in[1]
+
+    def test_to_text(self):
+        obj = self.obj_class.from_list(self.list_in)
+        text_out = obj.to_text()
+        assert text_out == self.list_in[0]
+
+    def test_to_tree(self):
+        obj = self.obj_class.from_list(self.list_in)
+        tree_out = obj.to_tree()
+        assert isinstance(tree_out, ParsedTree)
+
+    def test_to_tree_none(self):
+        obj = self.obj_class()
+        tree_out = obj.to_tree()
+        assert tree_out is None
 
 ################################################################################################################################
 

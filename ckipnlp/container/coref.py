@@ -140,9 +140,6 @@ class CorefSentence(_BaseSentence):
 
     from_text = NotImplemented
 
-    def to_text(self):
-        return '\u3000'.join(map(self._item_to_text, self))
-
 ################################################################################################################################
 
 class CorefParagraph(_BaseList):

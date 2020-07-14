@@ -24,6 +24,11 @@ class TestCorefToken(_TestBase):
         assert obj.coref == (0, 'source')
         assert obj.idx == (2, 2)
 
+    def test_to_text(self):
+        obj = self.obj_class.from_list(self.list_in)
+        text_out = obj.to_text()
+        assert text_out == '畢卡索_0'
+
 ################################################################################################################################
 
 class TestCorefSentence(_TestBase):

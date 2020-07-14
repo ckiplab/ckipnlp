@@ -104,7 +104,7 @@ class WsPosToken(_BaseTuple, _WsPosToken):
     """
 
     def __str__(self):
-        return str(self.to_text())
+        return self.to_text()
 
     ########################################################################################################################
 
@@ -128,12 +128,12 @@ class WsPosToken(_BaseTuple, _WsPosToken):
 
 ################################################################################################################################
 
-class WsPosSentence:
+class WsPosSentence(metaclass=_ABCMeta):
     """A helper class for data conversion of word-segmented and part-of-speech sentences."""
 
     @_abstractmethod
     def __init__(self):
-        pass
+        raise NotImplementedError  # pragma: no cover
 
     ########################################################################################################################
 
@@ -180,7 +180,7 @@ class WsPosParagraph(metaclass=_ABCMeta):
 
     @_abstractmethod
     def __init__(self):
-        pass
+        raise NotImplementedError  # pragma: no cover
 
     ########################################################################################################################
 
