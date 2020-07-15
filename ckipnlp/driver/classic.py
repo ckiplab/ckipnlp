@@ -70,7 +70,10 @@ class CkipClassicWordSegmenter(_BaseDriver):
             raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
 
         import ckip_classic.ws
-        self._core = ckip_classic.ws.CkipWs(lex_list=self._lexicons)
+        self._core = ckip_classic.ws.CkipWs(
+            new_style_format=True,
+            lex_list=self._lexicons,
+        )
 
     def _call(self, *, text):
         assert isinstance(text, _TextParagraph)
@@ -117,17 +120,22 @@ class CkipClassicSentenceParser(_BaseDriver):
         assert isinstance(ws, _SegParagraph)
         assert isinstance(pos, _SegParagraph)
 
-        ws = _SegParagraph.from_list([map(self._half2full, line) for line in ws])
 
         parsed_text = []
         for ws_sent, pos_sent in zip(ws, pos):
-            idx0 = 0
             parsed_sent_text = []
-            for idx1, (ws_token, pos_token,) in enumerate(_chain(zip(ws_sent, pos_sent), [(None, None),])):
-                if pos_token is None or pos_token.endswith('CATEGORY') or pos_token == 'WHITESPACE':
+            ws_clause = []
+            pos_clause = []
+            for ws_token, pos_token in _chain(zip(ws_sent, pos_sent), [(None, None),]):
 
-                    if idx0 != idx1:
-                        wspos_clause_text = _WsPosSentence.to_text(ws_sent[idx0:idx1], pos_sent[idx0:idx1])
+                # Skip WHITESPACE
+                if pos_token == 'WHITESPACE':
+                    continue
+
+                # Segment clauses by punctuations
+                if pos_token is None or pos_token.endswith('CATEGORY'):
+                    if ws_clause:
+                        wspos_clause_text = _WsPosSentence.to_text(ws_clause, pos_clause)
                         for parsed_clause_text in self._core.apply_list([wspos_clause_text]):
                             parsed_sent_text.append([self._normalize(parsed_clause_text), '',])
 
@@ -136,7 +144,12 @@ class CkipClassicSentenceParser(_BaseDriver):
                             parsed_sent_text.append([None, '',])
                         parsed_sent_text[-1][1] += ws_token
 
-                    idx0 = idx1+1
+                    ws_clause = []
+                    pos_clause = []
+
+                else:
+                    ws_clause.append(self._half2full(ws_token))
+                    pos_clause.append(pos_token)
 
             parsed_text.append(parsed_sent_text)
         parsed = _ParsedParagraph.from_list(parsed_text)

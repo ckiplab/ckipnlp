@@ -40,9 +40,9 @@ Container                 Item                      from/to text  from/to list, 
 |NerToken|                                          ✘             ✔
 |NerSentence|             |NerToken|                ✘             ✔
 |NerParagraph|            |NerSentence|             ✘             ✔
-|ParsedClause|                                      ✔             ✔
-|ParsedSentence|          |ParsedClause|            ✔             ✔
-|ParsedParagraph|         |ParsedSentence|          ✔             ✔
+|ParsedClause|                                      only to       ✔
+|ParsedSentence|          |ParsedClause|            only to       ✔
+|ParsedParagraph|         |ParsedSentence|          only to       ✔
 |CorefToken|                                        only to       ✔
 |CorefSentence|           |CorefToken|              only to       ✔
 |CorefParagraph|          |CorefSentence|           only to       ✔

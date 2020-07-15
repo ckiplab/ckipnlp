@@ -16,11 +16,11 @@ class TestTextParagraph(_TestBase):
 
     text_in = [
         '中文字耶，啊哈哈哈。',
-        '「完蛋了！」，畢卡索他想',
+        '「完蛋了！」畢卡索他想',
     ]
 
     def _assert_body(self, obj):
         assert len(obj) == 2
 
         assert obj[0] == '中文字耶，啊哈哈哈。'
-        assert obj[1] == '「完蛋了！」，畢卡索他想'
+        assert obj[1] == '「完蛋了！」畢卡索他想'
