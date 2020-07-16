@@ -11,11 +11,11 @@
 
 .. Driver
 
-.. |DriverType| replace:: :class:`~ckipnlp.drier.base.DriverType`
-.. |DriverFamily| replace:: :class:`~ckipnlp.drier.base.DriverFamily`
-.. |DriverBUILTIN| replace:: :class:`DriverFamily.BUILTIN <ckipnlp.drier.base.DriverFamily.BUILTIN>`
-.. |DriverTAGGER| replace:: :class:`DriverFamily.TAGGER <ckipnlp.drier.base.DriverFamily.TAGGER>`
-.. |DriverCLASSIC| replace:: :class:`DriverFamily.CLASSIC <ckipnlp.drier.base.DriverFamily.CLASSIC>`
+.. |DriverType| replace:: :class:`~ckipnlp.driver.base.DriverType`
+.. |DriverFamily| replace:: :attr:`~ckipnlp.driver.base.DriverFamily`
+.. |DriverBUILTIN| replace:: :attr:`DriverFamily.BUILTIN <ckipnlp.driver.base.DriverFamily.BUILTIN>`
+.. |DriverTAGGER| replace:: :attr:`DriverFamily.TAGGER <ckipnlp.driver.base.DriverFamily.TAGGER>`
+.. |DriverCLASSIC| replace:: :attr:`DriverFamily.CLASSIC <ckipnlp.driver.base.DriverFamily.CLASSIC>`
 
 .. |CkipClassicWordSegmenter| replace:: :class:`~ckipnlp.driver.classic.CkipClassicWordSegmenter`
 .. |CkipClassicConstituencyParser| replace:: :class:`~ckipnlp.driver.classic.CkipClassicConstituencyParser`

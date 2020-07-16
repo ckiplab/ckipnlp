@@ -10,7 +10,7 @@ Part-of-Speech Tags
    :header-rows: 1
 
 Constituency Parsing Tags
------------------
+-------------------------
 
 .. csv-table::
    :file: ./tag/constituency_pos.csv
@@ -18,7 +18,7 @@ Constituency Parsing Tags
    :header-rows: 1
 
 Constituency Parsing Roles
-------------------
+--------------------------
 
 .. csv-table::
    :file: ./tag/constituency_role.csv

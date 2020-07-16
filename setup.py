@@ -42,7 +42,11 @@ def main():
         ],
         python_requires='>=3.6',
         packages=find_namespace_packages(include=['ckipnlp', 'ckipnlp.*',]),
-        install_requires=parse_requirements('requirements.txt', session='hack'),
+        install_requires=[
+            'appdirs>=1.4.3',
+            'numpy>=1.18',
+            'treelib>=1.5.5',
+        ],
         extras_require={
             # 'classic': ['ckip-classic>=1.0'],
             'tagger': ['ckiptagger[tf]>=0.1.1'],

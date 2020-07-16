@@ -16,13 +16,13 @@ sdist bdist_wheel:
 	$(PY) setup.py $@
 
 tox:
-	- $(TOX) -p -f py36,py37,py38
+	NO_COV= $(TOX) -p -f py36,py37,py38
 
 tox-v:
-	- $(TOX)
+	$(TOX)
 
 tox-report:
-	- $(TOX) -p -f clean,py36,report -- --cov-report=term-missing --cov-append
+	- $(TOX) -p -f clean,py36,report -- --cov-append
 	python3.7 -m http.server --directory .test/htmlcov/ 3000
 
 lint:
@@ -41,5 +41,4 @@ upload: dist check
 clean:
 	- ( cd docs ; make clean )
 	- $(PY) setup.py clean -a
-	- $(TOX) -e clean
-	- $(RM) build dist .tox .test .lookup __pycache__
+	- $(RM) build dist *.egg-info .tox .test .lookup __pycache__

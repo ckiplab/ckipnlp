@@ -6,3 +6,6 @@
 - make tox
 - make tox-report
 - make upload
+
+# Requirements
+Make sure requirements.txt matches setup.py.
