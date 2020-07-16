@@ -38,8 +38,8 @@ The |CkipPipeline| will compute all necessary dependencies. For example, if one 
    print(doc.ner)
 
    # Sentence Parsing
-   pipeline.get_parsed(doc)
-   print(doc.parsed)
+   pipeline.get_constituency(doc)
+   print(doc.constituency)
 
    ################################################################
 
@@ -83,7 +83,7 @@ SENTENCE_SEGMENTER                |CkipSentenceSegmenter|
 WORD_SEGMENTER                                                      |CkipTaggerWordSegmenter|         |CkipClassicWordSegmenter|†
 POS_TAGGER                                                          |CkipTaggerPosTagger|             |CkipClassicWordSegmenter|†
 NER_CHUNKER                                                         |CkipTaggerNerChunker|
-SENTENCE_PARSER                                                                                       |CkipClassicSentenceParser|
+CONSTITUNCY_PARSER                                                                                       |CkipClassicConstituencyParser|
 COREF_CHUNKER                     |CkipCorefChunker|
 ================================  ================================  ================================  ================================
 

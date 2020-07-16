@@ -18,7 +18,7 @@
 .. |DriverCLASSIC| replace:: :class:`DriverFamily.CLASSIC <ckipnlp.drier.base.DriverFamily.CLASSIC>`
 
 .. |CkipClassicWordSegmenter| replace:: :class:`~ckipnlp.driver.classic.CkipClassicWordSegmenter`
-.. |CkipClassicSentenceParser| replace:: :class:`~ckipnlp.driver.classic.CkipClassicSentenceParser`
+.. |CkipClassicConstituencyParser| replace:: :class:`~ckipnlp.driver.classic.CkipClassicConstituencyParser`
 
 .. |CkipTaggerWordSegmenter| replace:: :class:`~ckipnlp.driver.tagger.CkipTaggerWordSegmenter`
 .. |CkipTaggerPosTagger| replace:: :class:`~ckipnlp.driver.tagger.CkipTaggerPosTagger`
@@ -35,9 +35,9 @@
 .. |NerToken| replace:: :class:`~ckipnlp.container.ner.NerToken`
 .. |NerSentence| replace:: :class:`~ckipnlp.container.ner.NerSentence`
 .. |NerParagraph| replace:: :class:`~ckipnlp.container.ner.NerParagraph`
-.. |ParsedClause| replace:: :class:`~ckipnlp.container.parsed.ParsedClause`
-.. |ParsedSentence| replace:: :class:`~ckipnlp.container.parsed.ParsedSentence`
-.. |ParsedParagraph| replace:: :class:`~ckipnlp.container.parsed.ParsedParagraph`
+.. |ParseClause| replace:: :class:`~ckipnlp.container.parse.ParseClause`
+.. |ParseSentence| replace:: :class:`~ckipnlp.container.parse.ParseSentence`
+.. |ParseParagraph| replace:: :class:`~ckipnlp.container.parse.ParseParagraph`
 .. |CorefToken| replace:: :class:`~ckipnlp.container.coref.CorefToken`
 .. |CorefSentence| replace:: :class:`~ckipnlp.container.coref.CorefSentence`
 .. |CorefParagraph| replace:: :class:`~ckipnlp.container.coref.CorefParagraph`
@@ -48,7 +48,7 @@
 .. |WsPosSentence| replace:: :class:`~ckipnlp.container.util.wspos.WsPosSentence`
 .. |WsPosParagraph| replace:: :class:`~ckipnlp.container.util.wspos.WsPosParagraph`
 
-.. |ParsedNodeData| replace:: :class:`~ckipnlp.container.util.parsed_tree.ParsedNodeData`
-.. |ParsedNode| replace:: :class:`~ckipnlp.container.util.parsed_tree.ParsedNode`
-.. |ParsedRelation| replace:: :class:`~ckipnlp.container.util.parsed_tree.ParsedRelation`
-.. |ParsedTree| replace:: :class:`~ckipnlp.container.util.parsed_tree.ParsedTree`
+.. |ParseNodeData| replace:: :class:`~ckipnlp.container.util.parse_tree.ParseNodeData`
+.. |ParseNode| replace:: :class:`~ckipnlp.container.util.parse_tree.ParseNode`
+.. |ParseRelation| replace:: :class:`~ckipnlp.container.util.parse_tree.ParseRelation`
+.. |ParseTree| replace:: :class:`~ckipnlp.container.util.parse_tree.ParseTree`

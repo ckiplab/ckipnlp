@@ -22,7 +22,7 @@ from .tagger import (
 
 from .classic import (
     CkipClassicWordSegmenter,
-    CkipClassicSentenceParser,
+    CkipClassicConstituencyParser,
 )
 
 from .ss import (

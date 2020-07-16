@@ -33,7 +33,7 @@ ner = [
     [ [ '中文字', 'LANGUAGE', (0, 3), ], ],
     [ [ '畢卡索', 'PERSON', (6, 9), ], ],
 ]
-parsed = [
+constituency = [
     [
         [ 'S(Head:Nab:中文字|particle:Td:耶)', '，', ],
         [ '%(particle:I:啊|manner:Dh:哈|manner:D:哈哈)', '。', ],

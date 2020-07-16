@@ -7,8 +7,8 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from base import *
 
-def test_classic_sentence_parser():
+def test_classic_constituency_parser():
     obj = CkipPipeline(sentence_parser=DriverFamily.CLASSIC)
     doc = CkipDocument(ws=SegParagraph.from_list(ws), pos=SegParagraph.from_list(pos))
-    obj.get_parsed(doc)
-    assert doc.parsed.to_list() == parsed
+    obj.get_constituency(doc)
+    assert doc.constituency.to_list() == constituency

@@ -18,7 +18,7 @@ from ckipnlp.container import (
     SegParagraph as _SegParagraph,
     WsPosSentence as _WsPosSentence,
     WsPosParagraph as _WsPosParagraph,
-    ParsedParagraph as _ParsedParagraph,
+    ParseParagraph as _ParseParagraph,
 )
 
 from .base import (
@@ -83,7 +83,7 @@ class CkipClassicWordSegmenter(_BaseDriver):
 
         return (ws, pos,) if self._do_pos else ws
 
-class CkipClassicSentenceParser(_BaseDriver):
+class CkipClassicConstituencyParser(_BaseDriver):
     """The CKIP sentence parsing driver with CkipClassic backend.
 
     Arguments
@@ -96,14 +96,14 @@ class CkipClassicSentenceParser(_BaseDriver):
         Apply sentence parsing.
 
         Parameters
-            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
-            - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
+            - **ws** (:class:`~ckipnlp.container.text.TextParagraph`) — The word-segmented sentences.
+            - **pos** (:class:`~ckipnlp.container.text.TextParagraph`) — The part-of-speech sentences.
 
         Returns
-            **parsed** (:class:`ParsedSentence <ckipnlp.container.parsed.ParsedSentence>`) — The parsed-sentences.
+            **constituency** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
     """
 
-    driver_type = _DriverType.SENTENCE_PARSER
+    driver_type = _DriverType.CONSTITUNCY_PARSER
     driver_family = _DriverFamily.CLASSIC
 
     _count = 0
@@ -121,9 +121,9 @@ class CkipClassicSentenceParser(_BaseDriver):
         assert isinstance(pos, _SegParagraph)
 
 
-        parsed_text = []
+        constituency_text = []
         for ws_sent, pos_sent in zip(ws, pos):
-            parsed_sent_text = []
+            constituency_sent_text = []
             ws_clause = []
             pos_clause = []
             for ws_token, pos_token in _chain(zip(ws_sent, pos_sent), [(None, None),]):
@@ -136,13 +136,13 @@ class CkipClassicSentenceParser(_BaseDriver):
                 if pos_token is None or pos_token.endswith('CATEGORY'):
                     if ws_clause:
                         wspos_clause_text = _WsPosSentence.to_text(ws_clause, pos_clause)
-                        for parsed_clause_text in self._core.apply_list([wspos_clause_text]):
-                            parsed_sent_text.append([self._normalize(parsed_clause_text), '',])
+                        for constituency_clause_text in self._core.apply_list([wspos_clause_text]):
+                            constituency_sent_text.append([self._normalize(constituency_clause_text), '',])
 
                     if ws_token:
-                        if not parsed_sent_text:
-                            parsed_sent_text.append([None, '',])
-                        parsed_sent_text[-1][1] += ws_token
+                        if not constituency_sent_text:
+                            constituency_sent_text.append([None, '',])
+                        constituency_sent_text[-1][1] += ws_token
 
                     ws_clause = []
                     pos_clause = []
@@ -151,10 +151,10 @@ class CkipClassicSentenceParser(_BaseDriver):
                     ws_clause.append(self._half2full(ws_token))
                     pos_clause.append(pos_token)
 
-            parsed_text.append(parsed_sent_text)
-        parsed = _ParsedParagraph.from_list(parsed_text)
+            constituency_text.append(constituency_sent_text)
+        constituency = _ParseParagraph.from_list(constituency_text)
 
-        return parsed
+        return constituency
 
     @staticmethod
     def _half2full(text):

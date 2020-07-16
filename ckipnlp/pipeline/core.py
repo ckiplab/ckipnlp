@@ -36,19 +36,19 @@ class CkipDocument(_Mapping):
             The part-of-speech sentences.
         ner : :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`
             The named-entity recognition results.
-        parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
-            The parsed-sentences.
+        constituency : :class:`ParseParagraph <ckipnlp.container.parse.ParseParagraph>`
+            The constituency-parsing sentences.
     """
 
-    __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'parsed',)
+    __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'constituency',)
 
-    def __init__(self, *, raw=None, text=None, ws=None, pos=None, ner=None, parsed=None):
+    def __init__(self, *, raw=None, text=None, ws=None, pos=None, ner=None, constituency=None):
         self.raw = raw
         self.text = text
         self.ws = ws
         self.pos = pos
         self.ner = ner
-        self.parsed = parsed
+        self.constituency = constituency
 
         self._wspos = None
 
@@ -123,7 +123,7 @@ class CkipPipeline:
         self._pos_tagger = _DriverRegister.get(_DriverType.POS_TAGGER, pos_tagger)(
             lazy=lazy, **opts.get('pos_tagger', {}),
         )
-        self._sentence_parser = _DriverRegister.get(_DriverType.SENTENCE_PARSER, sentence_parser)(
+        self._constituency_parser = _DriverRegister.get(_DriverType.CONSTITUNCY_PARSER, sentence_parser)(
             lazy=lazy, **opts.get('sentence_parser', {}),
         )
         self._ner_chunker = _DriverRegister.get(_DriverType.NER_CHUNKER, ner_chunker)(
@@ -282,8 +282,8 @@ class CkipPipeline:
 
     ########################################################################################################################
 
-    def get_parsed(self, doc):
-        """Apply sentence parsing.
+    def get_constituency(self, doc):
+        """Apply constituency parsing.
 
         Arguments
         ---------
@@ -292,22 +292,22 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
-                The parsed sentences.
+            doc.constituency : :class:`ParseParagraph <ckipnlp.container.parse.ParseParagraph>`
+                The constituency parsing sentences.
 
         .. note::
 
             This routine modify **doc** inplace.
         """
-        if doc.parsed is None:
+        if doc.constituency is None:
 
-            if not self._sentence_parser.is_dummy:
-                doc.parsed = self._sentence_parser(
+            if not self._constituency_parser.is_dummy:
+                doc.constituency = self._constituency_parser(
                     ws=self.get_ws(doc),
                     pos=self.get_pos(doc),
                 )
 
             else:
-                raise AttributeError('No sentence parsing driver / No valid sentence parsing input!')
+                raise AttributeError('No constituency parsing driver / No valid constituency parsing input!')
 
-        return doc.parsed
+        return doc.constituency

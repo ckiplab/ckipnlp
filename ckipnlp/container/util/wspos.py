@@ -195,9 +195,9 @@ class WsPosParagraph(metaclass=_ABCMeta):
 
         Returns
         -------
-            :class:`SegParagraph <.seg.SegParagraph>`:
+            :class:`~.seg.SegParagraph`:
                 the word sentence list
-            :class:`SegParagraph <.seg.SegParagraph>`:
+            :class:`~.seg.SegParagraph`:
                 the POS-tag sentence list.
         """
         return tuple(map(_SegParagraph.from_list, _paragraph_from_text(data)))
@@ -208,9 +208,9 @@ class WsPosParagraph(metaclass=_ABCMeta):
 
         Parameters
         ----------
-            word : :class:`SegParagraph <.seg.SegParagraph>`
+            word : :class:`~.seg.SegParagraph`
                 the word sentence list
-            pos  : :class:`SegParagraph <.seg.SegParagraph>`
+            pos  : :class:`~.seg.SegParagraph`
                 the POS-tag sentence list.
 
         Returns

@@ -9,18 +9,18 @@ Part-of-Speech Tags
    :widths: 50 50
    :header-rows: 1
 
-Parsing Tree Tags
+Constituency Parsing Tags
 -----------------
 
 .. csv-table::
-   :file: ./tag/parsed_pos.csv
+   :file: ./tag/constituency_pos.csv
    :widths: 50 50
    :header-rows: 1
 
-Parsing Tree Roles
+Constituency Parsing Roles
 ------------------
 
 .. csv-table::
-   :file: ./tag/parsed_role.csv
+   :file: ./tag/constituency_role.csv
    :widths: 50 50
    :header-rows: 1

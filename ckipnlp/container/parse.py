@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides containers for parsed sentences.
+This module provides containers for parse sentences.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -18,23 +18,23 @@ from .base import (
     BaseList as _BaseList,
 )
 
-from .util.parsed_tree import (
-    ParsedTree as _ParsedTree,
+from .util.parse_tree import (
+    ParseTree as _ParseTree,
 )
 
 ################################################################################################################################
 
-class _ParsedClause(_NamedTuple):
+class _ParseClause(_NamedTuple):
     clause: str = None
     delim: str = ''
 
-class ParsedClause(_BaseTuple, _ParsedClause):
-    """A parsed clause.
+class ParseClause(_BaseTuple, _ParseClause):
+    """A parse clause.
 
     Attributes
     ----------
         clause : str
-            the parsed clause.
+            the parse clause.
         delim : str
             the punctuations after this clause.
 
@@ -57,7 +57,7 @@ class ParsedClause(_BaseTuple, _ParsedClause):
             .. code-block:: python
 
                 [
-                    'S(Head:Nab:中文字|particle:Td:耶)', # parsed clause
+                    'S(Head:Nab:中文字|particle:Td:耶)', # parse clause
                     '，',                               # punctuations
                 ]
 
@@ -67,7 +67,7 @@ class ParsedClause(_BaseTuple, _ParsedClause):
             .. code-block:: python
 
                 {
-                    'clause': 'S(Head:Nab:中文字|particle:Td:耶)', # parsed clause
+                    'clause': 'S(Head:Nab:中文字|particle:Td:耶)', # parse clause
                     'delim': '，',                                # punctuations
                 }
     """
@@ -82,19 +82,19 @@ class ParsedClause(_BaseTuple, _ParsedClause):
 
         Returns
         -------
-            :class:`~.util.parsed_tree.ParsedTree`
+            :class:`~.util.parse_tree.ParseTree`
                 the tree format of this clause. (`None` if **clause** is `None`)
 
         .. seealso::
-            :meth:`ParsedTree.from_text() <.util.parsed_tree.ParsedTree.from_text>`.
+            :meth:`ParseTree.from_text() <.util.parse_tree.ParseTree.from_text>`.
 
         """
-        return _ParsedTree.from_text(self.clause) if self.clause else None
+        return _ParseTree.from_text(self.clause) if self.clause else None
 
 ################################################################################################################################
 
-class ParsedSentence(_BaseList):
-    """A parsed sentence.
+class ParseSentence(_BaseList):
+    """A parse sentence.
 
     .. admonition:: Data Structure Examples
 
@@ -144,10 +144,10 @@ class ParsedSentence(_BaseList):
 
     from_text = NotImplemented
 
-    item_class = ParsedClause
+    item_class = ParseClause
 
-class ParsedParagraph(_BaseList):
-    """A list of parsed sentence.
+class ParseParagraph(_BaseList):
+    """A list of parse sentence.
 
     .. admonition:: Data Structure Examples
 
@@ -235,4 +235,4 @@ class ParsedParagraph(_BaseList):
 
     from_text = NotImplemented
 
-    item_class = ParsedSentence
+    item_class = ParseSentence

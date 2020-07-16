@@ -31,7 +31,7 @@ class DriverType(_IntEnum):
     WORD_SEGMENTER = _enum_auto()      #: Word segmentation
     POS_TAGGER = _enum_auto()          #: Part-of-speech tagging
     NER_CHUNKER = _enum_auto()         #: Named-entity recognition
-    SENTENCE_PARSER = _enum_auto()     #: Sentence parsing
+    CONSTITUNCY_PARSER = _enum_auto()     #: Constituency parsing
     COREF_CHUNKER = _enum_auto()       #: Coreference delectation
 
 class DriverFamily(_IntEnum):

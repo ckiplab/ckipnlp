@@ -6,14 +6,14 @@ __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 from base import _TestBase
-from ckipnlp.container.parsed import *
-from ckipnlp.container.util.parsed_tree import ParsedTree
+from ckipnlp.container.parse import *
+from ckipnlp.container.util.parse_tree import ParseTree
 
 ################################################################################################################################
 
-class TestParsedClause(_TestBase):
+class TestParseClause(_TestBase):
 
-    obj_class = ParsedClause
+    obj_class = ParseClause
 
     test_io_text = NotImplemented
 
@@ -37,7 +37,7 @@ class TestParsedClause(_TestBase):
     def test_to_tree(self):
         obj = self.obj_class.from_list(self.list_in)
         tree_out = obj.to_tree()
-        assert isinstance(tree_out, ParsedTree)
+        assert isinstance(tree_out, ParseTree)
 
     def test_to_tree_none(self):
         obj = self.obj_class()
@@ -46,9 +46,9 @@ class TestParsedClause(_TestBase):
 
 ################################################################################################################################
 
-class TestParsedSentence(_TestBase):
+class TestParseSentence(_TestBase):
 
-    obj_class = ParsedSentence
+    obj_class = ParseSentence
 
     test_io_text = NotImplemented
 
@@ -81,9 +81,9 @@ class TestParsedSentence(_TestBase):
 
 ################################################################################################################################
 
-class TestParsedParagraph(_TestBase):
+class TestParseParagraph(_TestBase):
 
-    obj_class = ParsedParagraph
+    obj_class = ParseParagraph
 
     test_io_text = NotImplemented
 

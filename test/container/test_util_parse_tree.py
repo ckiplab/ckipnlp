@@ -6,13 +6,13 @@ __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
 from base import _TestBase
-from ckipnlp.container.util.parsed_tree import *
+from ckipnlp.container.util.parse_tree import *
 
 ################################################################################################################################
 
-class TestParsedNodeData(_TestBase):
+class TestParseNodeData(_TestBase):
 
-    obj_class = ParsedNodeData
+    obj_class = ParseNodeData
 
     test_io_list = NotImplemented
 
@@ -38,7 +38,7 @@ class TestParsedNodeData(_TestBase):
 
 ################################################################################################################################
 
-class TestParsedTree(_TestBase):
+class TestParseTree(_TestBase):
     """
     我的早餐、午餐和晚餐都在比賽中被吃掉了
 
@@ -67,7 +67,7 @@ class TestParsedTree(_TestBase):
     └── aspect:Di:了[22]
     """
 
-    obj_class = ParsedTree
+    obj_class = ParseTree
 
     test_io_list = NotImplemented
 
@@ -364,14 +364,14 @@ class TestParsedTree(_TestBase):
 
     def test_node_repr(self):
         obj = self.obj_class.from_text(self.text_in)
-        assert isinstance(obj[3], ParsedNode)
-        assert repr(obj[3]) == 'ParsedNode(tag=head:Nhaa:我, identifier=3)'
+        assert isinstance(obj[3], ParseNode)
+        assert repr(obj[3]) == 'ParseNode(tag=head:Nhaa:我, identifier=3)'
 
     def test_relation_repr(self):
         obj = self.obj_class.from_text(self.text_in)
         relations = sorted(obj.get_relations(semantic=True), key=lambda rel: (rel.head.identifier, rel.tail.identifier,))
-        assert repr(relations[0]) == 'ParsedRelation(tail=(head:Nhaa:我, 3), head=(DUMMY1:Nab:早餐, 7), relation=(possessor, 2))'
-        assert repr(relations[-1]) == 'ParsedRelation(head=(Head:VC31:吃掉, 21), tail=(aspect:Di:了, 22), relation=(aspect, 22))'
+        assert repr(relations[0]) == 'ParseRelation(tail=(head:Nhaa:我, 3), head=(DUMMY1:Nab:早餐, 7), relation=(possessor, 2))'
+        assert repr(relations[-1]) == 'ParseRelation(head=(Head:VC31:吃掉, 21), tail=(aspect:Di:了, 22), relation=(aspect, 22))'
 
     def test_relation_to_dict(self):
         obj = self.obj_class.from_text(self.text_in)

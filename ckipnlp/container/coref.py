@@ -43,7 +43,7 @@ class CorefToken(_BaseTuple, _CorefToken):
                 * `'zero'`: null element coreference target.
 
         idx : Tuple[int, int]
-            the node indexes (clause index, token index) in parsed tree.
+            the node indexes (clause index, token index) in parse tree.
             **idx[1]** = `None` if this node is a null element or the punctuations.
 
     Note

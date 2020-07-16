@@ -111,7 +111,7 @@ Coreference Resolution‡           ✔         ✔           ✔
 ================================  ========  ==========  ===========
 
 - † These drivers require only one of either backends.
-- ‡ Coreference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, sentence parsing, and named-entity recognition.
+- ‡ Coreference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, constituency parsing, and named-entity recognition.
 
 Installation via Pip
 ^^^^^^^^^^^^^^^^^^^^

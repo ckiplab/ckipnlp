@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides tree containers for sentence parsing.
+This module provides tree containers for sentence parse.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -23,7 +23,7 @@ from treelib import (
     Node as _Node,
 )
 
-from ckipnlp.data.parsed import (
+from ckipnlp.data.constituency import (
     SUBJECT_ROLES as _SUBJECT_ROLES,
     NEUTRAL_ROLES as _NEUTRAL_ROLES,
 )
@@ -35,13 +35,13 @@ from ..base import (
 
 ################################################################################################################################
 
-class _ParsedNodeData(_NamedTuple):
+class _ParseNodeData(_NamedTuple):
     role: str = None
     pos: str = None
     word: str = None
 
-class ParsedNodeData(_BaseTuple, _ParsedNodeData):
-    """A parser node.
+class ParseNodeData(_BaseTuple, _ParseNodeData):
+    """A parse node.
 
     Attributes
     ----------
@@ -108,12 +108,12 @@ class ParsedNodeData(_BaseTuple, _ParsedNodeData):
 
 ################################################################################################################################
 
-class ParsedNode(_Base, _Node):
-    """A parser node for tree.
+class ParseNode(_Base, _Node):
+    """A parse node for tree.
 
     Attributes
     ----------
-        data : :class:`ParsedNodeData`
+        data : :class:`ParseNodeData`
 
     See Also
     --------
@@ -139,7 +139,7 @@ class ParsedNode(_Base, _Node):
                 }
     """
 
-    data_class = ParsedNodeData
+    data_class = ParseNodeData
 
     from_dict = NotImplemented
 
@@ -160,21 +160,21 @@ class ParsedNode(_Base, _Node):
 
 ################################################################################################################################
 
-class _ParsedRelation(_NamedTuple):
-    head: ParsedNode
-    tail: ParsedNode
-    relation: ParsedNode
+class _ParseRelation(_NamedTuple):
+    head: ParseNode
+    tail: ParseNode
+    relation: ParseNode
 
-class ParsedRelation(_Base, _ParsedRelation):
-    """A parser relation.
+class ParseRelation(_Base, _ParseRelation):
+    """A parse relation.
 
     Attributes
     ----------
-        head : :class:`ParsedNode`
+        head : :class:`ParseNode`
             the head node.
-        tail : :class:`ParsedNode`
+        tail : :class:`ParseNode`
             the tail node.
-        relation : :class:`ParsedNode`
+        relation : :class:`ParseNode`
             the relation node. (the semantic role of this node is the relation.)
 
     Notes
@@ -230,8 +230,8 @@ class ParsedRelation(_Base, _ParsedRelation):
 
 ################################################################################################################################
 
-class ParsedTree(_Base, _Tree):
-    """A parsed tree.
+class ParseTree(_Base, _Tree):
+    """A parse tree.
 
     See Also
     --------
@@ -252,7 +252,7 @@ class ParsedTree(_Base, _Tree):
         Dict format
             Used for :meth:`from_dict` and :meth:`to_dict`.
             A dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
-            where ``'data'`` is a dictionary with the same format as :meth:`ParsedNodeData.to_dict`,
+            where ``'data'`` is a dictionary with the same format as :meth:`ParseNodeData.to_dict`,
             and ``'children'`` is a list of dictionaries of subtrees with the same format as this tree.
 
             .. code-block:: python
@@ -303,7 +303,7 @@ class ParsedTree(_Base, _Tree):
 
     """
 
-    node_class = ParsedNode
+    node_class = ParseNode
 
     from_list = NotImplemented
     to_list = NotImplemented
@@ -320,10 +320,10 @@ class ParsedTree(_Base, _Tree):
         Parameters
         ----------
             data : str
-                A parsed tree in text format (:class:`ParsedClause.clause <.parsed.ParsedClause>`).
+                A parse tree in text format (:class:`ParseClause.clause <.parse.ParseClause>`).
 
         .. seealso::
-            :meth:`ParsedClause.to_tree() <.parsed.ParsedClause.to_tree>`.
+            :meth:`ParseClause.to_tree() <.parse.ParseClause.to_tree>`.
         """
 
         tree = cls()
@@ -397,7 +397,7 @@ class ParsedTree(_Base, _Tree):
         Parameters
         ----------
             data : str
-                A parsed tree in dictionary format.
+                A parse tree in dictionary format.
         """
         tree = cls()
 
@@ -522,7 +522,7 @@ class ParsedTree(_Base, _Tree):
 
         Yields
         ------
-            :class:`ParsedNode`
+            :class:`ParseNode`
                 the children nodes with given role.
         """
         for child in self.children(node_id):
@@ -543,7 +543,7 @@ class ParsedTree(_Base, _Tree):
 
         Yields
         ------
-            :class:`ParsedNode`
+            :class:`ParseNode`
                 the head nodes.
         """
         if root_id is None:
@@ -599,7 +599,7 @@ class ParsedTree(_Base, _Tree):
 
         Yields
         ------
-            :class:`ParsedRelation`
+            :class:`ParseRelation`
                 the relations.
         """
         if root_id is None:
@@ -614,12 +614,12 @@ class ParsedTree(_Base, _Tree):
             for tail in children:
                 if tail.data.role != 'Head' and tail not in head_children:
                     if tail.is_leaf():
-                        yield ParsedRelation(  # pylint: disable=no-value-for-parameter
+                        yield ParseRelation(  # pylint: disable=no-value-for-parameter
                             head=head_node, tail=tail, relation=tail,
                         )
                     else:
                         for node in self.get_heads(tail.identifier, semantic=semantic):
-                            yield ParsedRelation(  # pylint: disable=no-value-for-parameter
+                            yield ParseRelation(  # pylint: disable=no-value-for-parameter
                                 head=head_node, tail=node, relation=tail,
                             )
 
@@ -641,7 +641,7 @@ class ParsedTree(_Base, _Tree):
 
         Yields
         ------
-            :class:`ParsedNode`
+            :class:`ParseNode`
                 the subject node.
 
         Notes
