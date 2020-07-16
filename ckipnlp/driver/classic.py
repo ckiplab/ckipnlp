@@ -164,9 +164,7 @@ class CkipClassicConstituencyParser(_BaseDriver):
            .replace('+', '＋') \
            .replace('-', '－') \
            .replace(':', '：') \
-           .replace('|', '｜') \
-           .replace('&', '＆') \
-           .replace('#', '＃')
+           .replace('|', '｜')
 
     @staticmethod
     def _normalize(text):
