@@ -8,4 +8,4 @@
 - make upload
 
 # Requirements
-Make sure requirements.txt matches setup.py.
+Make sure test/requirements.txt matches setup.py.
