@@ -48,17 +48,6 @@ class NerToken(_BaseTuple, _NerToken):
         Text format
             Not implemented
 
-        Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`.
-
-            .. code-block:: python
-
-                {
-                    'word': '中文字',   # token word
-                    'ner': 'LANGUAGE', # NER-tag
-                    'idx': (0, 3),     # starting / ending index.
-                }
-
         List format
             Used for :meth:`from_list` and :meth:`to_list`.
 
@@ -69,6 +58,17 @@ class NerToken(_BaseTuple, _NerToken):
                     'LANGUAGE', # NER-tag
                     (0, 3),     # starting / ending index.
                 ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                {
+                    'word': '中文字',   # token word
+                    'ner': 'LANGUAGE', # NER-tag
+                    'idx': (0, 3),     # starting / ending index.
+                }
 
         CkipTagger format
             Used for :meth:`from_tagger` and :meth:`to_tagger`.
@@ -82,6 +82,9 @@ class NerToken(_BaseTuple, _NerToken):
                     '中文字',    # token word
                 )
     """
+
+    def __new__(cls, word, ner, idx, **kwargs):  # pylint: disable=signature-differs
+        return super().__new__(cls, word, ner, tuple(idx), **kwargs)
 
     to_text = NotImplemented
     from_text = NotImplemented
@@ -108,16 +111,6 @@ class NerSentence(_BaseSentence):
         Text format
             Not implemented
 
-        Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`.
-
-            .. code-block:: python
-
-                [
-                    { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },   # name-entity 1
-                    { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), }, # name-entity 2
-                ]
-
         List format
             Used for :meth:`from_list` and :meth:`to_list`.
 
@@ -126,6 +119,16 @@ class NerSentence(_BaseSentence):
                 [
                     [ '美國', 'GPE', (0, 2), ],   # name-entity 1
                     [ '參議院', 'ORG', (3, 5), ], # name-entity 2
+                ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },   # name-entity 1
+                    { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), }, # name-entity 2
                 ]
 
         CkipTagger format
@@ -165,21 +168,6 @@ class NerParagraph(_BaseList):
         Text format
             Not implemented
 
-        Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`.
-
-            .. code-block:: python
-
-                [
-                    [ # Sentence 1
-                        { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), },
-                    ],
-                    [ # Sentence 2
-                        { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },
-                        { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), },
-                    ],
-                ]
-
         List format
             Used for :meth:`from_list` and :meth:`to_list`.
 
@@ -192,6 +180,21 @@ class NerParagraph(_BaseList):
                     [ # Sentence 2
                         [ '美國', 'GPE', (0, 2), ],
                         [ '參議院', 'ORG', (3, 5), ],
+                    ],
+                ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    [ # Sentence 1
+                        { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), },
+                    ],
+                    [ # Sentence 2
+                        { 'word': '美國', 'ner': 'GPE', 'idx': (0, 2), },
+                        { 'word': '參議院', 'ner': 'ORG', 'idx': (3, 5), },
                     ],
                 ]
 

@@ -42,8 +42,9 @@ class CorefToken(_BaseTuple, _CorefToken):
                 * `'target'`: coreference target.
                 * `'zero'`: null element coreference target.
 
-        idx : int
-            the node index in parsed tree.
+        idx : Tuple[int, int]
+            the node indexes (clause index, token index) in parse tree.
+            **idx[1]** = `None` if this node is a null element or the punctuations.
 
     Note
     ----
@@ -58,17 +59,6 @@ class CorefToken(_BaseTuple, _CorefToken):
 
                 '畢卡索_0'
 
-        Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`.
-
-            .. code-block:: python
-
-                {
-                    'word': '畢卡索',        # token word
-                    'coref': (0, 'source'), # coref ID and type
-                    'idx': 2,               # node index
-                }
-
         List format
             Used for :meth:`from_list` and :meth:`to_list`.
 
@@ -77,9 +67,23 @@ class CorefToken(_BaseTuple, _CorefToken):
                 [
                     '畢卡索',       # token word
                     (0, 'source'), # coref ID and type
-                    2,             # node index
+                    (2, 2),        # node index
                 ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                {
+                    'word': '畢卡索',        # token word
+                    'coref': (0, 'source'), # coref ID and type
+                    'idx': (2, 2),          # node index
+                }
     """
+
+    def __new__(cls, word, coref, idx, **kwargs):  # pylint: disable=signature-differs
+        return super().__new__(cls, word, tuple(coref) if coref else None, tuple(idx), **kwargs)
 
     from_text = NotImplemented
 
@@ -98,18 +102,8 @@ class CorefSentence(_BaseSentence):
 
             .. code-block:: python
 
-                '畢卡索_0\u3000他_0\u3000想' # Token segmented by \\u3000 (full-width space)
-
-        Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`.
-
-            .. code-block:: python
-
-                [
-                    { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, }, # coref-token 1
-                    { 'word': '他', 'coref': (0, 'target'), 'idx': 3, },    # coref-token 2
-                    { 'word': '想', 'coref': None, 'idx': 4, },             # coref-token 3
-                ]
+                # Token segmented by \\u3000 (full-width space)
+                '「\u3000完蛋\u3000了\u3000！」\u3000，\u3000畢卡索_0\u3000他_0\u3000想'
 
         List format
             Used for :meth:`from_list` and :meth:`to_list`.
@@ -117,18 +111,34 @@ class CorefSentence(_BaseSentence):
             .. code-block:: python
 
                 [
-                    [ '畢卡索', (0, 'source'), 2, ], # coref-token 1
-                    [ '他', (0, 'target'), 3, ],    # coref-token 2
-                    [ '想', None, 4, ],             # coref-token 3
+                    [ '「', None, (0, None,), ],
+                    [ '完蛋', None, (1, 0,), ],
+                    [ '了', None, (1, 1,), ],
+                    [ '！」', None, (1, None,), ],
+                    [ '畢卡索', (0, 'source'), (2, 2,), ],
+                    [ '他', (0, 'target'), (2, 3,), ],
+                    [ '想', None, (2, 4,), ],
+                ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    { 'word': '「', 'coref': None, 'idx': (0, None,), },
+                    { 'word': '完蛋', 'coref': None, 'idx': (1, 0,), },
+                    { 'word': '了', 'coref': None, 'idx': (1, 1,), },
+                    { 'word': '！」', 'coref': None, 'idx': (1, None,), },
+                    { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': (2, 2,), },
+                    { 'word': '他', 'coref': (0, 'target'), 'idx': (2, 3,), },
+                    { 'word': '想', 'coref': None, 'idx': (2, 4,), },
                 ]
     """
 
     item_class = CorefToken
 
     from_text = NotImplemented
-
-    def to_text(self):
-        return '\u3000'.join(map(self._item_to_text, self))
 
 ################################################################################################################################
 
@@ -143,26 +153,8 @@ class CorefParagraph(_BaseList):
             .. code-block:: python
 
                 [
-                    '畢卡索_0\u3000他_0\u3000想', # Sentence 1
-                    'None_0\u3000完蛋\u3000了',  # Sentence 2
-                ]
-
-        Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`.
-
-            .. code-block:: python
-
-                [
-                    [ # Sentence 1
-                        { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': 2, },
-                        { 'word': '他', 'coref': (0, 'target'), 'idx': 3, },
-                        { 'word': '想', 'coref': None, 'idx': 4, },
-                    ],
-                    [ # Sentence 2
-                        { 'word': None, 'coref': (0, 'zero'), None, },
-                        { 'word': '完蛋', 'coref': None, 'idx': 1, },
-                        { 'word': '了', 'coref': None, 'idx': 2, },
-                    ],
+                    '「\u3000完蛋\u3000了\u3000！」\u3000，\u3000畢卡索_0\u3000他_0\u3000想', # Sentence 1
+                    '但是\u3000None_0\u3000也\u3000沒有\u3000辦法', # Sentence 1
                 ]
 
         List format
@@ -172,14 +164,44 @@ class CorefParagraph(_BaseList):
 
                 [
                     [ # Sentence 1
-                        [ '畢卡索', (0, 'source'), 2, ],
-                        [ '他', (0, 'target'), 3, ],
-                        [ '想', None, 4, ],
+                        [ '「', None, (0, None,), ],
+                        [ '完蛋', None, (1, 0,), ],
+                        [ '了', None, (1, 1,), ],
+                        [ '！」', None, (1, None,), ],
+                        [ '畢卡索', (0, 'source'), (2, 2,), ],
+                        [ '他', (0, 'target'), (2, 3,), ],
+                        [ '想', None, (2, 4,), ],
                     ],
                     [ # Sentence 2
-                        [ None, (0, 'zero'), None, ],
-                        [ '完蛋', None, 1, ],
-                        [ '了', None, 2, ],
+                        [ '但是', None, (0, 1,), ],
+                        [ None, (0, 'zero'), (0, None,), ],
+                        [ '也', None, (0, 2,), ],
+                        [ '沒有', None, (0, 3,), ],
+                        [ '辦法', None, (0, 5,), ],
+                    ],
+                ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                [
+                    [ # Sentence 1
+                        { 'word': '「', 'coref': None, 'idx': (0, None,), },
+                        { 'word': '完蛋', 'coref': None, 'idx': (1, 0,), },
+                        { 'word': '了', 'coref': None, 'idx': (1, 1,), },
+                        { 'word': '！」', 'coref': None, 'idx': (1, None,), },
+                        { 'word': '畢卡索', 'coref': (0, 'source'), 'idx': (2, 2,), },
+                        { 'word': '他', 'coref': (0, 'target'), 'idx': (2, 3,), },
+                        { 'word': '想', 'coref': None, 'idx': (2, 4,), },
+                    ],
+                    [ # Sentence 2
+                        { 'word': '但是', 'coref': None, 'idx': (0, 1,), },
+                        { 'word': None, 'coref': (0, 'zero'), 'idx': (0, None,), },
+                        { 'word': '也', 'coref': None, 'idx': (0, 2,), },
+                        { 'word': '沒有', 'coref': None, 'idx': (0, 3,), },
+                        { 'word': '辦法', 'coref': None, 'idx': (0, 5,), },
                     ],
                 ]
     """

@@ -16,7 +16,7 @@ def main():
         readme = fin.read()
 
     setup(
-        name=about.__name__,
+        name='ckipnlp',
         version=about.__version__,
         author=about.__author_name__,
         author_email=about.__author_email__,
@@ -35,7 +35,6 @@ def main():
             'Programming Language :: Python :: 3.6',
             'Programming Language :: Python :: 3.7',
             'Programming Language :: Python :: 3.8',
-            'Programming Language :: Python :: 3.9',
             'Programming Language :: Python :: 3 :: Only',
             'License :: Free for non-commercial use',
             'Operating System :: POSIX :: Linux',

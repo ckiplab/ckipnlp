@@ -20,15 +20,15 @@ class TextParagraph(_BaseList0):
 
     .. admonition:: Data Structure Examples
 
-        Text/Dict/List format
-            Used for :meth:`from_text`, :meth:`to_text`, :meth:`from_dict`, :meth:`to_dict`, :meth:`from_list`, and
-            :meth:`to_list`.
+        Text/List/Dict format
+            Used for :meth:`from_text`, :meth:`to_text`, :meth:`from_list`, :meth:`to_list`, :meth:`from_dict`, and
+            :meth:`to_dict`.
 
             .. code-block:: python
 
                 [
-                    '中文字喔', # Sentence 1
-                    '啊哈哈哈', # Sentence 2
+                    '中文字耶，啊哈哈哈。',    # Sentence 1
+                    '「完蛋了！」畢卡索他想', # Sentence 2
                 ]
     """
 

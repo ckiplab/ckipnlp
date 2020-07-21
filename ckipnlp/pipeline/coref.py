@@ -14,12 +14,10 @@ from collections.abc import (
 )
 
 from ckipnlp.driver.base import (
-    DriverType as _DriverType,
-    DriverFamily as _DriverFamily,
     DriverRegister as _DriverRegister,
 )
 
-from .core import (
+from .kernel import (
     CkipPipeline as _CkipPipeline,
 )
 
@@ -30,22 +28,22 @@ class CkipCorefDocument(_Mapping):
 
     Attributes
     ----------
-        ws : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+        ws : :class:`~ckipnlp.container.seg.SegParagraph`
             The word-segmented sentences.
-        pos : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+        pos : :class:`~ckipnlp.container.seg.SegParagraph`
             The part-of-speech sentences.
-        parsed : :class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`
-            The parsed sentences.
-        coref : :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
+        constituency : :class:`~ckipnlp.container.constituency.ParseParagraph`
+            The constituency sentences.
+        coref : :class:`~ckipnlp.container.coref.CorefParagraph`
             The coreference resolution results.
     """
 
-    __keys = ('ws', 'pos', 'parsed', 'coref',)
+    __keys = ('ws', 'pos', 'constituency', 'coref',)
 
-    def __init__(self, *, ws=None, pos=None, parsed=None, coref=None):
+    def __init__(self, *, ws=None, pos=None, constituency=None, coref=None):
         self.ws = ws
         self.pos = pos
-        self.parsed = parsed
+        self.constituency = constituency
         self.coref = coref
 
     def __len__(self):
@@ -64,22 +62,22 @@ class CkipCorefPipeline(_CkipPipeline):
 
     Arguments
     ---------
-        sentence_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        sentence_segmenter : str
             The type of sentence segmenter.
 
-        word_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        word_segmenter : str
             The type of word segmenter.
 
-        pos_tagger : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        pos_tagger : str
             The type of part-of-speech tagger.
 
-        ner_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        ner_chunker : str
             The type of named-entity recognition chunker.
 
-        sentence_parser : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        sentence_parser : str
             The type of sentence parser.
 
-        coref_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        coref_chunker : str
             The type of coreference resolution chunker.
 
     Other Parameters
@@ -92,7 +90,7 @@ class CkipCorefPipeline(_CkipPipeline):
     """
 
     def __init__(self, *,
-        coref_chunker=_DriverFamily.BUILTIN,
+        coref_chunker='default',
         lazy=True,
         opts={},
         **kwargs,
@@ -103,7 +101,7 @@ class CkipCorefPipeline(_CkipPipeline):
         if coref_chunker:
             assert self._wspos_driver.is_dummy, 'Coreference pipeline is not compatible with CkipClassic word segmenter!'
 
-        self._coref_chunker = _DriverRegister.get(_DriverType.COREF_CHUNKER, coref_chunker)(
+        self._coref_chunker = _DriverRegister.get('coref_chunker', coref_chunker)(
             lazy=lazy, **opts.get('coref_chunker', {}),
         )
 
@@ -112,7 +110,7 @@ class CkipCorefPipeline(_CkipPipeline):
 
         Arguments
         ---------
-            doc : :class:`CkipDocument <.core.CkipDocument>`
+            doc : :class:`~.kernel.CkipDocument`
                 The input document.
 
         Returns
@@ -134,14 +132,14 @@ class CkipCorefPipeline(_CkipPipeline):
 
         Arguments
         ---------
-            doc : :class:`CkipDocument <.core.CkipDocument>`
+            doc : :class:`~.kernel.CkipDocument`
                 The input document.
             corefdoc : :class:`CkipCorefDocument`
                 The input document for coreference.
 
         Returns
         -------
-            corefdoc.coref : :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
+            corefdoc.coref : :class:`~ckipnlp.container.coref.CorefParagraph`
                 The coreference results.
 
         .. note::
@@ -173,10 +171,10 @@ class CkipCorefPipeline(_CkipPipeline):
             )
 
         # Do parsing
-        if corefdoc.parsed is None:
-            corefdoc.parsed = self.get_parsed(corefdoc)
+        if corefdoc.constituency is None:
+            corefdoc.constituency = self.get_constituency(corefdoc)
 
         # Do coreference resolution
-        corefdoc.coref = self._coref_chunker(parsed=corefdoc.parsed)
+        corefdoc.coref = self._coref_chunker(constituency=corefdoc.constituency)
 
         return corefdoc.coref

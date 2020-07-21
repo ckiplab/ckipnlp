@@ -82,16 +82,6 @@ class WsPosToken(_BaseTuple, _WsPosToken):
 
                 '中文字(Na)'  # word / POS-tag
 
-        Dict format
-            Used for :meth:`from_dict` and :meth:`to_dict`.
-
-            .. code-block:: python
-
-                {
-                    'word': '中文字', # word
-                    'pos': 'Na',     # POS-tag
-                }
-
         List format
             Used for :meth:`from_list` and :meth:`to_list`.
 
@@ -101,10 +91,20 @@ class WsPosToken(_BaseTuple, _WsPosToken):
                     '中文字', # word
                     'Na',    # POS-tag
                 ]
+
+        Dict format
+            Used for :meth:`from_dict` and :meth:`to_dict`.
+
+            .. code-block:: python
+
+                {
+                    'word': '中文字', # word
+                    'pos': 'Na',     # POS-tag
+                }
     """
 
     def __str__(self):
-        return str(self.to_text())
+        return self.to_text()
 
     ########################################################################################################################
 
@@ -128,12 +128,12 @@ class WsPosToken(_BaseTuple, _WsPosToken):
 
 ################################################################################################################################
 
-class WsPosSentence:
+class WsPosSentence(metaclass=_ABCMeta):
     """A helper class for data conversion of word-segmented and part-of-speech sentences."""
 
     @_abstractmethod
     def __init__(self):
-        pass
+        raise NotImplementedError  # pragma: no cover
 
     ########################################################################################################################
 
@@ -144,13 +144,13 @@ class WsPosSentence:
         Parameters
         ----------
             data : str
-                text such as ``'中文字(Na)\\u3000喔(T)'``.
+                text such as ``'中文字(Na)\\u3000耶(T)'``.
 
         Returns
         -------
-            :class:`SegSentence <.seg.SegSentence>`:
+            :class:`~ckipnlp.container.seg.SegSentence`
                 the word sentence
-            :class:`SegSentence <.seg.SegSentence>`:
+            :class:`~ckipnlp.container.seg.SegSentence`
                 the POS-tag sentence.
         """
         return tuple(map(_SegSentence.from_list, _sentence_from_text(data)))
@@ -161,15 +161,15 @@ class WsPosSentence:
 
         Parameters
         ----------
-            word : :class:`SegSentence <.seg.SegSentence>`
+            word : :class:`~ckipnlp.container.seg.SegSentence`
                 the word sentence
-            pos  : :class:`SegSentence <.seg.SegSentence>`
+            pos  : :class:`~ckipnlp.container.seg.SegSentence`
                 the POS-tag sentence.
 
         Returns
         -------
             str
-                text such as ``'中文字(Na)\\u3000喔(T)'``.
+                text such as ``'中文字(Na)\\u3000耶(T)'``.
         """
         return _sentence_to_text((word, pos,))
 
@@ -180,7 +180,7 @@ class WsPosParagraph(metaclass=_ABCMeta):
 
     @_abstractmethod
     def __init__(self):
-        pass
+        raise NotImplementedError  # pragma: no cover
 
     ########################################################################################################################
 
@@ -191,13 +191,13 @@ class WsPosParagraph(metaclass=_ABCMeta):
         Parameters
         ----------
             data : Sequence[str]
-                list of sentences such as ``'中文字(Na)\\u3000喔(T)'``.
+                list of sentences such as ``'中文字(Na)\\u3000耶(T)'``.
 
         Returns
         -------
-            :class:`SegParagraph <.seg.SegParagraph>`:
+            :class:`~.seg.SegParagraph`:
                 the word sentence list
-            :class:`SegParagraph <.seg.SegParagraph>`:
+            :class:`~.seg.SegParagraph`:
                 the POS-tag sentence list.
         """
         return tuple(map(_SegParagraph.from_list, _paragraph_from_text(data)))
@@ -208,14 +208,14 @@ class WsPosParagraph(metaclass=_ABCMeta):
 
         Parameters
         ----------
-            word : :class:`SegParagraph <.seg.SegParagraph>`
+            word : :class:`~.seg.SegParagraph`
                 the word sentence list
-            pos  : :class:`SegParagraph <.seg.SegParagraph>`
+            pos  : :class:`~.seg.SegParagraph`
                 the POS-tag sentence list.
 
         Returns
         -------
             List[str]
-                list of sentences such as ``'中文字(Na)\\u3000喔(T)'``.
+                list of sentences such as ``'中文字(Na)\\u3000耶(T)'``.
         """
         return list(_paragraph_to_text((word, pos,)))

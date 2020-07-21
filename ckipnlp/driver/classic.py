@@ -9,17 +9,20 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
+from itertools import (
+    chain as _chain,
+)
+
 from ckipnlp.container import (
     TextParagraph as _TextParagraph,
     SegParagraph as _SegParagraph,
+    WsPosSentence as _WsPosSentence,
     WsPosParagraph as _WsPosParagraph,
-    ParsedParagraph as _ParsedParagraph,
+    ParseParagraph as _ParseParagraph,
 )
 
 from .base import (
     BaseDriver as _BaseDriver,
-    DriverType as _DriverType,
-    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -30,13 +33,13 @@ class CkipClassicWordSegmenter(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize the driver.
         do_pos : bool
             Returns POS-tag or not
         lexicons: Iterable[Tuple[str, str]]
             A list of the lexicon words and their POS-tags.
 
-    .. py:method:: __call__(*, text)
+    .. method:: __call__(*, text)
 
         Apply word segmentation.
 
@@ -49,8 +52,9 @@ class CkipClassicWordSegmenter(_BaseDriver):
               (returns if **do_pos** is set.)
     """
 
-    driver_type = _DriverType.WORD_SEGMENTER
-    driver_family = _DriverFamily.CLASSIC
+    driver_type = None
+    driver_family = 'classic'
+    driver_inputs = None
 
     _count = 0
 
@@ -65,7 +69,10 @@ class CkipClassicWordSegmenter(_BaseDriver):
             raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
 
         import ckip_classic.ws
-        self._core = ckip_classic.ws.CkipWs(lex_list=self._lexicons)
+        self._core = ckip_classic.ws.CkipWs(
+            new_style_format=True,
+            lex_list=self._lexicons,
+        )
 
     def _call(self, *, text):
         assert isinstance(text, _TextParagraph)
@@ -75,28 +82,77 @@ class CkipClassicWordSegmenter(_BaseDriver):
 
         return (ws, pos,) if self._do_pos else ws
 
-class CkipClassicSentenceParser(_BaseDriver):
+class _CkipClassicWordSegmenter(CkipClassicWordSegmenter):
+    """The dummy class for :class:`CkipClassicWordSegmenter` for pipeline."""
+
+    driver_type = 'word_segmenter'
+    driver_family = 'classic'
+    driver_inputs = ('text',)
+
+    def __init__(self, *, lazy=False, lexicons=None):
+        super().__init__(lazy=lazy, do_pos=False, lexicons=lexicons)
+
+class _CkipClassic2WsPos(CkipClassicWordSegmenter):
+    """The dummy class for :class:`CkipClassicWordSegmenter` for pipeline."""
+
+    driver_type = '_wspos'
+    driver_family = '_classic'
+    driver_inputs = ('text',)
+
+    def __init__(self, *, lazy=False, lexicons=None):
+        super().__init__(lazy=lazy, do_pos=True, lexicons=lexicons)
+
+class _CkipClassic2WordSegmenter(_BaseDriver):
+    """The dummy class for :class:`CkipClassicWordSegmenter` for pipeline."""
+
+    driver_type = 'word_segmenter'
+    driver_family = '_classic'
+    driver_inputs = ('_wspos',)
+
+    def _init(self):
+        pass
+
+    def _call(self, *, _wspos):
+        return _wspos[0]
+
+class _CkipClassic2PosTagger(_BaseDriver):
+    """The dummy class for :class:`CkipClassicWordSegmenter` for pipeline."""
+
+    driver_type = 'pos_tagger'
+    driver_family = '_classic'
+    driver_inputs = ('_wspos',)
+
+    def _init(self):
+        pass
+
+    def _call(self, *, _wspos):
+        return _wspos[1]
+
+################################################################################################################################
+
+class CkipClassicConstituencyParser(_BaseDriver):
     """The CKIP sentence parsing driver with CkipClassic backend.
 
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlay object.
+            Lazy initialize the driver.
 
-    .. py:method:: __call__(*, ws, pos)
+    .. method:: __call__(*, ws, pos)
 
         Apply sentence parsing.
 
         Parameters
-            - **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
-            - **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
+            - **ws** (:class:`~ckipnlp.container.text.TextParagraph`) — The word-segmented sentences.
+            - **pos** (:class:`~ckipnlp.container.text.TextParagraph`) — The part-of-speech sentences.
 
         Returns
-            **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
+            **constituency** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
     """
 
-    driver_type = _DriverType.SENTENCE_PARSER
-    driver_family = _DriverFamily.CLASSIC
+    driver_type = 'constituncy_parser'
+    driver_family = 'classic'
+    driver_inputs = ('ws', 'pos',)
 
     _count = 0
 
@@ -112,12 +168,41 @@ class CkipClassicSentenceParser(_BaseDriver):
         assert isinstance(ws, _SegParagraph)
         assert isinstance(pos, _SegParagraph)
 
-        ws = _SegParagraph.from_list([map(self._half2full, line) for line in ws])
-        wspos_text = _WsPosParagraph.to_text(ws, pos)
-        parsed_text = self._core.apply_list(wspos_text)
-        parsed = _ParsedParagraph.from_text(parsed_text)
 
-        return parsed
+        constituency_text = []
+        for ws_sent, pos_sent in zip(ws, pos):
+            constituency_sent_text = []
+            ws_clause = []
+            pos_clause = []
+            for ws_token, pos_token in _chain(zip(ws_sent, pos_sent), [(None, None),]):
+
+                # Skip WHITESPACE
+                if pos_token == 'WHITESPACE':
+                    continue
+
+                # Segment clauses by punctuations
+                if pos_token is None or pos_token.endswith('CATEGORY'):
+                    if ws_clause:
+                        wspos_clause_text = _WsPosSentence.to_text(ws_clause, pos_clause)
+                        for constituency_clause_text in self._core.apply_list([wspos_clause_text]):
+                            constituency_sent_text.append([self._normalize(constituency_clause_text), '',])
+
+                    if ws_token:
+                        if not constituency_sent_text:
+                            constituency_sent_text.append([None, '',])
+                        constituency_sent_text[-1][1] += ws_token
+
+                    ws_clause = []
+                    pos_clause = []
+
+                else:
+                    ws_clause.append(self._half2full(ws_token))
+                    pos_clause.append(pos_token)
+
+            constituency_text.append(constituency_sent_text)
+        constituency = _ParseParagraph.from_list(constituency_text)
+
+        return constituency
 
     @staticmethod
     def _half2full(text):
@@ -127,6 +212,8 @@ class CkipClassicSentenceParser(_BaseDriver):
            .replace('+', '＋') \
            .replace('-', '－') \
            .replace(':', '：') \
-           .replace('|', '｜') \
-           .replace('&', '＆') \
-           .replace('#', '＃')
+           .replace('|', '｜')
+
+    @staticmethod
+    def _normalize(text):
+        return text.split('] ', 2)[-1].rstrip('#')
