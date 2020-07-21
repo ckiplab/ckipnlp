@@ -62,7 +62,7 @@ class CkipDocument(_Mapping):
 ################################################################################################################################
 
 class CkipPipeline:
-    """The core pipeline.
+    """The kernel pipeline.
 
     Arguments
     ---------

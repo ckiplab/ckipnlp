@@ -3,8 +3,8 @@ Pipelines
 
 .. include:: ../_defn.rst
 
-Core Pipeline
-^^^^^^^^^^^^^
+Kernel Pipeline
+^^^^^^^^^^^^^^^
 
 The |CkipPipeline| connect `drivers <usage/driver.html>`_ of sentence segmentation, word segmentation, part-of-speech tagging, named-entity recognition, and sentence parsing.
 
