@@ -65,7 +65,7 @@ class WS:
         elif np.array_equal(text, coref_text):
             return coref_ws
         else:
-            raise NotImplementedError
+            raise NotImplementedError(text)
 
 ################################################################################################################################
 
@@ -80,7 +80,7 @@ class POS:
         elif np.array_equal(ws, coref_ws):
             return coref_pos
         else:
-            raise NotImplementedError
+            raise NotImplementedError(ws)
 
 ################################################################################################################################
 
@@ -95,4 +95,4 @@ class NER:
         elif np.array_equal(ws, coref_ws) and np.array_equal(pos, coref_pos):
             return coref_ner
         else:
-            raise NotImplementedError
+            raise NotImplementedError((ws, pos,))
