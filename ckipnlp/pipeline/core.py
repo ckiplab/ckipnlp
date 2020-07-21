@@ -28,15 +28,15 @@ class CkipDocument(_Mapping):
     ----------
         raw : str
             The unsegmented text input.
-        text : :class:`TextParagraph <ckipnlp.container.text.TextParagraph>`
+        text : :class:`~ckipnlp.container.text.TextParagraph`
             The sentences.
-        ws : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+        ws : :class:`~ckipnlp.container.seg.SegParagraph`
             The word-segmented sentences.
-        pos : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+        pos : :class:`~ckipnlp.container.seg.SegParagraph`
             The part-of-speech sentences.
-        ner : :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`
+        ner : :class:`~ckipnlp.container.ner.NerParagraph`
             The named-entity recognition results.
-        constituency : :class:`ParseParagraph <ckipnlp.container.parse.ParseParagraph>`
+        constituency : :class:`~ckipnlp.container.parse.ParseParagraph`
             The constituency-parsing sentences.
     """
 
@@ -68,19 +68,19 @@ class CkipPipeline:
 
     Arguments
     ---------
-        sentence_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        sentence_segmenter : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of sentence segmenter.
 
-        word_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        word_segmenter : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of word segmenter.
 
-        pos_tagger : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        pos_tagger : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of part-of-speech tagger.
 
-        ner_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        ner_chunker : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of named-entity recognition chunker.
 
-        sentence_parser : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        sentence_parser : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of sentence parser.
 
     Other Parameters
@@ -134,14 +134,23 @@ class CkipPipeline:
 
     @staticmethod
     def _get_raw(doc):
+        if doc.raw is NotImplemented:
+            raise RecursionError('Loop dependence detected!')
+
         if doc.raw is None:
+            doc.raw = NotImplemented
             raise AttributeError('No raw text!')
+
         return doc.raw
 
     ########################################################################################################################
 
     def _get_wspos(self, doc):
+        if doc._wspos is NotImplemented:  # pylint: disable=protected-access
+            raise RecursionError('Loop dependence detected!')
+
         if doc._wspos is None:  # pylint: disable=protected-access
+            doc._wspos = NotImplemented  # pylint: disable=protected-access
 
             doc._wspos = self._wspos_driver(  # pylint: disable=protected-access
                 text=self.get_text(doc)
@@ -161,14 +170,18 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.text : :class:`TextParagraph <ckipnlp.container.text.TextParagraph>`
+            doc.text : :class:`~ckipnlp.container.text.TextParagraph`
                 The sentences.
 
         .. note::
 
             This routine modify **doc** inplace.
         """
+        if doc.text is NotImplemented:
+            raise RecursionError('Loop dependence detected!')
+
         if doc.text is None:
+            doc.text = NotImplemented
 
             if not self._sentence_segmenter.is_dummy:
                 doc.text = self._sentence_segmenter(
@@ -192,14 +205,18 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.ws : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+            doc.ws : :class:`~ckipnlp.container.seg.SegParagraph`
                 The word-segmented sentences.
 
         .. note::
 
             This routine modify **doc** inplace.
         """
+        if doc.ws is NotImplemented:
+            raise RecursionError('Loop dependence detected!')
+
         if doc.ws is None:
+            doc.ws = NotImplemented
 
             if not self._word_segmenter.is_dummy:
                 doc.ws = self._word_segmenter(
@@ -226,14 +243,18 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.pos : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+            doc.pos : :class:`~ckipnlp.container.seg.SegParagraph`
                 The part-of-speech sentences.
 
         .. note::
 
             This routine modify **doc** inplace.
         """
+        if doc.pos is NotImplemented:
+            raise RecursionError('Loop dependence detected!')
+
         if doc.pos is None:
+            doc.pos = NotImplemented
 
             if not self._pos_tagger.is_dummy:
                 doc.pos = self._pos_tagger(
@@ -260,14 +281,18 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.ner : :class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`
+            doc.ner : :class:`~ckipnlp.container.ner.NerParagraph`
                 The named-entity recognition results.
 
         .. note::
 
             This routine modify **doc** inplace.
         """
+        if doc.ner is NotImplemented:
+            raise RecursionError('Loop dependence detected!')
+
         if doc.ner is None:
+            doc.ner = NotImplemented
 
             if not self._ner_chunker.is_dummy:
                 doc.ner = self._ner_chunker(
@@ -292,14 +317,18 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.constituency : :class:`ParseParagraph <ckipnlp.container.parse.ParseParagraph>`
+            doc.constituency : :class:`~ckipnlp.container.parse.ParseParagraph`
                 The constituency parsing sentences.
 
         .. note::
 
             This routine modify **doc** inplace.
         """
+        if doc.constituency is NotImplemented:
+            raise RecursionError('Loop dependence detected!')
+
         if doc.constituency is None:
+            doc.constituency = NotImplemented
 
             if not self._constituency_parser.is_dummy:
                 doc.constituency = self._constituency_parser(

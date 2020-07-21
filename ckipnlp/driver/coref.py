@@ -49,7 +49,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlying objects.
+            Lazy initialize the driver.
 
     .. method:: __call__(*, constituency)
 
@@ -381,11 +381,3 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
     @staticmethod
     def _is_pronoun_word(node):
         return node.data.pos.startswith('Nh') or node.data.pos.startswith('N') and node.data.word in _PRONOUN_3RD_WORDS
-
-    @staticmethod
-    def _getitem_deep(obj, idx0, idx1):
-        return obj[idx0][idx1]
-
-    @staticmethod
-    def _setitem_deep(obj, idx0, idx1, value):
-        obj[idx0][idx1] = value

@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-The Official CKIP CoreNLP Toolkits.
+The Official CKIP CoreNLP Toolkit.
 """
 
 __author_name__ = 'Mu Yang'

@@ -1,19 +1,19 @@
 Containers
 ----------
 
-.. include:: _defn.rst
+.. include:: ../_defn.rst
 
-Major Containers
-^^^^^^^^^^^^^^^^
+Containers Prototypes
+^^^^^^^^^^^^^^^^^^^^^
 
-The container objects provides following methods:
+All the container objects can be convert from/to other formats:
 
--  :meth:`from_text`, :meth:`to_text` for plain-text format conversions;
--  :meth:`from_list`, :meth:`to_list` for list-like format conversions;
--  :meth:`from_dict`, :meth:`to_dict` for dictionary-like format conversions;
+-  :meth:`from_text`, :meth:`to_text` for plain-text conversions;
+-  :meth:`from_list`, :meth:`to_list` for list-like python object conversions;
+-  :meth:`from_dict`, :meth:`to_dict` for dictionary-like python object (key-value mappings) conversions;
 -  :meth:`from_json`, :meth:`to_json` for JSON format conversions (based-on dictionary-like format conversions).
 
-The following are the interfaces, where ``CONTAINER_CLASS`` refers to the container class.
+Here are the interfaces, where ``CONTAINER_CLASS`` refers to the container class.
 
 .. code-block:: python
 
@@ -29,7 +29,7 @@ The following are the interfaces, where ``CONTAINER_CLASS`` refers to the contai
    obj = CONTAINER_CLASS.from_json(json_str)
    json_str = obj.to_json()
 
-Note that not all container provide all above methods. Here is the table of implemented methods. Please refer the documentation of each container for detail formats.
+Note that not all container provide all above conversions. Here is the table of implemented methods. Please refer the documentation of each container for format details.
 
 ========================  ========================  ============  ========================
 Container                 Item                      from/to text  from/to list, dict, json
@@ -51,7 +51,7 @@ Container                 Item                      from/to text  from/to list, 
 WS with POS
 ^^^^^^^^^^^
 
-There are also conversion routines for word-segmentation and POS containers jointly. For example, |WsPosToken| provides routines for a word (|str|) with POS-tag (|str|):
+There are also conversion routines for word-segmentation and part-of-speech containers jointly. For example, |WsPosToken| provides routines for a word (|str|) with POS-tag (|str|):
 
 .. code-block:: python
 

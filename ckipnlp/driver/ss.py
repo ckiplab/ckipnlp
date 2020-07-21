@@ -29,7 +29,7 @@ class CkipSentenceSegmenter(_BaseDriver):  # pylint: disable=too-few-public-meth
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlying objects.
+            Lazy initialize the driver.
         delims : str
             The delimiters.
         keep_delims : bool

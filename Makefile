@@ -15,21 +15,14 @@ test: tox lint
 sdist bdist_wheel:
 	$(PY) setup.py $@
 
-tox:
-	NO_COV= $(TOX) -p -f py36,py37,py38
-
-tox-v:
-	$(TOX)
-
-tox-report:
-	- $(TOX) -p -f clean,py36,report -- --cov-append
-	python3.7 -m http.server --directory .test/htmlcov/ 3000
-
 lint:
 	$(LINT) ckipnlp
 
 check:
 	$(TWINE) check dist/*
+
+tox tox-v tox-report:
+	( cd test ; make $@ )
 
 doc:
 	( cd docs ; make clean ; make html )
@@ -40,5 +33,6 @@ upload: dist check
 
 clean:
 	- ( cd docs ; make clean )
+	- ( cd test ; make clean )
 	- $(PY) setup.py clean -a
-	- $(RM) build dist *.egg-info .tox .test .lookup __pycache__
+	- $(RM) build dist *.egg-info .lookup __pycache__

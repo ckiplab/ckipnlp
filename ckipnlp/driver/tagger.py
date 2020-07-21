@@ -33,7 +33,7 @@ class CkipTaggerWordSegmenter(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlying objects.
+            Lazy initialize the driver.
         disable_cuda : bool
             Disable GPU usage.
         recommend_lexicons: Mapping[str, float]
@@ -93,7 +93,7 @@ class CkipTaggerPosTagger(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlying objects.
+            Lazy initialize the driver.
         disable_cuda : bool
             Disable GPU usage.
 
@@ -140,7 +140,7 @@ class CkipTaggerNerChunker(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlying objects.
+            Lazy initialize the driver.
         disable_cuda : bool
             Disable GPU usage.
 

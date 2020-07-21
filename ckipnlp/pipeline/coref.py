@@ -30,13 +30,13 @@ class CkipCorefDocument(_Mapping):
 
     Attributes
     ----------
-        ws : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+        ws : :class:`~ckipnlp.container.seg.SegParagraph`
             The word-segmented sentences.
-        pos : :class:`SegParagraph <ckipnlp.container.seg.SegParagraph>`
+        pos : :class:`~ckipnlp.container.seg.SegParagraph`
             The part-of-speech sentences.
-        constituency : :class:`ParseParagraph <ckipnlp.container.constituency.ParseParagraph>`
+        constituency : :class:`~ckipnlp.container.constituency.ParseParagraph`
             The constituency sentences.
-        coref : :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
+        coref : :class:`~ckipnlp.container.coref.CorefParagraph`
             The coreference resolution results.
     """
 
@@ -64,22 +64,22 @@ class CkipCorefPipeline(_CkipPipeline):
 
     Arguments
     ---------
-        sentence_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        sentence_segmenter : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of sentence segmenter.
 
-        word_segmenter : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        word_segmenter : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of word segmenter.
 
-        pos_tagger : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        pos_tagger : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of part-of-speech tagger.
 
-        ner_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        ner_chunker : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of named-entity recognition chunker.
 
-        sentence_parser : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        sentence_parser : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of sentence parser.
 
-        coref_chunker : :class:`DriverFamily <ckipnlp.driver.base.DriverFamily>`
+        coref_chunker : :class:`~ckipnlp.driver.base.DriverFamily`
             The type of coreference resolution chunker.
 
     Other Parameters
@@ -112,7 +112,7 @@ class CkipCorefPipeline(_CkipPipeline):
 
         Arguments
         ---------
-            doc : :class:`CkipDocument <.core.CkipDocument>`
+            doc : :class:`~.core.CkipDocument`
                 The input document.
 
         Returns
@@ -134,14 +134,14 @@ class CkipCorefPipeline(_CkipPipeline):
 
         Arguments
         ---------
-            doc : :class:`CkipDocument <.core.CkipDocument>`
+            doc : :class:`~.core.CkipDocument`
                 The input document.
             corefdoc : :class:`CkipCorefDocument`
                 The input document for coreference.
 
         Returns
         -------
-            corefdoc.coref : :class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`
+            corefdoc.coref : :class:`~ckipnlp.container.coref.CorefParagraph`
                 The coreference results.
 
         .. note::

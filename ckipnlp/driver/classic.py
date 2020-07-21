@@ -35,7 +35,7 @@ class CkipClassicWordSegmenter(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlying objects.
+            Lazy initialize the driver.
         do_pos : bool
             Returns POS-tag or not
         lexicons: Iterable[Tuple[str, str]]
@@ -89,7 +89,7 @@ class CkipClassicConstituencyParser(_BaseDriver):
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlying objects.
+            Lazy initialize the driver.
 
     .. method:: __call__(*, ws, pos)
 
