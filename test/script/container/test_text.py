@@ -5,25 +5,22 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-import json
-import unittest
-
-from .base import _TestCaseBase
+from _base import _TestBase
 from ckipnlp.container.text import *
 
 ################################################################################################################################
 
-class TestTextParagraph(unittest.TestCase, _TestCaseBase):
+class TestTextParagraph(_TestBase):
 
     obj_class = TextParagraph
 
     text_in = [
         '中文字耶，啊哈哈哈。',
-        '「完蛋了！」，畢卡索他想',
+        '「完蛋了！」畢卡索他想',
     ]
 
-    def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 2)
+    def _assert_body(self, obj):
+        assert len(obj) == 2
 
-        self.assertEqual(obj[0], '中文字耶，啊哈哈哈。')
-        self.assertEqual(obj[1], '「完蛋了！」，畢卡索他想')
+        assert obj[0] == '中文字耶，啊哈哈哈。'
+        assert obj[1] == '「完蛋了！」畢卡索他想'

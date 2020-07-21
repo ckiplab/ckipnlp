@@ -5,16 +5,7 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-import os
-import unittest
-
-from ckipnlp.pipeline import *
-from ckipnlp.container import *
-
-################################################################################################################################
-
-import tensorflow
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+from _base import *
 
 ################################################################################################################################
 
@@ -40,14 +31,8 @@ coref = [
 
 ################################################################################################################################
 
-class TestCorefChunker(unittest.TestCase):
-
-    def test(self):
-        obj = CkipCorefPipeline()
-        doc = CkipDocument(raw=raw)
-        corefdoc = obj(doc)
-        list_out = corefdoc.coref.to_list()
-
-        self.assertEqual(len(list_out), len(coref))
-        for i in range(len(coref)):
-            self.assertSequenceEqual(list_out[i], coref[i])
+def test_coref_chunker():
+    obj = CkipCorefPipeline()
+    doc = CkipDocument(raw=raw)
+    corefdoc = obj(doc)
+    assert corefdoc.coref.to_list() == coref

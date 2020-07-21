@@ -18,15 +18,14 @@ from treelib import (
 from ckipnlp.container import (
     TextParagraph as _TextParagraph,
     SegParagraph as _SegParagraph,
-    ParsedParagraph as _ParsedParagraph,
-    ParsedTree as _ParsedTree,
+    ParseParagraph as _ParseParagraph,
     NerParagraph as _NerParagraph,
     CorefToken as _CorefToken,
     CorefSentence as _CorefSentence,
     CorefParagraph as _CorefParagraph,
 )
 
-from ckipnlp.data.parsed import (
+from ckipnlp.data.constituency import (
     APPOSITION_ROLES as _APPOSITION_ROLES,
 )
 
@@ -38,8 +37,6 @@ from ckipnlp.data.coref import (
 
 from .base import (
     BaseDriver as _BaseDriver,
-    DriverType as _DriverType,
-    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -50,31 +47,35 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
     Arguments
     ---------
         lazy : bool
-            Lazy initialize underlying objects.
+            Lazy initialize the driver.
 
-    .. method:: __call__(*, parsed)
+    .. method:: __call__(*, constituency)
 
         Apply coreference delectation.
 
         Parameters
-            **parsed** (:class:`ParsedParagraph <ckipnlp.container.parsed.ParsedParagraph>`) — The parsed-sentences.
+            **constituency** (:class:`~ckipnlp.container.parse.ParseParagraph`) — The constituency-parsing sentences.
 
         Returns
-            **coref** (:class:`CorefParagraph <ckipnlp.container.coref.CorefParagraph>`) — The coreference results.
+            **coref** (:class:`~ckipnlp.container.coref.CorefParagraph`) — The coreference results.
     """
 
-    driver_type = _DriverType.COREF_CHUNKER
-    driver_family = _DriverFamily.BUILTIN
+    driver_type = 'coref_chunker'
+    driver_family = 'default'
+    driver_inputs = None
 
-    def _call(self, *, parsed):
-        assert isinstance(parsed, _ParsedParagraph)
+    def _init(self):
+        pass
+
+    def _call(self, *, constituency):
+        assert isinstance(constituency, _ParseParagraph)
 
         # Convert to tree structure
         tree_list = [
             [
-                (_ParsedTree.from_text(clause.clause) if clause.clause else None, clause.delim,)
+                (clause.to_tree(), clause.delim,)
                 for clause in sent
-            ] for sent in parsed
+            ] for sent in constituency
         ]
 
         # Find coreference
@@ -85,8 +86,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         return coref
 
-    def _init(self):
-        pass
+    ########################################################################################################################
 
     @classmethod
     def _get_coref(cls, tree_list):
@@ -293,8 +293,8 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
-                the parser tree.
+            tree : :class:`~ckipnlp.container.util.parse_tree.ParseTree`
+                the constituency parsing tree.
 
         Yields
         ------
@@ -321,8 +321,8 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
-                the parser tree.
+            tree : :class:`~ckipnlp.container.util.parse_tree.ParseTree`
+                the constituency parsing tree.
 
         Yields
         ------
@@ -360,8 +360,8 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         Parameters
         ----------
-            tree : :class:`ParsedTree <ckipnlp.container.util.parsed_tree.ParsedTree>`
-                the parser tree.
+            tree : :class:`~ckipnlp.container.util.parse_tree.ParseTree`
+                the constituency parsing tree.
 
         Yields
         ------
@@ -382,11 +382,3 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
     @staticmethod
     def _is_pronoun_word(node):
         return node.data.pos.startswith('Nh') or node.data.pos.startswith('N') and node.data.word in _PRONOUN_3RD_WORDS
-
-    @staticmethod
-    def _getitem_deep(obj, idx0, idx1):
-        return obj[idx0][idx1]
-
-    @staticmethod
-    def _setitem_deep(obj, idx0, idx1, value):
-        obj[idx0][idx1] = value

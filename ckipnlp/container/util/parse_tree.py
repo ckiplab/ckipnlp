@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides tree containers for sentence parsing.
+This module provides tree containers for sentence parse.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -12,7 +12,6 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 from collections import (
     deque as _deque,
-    OrderedDict as _OrderedDict,
 )
 
 from typing import (
@@ -24,7 +23,7 @@ from treelib import (
     Node as _Node,
 )
 
-from ckipnlp.data.parsed import (
+from ckipnlp.data.constituency import (
     SUBJECT_ROLES as _SUBJECT_ROLES,
     NEUTRAL_ROLES as _NEUTRAL_ROLES,
 )
@@ -36,13 +35,13 @@ from ..base import (
 
 ################################################################################################################################
 
-class _ParsedNodeData(_NamedTuple):
+class _ParseNodeData(_NamedTuple):
     role: str = None
     pos: str = None
     word: str = None
 
-class ParsedNodeData(_BaseTuple, _ParsedNodeData):
-    """A parser node.
+class ParseNodeData(_BaseTuple, _ParseNodeData):
+    """A parse node.
 
     Attributes
     ----------
@@ -109,12 +108,12 @@ class ParsedNodeData(_BaseTuple, _ParsedNodeData):
 
 ################################################################################################################################
 
-class ParsedNode(_Base, _Node):
-    """A parser node for tree.
+class ParseNode(_Base, _Node):
+    """A parse node for tree.
 
     Attributes
     ----------
-        data : :class:`ParsedNodeData`
+        data : :class:`ParseNodeData`
 
     See Also
     --------
@@ -140,7 +139,7 @@ class ParsedNode(_Base, _Node):
                 }
     """
 
-    data_class = ParsedNodeData
+    data_class = ParseNodeData
 
     from_dict = NotImplemented
 
@@ -157,25 +156,25 @@ class ParsedNode(_Base, _Node):
         )
 
     def to_dict(self):
-        return _OrderedDict(id=self.identifier, data=self.data.to_dict())
+        return dict(id=self.identifier, data=self.data.to_dict())
 
 ################################################################################################################################
 
-class _ParsedRelation(_NamedTuple):
-    head: ParsedNode
-    tail: ParsedNode
-    relation: ParsedNode
+class _ParseRelation(_NamedTuple):
+    head: ParseNode
+    tail: ParseNode
+    relation: ParseNode
 
-class ParsedRelation(_Base, _ParsedRelation):
-    """A parser relation.
+class ParseRelation(_Base, _ParseRelation):
+    """A parse relation.
 
     Attributes
     ----------
-        head : :class:`ParsedNode`
+        head : :class:`ParseNode`
             the head node.
-        tail : :class:`ParsedNode`
+        tail : :class:`ParseNode`
             the tail node.
-        relation : :class:`ParsedNode`
+        relation : :class:`ParseNode`
             the relation node. (the semantic role of this node is the relation.)
 
     Notes
@@ -210,13 +209,16 @@ class ParsedRelation(_Base, _ParsedRelation):
     to_list = NotImplemented
 
     def __repr__(self):
-        ret = '{name}(head={head}, tail={tail}, relation={relation})' if self.head_first \
-         else '{name}(tail={tail}, head={head}, relation={relation})'
+        ret = '{name}(head=({head}, {head_id}), tail=({tail}, {tail_id}), relation=({rel}, {rel_id}))' if self.head_first \
+         else '{name}(tail=({tail}, {tail_id}), head=({head}, {head_id}), relation=({rel}, {rel_id}))'
         return ret.format(
             name=type(self).__name__,
-            head=(self.head.tag, self.head.identifier,),
-            tail=(self.tail.tag, self.tail.identifier,),
-            relation=(self.relation.data.role, self.relation.identifier,),
+            head=self.head.tag,
+            head_id=self.head.identifier,
+            tail=self.tail.tag,
+            tail_id=self.tail.identifier,
+            rel=self.relation.data.role,
+            rel_id=self.relation.identifier,
         )
 
     @property
@@ -224,12 +226,12 @@ class ParsedRelation(_Base, _ParsedRelation):
         return self.head.identifier <= self.tail.identifier
 
     def to_dict(self):
-        return _OrderedDict(head=self.head.to_dict(), tail=self.head.to_dict(), relation=self.relation.data.role)
+        return dict(head=self.head.to_dict(), tail=self.tail.to_dict(), relation=self.relation.data.role)
 
 ################################################################################################################################
 
-class ParsedTree(_Base, _Tree):
-    """A parsed tree.
+class ParseTree(_Base, _Tree):
+    """A parse tree.
 
     See Also
     --------
@@ -250,7 +252,7 @@ class ParsedTree(_Base, _Tree):
         Dict format
             Used for :meth:`from_dict` and :meth:`to_dict`.
             A dictionary such as ``{ 'id': 0, 'data': { ... }, 'children': [ ... ] }``,
-            where ``'data'`` is a dictionary with the same format as :meth:`ParsedNodeData.to_dict`,
+            where ``'data'`` is a dictionary with the same format as :meth:`ParseNodeData.to_dict`,
             and ``'children'`` is a list of dictionaries of subtrees with the same format as this tree.
 
             .. code-block:: python
@@ -301,13 +303,13 @@ class ParsedTree(_Base, _Tree):
 
     """
 
-    node_class = ParsedNode
+    node_class = ParseNode
 
     from_list = NotImplemented
     to_list = NotImplemented
 
     def __str__(self):
-        self.to_text()
+        return self.to_text()
 
     ########################################################################################################################
 
@@ -318,7 +320,10 @@ class ParsedTree(_Base, _Tree):
         Parameters
         ----------
             data : str
-                A parsed tree in text format (:class:`~ckipnlp.container.parsed.ParsedClause.clause`).
+                A parse tree in text format (:class:`ParseClause.clause <.parse.ParseClause>`).
+
+        .. seealso::
+            :meth:`ParseClause.to_tree() <.parse.ParseClause.to_tree>`.
         """
 
         tree = cls()
@@ -392,7 +397,7 @@ class ParsedTree(_Base, _Tree):
         Parameters
         ----------
             data : str
-                A parsed tree in dictionary format.
+                A parse tree in dictionary format.
         """
         tree = cls()
 
@@ -517,7 +522,7 @@ class ParsedTree(_Base, _Tree):
 
         Yields
         ------
-            :class:`ParsedNode`
+            :class:`ParseNode`
                 the children nodes with given role.
         """
         for child in self.children(node_id):
@@ -538,7 +543,7 @@ class ParsedTree(_Base, _Tree):
 
         Yields
         ------
-            :class:`ParsedNode`
+            :class:`ParseNode`
                 the head nodes.
         """
         if root_id is None:
@@ -594,7 +599,7 @@ class ParsedTree(_Base, _Tree):
 
         Yields
         ------
-            :class:`ParsedRelation`
+            :class:`ParseRelation`
                 the relations.
         """
         if root_id is None:
@@ -609,12 +614,12 @@ class ParsedTree(_Base, _Tree):
             for tail in children:
                 if tail.data.role != 'Head' and tail not in head_children:
                     if tail.is_leaf():
-                        yield ParsedRelation(  # pylint: disable=no-value-for-parameter
+                        yield ParseRelation(  # pylint: disable=no-value-for-parameter
                             head=head_node, tail=tail, relation=tail,
                         )
                     else:
                         for node in self.get_heads(tail.identifier, semantic=semantic):
-                            yield ParsedRelation(  # pylint: disable=no-value-for-parameter
+                            yield ParseRelation(  # pylint: disable=no-value-for-parameter
                                 head=head_node, tail=node, relation=tail,
                             )
 
@@ -636,7 +641,7 @@ class ParsedTree(_Base, _Tree):
 
         Yields
         ------
-            :class:`ParsedNode`
+            :class:`ParseNode`
                 the subject node.
 
         Notes

@@ -1,5 +1,5 @@
-CKIP CoreNLP Toolkits
----------------------
+CKIP CoreNLP Toolkit
+--------------------
 
 Features
 ^^^^^^^^
@@ -8,7 +8,7 @@ Features
 - Word Segmentation
 - Part-of-Speech Tagging
 - Named-Entity Recognition
-- Sentence Parsing
+- Constituency Parsing
 - Coreference Resolution
 
 Git
@@ -105,13 +105,13 @@ Driver                            Built-in  CkipTagger  CkipClassic
 Sentence Segmentation             ✔
 Word Segmentation†                          ✔           ✔
 Part-of-Speech Tagging†                     ✔           ✔
-Sentence Parsing                                        ✔
+Constituency Parsing                                        ✔
 Named-Entity Recognition                    ✔
 Coreference Resolution‡           ✔         ✔           ✔
 ================================  ========  ==========  ===========
 
 - † These drivers require only one of either backends.
-- ‡ Coreference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, sentence parsing, and named-entity recognition.
+- ‡ Coreference implementation does not require any backend, but requires results from word segmentation, part-of-speech tagging, constituency parsing, and named-entity recognition.
 
 Installation via Pip
 ^^^^^^^^^^^^^^^^^^^^
@@ -123,8 +123,7 @@ Installation via Pip
 Usage
 -----
 
-- See https://ckipnlp.readthedocs.io/en/latest/main/usage.html for Usage.
-- See https://ckipnlp.readthedocs.io/en/latest/_api/ckipnlp.html for API details.
+See https://ckipnlp.readthedocs.io/ for API details.
 
 License
 -------

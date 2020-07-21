@@ -28,7 +28,7 @@ class TextParagraph(_BaseList0):
 
                 [
                     '中文字耶，啊哈哈哈。',    # Sentence 1
-                    '「完蛋了！」，畢卡索他想', # Sentence 2
+                    '「完蛋了！」畢卡索他想', # Sentence 2
                 ]
     """
 

@@ -5,15 +5,12 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-import json
-import unittest
-
-from .base import _TestCaseBase
+from _base import _TestBase
 from ckipnlp.container.ner import *
 
 ################################################################################################################################
 
-class TestNerToken(unittest.TestCase, _TestCaseBase):
+class TestNerToken(_TestBase):
 
     obj_class = NerToken
 
@@ -23,22 +20,22 @@ class TestNerToken(unittest.TestCase, _TestCaseBase):
     dict_in = { 'word': '中文字', 'ner': 'LANGUAGE', 'idx': (0, 3), }
     tagger_in = ( 0, 3, 'LANGUAGE', '中文字', )
 
-    def _assertEqual(self, obj):
-        self.assertEqual(obj.word, '中文字')
-        self.assertEqual(obj.ner, 'LANGUAGE')
-        self.assertSequenceEqual(obj.idx, (0, 3))
+    def _assert_body(self, obj):
+        assert obj.word == '中文字'
+        assert obj.ner == 'LANGUAGE'
+        assert obj.idx, (0, 3)
 
     def test_io_tagger(self):
 
         obj = self.obj_class.from_tagger(self.tagger_in)
-        self._assertEqual(obj)
+        self._assert_body(obj)
         tagger_out = obj.to_tagger()
 
-        self.assertEqual(tagger_out, self.tagger_in)
+        assert tagger_out == self.tagger_in
 
 ################################################################################################################################
 
-class TestNerSentence(unittest.TestCase, _TestCaseBase):
+class TestNerSentence(_TestBase):
 
     obj_class = NerSentence
 
@@ -59,28 +56,28 @@ class TestNerSentence(unittest.TestCase, _TestCaseBase):
         ( 3, 5, 'ORG', '參議院', ),
     ]
 
-    def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 2)
+    def _assert_body(self, obj):
+        assert len(obj) == 2
 
-        self.assertEqual(obj[0].word, '美國')
-        self.assertEqual(obj[0].ner, 'GPE')
-        self.assertSequenceEqual(obj[0].idx, (0, 2))
+        assert obj[0].word == '美國'
+        assert obj[0].ner == 'GPE'
+        assert obj[0].idx, (0, 2)
 
-        self.assertEqual(obj[1].word, '參議院')
-        self.assertEqual(obj[1].ner, 'ORG')
-        self.assertSequenceEqual(obj[1].idx, (3, 5))
+        assert obj[1].word == '參議院'
+        assert obj[1].ner == 'ORG'
+        assert obj[1].idx, (3, 5)
 
     def test_io_tagger(self):
 
         obj = self.obj_class.from_tagger(self.tagger_in)
-        self._assertEqual(obj)
+        self._assert_body(obj)
         tagger_out = obj.to_tagger()
 
-        self.assertEqual(tagger_out, self.tagger_in)
+        assert tagger_out == self.tagger_in
 
 ################################################################################################################################
 
-class TestNerParagraph(unittest.TestCase, _TestCaseBase):
+class TestNerParagraph(_TestBase):
 
     obj_class = NerParagraph
 
@@ -118,23 +115,23 @@ class TestNerParagraph(unittest.TestCase, _TestCaseBase):
 
     def test_io_tagger(self):
         obj = self.obj_class.from_tagger(self.tagger_in)
-        self._assertEqual(obj)
+        self._assert_body(obj)
         tagger_out = obj.to_tagger()
 
-        self.assertEqual(tagger_out, self.tagger_in)
+        assert tagger_out == self.tagger_in
 
-    def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 2)
+    def _assert_body(self, obj):
+        assert len(obj) == 2
 
-        self.assertEqual(len(obj[0]), 1)
-        self.assertEqual(obj[0][0].word, '中文字')
-        self.assertEqual(obj[0][0].ner, 'LANGUAGE')
-        self.assertSequenceEqual(obj[0][0].idx, (0, 3))
+        assert len(obj[0]) == 1
+        assert obj[0][0].word == '中文字'
+        assert obj[0][0].ner == 'LANGUAGE'
+        assert obj[0][0].idx, (0, 3)
 
-        self.assertEqual(len(obj[1]), 2)
-        self.assertEqual(obj[1][0].word, '美國')
-        self.assertEqual(obj[1][0].ner, 'GPE')
-        self.assertSequenceEqual(obj[1][0].idx, (0, 2))
-        self.assertEqual(obj[1][1].word, '參議院')
-        self.assertEqual(obj[1][1].ner, 'ORG')
-        self.assertSequenceEqual(obj[1][1].idx, (3, 5))
+        assert len(obj[1]) == 2
+        assert obj[1][0].word == '美國'
+        assert obj[1][0].ner == 'GPE'
+        assert obj[1][0].idx, (0, 2)
+        assert obj[1][1].word == '參議院'
+        assert obj[1][1].ner == 'ORG'
+        assert obj[1][1].idx, (3, 5)

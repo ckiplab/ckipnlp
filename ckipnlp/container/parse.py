@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides containers for parsed sentences.
+This module provides containers for parse sentences.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -18,19 +18,23 @@ from .base import (
     BaseList as _BaseList,
 )
 
+from .util.parse_tree import (
+    ParseTree as _ParseTree,
+)
+
 ################################################################################################################################
 
-class _ParsedClause(_NamedTuple):
-    clause: str
-    delim: str
+class _ParseClause(_NamedTuple):
+    clause: str = None
+    delim: str = ''
 
-class ParsedClause(_BaseTuple, _ParsedClause):
-    """A parsed clause.
+class ParseClause(_BaseTuple, _ParseClause):
+    """A parse clause.
 
     Attributes
     ----------
         clause : str
-            the parsed clause.
+            the parse clause.
         delim : str
             the punctuations after this clause.
 
@@ -40,13 +44,20 @@ class ParsedClause(_BaseTuple, _ParsedClause):
 
     .. admonition:: Data Structure Examples
 
-        Text/List format
-            Used for :meth:`from_text`, :meth:`to_text`, :meth:`from_list`, and :meth:`to_list`.
+        Text format
+            Used for :meth:`to_text`.
+
+            .. code-block:: python
+
+                'S(Head:Nab:中文字|particle:Td:耶)' # delim are ignored
+
+        List format
+            Used for :meth:`from_list`, and :meth:`to_list`.
 
             .. code-block:: python
 
                 [
-                    'S(Head:Nab:中文字|particle:Td:耶)', # parsed clause
+                    'S(Head:Nab:中文字|particle:Td:耶)', # parse clause
                     '，',                               # punctuations
                 ]
 
@@ -56,27 +67,49 @@ class ParsedClause(_BaseTuple, _ParsedClause):
             .. code-block:: python
 
                 {
-                    'clause': 'S(Head:Nab:中文字|particle:Td:耶)', # parsed clause
+                    'clause': 'S(Head:Nab:中文字|particle:Td:耶)', # parse clause
                     'delim': '，',                                # punctuations
                 }
     """
 
-    @classmethod
-    def from_text(cls, data):
-        return cls.from_list(data)
+    from_text = NotImplemented
 
     def to_text(self):
-        return self.to_list()
+        return self.clause
+
+    def to_tree(self):
+        """Transform to tree format.
+
+        Returns
+        -------
+            :class:`~.util.parse_tree.ParseTree`
+                the tree format of this clause. (`None` if **clause** is `None`)
+
+        .. seealso::
+            :meth:`ParseTree.from_text() <.util.parse_tree.ParseTree.from_text>`.
+
+        """
+        return _ParseTree.from_text(self.clause) if self.clause else None
 
 ################################################################################################################################
 
-class ParsedSentence(_BaseList):
-    """A parsed sentence.
+class ParseSentence(_BaseList):
+    """A parse sentence.
 
     .. admonition:: Data Structure Examples
 
-        Text/List format
-            Used for :meth:`from_text`, :meth:`to_text`, :meth:`from_list`, and :meth:`to_list`.
+        Text format
+            Used for :meth:`to_text`.
+
+            .. code-block:: python
+
+                [ # delim are ignored
+                    'S(Head:Nab:中文字|particle:Td:耶)',                    # Clause 1
+                    '%(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈), # Clause 2
+                ]
+
+        List format
+            Used for :meth:`from_list`, and :meth:`to_list`.
 
             .. code-block:: python
 
@@ -109,15 +142,34 @@ class ParsedSentence(_BaseList):
 
     """
 
-    item_class = ParsedClause
+    from_text = NotImplemented
 
-class ParsedParagraph(_BaseList):
-    """A list of parsed sentence.
+    item_class = ParseClause
+
+class ParseParagraph(_BaseList):
+    """A list of parse sentence.
 
     .. admonition:: Data Structure Examples
 
-        Text/List format
-            Used for :meth:`from_text`, :meth:`to_text`, :meth:`from_list`, and :meth:`to_list`.
+        Text format
+            Used for :meth:`to_text`.
+
+            .. code-block:: python
+
+                [ # delim are ignored
+                    [ # Sentence 1
+                        'S(Head:Nab:中文字|particle:Td:耶)',
+                        '%(particle:I:啊|manner:Dh:哈|manner:Dh:哈|time:Dh:哈),
+                    ],
+                    [ # Sentence 2
+                        None,
+                        'VP(Head:VH11:完蛋|particle:Ta:了),
+                        'S(agent:NP(apposition:Nba:畢卡索|Head:Nhaa:他)|Head:VE2:想)',
+                    ],
+                ]
+
+        List format
+            Used for :meth:`from_list`, and :meth:`to_list`.
 
             .. code-block:: python
 
@@ -171,7 +223,7 @@ class ParsedParagraph(_BaseList):
                         },
                         {
                             'clause': 'VP(Head:VH11:完蛋|particle:Ta:了),
-                            'delim': '！」，',
+                            'delim': '！」',
                         },
                         {
                             'clause': 'S(agent:NP(apposition:Nba:畢卡索|Head:Nhaa:他)|Head:VE2:想)',
@@ -181,4 +233,6 @@ class ParsedParagraph(_BaseList):
                 ]
     """
 
-    item_class = ParsedSentence
+    from_text = NotImplemented
+
+    item_class = ParseSentence

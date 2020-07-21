@@ -1,5 +1,7 @@
 [MASTER]
 
+# Use pylint 2.2.3
+
 disable =
 	arguments-differ,
 	bad-continuation,

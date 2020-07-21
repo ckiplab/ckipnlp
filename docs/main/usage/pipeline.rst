@@ -1,12 +1,12 @@
 Pipelines
 ---------
 
-.. include:: _defn.rst
+.. include:: ../_defn.rst
 
-Core Pipeline
-^^^^^^^^^^^^^
+Kernel Pipeline
+^^^^^^^^^^^^^^^
 
-The |CkipPipeline| connect drivers of sentence segmentation, word segmentation, part-of-speech tagging, named-entity recognition, and sentence parsing.
+The |CkipPipeline| connect `drivers <usage/driver.html>`_ of sentence segmentation, word segmentation, part-of-speech tagging, named-entity recognition, and sentence parsing.
 
 The |CkipDocument| is the workspace of |CkipPipeline| with input/output data. Note that |CkipPipeline| will store the result into |CkipDocument| in-place.
 
@@ -37,9 +37,9 @@ The |CkipPipeline| will compute all necessary dependencies. For example, if one 
    pipeline.get_ner(doc)
    print(doc.ner)
 
-   # Sentence Parsing
-   pipeline.get_parsed(doc)
-   print(doc.parsed)
+   # Constituency Parsing
+   pipeline.get_constituency(doc)
+   print(doc.constituency)
 
    ################################################################
 
@@ -70,21 +70,3 @@ The |CkipCorefDocument| is the workspace of |CkipCorefPipeline| with input/outpu
    print(corefdoc.coref)
    for line in corefdoc.coref:
        print(line.to_text())
-
-Drivers
-^^^^^^^
-
-CkipNLP provides several alternative drivers for above two pipelines. Here are the list of the drivers:
-
-================================  ================================  ================================  ================================
-|DriverType|                      |DriverBUILTIN|                   |DriverTAGGER|                    |DriverCLASSIC|
-================================  ================================  ================================  ================================
-SENTENCE_SEGMENTER                |CkipSentenceSegmenter|
-WORD_SEGMENTER                                                      |CkipTaggerWordSegmenter|         |CkipClassicWordSegmenter|†
-POS_TAGGER                                                          |CkipTaggerPosTagger|             |CkipClassicWordSegmenter|†
-NER_CHUNKER                                                         |CkipTaggerNerChunker|
-SENTENCE_PARSER                                                                                       |CkipClassicSentenceParser|
-COREF_CHUNKER                     |CkipCorefChunker|
-================================  ================================  ================================  ================================
-
-† Not compatible with |CkipCorefPipeline|.

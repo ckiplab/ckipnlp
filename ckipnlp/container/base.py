@@ -36,7 +36,7 @@ class Base(metaclass=_ABCMeta):
         ----------
             data : str
         """
-        return NotImplemented
+        return NotImplemented  # pragma: no cover
 
     @_abstractmethod
     def to_text(self):
@@ -46,7 +46,7 @@ class Base(metaclass=_ABCMeta):
         -------
             str
         """
-        return NotImplemented
+        return NotImplemented  # pragma: no cover
 
     ########################################################################################################################
 
@@ -54,12 +54,12 @@ class Base(metaclass=_ABCMeta):
     @_abstractmethod
     def from_list(cls, data):
         """Construct an instance from python built-in containers."""
-        return NotImplemented
+        return NotImplemented  # pragma: no cover
 
     @_abstractmethod
     def to_list(self):
         """Transform to python built-in containers."""
-        return NotImplemented
+        return NotImplemented  # pragma: no cover
 
     ########################################################################################################################
 
@@ -67,12 +67,12 @@ class Base(metaclass=_ABCMeta):
     @_abstractmethod
     def from_dict(cls, data):
         """Construct an instance from python built-in containers."""
-        return NotImplemented
+        return NotImplemented  # pragma: no cover
 
     @_abstractmethod
     def to_dict(self):
         """Transform to python built-in containers."""
-        return NotImplemented
+        return NotImplemented  # pragma: no cover
 
     ########################################################################################################################
 
@@ -106,11 +106,11 @@ class BaseTuple(Base, metaclass=_ABCMeta):
     @classmethod
     @_abstractmethod
     def from_text(cls, data):
-        return NotImplemented
+        return NotImplemented  # pragma: no cover
 
     @_abstractmethod
     def to_text(self):
-        return NotImplemented
+        return NotImplemented  # pragma: no cover
 
     ########################################################################################################################
 
@@ -152,7 +152,7 @@ class BaseTuple(Base, metaclass=_ABCMeta):
         -------
             dict
         """
-        return self._asdict()  # pylint: disable=no-member
+        return dict(self._asdict())  # pylint: disable=no-member
 
 ################################################################################################################################
 

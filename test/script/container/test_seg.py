@@ -5,28 +5,25 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
-import json
-import unittest
-
-from .base import _TestCaseBase
+from _base import _TestBase
 from ckipnlp.container.seg import *
 
 ################################################################################################################################
 
-class TestSegSentence(unittest.TestCase, _TestCaseBase):
+class TestSegSentence(_TestBase):
 
     obj_class = SegSentence
 
     text_in = '中文字\u3000耶\u3000，\u3000啊\u3000哈\u3000哈哈\u3000。'
     list_in = [ '中文字', '耶', '，', '啊', '哈', '哈哈', '。', ]
 
-    def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 7)
-        self.assertSequenceEqual(obj, self.list_in)
+    def _assert_body(self, obj):
+        assert len(obj) == 7
+        assert obj == self.list_in
 
 ################################################################################################################################
 
-class TestSegParagraph(unittest.TestCase, _TestCaseBase):
+class TestSegParagraph(_TestBase):
 
     obj_class = SegParagraph
 
@@ -40,11 +37,11 @@ class TestSegParagraph(unittest.TestCase, _TestCaseBase):
         [ '「', '完蛋', '了', '！', '」', '，', '畢卡索', '他', '想', ],
     ]
 
-    def _assertEqual(self, obj):
-        self.assertEqual(len(obj), 2)
+    def _assert_body(self, obj):
+        assert len(obj) == 2
 
-        self.assertEqual(len(obj[0]), 7)
-        self.assertSequenceEqual(obj[0], self.list_in[0])
+        assert len(obj[0]) == 7
+        assert obj[0] == self.list_in[0]
 
-        self.assertEqual(len(obj[1]), 9)
-        self.assertSequenceEqual(obj[1], self.list_in[1])
+        assert len(obj[1]) == 9
+        assert obj[1] == self.list_in[1]

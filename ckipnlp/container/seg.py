@@ -43,13 +43,6 @@ class SegSentence(_BaseSentence0):
 
     item_class = str
 
-    @classmethod
-    def from_text(cls, data):
-        return cls(map(cls._item_from_text, data.split('\u3000')))
-
-    def to_text(self):
-        return '\u3000'.join(map(self._item_to_text, self))
-
 class SegParagraph(_BaseList):
     """A list of word-segmented sentences.
 

@@ -14,31 +14,9 @@ from abc import (
     abstractmethod as _abstractmethod,
 )
 
-from enum import (
-    IntEnum as _IntEnum,
-    auto as _enum_auto,
-)
-
 from ckipnlp.util.logger import (
     get_logger as _get_logger,
 )
-
-################################################################################################################################
-
-class DriverType(_IntEnum):
-    """The enumeration of driver types."""
-    SENTENCE_SEGMENTER = _enum_auto()  #: Sentence segmentation
-    WORD_SEGMENTER = _enum_auto()      #: Word segmentation
-    POS_TAGGER = _enum_auto()          #: Part-of-speech tagging
-    NER_CHUNKER = _enum_auto()         #: Named-entity recognition
-    SENTENCE_PARSER = _enum_auto()     #: Sentence parsing
-    COREF_CHUNKER = _enum_auto()       #: Coreference delectation
-
-class DriverFamily(_IntEnum):
-    """The enumeration of driver backend kinds."""
-    BUILTIN = _enum_auto()  #: Built-in Implementation
-    TAGGER = _enum_auto()   #: CkipTagger Backend
-    CLASSIC = _enum_auto()  #: CkipClassic Backend
 
 ################################################################################################################################
 
@@ -52,12 +30,9 @@ class DriverRegister:
         if driver_family is None:
             return DummyDriver
 
-        assert driver_type is None or isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
-        assert driver_family is None or isinstance(driver_family, DriverFamily), f'{driver_family} is not a DriverFamily'
-
         driver = DriverRegister._DRIVERS.get((driver_type, driver_family,))
         if not driver:
-            raise KeyError(f'{driver_type.name} is not implemented for type {driver_family.name}')
+            raise KeyError(f'{driver_type} is not implemented for type {driver_family}')
         if not driver.is_dummy:
             _get_logger().debug(f'Use {driver.__name__} ...')
 
@@ -99,12 +74,21 @@ class BaseDriver(metaclass=_ABCMeta):
         return NotImplemented
 
     @_abstractmethod
+    def driver_inputs(self):  # pylint: disable=missing-docstring
+        return NotImplemented
+
+    @_abstractmethod
     def _init(self):
         return NotImplemented
 
     @_abstractmethod
     def _call(self):
         return NotImplemented
+
+    def _call_from_pipeline(self, pipeline, doc):
+        return self.__call__(**{
+            key: pipeline._get(key, doc) for key in self.driver_inputs  # pylint: disable=protected-access
+        })
 
     ########################################################################################################################
 
@@ -113,9 +97,6 @@ class BaseDriver(metaclass=_ABCMeta):
 
         driver_type = cls.driver_type
         driver_family = cls.driver_family
-
-        assert driver_type is None or isinstance(driver_type, DriverType), f'{driver_type} is not a DriverType'
-        assert driver_family is None or isinstance(driver_family, DriverFamily), f'{driver_family} is not a DriverFamily'
 
         key = (driver_type, driver_family,)
         assert key not in DriverRegister._DRIVERS, f'{key} already registered!'  # pylint: disable=protected-access
@@ -128,6 +109,7 @@ class DummyDriver(BaseDriver):
 
     driver_type = None
     driver_family = None
+    driver_inputs = None
     is_dummy = True
 
     def __init__(self, *, lazy=False):
