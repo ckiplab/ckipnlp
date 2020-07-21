@@ -8,7 +8,7 @@ __license__ = 'CC BY-NC-SA 4.0'
 from base import *
 
 def test_classic_word_segmenter():
-    obj = CkipPipeline(word_segmenter=DriverFamily.CLASSIC)
+    obj = CkipPipeline(word_segmenter='classic')
     doc = CkipDocument(text=TextParagraph.from_list(text))
     obj.get_ws(doc)
     assert doc.ws.to_list() == [

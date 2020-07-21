@@ -11,12 +11,6 @@
 
 .. Driver
 
-.. |DriverType| replace:: :class:`~ckipnlp.driver.base.DriverType`
-.. |DriverFamily| replace:: :attr:`~ckipnlp.driver.base.DriverFamily`
-.. |DriverBUILTIN| replace:: :attr:`DriverFamily.BUILTIN <ckipnlp.driver.base.DriverFamily.BUILTIN>`
-.. |DriverTAGGER| replace:: :attr:`DriverFamily.TAGGER <ckipnlp.driver.base.DriverFamily.TAGGER>`
-.. |DriverCLASSIC| replace:: :attr:`DriverFamily.CLASSIC <ckipnlp.driver.base.DriverFamily.CLASSIC>`
-
 .. |CkipClassicWordSegmenter| replace:: :class:`~ckipnlp.driver.classic.CkipClassicWordSegmenter`
 .. |CkipClassicConstituencyParser| replace:: :class:`~ckipnlp.driver.classic.CkipClassicConstituencyParser`
 

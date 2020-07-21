@@ -21,8 +21,6 @@ from ckipnlp.util.data import (
 
 from .base import (
     BaseDriver as _BaseDriver,
-    DriverType as _DriverType,
-    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -59,8 +57,9 @@ class CkipTaggerWordSegmenter(_BaseDriver):
             **ws** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The word-segmented sentences.
     """
 
-    driver_type = _DriverType.WORD_SEGMENTER
-    driver_family = _DriverFamily.TAGGER
+    driver_type = 'word_segmenter'
+    driver_family = 'tagger'
+    driver_inputs = ('text',)
 
     def __init__(self, *, lazy=False, disable_cuda=True, recommend_lexicons={}, coerce_lexicons={}, **opts):
         super().__init__(lazy=lazy)
@@ -86,6 +85,8 @@ class CkipTaggerWordSegmenter(_BaseDriver):
         ws = _SegParagraph.from_list(ws_list)
 
         return ws
+
+################################################################################################################################
 
 class CkipTaggerPosTagger(_BaseDriver):
     """The CKIP part-of-speech tagging driver with CkipTagger backend.
@@ -114,8 +115,9 @@ class CkipTaggerPosTagger(_BaseDriver):
             **pos** (:class:`TextParagraph <ckipnlp.container.text.TextParagraph>`) — The part-of-speech sentences.
     """
 
-    driver_type = _DriverType.POS_TAGGER
-    driver_family = _DriverFamily.TAGGER
+    driver_type = 'pos_tagger'
+    driver_family = 'tagger'
+    driver_inputs = ('ws',)
 
     def __init__(self, *, lazy=False, disable_cuda=True, **opts):
         super().__init__(lazy=lazy)
@@ -133,6 +135,8 @@ class CkipTaggerPosTagger(_BaseDriver):
         pos = _SegParagraph.from_list(pos_list)
 
         return pos
+
+################################################################################################################################
 
 class CkipTaggerNerChunker(_BaseDriver):
     """The CKIP named-entity recognition driver with CkipTagger backend.
@@ -162,8 +166,9 @@ class CkipTaggerNerChunker(_BaseDriver):
             **ner** (:class:`NerParagraph <ckipnlp.container.ner.NerParagraph>`) — The named-entity recognition results.
     """
 
-    driver_type = _DriverType.NER_CHUNKER
-    driver_family = _DriverFamily.TAGGER
+    driver_type = 'ner_tagger'
+    driver_family = 'tagger'
+    driver_inputs = ('ws', 'pos',)
 
     def __init__(self, *, lazy=False, disable_cuda=True, **opts):
         super().__init__(lazy=lazy)

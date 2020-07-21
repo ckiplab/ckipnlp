@@ -14,8 +14,6 @@ from collections.abc import (
 )
 
 from ckipnlp.driver.base import (
-    DriverType as _DriverType,
-    DriverFamily as _DriverFamily,
     DriverRegister as _DriverRegister,
 )
 
@@ -64,22 +62,22 @@ class CkipCorefPipeline(_CkipPipeline):
 
     Arguments
     ---------
-        sentence_segmenter : :class:`~ckipnlp.driver.base.DriverFamily`
+        sentence_segmenter : str
             The type of sentence segmenter.
 
-        word_segmenter : :class:`~ckipnlp.driver.base.DriverFamily`
+        word_segmenter : str
             The type of word segmenter.
 
-        pos_tagger : :class:`~ckipnlp.driver.base.DriverFamily`
+        pos_tagger : str
             The type of part-of-speech tagger.
 
-        ner_chunker : :class:`~ckipnlp.driver.base.DriverFamily`
+        ner_chunker : str
             The type of named-entity recognition chunker.
 
-        sentence_parser : :class:`~ckipnlp.driver.base.DriverFamily`
+        sentence_parser : str
             The type of sentence parser.
 
-        coref_chunker : :class:`~ckipnlp.driver.base.DriverFamily`
+        coref_chunker : str
             The type of coreference resolution chunker.
 
     Other Parameters
@@ -92,7 +90,7 @@ class CkipCorefPipeline(_CkipPipeline):
     """
 
     def __init__(self, *,
-        coref_chunker=_DriverFamily.BUILTIN,
+        coref_chunker='default',
         lazy=True,
         opts={},
         **kwargs,
@@ -103,7 +101,7 @@ class CkipCorefPipeline(_CkipPipeline):
         if coref_chunker:
             assert self._wspos_driver.is_dummy, 'Coreference pipeline is not compatible with CkipClassic word segmenter!'
 
-        self._coref_chunker = _DriverRegister.get(_DriverType.COREF_CHUNKER, coref_chunker)(
+        self._coref_chunker = _DriverRegister.get('coref_chunker', coref_chunker)(
             lazy=lazy, **opts.get('coref_chunker', {}),
         )
 

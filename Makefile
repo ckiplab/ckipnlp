@@ -35,4 +35,4 @@ clean:
 	- ( cd docs ; make clean )
 	- ( cd test ; make clean )
 	- $(PY) setup.py clean -a
-	- $(RM) build dist *.egg-info .lookup __pycache__
+	- $(RM) build dist *.egg-info __pycache__

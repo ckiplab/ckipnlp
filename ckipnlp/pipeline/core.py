@@ -14,8 +14,6 @@ from collections.abc import (
 )
 
 from ckipnlp.driver.base import (
-    DriverType as _DriverType,
-    DriverFamily as _DriverFamily,
     DriverRegister as _DriverRegister,
 )
 
@@ -68,19 +66,19 @@ class CkipPipeline:
 
     Arguments
     ---------
-        sentence_segmenter : :class:`~ckipnlp.driver.base.DriverFamily`
+        sentence_segmenter : str
             The type of sentence segmenter.
 
-        word_segmenter : :class:`~ckipnlp.driver.base.DriverFamily`
+        word_segmenter : str
             The type of word segmenter.
 
-        pos_tagger : :class:`~ckipnlp.driver.base.DriverFamily`
+        pos_tagger : str
             The type of part-of-speech tagger.
 
-        ner_chunker : :class:`~ckipnlp.driver.base.DriverFamily`
+        ner_chunker : str
             The type of named-entity recognition chunker.
 
-        sentence_parser : :class:`~ckipnlp.driver.base.DriverFamily`
+        sentence_parser : str
             The type of sentence parser.
 
     Other Parameters
@@ -93,70 +91,89 @@ class CkipPipeline:
     """
 
     def __init__(self, *,
-            sentence_segmenter=_DriverFamily.BUILTIN,
-            word_segmenter=_DriverFamily.TAGGER,
-            pos_tagger=_DriverFamily.TAGGER,
-            sentence_parser=_DriverFamily.CLASSIC,
-            ner_chunker=_DriverFamily.TAGGER,
+            sentence_segmenter='default',
+            word_segmenter='tagger',
+            pos_tagger='tagger',
+            sentence_parser='classic',
+            ner_chunker='tagger',
             lazy=True,
             opts={},
         ):
 
-        # WS & POS
-        if word_segmenter == _DriverFamily.CLASSIC and pos_tagger == _DriverFamily.CLASSIC:
-            self._wspos_driver = _DriverRegister.get(_DriverType.WORD_SEGMENTER, _DriverFamily.CLASSIC)(
-                do_pos=True, lazy=lazy, **opts.get('word_segmenter', {}), **opts.get('pos_tagger', {}),
-            )
-            word_segmenter = None
-            pos_tagger = None
-        else:
-            self._wspos_driver = _DriverRegister.get(None, None)(
-                lazy=lazy, **opts.get('word_segmenter', {}),
-            )
+        if word_segmenter == '_classic':
+            word_segmenter = 'classic'
+        if pos_tagger == '_classic':
+            pos_tagger = 'classic'
 
-        self._sentence_segmenter = _DriverRegister.get(_DriverType.SENTENCE_SEGMENTER, sentence_segmenter)(
+        # WS & POS
+        if pos_tagger == 'classic':
+            assert word_segmenter == 'classic', 'CkipClassicPosTagger must be used with CkipClassicWordSegmenter together!'
+            self._wspos_driver = _DriverRegister.get('_wspos', '_classic')(
+                lazy=lazy, **opts.get('word_segmenter', {}), **opts.get('pos_tagger', {}),
+            )
+            word_segmenter = '_classic'
+            pos_tagger = '_classic'
+        else:
+            self._wspos_driver = _DriverRegister.get(None, None)()
+
+        self._sentence_segmenter = _DriverRegister.get('sentence_segmenter', sentence_segmenter)(
             lazy=lazy, **opts.get('sentence_segmenter', {}),
         )
-        self._word_segmenter = _DriverRegister.get(_DriverType.WORD_SEGMENTER, word_segmenter)(
+        self._word_segmenter = _DriverRegister.get('word_segmenter', word_segmenter)(
             lazy=lazy, **opts.get('word_segmenter', {}),
         )
-        self._pos_tagger = _DriverRegister.get(_DriverType.POS_TAGGER, pos_tagger)(
+        self._pos_tagger = _DriverRegister.get('pos_tagger', pos_tagger)(
             lazy=lazy, **opts.get('pos_tagger', {}),
         )
-        self._constituency_parser = _DriverRegister.get(_DriverType.CONSTITUNCY_PARSER, sentence_parser)(
+        self._constituency_parser = _DriverRegister.get('constituncy_parser', sentence_parser)(
             lazy=lazy, **opts.get('sentence_parser', {}),
         )
-        self._ner_chunker = _DriverRegister.get(_DriverType.NER_CHUNKER, ner_chunker)(
+        self._ner_chunker = _DriverRegister.get('ner_tagger', ner_chunker)(
             lazy=lazy, **opts.get('ner_chunker', {}),
         )
 
     ########################################################################################################################
 
-    @staticmethod
-    def _get_raw(doc):
-        if doc.raw is NotImplemented:
+    def _get(self, key, doc):
+        driver, name = {
+            'raw': (
+                None, None,
+            ),
+            '_wspos': (
+                self._wspos_driver, 'classic word segmentation',
+            ),
+            'text': (
+                self._sentence_segmenter, 'sentence segmentation',
+            ),
+            'ws': (
+                self._word_segmenter, 'word segmentation',
+            ),
+            'pos': (
+                self._pos_tagger, 'part-of-speech tagging',
+            ),
+            'constituency': (
+                self._constituency_parser, 'constituency parsing',
+            ),
+            'ner': (
+                self._ner_chunker, 'named-entity recognition',
+            ),
+        }[key]
+
+        if doc[key] is NotImplemented:
             raise RecursionError('Loop dependence detected!')
 
-        if doc.raw is None:
-            doc.raw = NotImplemented
-            raise AttributeError('No raw text!')
+        if doc[key] is None:
+            setattr(doc, key, NotImplemented)
 
-        return doc.raw
+            if key == 'raw':
+                raise AttributeError('No raw text!')
+            elif not driver.is_dummy:
+                ret = driver._call_from_pipeline(self, doc)  # pylint: disable=protected-access
+                setattr(doc, key, ret)
+            else:
+                raise AttributeError(f'No {name} driver / no {name} as input!')
 
-    ########################################################################################################################
-
-    def _get_wspos(self, doc):
-        if doc._wspos is NotImplemented:  # pylint: disable=protected-access
-            raise RecursionError('Loop dependence detected!')
-
-        if doc._wspos is None:  # pylint: disable=protected-access
-            doc._wspos = NotImplemented  # pylint: disable=protected-access
-
-            doc._wspos = self._wspos_driver(  # pylint: disable=protected-access
-                text=self.get_text(doc)
-            )
-
-        return doc._wspos  # pylint: disable=protected-access
+        return doc[key]
 
     ########################################################################################################################
 
@@ -177,21 +194,7 @@ class CkipPipeline:
 
             This routine modify **doc** inplace.
         """
-        if doc.text is NotImplemented:
-            raise RecursionError('Loop dependence detected!')
-
-        if doc.text is None:
-            doc.text = NotImplemented
-
-            if not self._sentence_segmenter.is_dummy:
-                doc.text = self._sentence_segmenter(
-                    raw=self._get_raw(doc)
-                )
-
-            else:
-                raise AttributeError('No sentence segmentation driver / No valid text input!')
-
-        return doc.text
+        return self._get('text', doc)
 
     ########################################################################################################################
 
@@ -212,24 +215,7 @@ class CkipPipeline:
 
             This routine modify **doc** inplace.
         """
-        if doc.ws is NotImplemented:
-            raise RecursionError('Loop dependence detected!')
-
-        if doc.ws is None:
-            doc.ws = NotImplemented
-
-            if not self._word_segmenter.is_dummy:
-                doc.ws = self._word_segmenter(
-                    text=self.get_text(doc)
-                )
-
-            elif not self._wspos_driver.is_dummy:
-                doc.ws, _ = self._get_wspos(doc)
-
-            else:
-                raise AttributeError('No word segmentation driver / No valid word segmentation input!')
-
-        return doc.ws
+        return self._get('ws', doc)
 
     ########################################################################################################################
 
@@ -250,24 +236,7 @@ class CkipPipeline:
 
             This routine modify **doc** inplace.
         """
-        if doc.pos is NotImplemented:
-            raise RecursionError('Loop dependence detected!')
-
-        if doc.pos is None:
-            doc.pos = NotImplemented
-
-            if not self._pos_tagger.is_dummy:
-                doc.pos = self._pos_tagger(
-                    ws=self.get_ws(doc)
-                )
-
-            elif not self._wspos_driver.is_dummy:
-                _, doc.pos = self._get_wspos(doc)
-
-            else:
-                raise AttributeError('No part-of-speech tagging driver / No valid part-of-speech tagging input!')
-
-        return doc.pos
+        return self._get('pos', doc)
 
     ########################################################################################################################
 
@@ -288,22 +257,7 @@ class CkipPipeline:
 
             This routine modify **doc** inplace.
         """
-        if doc.ner is NotImplemented:
-            raise RecursionError('Loop dependence detected!')
-
-        if doc.ner is None:
-            doc.ner = NotImplemented
-
-            if not self._ner_chunker.is_dummy:
-                doc.ner = self._ner_chunker(
-                    ws=self.get_ws(doc),
-                    pos=self.get_pos(doc),
-                )
-
-            else:
-                raise AttributeError('No named-entity recognition driver / No valid named-entity recognition input!')
-
-        return doc.ner
+        return self._get('ner', doc)
 
     ########################################################################################################################
 
@@ -324,19 +278,4 @@ class CkipPipeline:
 
             This routine modify **doc** inplace.
         """
-        if doc.constituency is NotImplemented:
-            raise RecursionError('Loop dependence detected!')
-
-        if doc.constituency is None:
-            doc.constituency = NotImplemented
-
-            if not self._constituency_parser.is_dummy:
-                doc.constituency = self._constituency_parser(
-                    ws=self.get_ws(doc),
-                    pos=self.get_pos(doc),
-                )
-
-            else:
-                raise AttributeError('No constituency parsing driver / No valid constituency parsing input!')
-
-        return doc.constituency
+        return self._get('constituency', doc)

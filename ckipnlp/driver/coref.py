@@ -37,8 +37,6 @@ from ckipnlp.data.coref import (
 
 from .base import (
     BaseDriver as _BaseDriver,
-    DriverType as _DriverType,
-    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -62,8 +60,12 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
             **coref** (:class:`~ckipnlp.container.coref.CorefParagraph`) — The coreference results.
     """
 
-    driver_type = _DriverType.COREF_CHUNKER
-    driver_family = _DriverFamily.BUILTIN
+    driver_type = 'coref_chunker'
+    driver_family = 'default'
+    driver_inputs = None
+
+    def _init(self):
+        pass
 
     def _call(self, *, constituency):
         assert isinstance(constituency, _ParseParagraph)
@@ -84,8 +86,7 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
 
         return coref
 
-    def _init(self):
-        pass
+    ########################################################################################################################
 
     @classmethod
     def _get_coref(cls, tree_list):

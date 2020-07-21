@@ -23,8 +23,6 @@ from ckipnlp.container import (
 
 from .base import (
     BaseDriver as _BaseDriver,
-    DriverType as _DriverType,
-    DriverFamily as _DriverFamily,
 )
 
 ################################################################################################################################
@@ -54,8 +52,9 @@ class CkipClassicWordSegmenter(_BaseDriver):
               (returns if **do_pos** is set.)
     """
 
-    driver_type = _DriverType.WORD_SEGMENTER
-    driver_family = _DriverFamily.CLASSIC
+    driver_type = None
+    driver_family = 'classic'
+    driver_inputs = None
 
     _count = 0
 
@@ -83,6 +82,54 @@ class CkipClassicWordSegmenter(_BaseDriver):
 
         return (ws, pos,) if self._do_pos else ws
 
+class _CkipClassicWordSegmenter(CkipClassicWordSegmenter):
+    """The dummy class for :class:`CkipClassicWordSegmenter` for pipeline."""
+
+    driver_type = 'word_segmenter'
+    driver_family = 'classic'
+    driver_inputs = ('text',)
+
+    def __init__(self, *, lazy=False, lexicons=None):
+        super().__init__(lazy=lazy, do_pos=False, lexicons=lexicons)
+
+class _CkipClassic2WsPos(CkipClassicWordSegmenter):
+    """The dummy class for :class:`CkipClassicWordSegmenter` for pipeline."""
+
+    driver_type = '_wspos'
+    driver_family = '_classic'
+    driver_inputs = ('text',)
+
+    def __init__(self, *, lazy=False, lexicons=None):
+        super().__init__(lazy=lazy, do_pos=True, lexicons=lexicons)
+
+class _CkipClassic2WordSegmenter(_BaseDriver):
+    """The dummy class for :class:`CkipClassicWordSegmenter` for pipeline."""
+
+    driver_type = 'word_segmenter'
+    driver_family = '_classic'
+    driver_inputs = ('_wspos',)
+
+    def _init(self):
+        pass
+
+    def _call(self, *, _wspos):
+        return _wspos[0]
+
+class _CkipClassic2PosTagger(_BaseDriver):
+    """The dummy class for :class:`CkipClassicWordSegmenter` for pipeline."""
+
+    driver_type = 'pos_tagger'
+    driver_family = '_classic'
+    driver_inputs = ('_wspos',)
+
+    def _init(self):
+        pass
+
+    def _call(self, *, _wspos):
+        return _wspos[1]
+
+################################################################################################################################
+
 class CkipClassicConstituencyParser(_BaseDriver):
     """The CKIP sentence parsing driver with CkipClassic backend.
 
@@ -103,8 +150,9 @@ class CkipClassicConstituencyParser(_BaseDriver):
             **constituency** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
     """
 
-    driver_type = _DriverType.CONSTITUNCY_PARSER
-    driver_family = _DriverFamily.CLASSIC
+    driver_type = 'constituncy_parser'
+    driver_family = 'classic'
+    driver_inputs = ('ws', 'pos',)
 
     _count = 0
 
