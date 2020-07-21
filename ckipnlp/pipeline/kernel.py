@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides core CKIPNLP pipeline.
+This module provides kernel CKIPNLP pipeline.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -20,7 +20,7 @@ from ckipnlp.driver.base import (
 ###############################################################################################################################)
 
 class CkipDocument(_Mapping):
-    """The core document.
+    """The kernel document.
 
     Attributes
     ----------

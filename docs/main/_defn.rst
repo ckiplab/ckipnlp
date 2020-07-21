@@ -4,8 +4,8 @@
 
 .. Pipeline
 
-.. |CkipPipeline| replace:: :class:`~ckipnlp.pipeline.core.CkipPipeline`
-.. |CkipDocument| replace:: :class:`~ckipnlp.pipeline.core.CkipDocument`
+.. |CkipPipeline| replace:: :class:`~ckipnlp.pipeline.kernel.CkipPipeline`
+.. |CkipDocument| replace:: :class:`~ckipnlp.pipeline.kernel.CkipDocument`
 .. |CkipCorefPipeline| replace:: :class:`~ckipnlp.pipeline.coref.CkipCorefPipeline`
 .. |CkipCorefDocument| replace:: :class:`~ckipnlp.pipeline.coref.CkipCorefDocument`
 

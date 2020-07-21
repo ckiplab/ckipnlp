@@ -7,7 +7,7 @@ __license__ = 'CC BY-NC-SA 4.0'
 
 import pytest
 
-from base import _TestBase
+from _base import _TestBase
 from ckipnlp.container.util.wspos import *
 from ckipnlp.container.seg import *
 

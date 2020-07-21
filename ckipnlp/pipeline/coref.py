@@ -17,7 +17,7 @@ from ckipnlp.driver.base import (
     DriverRegister as _DriverRegister,
 )
 
-from .core import (
+from .kernel import (
     CkipPipeline as _CkipPipeline,
 )
 
@@ -110,7 +110,7 @@ class CkipCorefPipeline(_CkipPipeline):
 
         Arguments
         ---------
-            doc : :class:`~.core.CkipDocument`
+            doc : :class:`~.kernel.CkipDocument`
                 The input document.
 
         Returns
@@ -132,7 +132,7 @@ class CkipCorefPipeline(_CkipPipeline):
 
         Arguments
         ---------
-            doc : :class:`~.core.CkipDocument`
+            doc : :class:`~.kernel.CkipDocument`
                 The input document.
             corefdoc : :class:`CkipCorefDocument`
                 The input document for coreference.
