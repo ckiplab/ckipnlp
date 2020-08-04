@@ -78,7 +78,7 @@ class CkipPipeline:
         ner_chunker : str
             The type of named-entity recognition chunker.
 
-        sentence_parser : str
+        constituency_parser : str
             The type of sentence parser.
 
     Other Parameters
@@ -94,7 +94,7 @@ class CkipPipeline:
             sentence_segmenter='default',
             word_segmenter='tagger',
             pos_tagger='tagger',
-            sentence_parser='classic',
+            constituency_parser='classic',
             ner_chunker='tagger',
             lazy=True,
             opts={},
@@ -125,8 +125,8 @@ class CkipPipeline:
         self._pos_tagger = _DriverRegister.get('pos_tagger', pos_tagger)(
             lazy=lazy, **opts.get('pos_tagger', {}),
         )
-        self._constituency_parser = _DriverRegister.get('constituncy_parser', sentence_parser)(
-            lazy=lazy, **opts.get('sentence_parser', {}),
+        self._constituency_parser = _DriverRegister.get('constituency_parser', constituency_parser)(
+            lazy=lazy, **opts.get('constituency_parser', {}),
         )
         self._ner_chunker = _DriverRegister.get('ner_tagger', ner_chunker)(
             lazy=lazy, **opts.get('ner_chunker', {}),

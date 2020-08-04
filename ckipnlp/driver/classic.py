@@ -150,7 +150,7 @@ class CkipClassicConstituencyParser(_BaseDriver):
             **constituency** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
     """
 
-    driver_type = 'constituncy_parser'
+    driver_type = 'constituency_parser'
     driver_family = 'classic'
     driver_inputs = ('ws', 'pos',)
 

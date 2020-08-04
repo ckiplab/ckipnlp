@@ -74,7 +74,7 @@ class CkipCorefPipeline(_CkipPipeline):
         ner_chunker : str
             The type of named-entity recognition chunker.
 
-        sentence_parser : str
+        constituency_parser : str
             The type of sentence parser.
 
         coref_chunker : str
