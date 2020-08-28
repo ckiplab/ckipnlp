@@ -23,7 +23,7 @@ from treelib import (
     Node as _Node,
 )
 
-from ckipnlp.data.constituency import (
+from ckipnlp.data.conparse import (
     SUBJECT_ROLES as _SUBJECT_ROLES,
     NEUTRAL_ROLES as _NEUTRAL_ROLES,
 )

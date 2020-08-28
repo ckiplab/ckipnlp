@@ -32,18 +32,18 @@ class CkipCorefDocument(_Mapping):
             The word-segmented sentences.
         pos : :class:`~ckipnlp.container.seg.SegParagraph`
             The part-of-speech sentences.
-        constituency : :class:`~ckipnlp.container.constituency.ParseParagraph`
+        conparse : :class:`~ckipnlp.container.parse.ParseParagraph`
             The constituency sentences.
         coref : :class:`~ckipnlp.container.coref.CorefParagraph`
             The coreference resolution results.
     """
 
-    __keys = ('ws', 'pos', 'constituency', 'coref',)
+    __keys = ('ws', 'pos', 'conparse', 'coref',)
 
-    def __init__(self, *, ws=None, pos=None, constituency=None, coref=None):
+    def __init__(self, *, ws=None, pos=None, conparse=None, coref=None):
         self.ws = ws
         self.pos = pos
-        self.constituency = constituency
+        self.conparse = conparse
         self.coref = coref
 
     def __len__(self):
@@ -171,10 +171,10 @@ class CkipCorefPipeline(_CkipPipeline):
             )
 
         # Do parsing
-        if corefdoc.constituency is None:
-            corefdoc.constituency = self.get_constituency(corefdoc)
+        if corefdoc.conparse is None:
+            corefdoc.conparse = self.get_conparse(corefdoc)
 
         # Do coreference resolution
-        corefdoc.coref = self._coref_chunker(constituency=corefdoc.constituency)
+        corefdoc.coref = self._coref_chunker(conparse=corefdoc.conparse)
 
         return corefdoc.coref

@@ -34,19 +34,19 @@ class CkipDocument(_Mapping):
             The part-of-speech sentences.
         ner : :class:`~ckipnlp.container.ner.NerParagraph`
             The named-entity recognition results.
-        constituency : :class:`~ckipnlp.container.parse.ParseParagraph`
+        conparse : :class:`~ckipnlp.container.parse.ParseParagraph`
             The constituency-parsing sentences.
     """
 
-    __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'constituency',)
+    __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'conparse',)
 
-    def __init__(self, *, raw=None, text=None, ws=None, pos=None, ner=None, constituency=None):
+    def __init__(self, *, raw=None, text=None, ws=None, pos=None, ner=None, conparse=None):
         self.raw = raw
         self.text = text
         self.ws = ws
         self.pos = pos
         self.ner = ner
-        self.constituency = constituency
+        self.conparse = conparse
 
         self._wspos = None
 
@@ -151,7 +151,7 @@ class CkipPipeline:
             'pos': (
                 self._pos_tagger, 'part-of-speech tagging',
             ),
-            'constituency': (
+            'conparse': (
                 self._constituency_parser, 'constituency parsing',
             ),
             'ner': (
@@ -261,7 +261,7 @@ class CkipPipeline:
 
     ########################################################################################################################
 
-    def get_constituency(self, doc):
+    def get_conparse(self, doc):
         """Apply constituency parsing.
 
         Arguments
@@ -271,11 +271,11 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.constituency : :class:`~ckipnlp.container.parse.ParseParagraph`
+            doc.conparse : :class:`~ckipnlp.container.parse.ParseParagraph`
                 The constituency parsing sentences.
 
         .. note::
 
             This routine modify **doc** inplace.
         """
-        return self._get('constituency', doc)
+        return self._get('conparse', doc)
