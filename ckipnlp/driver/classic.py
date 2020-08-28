@@ -130,8 +130,8 @@ class _CkipClassic2PosTagger(_BaseDriver):
 
 ################################################################################################################################
 
-class CkipClassicConstituencyParser(_BaseDriver):
-    """The CKIP sentence parsing driver with CkipClassic backend.
+class CkipClassicConParser(_BaseDriver):
+    """The CKIP constituency parsing driver with CkipClassic backend.
 
     Arguments
     ---------
@@ -140,7 +140,7 @@ class CkipClassicConstituencyParser(_BaseDriver):
 
     .. method:: __call__(*, ws, pos)
 
-        Apply sentence parsing.
+        Apply constituency parsing.
 
         Parameters
             - **ws** (:class:`~ckipnlp.container.text.TextParagraph`) — The word-segmented sentences.
@@ -150,7 +150,7 @@ class CkipClassicConstituencyParser(_BaseDriver):
             **conparse** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
     """
 
-    driver_type = 'constituency_parser'
+    driver_type = 'con_parser'
     driver_family = 'classic'
     driver_inputs = ('ws', 'pos',)
 

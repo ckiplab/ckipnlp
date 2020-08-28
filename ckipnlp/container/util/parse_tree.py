@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides tree containers for sentence parse.
+This module provides tree containers for parsed sentences.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'

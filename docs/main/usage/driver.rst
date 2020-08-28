@@ -42,7 +42,7 @@ Sentence Segmenter                |CkipSentenceSegmenter|
 Word Segmenter                                                      |CkipTaggerWordSegmenter|         |CkipClassicWordSegmenter|†
 Pos Tagger                                                          |CkipTaggerPosTagger|             |CkipClassicWordSegmenter|†
 Ner Chunker                                                         |CkipTaggerNerChunker|
-Constituency Parser                                                                                    |CkipClassicConstituencyParser|
+Constituency Parser                                                                                   |CkipClassicConParser|
 Coref Chunker                     |CkipCorefChunker|
 ================================  ================================  ================================  ================================
 

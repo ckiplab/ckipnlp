@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides containers for parse sentences.
+This module provides containers for parsed sentences.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
