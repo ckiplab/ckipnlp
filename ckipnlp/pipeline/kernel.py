@@ -34,19 +34,19 @@ class CkipDocument(_Mapping):
             The part-of-speech sentences.
         ner : :class:`~ckipnlp.container.ner.NerParagraph`
             The named-entity recognition results.
-        constituency : :class:`~ckipnlp.container.parse.ParseParagraph`
+        conparse : :class:`~ckipnlp.container.parse.ParseParagraph`
             The constituency-parsing sentences.
     """
 
-    __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'constituency',)
+    __keys = ('raw', 'text', 'ws', 'pos', 'ner', 'conparse',)
 
-    def __init__(self, *, raw=None, text=None, ws=None, pos=None, ner=None, constituency=None):
+    def __init__(self, *, raw=None, text=None, ws=None, pos=None, ner=None, conparse=None):
         self.raw = raw
         self.text = text
         self.ws = ws
         self.pos = pos
         self.ner = ner
-        self.constituency = constituency
+        self.conparse = conparse
 
         self._wspos = None
 
@@ -78,8 +78,8 @@ class CkipPipeline:
         ner_chunker : str
             The type of named-entity recognition chunker.
 
-        sentence_parser : str
-            The type of sentence parser.
+        con_parser : str
+            The type of constituency parser.
 
     Other Parameters
     ----------------
@@ -94,7 +94,7 @@ class CkipPipeline:
             sentence_segmenter='default',
             word_segmenter='tagger',
             pos_tagger='tagger',
-            sentence_parser='classic',
+            con_parser='classic',
             ner_chunker='tagger',
             lazy=True,
             opts={},
@@ -125,8 +125,8 @@ class CkipPipeline:
         self._pos_tagger = _DriverRegister.get('pos_tagger', pos_tagger)(
             lazy=lazy, **opts.get('pos_tagger', {}),
         )
-        self._constituency_parser = _DriverRegister.get('constituncy_parser', sentence_parser)(
-            lazy=lazy, **opts.get('sentence_parser', {}),
+        self._con_parser = _DriverRegister.get('con_parser', con_parser)(
+            lazy=lazy, **opts.get('con_parser', {}),
         )
         self._ner_chunker = _DriverRegister.get('ner_tagger', ner_chunker)(
             lazy=lazy, **opts.get('ner_chunker', {}),
@@ -151,8 +151,8 @@ class CkipPipeline:
             'pos': (
                 self._pos_tagger, 'part-of-speech tagging',
             ),
-            'constituency': (
-                self._constituency_parser, 'constituency parsing',
+            'conparse': (
+                self._con_parser, 'constituency parsing',
             ),
             'ner': (
                 self._ner_chunker, 'named-entity recognition',
@@ -261,7 +261,7 @@ class CkipPipeline:
 
     ########################################################################################################################
 
-    def get_constituency(self, doc):
+    def get_conparse(self, doc):
         """Apply constituency parsing.
 
         Arguments
@@ -271,11 +271,11 @@ class CkipPipeline:
 
         Returns
         -------
-            doc.constituency : :class:`~ckipnlp.container.parse.ParseParagraph`
+            doc.conparse : :class:`~ckipnlp.container.parse.ParseParagraph`
                 The constituency parsing sentences.
 
         .. note::
 
             This routine modify **doc** inplace.
         """
-        return self._get('constituency', doc)
+        return self._get('conparse', doc)

@@ -25,7 +25,7 @@ from ckipnlp.container import (
     CorefParagraph as _CorefParagraph,
 )
 
-from ckipnlp.data.constituency import (
+from ckipnlp.data.conparse import (
     APPOSITION_ROLES as _APPOSITION_ROLES,
 )
 
@@ -49,12 +49,12 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
         lazy : bool
             Lazy initialize the driver.
 
-    .. method:: __call__(*, constituency)
+    .. method:: __call__(*, conparse)
 
         Apply coreference delectation.
 
         Parameters
-            **constituency** (:class:`~ckipnlp.container.parse.ParseParagraph`) — The constituency-parsing sentences.
+            **conparse** (:class:`~ckipnlp.container.parse.ParseParagraph`) — The constituency-parsing sentences.
 
         Returns
             **coref** (:class:`~ckipnlp.container.coref.CorefParagraph`) — The coreference results.
@@ -67,15 +67,15 @@ class CkipCorefChunker(_BaseDriver):  # pylint: disable=too-few-public-methods
     def _init(self):
         pass
 
-    def _call(self, *, constituency):
-        assert isinstance(constituency, _ParseParagraph)
+    def _call(self, *, conparse):
+        assert isinstance(conparse, _ParseParagraph)
 
         # Convert to tree structure
         tree_list = [
             [
                 (clause.to_tree(), clause.delim,)
                 for clause in sent
-            ] for sent in constituency
+            ] for sent in conparse
         ]
 
         # Find coreference
