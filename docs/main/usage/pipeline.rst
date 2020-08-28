@@ -38,8 +38,8 @@ The |CkipPipeline| will compute all necessary dependencies. For example, if one 
    print(doc.ner)
 
    # Constituency Parsing
-   pipeline.get_constituency(doc)
-   print(doc.constituency)
+   pipeline.get_conparse(doc)
+   print(doc.conparse)
 
    ################################################################
 

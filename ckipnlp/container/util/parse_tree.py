@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 """
-This module provides tree containers for sentence parse.
+This module provides tree containers for parsed sentences.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
@@ -23,7 +23,7 @@ from treelib import (
     Node as _Node,
 )
 
-from ckipnlp.data.constituency import (
+from ckipnlp.data.conparse import (
     SUBJECT_ROLES as _SUBJECT_ROLES,
     NEUTRAL_ROLES as _NEUTRAL_ROLES,
 )

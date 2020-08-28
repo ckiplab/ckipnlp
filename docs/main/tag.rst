@@ -13,7 +13,7 @@ Constituency Parsing Tags
 -------------------------
 
 .. csv-table::
-   :file: ./tag/constituency_pos.csv
+   :file: ./tag/conparse_pos.csv
    :widths: 50 50
    :header-rows: 1
 
@@ -21,6 +21,6 @@ Constituency Parsing Roles
 --------------------------
 
 .. csv-table::
-   :file: ./tag/constituency_role.csv
+   :file: ./tag/conparse_role.csv
    :widths: 50 50
    :header-rows: 1
