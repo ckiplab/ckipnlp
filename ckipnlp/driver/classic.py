@@ -181,7 +181,7 @@ class CkipClassicConstituencyParser(_BaseDriver):
                     continue
 
                 # Segment clauses by punctuations
-                if pos_token is None or pos_token.endswith('CATEGORY'):
+                if pos_token is None or (pos_token.endswith('CATEGORY') and pos_token != 'PAUSECATEGORY'):
                     if ws_clause:
                         wspos_clause_text = _WsPosSentence.to_text(ws_clause, pos_clause)
                         for conparse_clause_text in self._core.apply_list([wspos_clause_text]):
