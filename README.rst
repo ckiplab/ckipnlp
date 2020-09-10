@@ -92,9 +92,9 @@ Requirements
 
 * `Python <https://www.python.org>`__ 3.6+
 * `TreeLib <https://treelib.readthedocs.io>`__ 1.5+
-* `CkipTagger <https://pypi.org/project/ckiptagger>`__ 0.1.1+ [Optional, Recommended]
+* `CkipTagger <https://pypi.org/project/ckiptagger>`__ 0.2.1+ [Optional, Recommended]
 * `CkipClassic <https://ckip-classic.readthedocs.io>`__ 1.0+ [Optional]
-* `TensorFlow / TensorFlow-GPU <https://www.tensorflow.org/>`__ 1.13.1+, <2 [Required by CkipTagger]
+* `TensorFlow / TensorFlow-GPU <https://www.tensorflow.org/>`__ 1.13.1+ [Required by CkipTagger]
 
 Driver Requirements
 ^^^^^^^^^^^^^^^^^^^
