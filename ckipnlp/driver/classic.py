@@ -9,6 +9,10 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
+from abc import (
+    abstractmethod as _abstractmethod,
+)
+
 from itertools import (
     chain as _chain,
 )
@@ -132,8 +136,17 @@ class _CkipClassic2PosTagger(_BaseDriver):
 
 class _CkipClassicConParser(_BaseDriver):
 
+
     driver_type = 'con_parser'
     driver_inputs = ('ws', 'pos',)
+
+    @_abstractmethod
+    def driver_family(self):  # pylint: disable=missing-docstring
+        return NotImplemented
+
+    @_abstractmethod
+    def _init(self):
+        return NotImplemented
 
     def _call(self, *, ws, pos):
         assert isinstance(ws, _SegParagraph)
@@ -232,6 +245,12 @@ class CkipClassicConParserClient(_CkipClassicConParser):
         lazy : bool
             Lazy initialize the driver.
 
+    Notes
+    -----
+
+        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe and
+        set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD``.
+
     .. method:: __call__(*, ws, pos)
 
         Apply constituency parsing.
@@ -242,12 +261,6 @@ class CkipClassicConParserClient(_CkipClassicConParser):
 
         Returns
             **conparse** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
-
-    Notes
-    -----
-
-        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe and
-        set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD``.
 
     """
 
