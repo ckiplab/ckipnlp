@@ -35,15 +35,16 @@ Drivers
 
 Here are the list of the drivers:
 
-================================  ================================  ================================  ================================
-Driver Type \\ Family             ``'default'``                     ``'tagger'``                      ``'classic'``
-================================  ================================  ================================  ================================
+================================  ================================  ================================  ================================  ================================
+Driver Type \\ Family             ``'default'``                     ``'tagger'``                      ``'classic'``                     ``'classic-client'``
+================================  ================================  ================================  ================================  ================================
 Sentence Segmenter                |CkipSentenceSegmenter|
 Word Segmenter                                                      |CkipTaggerWordSegmenter|         |CkipClassicWordSegmenter|†
 Pos Tagger                                                          |CkipTaggerPosTagger|             |CkipClassicWordSegmenter|†
 Ner Chunker                                                         |CkipTaggerNerChunker|
-Constituency Parser                                                                                   |CkipClassicConParser|
+Constituency Parser                                                                                   |CkipClassicConParser|            |CkipClassicConParserClient|‡
 Coref Chunker                     |CkipCorefChunker|
-================================  ================================  ================================  ================================
+================================  ================================  ================================  ================================  ================================
 
-† Not compatible with |CkipCorefPipeline|.
+- † Not compatible with |CkipCorefPipeline|.
+- ‡ Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe and set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD``.
