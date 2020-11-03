@@ -48,9 +48,9 @@ def main():
             'treelib>=1.5.5',
         ],
         extras_require={
-            # 'classic': ['ckip-classic>=1.0'],
-            'tagger': ['ckiptagger[tf]>=0.1.1'],
-            'tagger-gpu': ['ckiptagger[tfgpu]>=0.1.1'],
+            'classic': ['ckip-classic>=1.1.2'],
+            'tagger': ['ckiptagger[tf]>=0.2.1'],
+            'tagger-gpu': ['ckiptagger[tfgpu]>=0.2.1'],
         },
         data_files=[],
     )

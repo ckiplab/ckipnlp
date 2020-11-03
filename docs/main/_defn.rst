@@ -13,6 +13,7 @@
 
 .. |CkipClassicWordSegmenter| replace:: :class:`~ckipnlp.driver.classic.CkipClassicWordSegmenter`
 .. |CkipClassicConParser| replace:: :class:`~ckipnlp.driver.classic.CkipClassicConParser`
+.. |CkipClassicConParserClient| replace:: :class:`~ckipnlp.driver.classic.CkipClassicConParserClient`
 
 .. |CkipTaggerWordSegmenter| replace:: :class:`~ckipnlp.driver.tagger.CkipTaggerWordSegmenter`
 .. |CkipTaggerPosTagger| replace:: :class:`~ckipnlp.driver.tagger.CkipTaggerPosTagger`

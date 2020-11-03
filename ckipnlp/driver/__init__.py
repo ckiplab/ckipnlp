@@ -18,6 +18,7 @@ from .tagger import (
 from .classic import (
     CkipClassicWordSegmenter,
     CkipClassicConParser,
+    CkipClassicConParserClient,
 )
 
 from .ss import (

@@ -17,6 +17,14 @@ def test_sentence_segmenter():
 
 ################################################################################################################################
 
+def test_classic_con_parser_client():
+    obj = CkipPipeline(con_parser='classic-client')
+    doc = CkipDocument(ws=SegParagraph.from_list(ws), pos=SegParagraph.from_list(pos))
+    obj.get_conparse(doc)
+    assert doc.conparse.to_list() == conparse
+
+################################################################################################################################
+
 def test_tagger_word_segmenter():
     obj = CkipPipeline(word_segmenter='tagger')
     doc = CkipDocument(text=TextParagraph.from_list(text))

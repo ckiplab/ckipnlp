@@ -9,6 +9,10 @@ __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
 __license__ = 'CC BY-NC-SA 4.0'
 
+from abc import (
+    abstractmethod as _abstractmethod,
+)
+
 from itertools import (
     chain as _chain,
 )
@@ -130,39 +134,19 @@ class _CkipClassic2PosTagger(_BaseDriver):
 
 ################################################################################################################################
 
-class CkipClassicConParser(_BaseDriver):
-    """The CKIP constituency parsing driver with CkipClassic backend.
+class _CkipClassicConParser(_BaseDriver):
 
-    Arguments
-    ---------
-        lazy : bool
-            Lazy initialize the driver.
-
-    .. method:: __call__(*, ws, pos)
-
-        Apply constituency parsing.
-
-        Parameters
-            - **ws** (:class:`~ckipnlp.container.text.TextParagraph`) — The word-segmented sentences.
-            - **pos** (:class:`~ckipnlp.container.text.TextParagraph`) — The part-of-speech sentences.
-
-        Returns
-            **conparse** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
-    """
 
     driver_type = 'con_parser'
-    driver_family = 'classic'
     driver_inputs = ('ws', 'pos',)
 
-    _count = 0
+    @_abstractmethod
+    def driver_family(self):  # pylint: disable=missing-docstring
+        return NotImplemented
 
+    @_abstractmethod
     def _init(self):
-        self.__class__._count += 1  # pylint: disable=protected-access
-        if self.__class__._count > 1:  # pylint: disable=protected-access
-            raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
-
-        import ckip_classic.parser
-        self._core = ckip_classic.parser.CkipParser(do_ws=False)
+        return NotImplemented
 
     def _call(self, *, ws, pos):
         assert isinstance(ws, _SegParagraph)
@@ -217,3 +201,72 @@ class CkipClassicConParser(_BaseDriver):
     @staticmethod
     def _normalize(text):
         return text.split('] ', 2)[-1].rstrip('#')
+
+################################################################################################################################
+
+class CkipClassicConParser(_CkipClassicConParser):
+    """The CKIP constituency parsing driver with CkipClassic backend.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize the driver.
+
+    .. method:: __call__(*, ws, pos)
+
+        Apply constituency parsing.
+
+        Parameters
+            - **ws** (:class:`~ckipnlp.container.text.TextParagraph`) — The word-segmented sentences.
+            - **pos** (:class:`~ckipnlp.container.text.TextParagraph`) — The part-of-speech sentences.
+
+        Returns
+            **conparse** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
+    """
+
+    driver_family = 'classic'
+
+    _count = 0
+
+    def _init(self):
+
+        self.__class__._count += 1  # pylint: disable=protected-access
+        if self.__class__._count > 1:  # pylint: disable=protected-access
+            raise RuntimeError(f'Never instance more than one {self.__class__.__name__}!')
+
+        import ckip_classic.parser
+        self._core = ckip_classic.parser.CkipParser(do_ws=False)
+
+class CkipClassicConParserClient(_CkipClassicConParser):
+    """The CKIP constituency parsing driver with CkipClassic client backend.
+
+    Arguments
+    ---------
+        lazy : bool
+            Lazy initialize the driver.
+
+    Notes
+    -----
+
+        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe and
+        set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD``.
+
+    .. method:: __call__(*, ws, pos)
+
+        Apply constituency parsing.
+
+        Parameters
+            - **ws** (:class:`~ckipnlp.container.text.TextParagraph`) — The word-segmented sentences.
+            - **pos** (:class:`~ckipnlp.container.text.TextParagraph`) — The part-of-speech sentences.
+
+        Returns
+            **conparse** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
+
+    """
+
+    driver_family = 'classic-client'
+
+    def _init(self):
+
+        import ckip_classic.client
+        self._core = ckip_classic.client.CkipParserClient()
