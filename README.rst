@@ -118,7 +118,8 @@ Installation via Pip
 
 - No backend (not recommended): ``pip install ckipnlp``.
 - With CkipTagger backend (recommended): ``pip install ckipnlp[tagger]`` or ``pip install ckipnlp[tagger-gpu]``.
-- With CkipClassic backend: Please refer https://ckip-classic.readthedocs.io/en/latest/main/readme.html#installation for CkipClassic installation guide.
+- With CkipClassic Parser Client backend (recommended): ``pip install ckipnlp[classic]``.
+- With CkipClassic offline backend: Please refer https://ckip-classic.readthedocs.io/en/latest/main/readme.html#installation for CkipClassic installation guide.
 
 Usage
 -----

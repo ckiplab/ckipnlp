@@ -94,7 +94,7 @@ class CkipPipeline:
             sentence_segmenter='default',
             word_segmenter='tagger',
             pos_tagger='tagger',
-            con_parser='classic',
+            con_parser='classic-client',
             ner_chunker='tagger',
             lazy=True,
             opts={},

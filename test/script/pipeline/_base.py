@@ -39,7 +39,7 @@ ner = [
 conparse = [
     [
         [ 'S(Head:Nab:中文字|particle:Td:耶)', '，', ],
-        [ '%(particle:I:啊|manner:Dh:哈|manner:D:哈哈)', '。', ],
+        [ '%(particle:interjection(Head:I:啊)|time:Dh:哈|time:D:哈哈)', '。', ],
     ],
     [
         [ None, '「', ],
