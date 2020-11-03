@@ -245,6 +245,12 @@ class CkipClassicConParserClient(_CkipClassicConParser):
         lazy : bool
             Lazy initialize the driver.
 
+    Notes
+    -----
+
+        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe and
+        set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD``.
+
     .. method:: __call__(*, ws, pos)
 
         Apply constituency parsing.
@@ -255,12 +261,6 @@ class CkipClassicConParserClient(_CkipClassicConParser):
 
         Returns
             **conparse** (:class:`~ckipnlp.container.parse.ParseSentence`) — The constituency-parsing sentences.
-
-    Notes
-    -----
-
-        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe and
-        set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD``.
 
     """
 
