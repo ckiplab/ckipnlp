@@ -130,7 +130,7 @@ Installation via Pip
 Detail
 ------
 
-See https://ckipnlp.readthedocs.io/ for API details.
+See https://ckipnlp.readthedocs.io/ for full documentation.
 
 License
 -------
