@@ -9,6 +9,9 @@ tox:
 tox-v:
 	NO_COV= $(TOX) -f py36,py37,py38 -- -v
 
+tox-vv:
+	NO_COV= $(TOX) -f py36 -- -vv
+
 tox-report:
 	- $(TOX) -p -f clean,py36,report -- --cov-append
 	python3.7 -m http.server --directory .test/htmlcov/ 3000
