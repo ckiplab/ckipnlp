@@ -22,17 +22,17 @@ check:
 	$(TWINE) check dist/*
 
 tox tox-v tox-report:
-	( cd test ; make $@ )
+	( cd test && make $@ )
 
 doc:
-	( cd docs ; make clean ; make html )
+	( cd docs && make clean && make html )
 
 upload: dist check
 	ls dist/*
 	$(TWINE) upload --repository-url https://test.pypi.org/legacy/ dist/* --verbose
 
 clean:
-	- ( cd docs ; make clean )
-	- ( cd test ; make clean )
+	- ( cd docs && make clean )
+	- ( cd test && make clean )
 	- $(PY) setup.py clean -a
 	- $(RM) build dist *.egg-info __pycache__

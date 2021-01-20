@@ -7,7 +7,7 @@ This module provides drivers with CkipClassic backend.
 
 __author__ = 'Mu Yang <http://muyang.pro>'
 __copyright__ = '2018-2020 CKIP Lab'
-__license__ = 'CC BY-NC-SA 4.0'
+__license__ = 'GPL-3.0'
 
 from abc import (
     abstractmethod as _abstractmethod,
