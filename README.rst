@@ -73,7 +73,7 @@ https://ckipnlp.readthedocs.io/
    :target: https://ckipnlp.readthedocs.io
 
 Online Demo
-^^^^^^^^^^^^^^
+^^^^^^^^^^^
 
 https://ckip.iis.sinica.edu.tw/service/corenlp
 
@@ -130,14 +130,14 @@ Installation via Pip
 Detail
 ------
 
-See https://ckipnlp.readthedocs.io/ for API details.
+See https://ckipnlp.readthedocs.io/ for full documentation.
 
 License
 -------
 
-|CC BY-NC-SA 4.0|
+|GPL-3.0|
 
-Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`__ under the `CC BY-NC-SA 4.0 License <http://creativecommons.org/licenses/by-nc-sa/4.0/>`__.
+Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`__ under the `GPL-3.0 License <https://www.gnu.org/licenses/gpl-3.0.html>`__.
 
-.. |CC BY-NC-SA 4.0| image:: https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png
-   :target: http://creativecommons.org/licenses/by-nc-sa/4.0/
+.. |GPL-3.0| image:: https://www.gnu.org/graphics/gplv3-with-text-136x68.png
+   :target: https://www.gnu.org/licenses/gpl-3.0.html
