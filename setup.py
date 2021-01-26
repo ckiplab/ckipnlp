@@ -28,7 +28,7 @@ def main():
         platforms=['linux_x86_64'],
         license=about.__license__,
         classifiers=[
-            'Development Status :: 4 - Beta',
+            'Development Status :: 5 - Production/Stable',
             'Environment :: Console',
             'Programming Language :: Python',
             'Programming Language :: Python :: 3',
