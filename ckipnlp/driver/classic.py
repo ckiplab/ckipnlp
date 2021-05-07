@@ -244,6 +244,10 @@ class CkipClassicConParserClient(_CkipClassicConParser):
     ---------
         lazy : bool
             Lazy initialize the driver.
+        username : string
+            (*optional*) The username of CkipClassicParserClient.
+        password : string
+            (*optional*) The password of CkipClassicParserClient.
 
     Notes
     -----
@@ -266,7 +270,11 @@ class CkipClassicConParserClient(_CkipClassicConParser):
 
     driver_family = 'classic-client'
 
+    def __init__(self, *, lazy=False, **opts):
+        super().__init__(lazy=lazy)
+        self._opts = opts
+
     def _init(self):
 
         import ckip_classic.client
-        self._core = ckip_classic.client.CkipParserClient()
+        self._core = ckip_classic.client.CkipParserClient(**self._opts)
