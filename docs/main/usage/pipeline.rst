@@ -49,6 +49,14 @@ The |CkipPipeline| will compute all necessary dependencies. For example, if one 
    for line in WsPosParagraph.to_text(doc.ws, doc.pos):
        print(line)
 
+To customize the driver (e.g. disable CUDA in |CkipTaggerWordSegmenter|), you may pass the options to the pipeline:
+
+.. code-block:: python
+
+   pipeline = CkipPipeline(opts = {'word_segmenter': {'disable_cuda': True}})
+
+Please refer each driver's documentation for the extra options.
+
 Co-Reference Pipeline
 ^^^^^^^^^^^^^^^^^^^^^
 

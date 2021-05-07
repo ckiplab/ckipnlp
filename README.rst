@@ -125,7 +125,13 @@ Installation via Pip
    To use CkipClassic Parser Client backend, please
 
    #. Register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe
-   #. Set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD`` to the username and password.
+   #. Set the username and password in the pipeline's options:
+
+   .. code-block:: python
+
+      pipeline = CkipPipeline(opts={'con_parser': {'username': YOUR_USERNAME, 'password': YOUR_PASSWORD})
+
+
 
 Detail
 ------
