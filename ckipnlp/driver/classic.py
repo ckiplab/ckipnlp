@@ -6,7 +6,7 @@ This module provides drivers with CkipClassic backend.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = '2018-2020 CKIP Lab'
+__copyright__ = '2018-2023 CKIP Lab'
 __license__ = 'GPL-3.0'
 
 from abc import (
@@ -252,7 +252,7 @@ class CkipClassicConParserClient(_CkipClassicConParser):
     Notes
     -----
 
-        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe and
+        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.php and
         set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD``.
 
     .. method:: __call__(*, ws, pos)

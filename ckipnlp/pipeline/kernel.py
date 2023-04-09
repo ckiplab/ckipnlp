@@ -6,7 +6,7 @@ This module provides kernel CKIPNLP pipeline.
 """
 
 __author__ = 'Mu Yang <http://muyang.pro>'
-__copyright__ = '2018-2020 CKIP Lab'
+__copyright__ = '2018-2023 CKIP Lab'
 __license__ = 'GPL-3.0'
 
 from collections.abc import (

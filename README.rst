@@ -124,7 +124,7 @@ Installation via Pip
 .. attention::
    To use CkipClassic Parser Client backend, please
 
-   #. Register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe
+   #. Register an account at http://parser.iis.sinica.edu.tw/v1/reg.php
    #. Set the username and password in the pipeline's options:
 
    .. code-block:: python
@@ -143,7 +143,7 @@ License
 
 |GPL-3.0|
 
-Copyright (c) 2018-2020 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`__ under the `GPL-3.0 License <https://www.gnu.org/licenses/gpl-3.0.html>`__.
+Copyright (c) 2018-2023 `CKIP Lab <https://ckip.iis.sinica.edu.tw>`__ under the `GPL-3.0 License <https://www.gnu.org/licenses/gpl-3.0.html>`__.
 
 .. |GPL-3.0| image:: https://www.gnu.org/graphics/gplv3-with-text-136x68.png
    :target: https://www.gnu.org/licenses/gpl-3.0.html
