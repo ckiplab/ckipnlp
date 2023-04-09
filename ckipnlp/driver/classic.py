@@ -252,7 +252,7 @@ class CkipClassicConParserClient(_CkipClassicConParser):
     Notes
     -----
 
-        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe and
+        Please register an account at http://parser.iis.sinica.edu.tw/v1/reg.php and
         set the environment variables ``$CKIPPARSER_USERNAME`` and ``$CKIPPARSER_PASSWORD``.
 
     .. method:: __call__(*, ws, pos)

@@ -124,7 +124,7 @@ Installation via Pip
 .. attention::
    To use CkipClassic Parser Client backend, please
 
-   #. Register an account at http://parser.iis.sinica.edu.tw/v1/reg.exe
+   #. Register an account at http://parser.iis.sinica.edu.tw/v1/reg.php
    #. Set the username and password in the pipeline's options:
 
    .. code-block:: python
